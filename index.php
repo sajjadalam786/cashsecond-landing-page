@@ -21,42 +21,106 @@ require __DIR__ . '/includes/header.php';
 ?>
 
 <!-- ============================================================
-     1. HERO SECTION — CHOOSE YOUR IPHONE MODEL (MOBILE-FIRST CAROUSEL)
+     1. HERO SECTION — MOBILE-FIRST PROMOTIONAL BANNER SLIDER
      ============================================================ -->
-<section class="model-carousel-hero-section" id="models">
-    <div class="container">
-        <div class="hero-carousel-header">
-            <h1>Choose Your iPhone Model</h1>
-            <p>Select your iPhone model to check its resale value.</p>
+<section class="promo-slider-section" id="promo-hero">
+    <div class="promo-slider-wrapper">
+        <!-- Main Slider Container -->
+        <div class="promo-slider-container" id="hero-promo-slider" role="region" aria-label="Promotional Banners" tabindex="0">
+            <!-- Left / Right Desktop Controls -->
+            <button type="button" class="promo-arrow-btn promo-arrow-prev" id="promo-slider-prev" aria-label="Previous banner" title="Previous">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+            </button>
+            <button type="button" class="promo-arrow-btn promo-arrow-next" id="promo-slider-next" aria-label="Next banner" title="Next">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+
+            <!-- Slider Track -->
+            <div class="promo-slider-track" id="promo-slider-track">
+                <!-- Slide 1: iPhone Buyback -->
+                <div class="promo-slide promo-slide-1" data-index="0" role="group" aria-label="Slide 1 of 4: Sell Your iPhone at the Best Value">
+                    <div class="promo-content">
+                        <span class="promo-tag">
+                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                            Instant Buyback
+                        </span>
+                        <h1 class="promo-title">Sell Your iPhone at the Best Value</h1>
+                        <p class="promo-desc">Get an instant estimate and hassle-free doorstep pickup across Mumbai.</p>
+                        <a href="#valuation" class="promo-btn" id="promo-slide-1-cta">
+                            <span>Get Instant Price</span>
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                        </a>
+                    </div>
+                    <div class="promo-visual">
+                        <img src="assets/images/phones/iphone-16-pro.svg" alt="Apple iPhone 16 Pro buyback and valuation" class="promo-img" loading="eager" width="180" height="210">
+                    </div>
+                </div>
+
+                <!-- Slide 2: Upgrade Your iPhone -->
+                <div class="promo-slide promo-slide-2" data-index="1" role="group" aria-label="Slide 2 of 4: Upgrade Your iPhone">
+                    <div class="promo-content">
+                        <span class="promo-tag">
+                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                            Trade-In Value
+                        </span>
+                        <h2 class="promo-title">Upgrade Your iPhone Today</h2>
+                        <p class="promo-desc">Sell your old iPhone and get top resale value for your next flagship upgrade.</p>
+                        <a href="#valuation" class="promo-btn" id="promo-slide-2-cta">
+                            <span>Check Resale Value</span>
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                        </a>
+                    </div>
+                    <div class="promo-visual">
+                        <img src="assets/images/phones/iphone-15-pro.svg" alt="Apple iPhone 15 Pro resale and trade-in" class="promo-img" loading="lazy" width="180" height="210">
+                    </div>
+                </div>
+
+                <!-- Slide 3: Doorstep Pickup -->
+                <div class="promo-slide promo-slide-3" data-index="2" role="group" aria-label="Slide 3 of 4: Sell From Your Home">
+                    <div class="promo-content">
+                        <span class="promo-tag">
+                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+                            Doorstep Service
+                        </span>
+                        <h2 class="promo-title">Sell From The Comfort Of Home</h2>
+                        <p class="promo-desc">Quick 32-point valuation and convenient free doorstep pickup anywhere in Mumbai.</p>
+                        <a href="#valuation" class="promo-btn" id="promo-slide-3-cta">
+                            <span>Book Free Pickup</span>
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                        </a>
+                    </div>
+                    <div class="promo-visual">
+                        <img src="assets/images/phones/iphone-16.svg" alt="Convenient doorstep pickup for iPhone in Mumbai" class="promo-img" loading="lazy" width="180" height="210">
+                    </div>
+                </div>
+
+                <!-- Slide 4: Fast Payment -->
+                <div class="promo-slide promo-slide-4" data-index="3" role="group" aria-label="Slide 4 of 4: Get Paid Quickly">
+                    <div class="promo-content">
+                        <span class="promo-tag">
+                            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                            Instant On-Spot Pay
+                        </span>
+                        <h2 class="promo-title">Get Paid Instantly on Handover</h2>
+                        <p class="promo-desc">Simple valuation. Secure factory reset. Direct UPI, IMPS, or Cash payout on the spot.</p>
+                        <a href="#valuation" class="promo-btn" id="promo-slide-4-cta">
+                            <span>Start Now</span>
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                        </a>
+                    </div>
+                    <div class="promo-visual">
+                        <img src="assets/images/phones/iphone-14-pro.svg" alt="Instant payment for Apple iPhone buyback" class="promo-img" loading="lazy" width="180" height="210">
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div class="hero-carousel-wrapper">
-            <!-- Carousel Track (Mobile-First: 2 cards per view with snap) -->
-            <div class="hero-carousel-track" id="hero-models-carousel" role="region" aria-label="iPhone Model Carousel">
-                <?php foreach ($iphoneModels as $model): 
-                    $imgSrc = htmlspecialchars($model['image'] ?? 'assets/images/phones/iphone-15.svg');
-                    $prodName = htmlspecialchars($model['product_name']);
-                    $prodId = htmlspecialchars($model['product_id']);
-                ?>
-                <div class="hero-model-card" data-name="<?= $prodName ?>" data-id="<?= $prodId ?>" data-image="<?= $imgSrc ?>" tabindex="0" role="button" aria-label="Select <?= $prodName ?>">
-                    <div class="hero-model-img-wrap">
-                        <img src="<?= $imgSrc ?>" alt="<?= $prodName ?>" class="hero-model-img" loading="eager" width="120" height="120">
-                    </div>
-                    <div class="hero-model-name"><?= $prodName ?></div>
-                    <span class="hero-model-cta">Check Value &rarr;</span>
-                </div>
-                <?php endforeach; ?>
-            </div>
-
-            <!-- Carousel Arrow Controls -->
-            <div class="hero-carousel-controls">
-                <button type="button" class="hero-carousel-btn" id="hero-carousel-prev" aria-label="Previous iPhone models" title="Previous">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-                </button>
-                <button type="button" class="hero-carousel-btn" id="hero-carousel-next" aria-label="Next iPhone models" title="Next">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-                </button>
-            </div>
+        <!-- Pagination Dots -->
+        <div class="promo-dots-wrapper" id="promo-dots-container" role="tablist" aria-label="Banner slider navigation">
+            <button type="button" class="promo-dot active" data-slide="0" role="tab" aria-selected="true" aria-label="Go to slide 1"></button>
+            <button type="button" class="promo-dot" data-slide="1" role="tab" aria-selected="false" aria-label="Go to slide 2"></button>
+            <button type="button" class="promo-dot" data-slide="2" role="tab" aria-selected="false" aria-label="Go to slide 3"></button>
+            <button type="button" class="promo-dot" data-slide="3" role="tab" aria-selected="false" aria-label="Go to slide 4"></button>
         </div>
     </div>
 </section>

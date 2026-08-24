@@ -78,86 +78,132 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ============================================================
-    // 2. HERO iPHONE MODEL BROWSING CAROUSEL (MOBILE-FIRST)
+    // 2. HERO PROMOTIONAL BANNER SLIDER (MOBILE-FIRST)
     // ============================================================
-    const heroCarouselTrack = document.getElementById('hero-models-carousel');
-    const heroCarouselPrev = document.getElementById('hero-carousel-prev');
-    const heroCarouselNext = document.getElementById('hero-carousel-next');
-    const heroModelCards = document.querySelectorAll('.hero-model-card');
+    const promoSliderContainer = document.getElementById('hero-promo-slider');
+    const promoSliderTrack = document.getElementById('promo-slider-track');
+    const promoSlides = document.querySelectorAll('.promo-slide');
+    const promoDots = document.querySelectorAll('.promo-dot');
+    const promoPrevBtn = document.getElementById('promo-slider-prev');
+    const promoNextBtn = document.getElementById('promo-slider-next');
 
-    if (heroCarouselTrack) {
-        // Arrow Navigation
-        const getScrollDistance = () => {
-            const card = heroCarouselTrack.querySelector('.hero-model-card');
-            return card ? (card.offsetWidth + 12) * 2 : 300;
-        };
+    let currentSlide = 0;
+    const totalSlides = promoSlides.length;
+    let autoplayInterval = null;
 
-        if (heroCarouselPrev) {
-            heroCarouselPrev.addEventListener('click', () => {
-                heroCarouselTrack.scrollBy({ left: -getScrollDistance(), behavior: 'smooth' });
-            });
+    function goToSlide(index) {
+        if (totalSlides === 0) return;
+        currentSlide = (index + totalSlides) % totalSlides;
+
+        if (promoSliderTrack) {
+            promoSliderTrack.style.transform = `translateX(-${currentSlide * 100}%)`;
         }
 
-        if (heroCarouselNext) {
-            heroCarouselNext.addEventListener('click', () => {
-                heroCarouselTrack.scrollBy({ left: getScrollDistance(), behavior: 'smooth' });
-            });
-        }
-
-        // Desktop Mouse Drag to Scroll
-        let isDown = false;
-        let startX;
-        let scrollLeft;
-
-        heroCarouselTrack.addEventListener('mousedown', (e) => {
-            isDown = true;
-            heroCarouselTrack.style.cursor = 'grabbing';
-            startX = e.pageX - heroCarouselTrack.offsetLeft;
-            scrollLeft = heroCarouselTrack.scrollLeft;
-        });
-
-        heroCarouselTrack.addEventListener('mouseleave', () => {
-            isDown = false;
-            heroCarouselTrack.style.cursor = '';
-        });
-
-        heroCarouselTrack.addEventListener('mouseup', () => {
-            isDown = false;
-            heroCarouselTrack.style.cursor = '';
-        });
-
-        heroCarouselTrack.addEventListener('mousemove', (e) => {
-            if (!isDown) return;
-            e.preventDefault();
-            const x = e.pageX - heroCarouselTrack.offsetLeft;
-            const walk = (x - startX) * 1.5;
-            heroCarouselTrack.scrollLeft = scrollLeft - walk;
+        promoDots.forEach((dot, idx) => {
+            const isActive = idx === currentSlide;
+            dot.classList.toggle('active', isActive);
+            dot.setAttribute('aria-selected', isActive ? 'true' : 'false');
         });
     }
 
-    // Hero Model Card Click & Keyboard Selection
-    heroModelCards.forEach(card => {
-        const selectCardModel = () => {
-            const name = card.getAttribute('data-name');
-            const id = card.getAttribute('data-id');
-            const image = card.getAttribute('data-image');
-            
-            // Highlight active in hero carousel
-            heroModelCards.forEach(c => c.classList.remove('active'));
-            card.classList.add('active');
+    function startAutoplay() {
+        stopAutoplay();
+        autoplayInterval = setInterval(() => {
+            goToSlide(currentSlide + 1);
+        }, 4500);
+    }
 
-            startValuationWithModel(name, id, image);
-        };
+    function stopAutoplay() {
+        if (autoplayInterval) {
+            clearInterval(autoplayInterval);
+            autoplayInterval = null;
+        }
+    }
 
-        card.addEventListener('click', selectCardModel);
+    if (promoSliderContainer && totalSlides > 1) {
+        startAutoplay();
 
-        card.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
+        // Pause on Hover & Focus
+        promoSliderContainer.addEventListener('mouseenter', stopAutoplay);
+        promoSliderContainer.addEventListener('mouseleave', startAutoplay);
+        promoSliderContainer.addEventListener('focusin', stopAutoplay);
+        promoSliderContainer.addEventListener('focusout', startAutoplay);
+
+        // Arrow Buttons
+        if (promoPrevBtn) {
+            promoPrevBtn.addEventListener('click', () => {
+                goToSlide(currentSlide - 1);
+                startAutoplay();
+            });
+        }
+
+        if (promoNextBtn) {
+            promoNextBtn.addEventListener('click', () => {
+                goToSlide(currentSlide + 1);
+                startAutoplay();
+            });
+        }
+
+        // Pagination Dots Click
+        promoDots.forEach(dot => {
+            dot.addEventListener('click', () => {
+                const targetSlide = parseInt(dot.getAttribute('data-slide'), 10);
+                goToSlide(targetSlide);
+                startAutoplay();
+            });
+        });
+
+        // Mobile Touch Swipe Handling
+        let touchStartX = 0;
+        let touchStartY = 0;
+        let touchEndX = 0;
+        let touchEndY = 0;
+        let isSwiping = false;
+
+        promoSliderContainer.addEventListener('touchstart', (e) => {
+            stopAutoplay();
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+            isSwiping = true;
+        }, { passive: true });
+
+        promoSliderContainer.addEventListener('touchmove', (e) => {
+            if (!isSwiping) return;
+            touchEndX = e.touches[0].clientX;
+            touchEndY = e.touches[0].clientY;
+        }, { passive: true });
+
+        promoSliderContainer.addEventListener('touchend', () => {
+            if (!isSwiping) return;
+            isSwiping = false;
+
+            const deltaX = touchStartX - touchEndX;
+            const deltaY = Math.abs(touchStartY - touchEndY);
+
+            // Trigger only if horizontal swipe dominates vertical scroll
+            if (Math.abs(deltaX) > 40 && Math.abs(deltaX) > deltaY) {
+                if (deltaX > 0) {
+                    goToSlide(currentSlide + 1); // Swiped Left -> Next
+                } else {
+                    goToSlide(currentSlide - 1); // Swiped Right -> Prev
+                }
+            }
+            startAutoplay();
+        });
+
+        // Keyboard Navigation
+        promoSliderContainer.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') {
                 e.preventDefault();
-                selectCardModel();
+                goToSlide(currentSlide - 1);
+                startAutoplay();
+            } else if (e.key === 'ArrowRight') {
+                e.preventDefault();
+                goToSlide(currentSlide + 1);
+                startAutoplay();
             }
         });
-    });
+    }
 
     // ============================================================
     // 4. STEP 1: GENERATION TABS & MODEL FILTER
