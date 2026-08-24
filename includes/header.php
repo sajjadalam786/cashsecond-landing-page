@@ -1,104 +1,82 @@
 <?php
 /**
- * CashSecond - Header Template (Apple-Inspired Minimalist Design)
- * SEO meta tags, OpenGraph, Favicon, Tracking & Responsive Navigation
+ * CashSecond - Premium Header Template & Top Moving Announcement Strip
+ * Apple-Inspired Design with Marquee & Sticky Navigation
  */
-
-if (!isset($config) || !is_array($config)) {
+if (!isset($config)) {
     $config = require __DIR__ . '/../config/config.php';
 }
 
 $business = $config['business'] ?? [];
 $seo = $config['seo'] ?? [];
-$tracking = $config['tracking'] ?? [];
+$page_title = $seo['meta_title'] ?? 'Sell Your iPhone at a Fair Price in Mumbai | CashSecond';
+$page_description = $seo['meta_description'] ?? 'Get an instant estimate for your iPhone in seconds. Simple, secure and hassle-free buyback with free doorstep pickup in Mumbai.';
+$canonical_url = $seo['site_url'] ?? 'http://localhost/cashsecond-landing-page/';
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    
-    <!-- Primary Meta Tags -->
-    <title><?= htmlspecialchars($seo['meta_title'] ?? 'Sell Your iPhone at a Fair Price | CashSecond'); ?></title>
-    <meta name="title" content="<?= htmlspecialchars($seo['meta_title'] ?? 'Sell Your iPhone at a Fair Price | CashSecond'); ?>">
-    <meta name="description" content="<?= htmlspecialchars($seo['meta_description'] ?? 'Get a transparent valuation for your used Apple iPhone with a simple, secure and hassle-free selling process in Mumbai.'); ?>">
-    <meta name="keywords" content="Sell Used iPhone, Sell Old iPhone, Sell iPhone Online, iPhone Buyback, Used iPhone Buyers, iPhone Resale, Sell iPhone for Cash, Mumbai iPhone buyback">
+    <title><?= htmlspecialchars($page_title); ?></title>
+    <meta name="description" content="<?= htmlspecialchars($page_description); ?>">
     <meta name="robots" content="index, follow">
-    <meta name="theme-color" content="#0B0D10">
-    <link rel="canonical" href="<?= htmlspecialchars($seo['site_url'] ?? 'http://localhost/'); ?>/">
+    <link rel="canonical" href="<?= htmlspecialchars($canonical_url); ?>">
 
-    <!-- Open Graph / Facebook -->
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="<?= htmlspecialchars($page_title); ?>">
+    <meta property="og:description" content="<?= htmlspecialchars($page_description); ?>">
+    <meta property="og:url" content="<?= htmlspecialchars($canonical_url); ?>">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="<?= htmlspecialchars($seo['site_url'] ?? 'http://localhost/'); ?>/">
-    <meta property="og:title" content="<?= htmlspecialchars($seo['meta_title'] ?? 'Sell Your iPhone at a Fair Price | CashSecond'); ?>">
-    <meta property="og:description" content="<?= htmlspecialchars($seo['meta_description'] ?? 'Get a transparent valuation for your used Apple iPhone with a simple, secure and hassle-free selling process in Mumbai.'); ?>">
-    <meta property="og:image" content="<?= htmlspecialchars(($seo['site_url'] ?? '') . ($seo['og_image'] ?? '/assets/images/logo.svg')); ?>">
+    <meta property="og:image" content="<?= htmlspecialchars(rtrim($canonical_url, '/') . '/assets/images/phones/iphone-16-pro.svg'); ?>">
 
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="<?= htmlspecialchars($seo['site_url'] ?? 'http://localhost/'); ?>/">
-    <meta property="twitter:title" content="<?= htmlspecialchars($seo['meta_title'] ?? 'Sell Your iPhone at a Fair Price | CashSecond'); ?>">
-    <meta property="twitter:description" content="<?= htmlspecialchars($seo['meta_description'] ?? 'Get a transparent valuation for your used Apple iPhone with a simple, secure and hassle-free selling process in Mumbai.'); ?>">
-    <meta property="twitter:image" content="<?= htmlspecialchars(($seo['site_url'] ?? '') . ($seo['og_image'] ?? '/assets/images/logo.svg')); ?>">
+    <!-- Preconnect Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-    <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="assets/images/logo.svg">
-
-    <!-- Stylesheet -->
-    <link rel="stylesheet" href="assets/css/style.css?v=5.0">
-
-    <?php if (!empty($tracking['ga4_measurement_id'])): ?>
-    <!-- Google tag (gtag.js) GA4 -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=<?= htmlspecialchars($tracking['ga4_measurement_id']); ?>"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', '<?= htmlspecialchars($tracking['ga4_measurement_id']); ?>');
-    </script>
-    <?php endif; ?>
-
-    <?php if (!empty($tracking['google_ads_id'])): ?>
-    <!-- Google Ads Tag -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=<?= htmlspecialchars($tracking['google_ads_id']); ?>"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-      gtag('config', '<?= htmlspecialchars($tracking['google_ads_id']); ?>');
-    </script>
-    <?php endif; ?>
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="assets/css/style.css?v=6.0">
 </head>
 <body id="top">
-    <!-- Top Announcement Bar -->
-    <div class="top-bar-notice">
-        <span>📱 Sell Your iPhone Online • Free Doorstep Pickup in Mumbai • Secure Instant Payment</span>
+    <!-- 1. Top Moving Announcement Strip (Infinite Marquee) -->
+    <div class="marquee-wrapper marquee-top-bar" aria-label="Announcements">
+        <div class="marquee-track">
+            <span class="marquee-item">SELL YOUR iPHONE <span class="marquee-dot">•</span> GET INSTANT VALUE <span class="marquee-dot">•</span> FREE DOORSTEP PICKUP <span class="marquee-dot">•</span> SECURE DATA WIPE <span class="marquee-dot">•</span> FAST PAYMENT <span class="marquee-dot">•</span> BEST VALUE FOR YOUR iPHONE <span class="marquee-dot">•</span></span>
+            <span class="marquee-item">SELL YOUR iPHONE <span class="marquee-dot">•</span> GET INSTANT VALUE <span class="marquee-dot">•</span> FREE DOORSTEP PICKUP <span class="marquee-dot">•</span> SECURE DATA WIPE <span class="marquee-dot">•</span> FAST PAYMENT <span class="marquee-dot">•</span> BEST VALUE FOR YOUR iPHONE <span class="marquee-dot">•</span></span>
+        </div>
+        <div class="marquee-track" aria-hidden="true">
+            <span class="marquee-item">SELL YOUR iPHONE <span class="marquee-dot">•</span> GET INSTANT VALUE <span class="marquee-dot">•</span> FREE DOORSTEP PICKUP <span class="marquee-dot">•</span> SECURE DATA WIPE <span class="marquee-dot">•</span> FAST PAYMENT <span class="marquee-dot">•</span> BEST VALUE FOR YOUR iPHONE <span class="marquee-dot">•</span></span>
+            <span class="marquee-item">SELL YOUR iPHONE <span class="marquee-dot">•</span> GET INSTANT VALUE <span class="marquee-dot">•</span> FREE DOORSTEP PICKUP <span class="marquee-dot">•</span> SECURE DATA WIPE <span class="marquee-dot">•</span> FAST PAYMENT <span class="marquee-dot">•</span> BEST VALUE FOR YOUR iPHONE <span class="marquee-dot">•</span></span>
+        </div>
     </div>
 
-    <!-- Main Navigation Header -->
+    <!-- 2. Sticky Header -->
     <header class="site-header" id="site-header">
         <div class="container header-inner">
             <!-- Brand Logo -->
-            <a href="index.php" class="brand-logo" title="CashSecond - iPhone Buyback">
-                <img src="assets/images/logo.svg" alt="CashSecond" width="150" height="30">
+            <a href="#top" class="brand-logo" aria-label="CashSecond Home">
+                <img src="assets/images/logo.svg" alt="CashSecond Logo" width="30" height="30">
+                <span>CashSecond</span>
             </a>
 
-            <!-- Desktop Navigation Links -->
+            <!-- Desktop Nav Menu -->
             <nav class="nav-menu" aria-label="Main Navigation">
-                <a href="#top" class="nav-link">Home</a>
+                <a href="#valuation" class="nav-link">Sell iPhone</a>
                 <a href="#how-it-works" class="nav-link">How It Works</a>
+                <a href="#models" class="nav-link">iPhone Models</a>
+                <a href="#showcase" class="nav-link">Showcase</a>
                 <a href="#why-us" class="nav-link">Why Us</a>
-                <a href="#faq" class="nav-link">FAQ</a>
-                <a href="#contact" class="nav-link">Contact</a>
+                <a href="#faq" class="nav-link">FAQs</a>
             </nav>
 
-            <!-- Header Action CTAs -->
+            <!-- Header Actions -->
             <div class="header-actions">
-                <a href="#valuation" class="btn btn-primary btn-sm" id="header-cta-btn">Sell Your iPhone</a>
+                <a href="#valuation" class="btn btn-primary btn-sm" id="header-instant-price-btn">
+                    <span>Get Instant Price</span>
+                </a>
 
-                <!-- Mobile Hamburger Menu Toggle -->
-                <button type="button" class="hamburger-btn" id="mobile-menu-toggle" aria-label="Toggle Navigation Menu">
+                <!-- Mobile Hamburger Button -->
+                <button type="button" class="hamburger-btn" id="hamburger-menu-btn" aria-label="Toggle Menu" aria-expanded="false">
                     <span></span>
                     <span></span>
                     <span></span>
@@ -107,17 +85,19 @@ $tracking = $config['tracking'] ?? [];
         </div>
 
         <!-- Mobile Navigation Drawer -->
-        <div class="mobile-nav-drawer" id="mobile-nav-drawer">
-            <div class="mobile-nav-links">
-                <a href="#top" class="nav-link mobile-nav-item">Home</a>
-                <a href="#valuation" class="nav-link mobile-nav-item">Check iPhone Value</a>
-                <a href="#models" class="nav-link mobile-nav-item">iPhone Models</a>
-                <a href="#why-us" class="nav-link mobile-nav-item">Why Sell With Us</a>
-                <a href="#inspection" class="nav-link mobile-nav-item">32-Point Inspection</a>
-                <a href="#how-it-works" class="nav-link mobile-nav-item">How It Works</a>
-                <a href="#faq" class="nav-link mobile-nav-item">FAQs</a>
-                <a href="#contact" class="nav-link mobile-nav-item">Contact Us</a>
-            </div>
-            <a href="#valuation" class="btn btn-primary btn-full mobile-nav-item">Check My iPhone Value</a>
+        <div class="mobile-nav-drawer" id="mobile-nav-drawer" aria-label="Mobile Navigation">
+            <nav class="mobile-nav-links">
+                <a href="#valuation" class="nav-link mobile-drawer-link">Sell iPhone</a>
+                <a href="#how-it-works" class="nav-link mobile-drawer-link">How It Works</a>
+                <a href="#models" class="nav-link mobile-drawer-link">iPhone Models</a>
+                <a href="#showcase" class="nav-link mobile-drawer-link">Interactive Showcase</a>
+                <a href="#why-us" class="nav-link mobile-drawer-link">Why Choose Us</a>
+                <a href="#inspection" class="nav-link mobile-drawer-link">32-Point Check</a>
+                <a href="#faq" class="nav-link mobile-drawer-link">FAQs</a>
+                <a href="#contact" class="nav-link mobile-drawer-link">Contact Store</a>
+            </nav>
+            <a href="#valuation" class="btn btn-primary btn-full mobile-drawer-link">
+                <span>Get Instant Price &rarr;</span>
+            </a>
         </div>
     </header>
