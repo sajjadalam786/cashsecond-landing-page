@@ -126,37 +126,69 @@ require __DIR__ . '/includes/header.php';
 </section>
 
 <!-- ============================================================
-     2. "SELL iPHONES" COMPACT MODEL GRID (MOBILE-FIRST 3-COL)
+     2. "SELL iPHONES" 4-CARD HORIZONTAL SCROLL PRODUCT CAROUSEL
      ============================================================ -->
-<section class="sell-iphones-compact-section" id="models">
+<section class="sell-iphones-carousel-section" id="models">
     <div class="container">
-        <div class="section-header text-center" style="margin-bottom: 16px;">
-            <span class="section-eyebrow">Select Device</span>
-            <h2 class="section-title" style="font-size: clamp(1.35rem, 3.5vw, 1.875rem); margin-bottom: 4px;">Sell iPhones</h2>
-            <p class="section-subtitle" style="font-size: 0.875rem;">Select your exact iPhone model to get an instant valuation.</p>
-        </div>
-
-        <!-- 3-Column Mobile-First Model Grid -->
-        <div class="compact-models-grid" id="compact-sell-iphones-grid">
-            <?php foreach ($iphoneModels as $model): 
-                $imgSrc = htmlspecialchars($model['image'] ?? 'assets/images/phones/iphone-15.svg');
-                $prodName = htmlspecialchars($model['product_name']);
-                $prodId = htmlspecialchars($model['product_id']);
-                $shortDisplayName = preg_replace('/^Apple\s+/i', '', $prodName);
-            ?>
-            <div class="compact-model-card" data-name="<?= $prodName ?>" data-id="<?= $prodId ?>" data-image="<?= $imgSrc ?>" tabindex="0" role="button" aria-label="Sell <?= $prodName ?>">
-                <div class="compact-model-img-wrap">
-                    <img src="<?= $imgSrc ?>" alt="<?= $prodName ?>" class="compact-model-img" loading="lazy" width="65" height="65">
-                </div>
-                <div class="compact-model-name"><?= htmlspecialchars($shortDisplayName) ?></div>
+        <!-- Header with Title on Left and "View All" on Right -->
+        <div class="carousel-section-header">
+            <div class="carousel-title-col">
+                <span class="section-eyebrow">Select Device</span>
+                <h2 class="section-title">Sell iPhones</h2>
             </div>
-            <?php endforeach; ?>
+            <a href="#valuation" class="carousel-view-all-link" id="carousel-view-all-btn">
+                <span>View All &rarr;</span>
+            </a>
         </div>
 
-        <div class="text-center" style="margin-top: 16px;">
-            <a href="#valuation" class="btn btn-secondary btn-sm" id="btn-explore-all-models">
-                <span>Explore All Models &amp; Check Value &rarr;</span>
-            </a>
+        <!-- Carousel Outer Wrapper with Desktop Left/Right Controls -->
+        <div class="models-carousel-wrapper">
+            <button type="button" class="models-carousel-arrow models-carousel-prev" id="models-carousel-prev-btn" aria-label="Previous iPhone models" title="Previous">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+            </button>
+            <button type="button" class="models-carousel-arrow models-carousel-next" id="models-carousel-next-btn" aria-label="Next iPhone models" title="Next">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+            </button>
+
+            <!-- Horizontal Scrolling Track (4 cards visible in one row on mobile) -->
+            <div class="models-horizontal-track" id="models-horizontal-carousel" role="region" aria-label="iPhone Products Carousel">
+                <?php 
+                $priceLookup = [
+                    '16 pro max' => '₹98,000', '16 pro' => '₹88,000', '16 plus' => '₹68,000', '16' => '₹62,000',
+                    '15 pro max' => '₹82,000', '15 pro' => '₹72,000', '15 plus' => '₹56,000', '15' => '₹51,000',
+                    '14 pro max' => '₹64,000', '14 pro' => '₹56,000', '14 plus' => '₹44,000', '14' => '₹40,000',
+                    '13 pro max' => '₹48,000', '13 pro' => '₹42,000', '13' => '₹32,000', '13 mini' => '₹26,000',
+                    '12 pro max' => '₹36,000', '12 pro' => '₹30,000', '12' => '₹23,000', '12 mini' => '₹18,000',
+                    '11 pro max' => '₹24,000', '11 pro' => '₹21,000', '11' => '₹16,000',
+                    'xs max' => '₹14,000', 'xs' => '₹12,000', 'xr' => '₹11,500', 'x' => '₹10,500'
+                ];
+
+                foreach ($iphoneModels as $model): 
+                    $imgSrc = htmlspecialchars($model['image'] ?? 'assets/images/phones/iphone-15.svg');
+                    $prodName = htmlspecialchars($model['product_name']);
+                    $prodId = htmlspecialchars($model['product_id']);
+                    $shortDisplayName = preg_replace('/^Apple\s+/i', '', $prodName);
+
+                    $lowerName = strtolower($prodName);
+                    $estPrice = '₹45,000';
+                    foreach ($priceLookup as $k => $val) {
+                        if (strpos($lowerName, $k) !== false) {
+                            $estPrice = $val;
+                            break;
+                        }
+                    }
+                ?>
+                <div class="product-carousel-card" data-name="<?= $prodName ?>" data-id="<?= $prodId ?>" data-image="<?= $imgSrc ?>" tabindex="0" role="button" aria-label="Sell <?= $prodName ?>">
+                    <div class="product-card-img-wrap">
+                        <img src="<?= $imgSrc ?>" alt="<?= $prodName ?>" class="product-card-img" loading="lazy" width="60" height="60">
+                    </div>
+                    <div class="product-card-info">
+                        <h3 class="product-card-name"><?= htmlspecialchars($shortDisplayName) ?></h3>
+                        <div class="product-card-price">Up to <?= $estPrice ?></div>
+                    </div>
+                </div>
+                <?php endforeach; ?>
+            </div>
         </div>
     </div>
 </section>

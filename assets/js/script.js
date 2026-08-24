@@ -206,27 +206,82 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ============================================================
-    // 3. COMPACT "SELL iPHONES" GRID CARD CLICK & SELECTION
+    // 3. "SELL iPHONES" 4-CARD HORIZONTAL PRODUCT CAROUSEL
     // ============================================================
-    const compactModelCards = document.querySelectorAll('.compact-model-card');
-    compactModelCards.forEach(card => {
-        const selectCompactModel = () => {
+    const modelsCarouselTrack = document.getElementById('models-horizontal-carousel');
+    const modelsCarouselPrev = document.getElementById('models-carousel-prev-btn');
+    const modelsCarouselNext = document.getElementById('models-carousel-next-btn');
+    const productCarouselCards = document.querySelectorAll('.product-carousel-card');
+
+    if (modelsCarouselTrack) {
+        // Arrow Navigation
+        const getCardScrollStep = () => {
+            const card = modelsCarouselTrack.querySelector('.product-carousel-card');
+            return card ? (card.offsetWidth + 8) * 3 : 280;
+        };
+
+        if (modelsCarouselPrev) {
+            modelsCarouselPrev.addEventListener('click', () => {
+                modelsCarouselTrack.scrollBy({ left: -getCardScrollStep(), behavior: 'smooth' });
+            });
+        }
+
+        if (modelsCarouselNext) {
+            modelsCarouselNext.addEventListener('click', () => {
+                modelsCarouselTrack.scrollBy({ left: getCardScrollStep(), behavior: 'smooth' });
+            });
+        }
+
+        // Desktop Mouse Drag to Scroll
+        let isDownTrack = false;
+        let startXTrack;
+        let scrollLeftTrack;
+
+        modelsCarouselTrack.addEventListener('mousedown', (e) => {
+            isDownTrack = true;
+            modelsCarouselTrack.style.cursor = 'grabbing';
+            startXTrack = e.pageX - modelsCarouselTrack.offsetLeft;
+            scrollLeftTrack = modelsCarouselTrack.scrollLeft;
+        });
+
+        modelsCarouselTrack.addEventListener('mouseleave', () => {
+            isDownTrack = false;
+            modelsCarouselTrack.style.cursor = '';
+        });
+
+        modelsCarouselTrack.addEventListener('mouseup', () => {
+            isDownTrack = false;
+            modelsCarouselTrack.style.cursor = '';
+        });
+
+        modelsCarouselTrack.addEventListener('mousemove', (e) => {
+            if (!isDownTrack) return;
+            e.preventDefault();
+            const x = e.pageX - modelsCarouselTrack.offsetLeft;
+            const walk = (x - startXTrack) * 1.5;
+            modelsCarouselTrack.scrollLeft = scrollLeftTrack - walk;
+        });
+    }
+
+    // Product Carousel Card Click & Keyboard Selection
+    productCarouselCards.forEach(card => {
+        const selectProductModel = () => {
             const name = card.getAttribute('data-name');
             const id = card.getAttribute('data-id');
             const image = card.getAttribute('data-image');
 
-            compactModelCards.forEach(c => c.classList.remove('active'));
+            productCarouselCards.forEach(c => c.classList.remove('active'));
             card.classList.add('active');
 
             startValuationWithModel(name, id, image);
         };
 
-        card.addEventListener('click', selectCompactModel);
+        card.addEventListener('click', selectProductModel);
 
         card.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault();
-                selectCompactModel();
+                selectProductModel();
             }
         });
     });
