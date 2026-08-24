@@ -21,75 +21,41 @@ require __DIR__ . '/includes/header.php';
 ?>
 
 <!-- ============================================================
-     1. HERO SECTION & 3D INTERACTION
+     1. HERO SECTION — CHOOSE YOUR IPHONE MODEL (MOBILE-FIRST CAROUSEL)
      ============================================================ -->
-<section class="hero-section" id="hero">
+<section class="model-carousel-hero-section" id="models">
     <div class="container">
-        <div class="hero-grid">
-            <!-- Left Hero Content -->
-            <div class="hero-content-col">
-                <div class="hero-badge">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-                    <span>Apple-Specialist Buyback</span>
-                </div>
+        <div class="hero-carousel-header">
+            <h1>Choose Your iPhone Model</h1>
+            <p>Select your iPhone model to check its resale value.</p>
+        </div>
 
-                <h1 class="hero-title">
-                    Sell Your iPhone.<br>Get Its Best Value.
-                </h1>
-
-                <p class="hero-subtitle">
-                    Get an instant estimate for your iPhone in seconds. Simple, secure and hassle-free with free doorstep pickup in Mumbai.
-                </p>
-
-                <!-- Hero Search Experience -->
-                <div class="hero-search-wrapper" id="hero-search-box">
-                    <div class="search-input-group">
-                        <span class="search-icon-left">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                        </span>
-                        <input type="text" id="hero-search-input" class="hero-search-input" placeholder="Search your iPhone model (e.g. 16 Pro, 15, 14)..." autocomplete="off">
-                        <span class="search-clear-btn" id="hero-search-clear" title="Clear search">&times;</span>
+        <div class="hero-carousel-wrapper">
+            <!-- Carousel Track (Mobile-First: 2 cards per view with snap) -->
+            <div class="hero-carousel-track" id="hero-models-carousel" role="region" aria-label="iPhone Model Carousel">
+                <?php foreach ($iphoneModels as $model): 
+                    $imgSrc = htmlspecialchars($model['image'] ?? 'assets/images/phones/iphone-15.svg');
+                    $prodName = htmlspecialchars($model['product_name']);
+                    $prodId = htmlspecialchars($model['product_id']);
+                ?>
+                <div class="hero-model-card" data-name="<?= $prodName ?>" data-id="<?= $prodId ?>" data-image="<?= $imgSrc ?>" tabindex="0" role="button" aria-label="Select <?= $prodName ?>">
+                    <div class="hero-model-img-wrap">
+                        <img src="<?= $imgSrc ?>" alt="<?= $prodName ?>" class="hero-model-img" loading="eager" width="120" height="120">
                     </div>
-
-                    <!-- Autocomplete Dropdown -->
-                    <div class="search-autocomplete-dropdown" id="search-autocomplete-results"></div>
+                    <div class="hero-model-name"><?= $prodName ?></div>
+                    <span class="hero-model-cta">Check Value &rarr;</span>
                 </div>
-
-                <!-- CTA Group -->
-                <div class="hero-cta-group">
-                    <a href="#valuation" class="btn btn-primary btn-lg" id="hero-get-price-cta">
-                        <span>Get Instant Price</span>
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
-                    </a>
-                    <a href="#models" class="btn btn-secondary btn-lg" id="hero-explore-models-cta">
-                        <span>Explore iPhone Models</span>
-                    </a>
-                </div>
+                <?php endforeach; ?>
             </div>
 
-            <!-- Right 3D Interactive Hero iPhone Visual -->
-            <div class="hero-3d-scene" id="hero-3d-container">
-                <div class="hero-3d-phone-wrap" id="hero-3d-phone-wrap">
-                    <!-- Floating Specification Pills -->
-                    <div class="spec-pill spec-pill-1">
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--color-cta)" stroke-width="2.5"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-                        <span>Pro Camera</span>
-                    </div>
-                    <div class="spec-pill spec-pill-2">
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--color-cta)" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-                        <span>Apple Silicon</span>
-                    </div>
-                    <div class="spec-pill spec-pill-3">
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--color-success)" stroke-width="2.5"><rect x="1" y="6" width="18" height="12" rx="2" ry="2"/><line x1="23" y1="13" x2="23" y2="11"/></svg>
-                        <span>Battery Health</span>
-                    </div>
-                    <div class="spec-pill spec-pill-4">
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--color-cta)" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                        <span>Original Display</span>
-                    </div>
-
-                    <img src="assets/images/phones/iphone-16-pro.svg" alt="Apple iPhone Buyback, Valuation and Resale in Mumbai - CashSecond" class="hero-3d-phone-img" id="hero-main-phone-img" loading="eager" width="280" height="310">
-                </div>
+            <!-- Carousel Arrow Controls -->
+            <div class="hero-carousel-controls">
+                <button type="button" class="hero-carousel-btn" id="hero-carousel-prev" aria-label="Previous iPhone models" title="Previous">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+                </button>
+                <button type="button" class="hero-carousel-btn" id="hero-carousel-next" aria-label="Next iPhone models" title="Next">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                </button>
             </div>
         </div>
     </div>

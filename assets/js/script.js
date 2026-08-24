@@ -78,136 +78,86 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ============================================================
-    // 2. HERO 3D TILT EFFECT (DESKTOP ONLY)
+    // 2. HERO iPHONE MODEL BROWSING CAROUSEL (MOBILE-FIRST)
     // ============================================================
-    const hero3dScene = document.getElementById('hero-3d-container');
-    const hero3dPhone = document.getElementById('hero-3d-phone-wrap');
+    const heroCarouselTrack = document.getElementById('hero-models-carousel');
+    const heroCarouselPrev = document.getElementById('hero-carousel-prev');
+    const heroCarouselNext = document.getElementById('hero-carousel-next');
+    const heroModelCards = document.querySelectorAll('.hero-model-card');
 
-    if (hero3dScene && hero3dPhone && window.innerWidth >= 992) {
-        let isHovered = false;
-        let targetX = 0, targetY = 0;
-        let currentX = 0, currentY = 0;
+    if (heroCarouselTrack) {
+        // Arrow Navigation
+        const getScrollDistance = () => {
+            const card = heroCarouselTrack.querySelector('.hero-model-card');
+            return card ? (card.offsetWidth + 12) * 2 : 300;
+        };
 
-        hero3dScene.addEventListener('mouseenter', () => { isHovered = true; });
-        hero3dScene.addEventListener('mouseleave', () => {
-            isHovered = false;
-            targetX = 0;
-            targetY = 0;
-        });
-
-        hero3dScene.addEventListener('mousemove', (e) => {
-            const rect = hero3dScene.getBoundingClientRect();
-            const x = e.clientX - rect.left - rect.width / 2;
-            const y = e.clientY - rect.top - rect.height / 2;
-            targetX = (x / (rect.width / 2)) * 10; // Max 10 deg
-            targetY = -(y / (rect.height / 2)) * 10;
-        });
-
-        function update3DTilt() {
-            currentX += (targetX - currentX) * 0.1;
-            currentY += (targetY - currentY) * 0.1;
-            hero3dPhone.style.transform = `rotateY(${currentX.toFixed(2)}deg) rotateX(${currentY.toFixed(2)}deg)`;
-            requestAnimationFrame(update3DTilt);
-        }
-        update3DTilt();
-    }
-
-    // ============================================================
-    // 3. HERO AUTOCOMPLETE SEARCH
-    // ============================================================
-    const searchInput = document.getElementById('hero-search-input');
-    const searchClearBtn = document.getElementById('hero-search-clear');
-    const searchDropdown = document.getElementById('search-autocomplete-results');
-
-    function filterModels(query) {
-        if (!query) return [];
-        const tokens = query.toLowerCase().trim().replace(/[^a-z0-9\s]/g, ' ').split(/\s+/).filter(Boolean);
-        if (tokens.length === 0) return [];
-
-        return catalogModels.filter(m => {
-            const mName = m.product_name.toLowerCase();
-            return tokens.every(t => mName.includes(t));
-        });
-    }
-
-    if (searchInput && searchDropdown) {
-        searchInput.addEventListener('input', () => {
-            const query = searchInput.value.trim();
-            if (searchClearBtn) {
-                searchClearBtn.style.display = query ? 'block' : 'none';
-            }
-
-            if (query.length < 1) {
-                searchDropdown.style.display = 'none';
-                searchDropdown.innerHTML = '';
-                return;
-            }
-
-            const matches = filterModels(query);
-            if (matches.length === 0) {
-                searchDropdown.innerHTML = `
-                    <div class="search-empty-state">
-                        <h4 class="search-empty-title">No iPhone model found</h4>
-                        <p class="search-empty-sub">Try searching by model name, such as <strong>iPhone 16</strong> or <strong>iPhone 15 Pro</strong>.</p>
-                    </div>
-                `;
-                searchDropdown.style.display = 'block';
-                return;
-            }
-
-            let html = `
-                <div class="search-section-header">
-                    <span class="search-section-title">Matching iPhones (${matches.length})</span>
-                    <span style="font-size:0.75rem; color:var(--color-text-muted);">Select to check value</span>
-                </div>
-                <div class="search-products-grid">
-            `;
-
-            matches.slice(0, 9).forEach(m => {
-                const imgSrc = m.image || 'assets/images/phones/iphone-15.svg';
-                html += `
-                    <div class="search-product-card" data-name="${escapeHtml(m.product_name)}" data-id="${m.product_id}" data-image="${escapeHtml(imgSrc)}">
-                        <div class="search-product-img-wrap">
-                            <img src="${escapeHtml(imgSrc)}" alt="${escapeHtml(m.product_name)} valuation and buyback" class="search-product-img" loading="lazy" width="75" height="75">
-                        </div>
-                        <h4 class="search-product-name">${escapeHtml(m.product_name)}</h4>
-                        <span class="search-product-cta">Check Value &rarr;</span>
-                    </div>
-                `;
-            });
-
-            html += `</div>`;
-            searchDropdown.innerHTML = html;
-            searchDropdown.style.display = 'block';
-
-            searchDropdown.querySelectorAll('.search-product-card').forEach(card => {
-                card.addEventListener('click', () => {
-                    const name = card.getAttribute('data-name');
-                    const id = card.getAttribute('data-id');
-                    const image = card.getAttribute('data-image');
-                    startValuationWithModel(name, id, image);
-                    searchDropdown.style.display = 'none';
-                    searchInput.value = '';
-                    if (searchClearBtn) searchClearBtn.style.display = 'none';
-                });
-            });
-        });
-
-        if (searchClearBtn) {
-            searchClearBtn.addEventListener('click', () => {
-                searchInput.value = '';
-                searchDropdown.style.display = 'none';
-                searchClearBtn.style.display = 'none';
-                searchInput.focus();
+        if (heroCarouselPrev) {
+            heroCarouselPrev.addEventListener('click', () => {
+                heroCarouselTrack.scrollBy({ left: -getScrollDistance(), behavior: 'smooth' });
             });
         }
 
-        document.addEventListener('click', (e) => {
-            if (!e.target.closest('#hero-search-box')) {
-                searchDropdown.style.display = 'none';
-            }
+        if (heroCarouselNext) {
+            heroCarouselNext.addEventListener('click', () => {
+                heroCarouselTrack.scrollBy({ left: getScrollDistance(), behavior: 'smooth' });
+            });
+        }
+
+        // Desktop Mouse Drag to Scroll
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+
+        heroCarouselTrack.addEventListener('mousedown', (e) => {
+            isDown = true;
+            heroCarouselTrack.style.cursor = 'grabbing';
+            startX = e.pageX - heroCarouselTrack.offsetLeft;
+            scrollLeft = heroCarouselTrack.scrollLeft;
+        });
+
+        heroCarouselTrack.addEventListener('mouseleave', () => {
+            isDown = false;
+            heroCarouselTrack.style.cursor = '';
+        });
+
+        heroCarouselTrack.addEventListener('mouseup', () => {
+            isDown = false;
+            heroCarouselTrack.style.cursor = '';
+        });
+
+        heroCarouselTrack.addEventListener('mousemove', (e) => {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - heroCarouselTrack.offsetLeft;
+            const walk = (x - startX) * 1.5;
+            heroCarouselTrack.scrollLeft = scrollLeft - walk;
         });
     }
+
+    // Hero Model Card Click & Keyboard Selection
+    heroModelCards.forEach(card => {
+        const selectCardModel = () => {
+            const name = card.getAttribute('data-name');
+            const id = card.getAttribute('data-id');
+            const image = card.getAttribute('data-image');
+            
+            // Highlight active in hero carousel
+            heroModelCards.forEach(c => c.classList.remove('active'));
+            card.classList.add('active');
+
+            startValuationWithModel(name, id, image);
+        };
+
+        card.addEventListener('click', selectCardModel);
+
+        card.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                selectCardModel();
+            }
+        });
+    });
 
     // ============================================================
     // 4. STEP 1: GENERATION TABS & MODEL FILTER

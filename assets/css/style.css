@@ -446,169 +446,233 @@ button {
 }
 
 /* ============================================================
-   6. HERO SECTION & 3D INTERACTION
+   6. HERO SECTION — CHOOSE YOUR iPHONE MODEL (MOBILE-FIRST CAROUSEL)
    ============================================================ */
-.hero-section {
-    position: relative;
-    padding: 44px 0 36px 0;
+.model-carousel-hero-section {
+    padding: 28px 0 20px 0;
     background: linear-gradient(180deg, #FFFFFF 0%, var(--color-bg-page) 100%);
     overflow: hidden;
-}
-
-@media (min-width: 992px) {
-    .hero-section {
-        padding: 64px 0 48px 0;
-    }
-}
-
-.hero-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 36px;
-    align-items: center;
-}
-
-@media (min-width: 992px) {
-    .hero-grid {
-        grid-template-columns: 1.1fr 0.9fr;
-        gap: 48px;
-    }
-}
-
-.hero-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background-color: rgba(0, 113, 227, 0.08);
-    color: var(--color-cta);
-    font-size: 0.8125rem;
-    font-weight: 600;
-    padding: 5px 12px;
-    border-radius: var(--radius-pill);
-    margin-bottom: 14px;
-}
-
-.hero-title {
-    font-family: var(--font-heading);
-    font-size: 2.25rem;
-    font-weight: 700;
-    line-height: 1.12;
-    color: var(--color-dark);
-    letter-spacing: -0.03em;
-    margin-bottom: 14px;
+    position: relative;
 }
 
 @media (min-width: 768px) {
-    .hero-title {
-        font-size: 3.125rem;
+    .model-carousel-hero-section {
+        padding: 40px 0 28px 0;
     }
 }
 
-.hero-subtitle {
-    font-size: 1.0625rem;
+.hero-carousel-header {
+    text-align: center;
+    max-width: 680px;
+    margin: 0 auto 20px auto;
+    padding: 0 16px;
+}
+
+.hero-carousel-header h1 {
+    font-family: var(--font-heading);
+    font-size: 1.625rem;
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--color-dark);
+    letter-spacing: -0.025em;
+    margin-bottom: 6px;
+}
+
+@media (min-width: 768px) {
+    .hero-carousel-header h1 {
+        font-size: 2.25rem;
+    }
+}
+
+.hero-carousel-header p {
+    font-size: 0.9375rem;
     color: var(--color-text-secondary);
-    line-height: 1.55;
-    margin-bottom: 22px;
-    max-width: 520px;
+    line-height: 1.4;
 }
 
-.hero-cta-group {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 22px;
+@media (min-width: 768px) {
+    .hero-carousel-header p {
+        font-size: 1.0625rem;
+    }
 }
 
-/* 3D Scene Container */
-.hero-3d-scene {
-    position: relative;
-    perspective: 1000px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.hero-3d-phone-wrap {
+/* Carousel Outer Wrapper */
+.hero-carousel-wrapper {
     position: relative;
     width: 100%;
-    max-width: 320px;
-    height: 380px;
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+/* Scroll Track (Mobile-First: 2 cards per view) */
+.hero-carousel-track {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    transform-style: preserve-3d;
-    transition: transform 0.15s ease-out;
+    gap: 12px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding: 6px 16px 16px 16px;
+    user-select: none;
 }
 
-.hero-3d-phone-img {
-    max-height: 310px;
-    object-fit: contain;
-    filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.16));
-    animation: phone-float 4.5s ease-in-out infinite;
+.hero-carousel-track::-webkit-scrollbar {
+    display: none;
 }
 
-@keyframes phone-float {
-    0%, 100% {
-        transform: translateY(0px) rotate(0deg);
-    }
-    50% {
-        transform: translateY(-8px) rotate(0.8deg);
-    }
-}
-
-/* Floating Specification Pills */
-.spec-pill {
-    position: absolute;
-    background: rgba(255, 255, 255, 0.92);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+/* Model Card (Mobile-First) */
+.hero-model-card {
+    flex: 0 0 calc((100% - 12px) / 2);
+    min-width: 135px;
+    max-width: 180px;
+    scroll-snap-align: start;
+    box-sizing: border-box;
+    background-color: #FFFFFF;
     border: 1px solid var(--color-border);
-    border-radius: var(--radius-pill);
-    padding: 6px 14px;
-    font-size: 0.75rem;
+    border-radius: var(--radius-md);
+    padding: 14px 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: var(--shadow-subtle);
+}
+
+.hero-model-card:hover, .hero-model-card:focus-visible, .hero-model-card.active {
+    border-color: var(--color-cta);
+    box-shadow: var(--shadow-card);
+    transform: translateY(-2px);
+    outline: none;
+}
+
+/* Responsive Card Width for Tablets (3-4 cards) */
+@media (min-width: 640px) {
+    .hero-model-card {
+        flex: 0 0 calc((100% - 24px) / 3);
+        min-width: 160px;
+        max-width: 200px;
+    }
+}
+
+@media (min-width: 768px) {
+    .hero-model-card {
+        flex: 0 0 calc((100% - 36px) / 4);
+        min-width: 165px;
+        max-width: 210px;
+        padding: 16px 12px;
+    }
+}
+
+/* Responsive Card Width for Desktops (5-6 cards) */
+@media (min-width: 1024px) {
+    .hero-model-card {
+        flex: 0 0 calc((100% - 60px) / 6);
+        min-width: 145px;
+        max-width: 175px;
+        padding: 18px 12px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .hero-model-card {
+        flex: 0 0 calc((100% - 72px) / 7);
+        min-width: 140px;
+        max-width: 165px;
+    }
+}
+
+/* Product Image in Carousel */
+.hero-model-img-wrap {
+    width: 100%;
+    height: clamp(85px, 24vw, 125px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 8px;
+}
+
+.hero-model-img {
+    max-height: 100%;
+    max-width: 100%;
+    object-fit: contain;
+    transition: transform 0.25s ease;
+}
+
+.hero-model-card:hover .hero-model-img {
+    transform: scale(1.06);
+}
+
+/* Model Name */
+.hero-model-name {
+    font-size: 0.8125rem;
     font-weight: 700;
     color: var(--color-dark);
-    box-shadow: var(--shadow-card);
+    line-height: 1.3;
+    margin-bottom: 6px;
+    flex-grow: 1;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+@media (min-width: 768px) {
+    .hero-model-name {
+        font-size: 0.875rem;
+    }
+}
+
+/* Check Value Action */
+.hero-model-cta {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--color-cta);
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+}
+
+/* Carousel Control Arrows */
+.hero-carousel-controls {
     display: flex;
     align-items: center;
-    gap: 6px;
-    z-index: 10;
-    pointer-events: none;
-    animation: pill-float 4s ease-in-out infinite;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 8px;
 }
 
-.spec-pill-1 {
-    top: 25px;
-    left: -10px;
-    animation-delay: 0s;
+.hero-carousel-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background-color: #FFFFFF;
+    border: 1px solid var(--color-border);
+    color: var(--color-dark);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow-subtle);
+    transition: var(--transition);
+    cursor: pointer;
 }
 
-.spec-pill-2 {
-    top: 50px;
-    right: -10px;
-    animation-delay: 1s;
+.hero-carousel-btn:hover {
+    background-color: var(--color-dark);
+    border-color: var(--color-dark);
+    color: #FFFFFF;
+    box-shadow: var(--shadow-card);
+    transform: scale(1.05);
 }
 
-.spec-pill-3 {
-    bottom: 60px;
-    left: -15px;
-    animation-delay: 2s;
+.hero-carousel-btn:active {
+    transform: scale(0.95);
 }
 
-.spec-pill-4 {
-    bottom: 30px;
-    right: -10px;
-    animation-delay: 1.5s;
-}
-
-@keyframes pill-float {
-    0%, 100% {
-        transform: translateY(0);
-    }
-    50% {
-        transform: translateY(-5px);
-    }
+.hero-carousel-btn:focus-visible {
+    outline: 2px solid var(--color-cta);
 }
 
 /* ============================================================
