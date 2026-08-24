@@ -206,6 +206,32 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ============================================================
+    // 3. COMPACT "SELL iPHONES" GRID CARD CLICK & SELECTION
+    // ============================================================
+    const compactModelCards = document.querySelectorAll('.compact-model-card');
+    compactModelCards.forEach(card => {
+        const selectCompactModel = () => {
+            const name = card.getAttribute('data-name');
+            const id = card.getAttribute('data-id');
+            const image = card.getAttribute('data-image');
+
+            compactModelCards.forEach(c => c.classList.remove('active'));
+            card.classList.add('active');
+
+            startValuationWithModel(name, id, image);
+        };
+
+        card.addEventListener('click', selectCompactModel);
+
+        card.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                selectCompactModel();
+            }
+        });
+    });
+
+    // ============================================================
     // 4. STEP 1: GENERATION TABS & MODEL FILTER
     // ============================================================
     const genTabBtns = document.querySelectorAll('.gen-tab-btn');

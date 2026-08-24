@@ -759,6 +759,125 @@ button {
 }
 
 /* ============================================================
+   7. "SELL iPHONES" COMPACT MODEL GRID (MOBILE-FIRST 3-COL)
+   ============================================================ */
+.sell-iphones-compact-section {
+    padding: 24px 0 28px 0;
+    background-color: #FFFFFF;
+    border-bottom: 1px solid var(--color-border);
+}
+
+@media (min-width: 768px) {
+    .sell-iphones-compact-section {
+        padding: 36px 0 40px 0;
+    }
+}
+
+.compact-models-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px 10px;
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+@media (min-width: 540px) {
+    .compact-models-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 12px;
+    }
+}
+
+@media (min-width: 768px) {
+    .compact-models-grid {
+        grid-template-columns: repeat(5, 1fr);
+        gap: 14px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .compact-models-grid {
+        grid-template-columns: repeat(6, 1fr);
+        gap: 14px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .compact-models-grid {
+        grid-template-columns: repeat(7, 1fr);
+        gap: 16px;
+    }
+}
+
+.compact-model-card {
+    background-color: #FFFFFF;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 12px 6px;
+    text-align: center;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow-subtle);
+    user-select: none;
+    box-sizing: border-box;
+}
+
+.compact-model-card:hover, .compact-model-card:focus-visible, .compact-model-card.active {
+    border-color: var(--color-cta);
+    box-shadow: var(--shadow-card);
+    transform: translateY(-2px);
+    outline: none;
+}
+
+.compact-model-img-wrap {
+    width: 100%;
+    height: clamp(52px, 14vw, 70px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 6px;
+}
+
+@media (min-width: 768px) {
+    .compact-model-img-wrap {
+        height: 75px;
+    }
+}
+
+.compact-model-img {
+    max-height: 100%;
+    max-width: 100%;
+    object-fit: contain;
+    transition: transform 0.2s ease;
+}
+
+.compact-model-card:hover .compact-model-img {
+    transform: scale(1.08);
+}
+
+.compact-model-name {
+    font-size: clamp(0.6875rem, 2.4vw, 0.8125rem);
+    font-weight: 700;
+    color: var(--color-dark);
+    line-height: 1.25;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    word-break: break-word;
+}
+
+@media (min-width: 768px) {
+    .compact-model-name {
+        font-size: 0.8125rem;
+    }
+}
+
+/* ============================================================
    7. LIVE AUTOCOMPLETE IPHONE SEARCH
    ============================================================ */
 .hero-search-wrapper {

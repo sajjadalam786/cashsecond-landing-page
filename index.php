@@ -126,7 +126,43 @@ require __DIR__ . '/includes/header.php';
 </section>
 
 <!-- ============================================================
-     2. MOVING TRUST STRIP #1 (Infinite Marquee)
+     2. "SELL iPHONES" COMPACT MODEL GRID (MOBILE-FIRST 3-COL)
+     ============================================================ -->
+<section class="sell-iphones-compact-section" id="models">
+    <div class="container">
+        <div class="section-header text-center" style="margin-bottom: 16px;">
+            <span class="section-eyebrow">Select Device</span>
+            <h2 class="section-title" style="font-size: clamp(1.35rem, 3.5vw, 1.875rem); margin-bottom: 4px;">Sell iPhones</h2>
+            <p class="section-subtitle" style="font-size: 0.875rem;">Select your exact iPhone model to get an instant valuation.</p>
+        </div>
+
+        <!-- 3-Column Mobile-First Model Grid -->
+        <div class="compact-models-grid" id="compact-sell-iphones-grid">
+            <?php foreach ($iphoneModels as $model): 
+                $imgSrc = htmlspecialchars($model['image'] ?? 'assets/images/phones/iphone-15.svg');
+                $prodName = htmlspecialchars($model['product_name']);
+                $prodId = htmlspecialchars($model['product_id']);
+                $shortDisplayName = preg_replace('/^Apple\s+/i', '', $prodName);
+            ?>
+            <div class="compact-model-card" data-name="<?= $prodName ?>" data-id="<?= $prodId ?>" data-image="<?= $imgSrc ?>" tabindex="0" role="button" aria-label="Sell <?= $prodName ?>">
+                <div class="compact-model-img-wrap">
+                    <img src="<?= $imgSrc ?>" alt="<?= $prodName ?>" class="compact-model-img" loading="lazy" width="65" height="65">
+                </div>
+                <div class="compact-model-name"><?= htmlspecialchars($shortDisplayName) ?></div>
+            </div>
+            <?php endforeach; ?>
+        </div>
+
+        <div class="text-center" style="margin-top: 16px;">
+            <a href="#valuation" class="btn btn-secondary btn-sm" id="btn-explore-all-models">
+                <span>Explore All Models &amp; Check Value &rarr;</span>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
+     3. MOVING TRUST STRIP #1 (Infinite Marquee)
      ============================================================ -->
 <div class="marquee-wrapper trust-marquee-section" aria-label="Trust Badges">
     <div class="marquee-track">
