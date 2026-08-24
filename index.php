@@ -194,6 +194,32 @@ require __DIR__ . '/includes/header.php';
 </section>
 
 <!-- ============================================================
+     2.5. COMPACT PROMOTIONAL AD BANNER (MIDDLE AD BANNER)
+     ============================================================ -->
+<div class="compact-ad-banner-section" aria-label="Special Buyback Offer">
+    <div class="container">
+        <div class="compact-ad-banner-card">
+            <!-- Left Text Content -->
+            <div class="compact-ad-content">
+                <span class="compact-ad-tag">
+                    <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                    Special Buyback Offer
+                </span>
+                <h3 class="compact-ad-title">Sell Your Old iPhone at Top Market Value</h3>
+                <p class="compact-ad-desc">Instant doorstep evaluation &amp; on-spot UPI payment in Mumbai.</p>
+                <a href="#valuation" class="compact-ad-btn" id="compact-ad-cta-btn">
+                    <span>Check Value &rarr;</span>
+                </a>
+            </div>
+            <!-- Right Product Visual -->
+            <div class="compact-ad-visual">
+                <img src="assets/images/phones/iphone-16-pro.svg" alt="Sell your iPhone at best value with CashSecond" class="compact-ad-img" loading="lazy" width="90" height="95">
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================================
      3. MOVING TRUST STRIP #1 (Infinite Marquee)
      ============================================================ -->
 <div class="marquee-wrapper trust-marquee-section" aria-label="Trust Badges">
