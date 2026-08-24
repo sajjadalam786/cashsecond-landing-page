@@ -69,19 +69,12 @@ $canonical_url = $seo['site_url'] ?? 'http://localhost/cashsecond-landing-page/'
                 <a href="#faq" class="nav-link">FAQs</a>
             </nav>
 
-            <!-- Header Actions -->
-            <div class="header-actions">
-                <a href="#valuation" class="btn btn-primary btn-sm" id="header-instant-price-btn">
-                    <span>Get Instant Price</span>
-                </a>
-
-                <!-- Mobile Hamburger Button -->
-                <button type="button" class="hamburger-btn" id="hamburger-menu-btn" aria-label="Toggle Menu" aria-expanded="false">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </button>
-            </div>
+            <!-- Mobile Hamburger Button -->
+            <button type="button" class="hamburger-btn" id="hamburger-menu-btn" aria-label="Toggle Menu" aria-expanded="false">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
         </div>
 
         <!-- Mobile Navigation Drawer -->
