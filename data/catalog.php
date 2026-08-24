@@ -1,0 +1,331 @@
+<?php
+// CashSecond Product Catalog Database - iPhone Only
+// Sourced from https://cashsecond.com/
+
+return array (
+  'buy_products' => 
+  array (
+    0 => 
+    array (
+      'id' => 2,
+      'brand' => 'Apple',
+      'model' => 'Apple iPhone 15',
+      'variant' => 'Pink',
+      'ram' => '6 GB RAM',
+      'storage' => '128 GB Storage',
+      'condition' => 'RENEWED',
+      'price_raw' => 44799,
+      'price_display' => '₹44,799',
+      'mrp_raw' => 69900,
+      'mrp_display' => '₹69,900',
+      'discount' => '36% off',
+      'availability' => 'In Stock',
+      'image' => 'assets/images/phones/iphone-15.svg',
+      'description' => 'Buy the Apple iPhone 15 (128 GB) in stunning Pink. Experience the A16 Bionic chip, advanced dual-camera system, Dynamic Island, and 6.1″ Super Retina XDR display.',
+    ),
+    1 => 
+    array (
+      'id' => 3,
+      'brand' => 'Apple',
+      'model' => 'Apple iPhone 16',
+      'variant' => 'White',
+      'ram' => '6 GB RAM',
+      'storage' => '128 GB Storage',
+      'condition' => 'NEW',
+      'price_raw' => 53600,
+      'price_display' => '₹53,600',
+      'mrp_raw' => 59900,
+      'mrp_display' => '₹59,900',
+      'discount' => '11% off',
+      'availability' => 'In Stock',
+      'image' => 'assets/images/phones/iphone-16.svg',
+      'description' => 'Discover the power of the Apple A18 chip with Apple Intelligence, supersized battery life, Action button, and 48MP Fusion Camera.',
+    ),
+  ),
+  'sell_brands' => 
+  array (
+    'Apple' => 
+    array (
+      0 => 
+      array (
+        'product_id' => 1757,
+        'product_name' => 'Apple iPhone 16 Pro Max',
+        'brand' => 'Apple',
+        'image' => 'assets/images/phones/iphone-16-pro.svg',
+        'series' => '16',
+      ),
+      1 => 
+      array (
+        'product_id' => 1753,
+        'product_name' => 'Apple iPhone 16 Pro',
+        'brand' => 'Apple',
+        'image' => 'assets/images/phones/iphone-16-pro.svg',
+        'series' => '16',
+      ),
+      2 => 
+      array (
+        'product_id' => 1750,
+        'product_name' => 'Apple iPhone 16 Plus',
+        'brand' => 'Apple',
+        'image' => 'assets/images/phones/iphone-16.svg',
+        'series' => '16',
+      ),
+      3 => 
+      array (
+        'product_id' => 1747,
+        'product_name' => 'Apple iPhone 16',
+        'brand' => 'Apple',
+        'image' => 'assets/images/phones/iphone-16.svg',
+        'series' => '16',
+      ),
+      4 => 
+      array (
+        'product_id' => 1351,
+        'product_name' => 'Apple iPhone 15 Pro Max',
+        'brand' => 'Apple',
+        'image' => 'assets/images/phones/iphone-15-pro.svg',
+        'series' => '15',
+      ),
+      5 => 
+      array (
+        'product_id' => 1347,
+        'product_name' => 'Apple iPhone 15 Pro',
+        'brand' => 'Apple',
+        'image' => 'assets/images/phones/iphone-15-pro.svg',
+        'series' => '15',
+      ),
+      6 => 
+      array (
+        'product_id' => 1344,
+        'product_name' => 'Apple iPhone 15 Plus',
+        'brand' => 'Apple',
+        'image' => 'assets/images/phones/iphone-15.svg',
+        'series' => '15',
+      ),
+      7 => 
+      array (
+        'product_id' => 1341,
+        'product_name' => 'Apple iPhone 15',
+        'brand' => 'Apple',
+        'image' => 'assets/images/phones/iphone-15.svg',
+        'series' => '15',
+      ),
+      8 => 
+      array (
+        'product_id' => 85,
+        'product_name' => 'Apple iPhone 14 Pro Max',
+        'brand' => 'Apple',
+        'image' => 'assets/images/phones/iphone-14-pro.svg',
+        'series' => '14',
+      ),
+      9 => 
+      array (
+        'product_id' => 81,
+        'product_name' => 'Apple iPhone 14 Pro',
+        'brand' => 'Apple',
+        'image' => 'assets/images/phones/iphone-14-pro.svg',
+        'series' => '14',
+      ),
+      10 => 
+      array (
+        'product_id' => 79,
+        'product_name' => 'Apple iPhone 14 Plus',
+        'brand' => 'Apple',
+        'image' => 'assets/images/phones/iphone-14.svg',
+        'series' => '14',
+      ),
+      11 => 
+      array (
+        'product_id' => 76,
+        'product_name' => 'Apple iPhone 14',
+        'brand' => 'Apple',
+        'image' => 'assets/images/phones/iphone-14.svg',
+        'series' => '14',
+      ),
+      12 => 
+      array (
+        'product_id' => 28,
+        'product_name' => 'Apple iPhone 13 Pro Max',
+        'brand' => 'Apple',
+        'image' => 'assets/images/phones/iphone-13.svg',
+        'series' => '13',
+      ),
+      13 => 
+      array (
+        'product_id' => 26,
+        'product_name' => 'Apple iPhone 13 Pro',
+        'brand' => 'Apple',
+        'image' => 'assets/images/phones/iphone-13.svg',
+        'series' => '13',
+      ),
+      14 => 
+      array (
+        'product_id' => 47,
+        'product_name' => 'Apple iPhone 13',
+        'brand' => 'Apple',
+        'image' => 'assets/images/phones/iphone-13.svg',
+        'series' => '13',
+      ),
+      15 => 
+      array (
+        'product_id' => 44,
+        'product_name' => 'Apple iPhone 13 Mini',
+        'brand' => 'Apple',
+        'image' => 'assets/images/phones/iphone-13.svg',
+        'series' => '13',
+      ),
+      16 => 
+      array (
+        'product_id' => 71,
+        'product_name' => 'Apple iPhone 12 Pro Max',
+        'brand' => 'Apple',
+        'image' => 'assets/images/phones/iphone-12.svg',
+        'series' => '12',
+      ),
+      17 => 
+      array (
+        'product_id' => 68,
+        'product_name' => 'Apple iPhone 12 Pro',
+        'brand' => 'Apple',
+        'image' => 'assets/images/phones/iphone-12.svg',
+        'series' => '12',
+      ),
+      18 => 
+      array (
+        'product_id' => 62,
+        'product_name' => 'Apple iPhone 12',
+        'brand' => 'Apple',
+        'image' => 'assets/images/phones/iphone-12.svg',
+        'series' => '12',
+      ),
+      19 => 
+      array (
+        'product_id' => 65,
+        'product_name' => 'Apple iPhone 12 Mini',
+        'brand' => 'Apple',
+        'image' => 'assets/images/phones/iphone-12.svg',
+        'series' => '12',
+      ),
+      20 => 
+      array (
+        'product_id' => 41,
+        'product_name' => 'Apple iPhone 11 Pro Max',
+        'brand' => 'Apple',
+        'image' => 'assets/images/phones/iphone-11.svg',
+        'series' => '11',
+      ),
+      21 => 
+      array (
+        'product_id' => 38,
+        'product_name' => 'Apple iPhone 11 Pro',
+        'brand' => 'Apple',
+        'image' => 'assets/images/phones/iphone-11.svg',
+        'series' => '11',
+      ),
+      22 => 
+      array (
+        'product_id' => 35,
+        'product_name' => 'Apple iPhone 11',
+        'brand' => 'Apple',
+        'image' => 'assets/images/phones/iphone-11.svg',
+        'series' => '11',
+      ),
+      23 => 
+      array (
+        'product_id' => 55,
+        'product_name' => 'Apple iPhone XS Max',
+        'brand' => 'Apple',
+        'image' => 'assets/images/phones/iphone-x.svg',
+        'series' => 'X',
+      ),
+      24 => 
+      array (
+        'product_id' => 52,
+        'product_name' => 'Apple iPhone XS',
+        'brand' => 'Apple',
+        'image' => 'assets/images/phones/iphone-x.svg',
+        'series' => 'X',
+      ),
+      25 => 
+      array (
+        'product_id' => 32,
+        'product_name' => 'Apple iPhone XR',
+        'brand' => 'Apple',
+        'image' => 'assets/images/phones/iphone-x.svg',
+        'series' => 'X',
+      ),
+      26 => 
+      array (
+        'product_id' => 50,
+        'product_name' => 'Apple iPhone X',
+        'brand' => 'Apple',
+        'image' => 'assets/images/phones/iphone-x.svg',
+        'series' => 'X',
+      ),
+      27 => 
+      array (
+        'product_id' => 88,
+        'product_name' => 'Apple iPhone SE (2022)',
+        'brand' => 'Apple',
+        'image' => 'assets/images/phones/iphone-se.svg',
+        'series' => 'SE',
+      ),
+      28 => 
+      array (
+        'product_id' => 20,
+        'product_name' => 'Apple iPhone 8 Plus',
+        'brand' => 'Apple',
+        'image' => 'assets/images/phones/iphone-se.svg',
+        'series' => '8',
+      ),
+      29 => 
+      array (
+        'product_id' => 18,
+        'product_name' => 'Apple iPhone 8',
+        'brand' => 'Apple',
+        'image' => 'assets/images/phones/iphone-se.svg',
+        'series' => '8',
+      ),
+      30 => 
+      array (
+        'product_id' => 2129,
+        'product_name' => 'Apple iPhone 17 Pro Max',
+        'brand' => 'Apple',
+        'image' => 'assets/images/phones/iphone-17-pro.svg',
+        'series' => '17',
+      ),
+      31 => 
+      array (
+        'product_id' => 2126,
+        'product_name' => 'Apple iPhone 17 Pro',
+        'brand' => 'Apple',
+        'image' => 'assets/images/phones/iphone-17-pro.svg',
+        'series' => '17',
+      ),
+      32 => 
+      array (
+        'product_id' => 2121,
+        'product_name' => 'Apple iPhone 17 Air',
+        'brand' => 'Apple',
+        'image' => 'assets/images/phones/iphone-17-pro.svg',
+        'series' => '17',
+      ),
+      33 => 
+      array (
+        'product_id' => 2124,
+        'product_name' => 'Apple iPhone 17e',
+        'brand' => 'Apple',
+        'image' => 'assets/images/phones/iphone-17-pro.svg',
+        'series' => '17',
+      ),
+      34 => 
+      array (
+        'product_id' => 2119,
+        'product_name' => 'Apple iPhone 17',
+        'brand' => 'Apple',
+        'image' => 'assets/images/phones/iphone-17-pro.svg',
+        'series' => '17',
+      ),
+    ),
+  ),
+);

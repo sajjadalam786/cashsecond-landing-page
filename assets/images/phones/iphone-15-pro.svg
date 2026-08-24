@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 360" width="100%" height="100%">
+  <defs>
+    <linearGradient id="body-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#38383d"/>
+      <stop offset="100%" stop-color="#1d1d1f"/>
+    </linearGradient>
+    <linearGradient id="screen-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1e1b4b"/>
+      <stop offset="50%" stop-color="#312e81"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <filter id="shadow" x="-10%" y="-10%" width="120%" height="125%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#000000" flood-opacity="0.18"/>
+    </filter>
+  </defs>
+  <!-- Drop Shadow & Phone Chassis -->
+  <rect x="75" y="25" width="150" height="300" rx="30" fill="url(#body-grad)" stroke="#6b7280" stroke-width="2.5" filter="url(#shadow)"/>
+  <!-- Screen Bezel -->
+  <rect x="80" y="30" width="140" height="290" rx="26" fill="#000000"/>
+  <!-- Screen Inner -->
+  <rect x="83" y="33" width="134" height="284" rx="24" fill="url(#screen-grad)"/>
+  
+  <!-- Dynamic Island -->
+  <rect x="125" y="42" width="50" height="13" rx="6.5" fill="#000000"/>
+  <circle cx="163" cy="48.5" r="3.5" fill="#1e293b"/>
+  
+  <!-- Screen Graphic Wallpaper Accent -->
+  <circle cx="150" cy="170" r="48" fill="#3b82f6" opacity="0.3" filter="blur(16px)"/>
+  <circle cx="170" cy="200" r="40" fill="#a855f7" opacity="0.35" filter="blur(18px)"/>
+  
+  <!-- Clock on screen -->
+  <text x="150" y="115" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="28" font-weight="700" fill="#ffffff" text-anchor="middle">09:41</text>
+  <text x="150" y="132" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="10" font-weight="500" fill="#93c5fd" text-anchor="middle">Apple A17 Pro • Titanium</text>
+  
+  <!-- Verified Certified Badge Overlay -->
+  <g transform="translate(100, 240)">
+    <rect width="100" height="26" rx="13" fill="#10b981" opacity="0.95"/>
+    <text x="50" y="17" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="10" font-weight="700" fill="#ffffff" text-anchor="middle">✓ 100% TESTED</text>
+  </g>
+
+  <!-- Side buttons -->
+  <rect x="71" y="80" width="3" height="22" rx="1.5" fill="#4b5563"/>
+  <rect x="71" y="112" width="3" height="38" rx="1.5" fill="#4b5563"/>
+  <rect x="71" y="158" width="3" height="38" rx="1.5" fill="#4b5563"/>
+  <rect x="226" y="110" width="3" height="48" rx="1.5" fill="#4b5563"/>
+</svg>

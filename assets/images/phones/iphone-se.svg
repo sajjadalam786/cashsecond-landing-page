@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 360" width="100%" height="100%">
+  <defs>
+    <linearGradient id="chassis-se" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#18181b"/>
+      <stop offset="100%" stop-color="#09090b"/>
+    </linearGradient>
+    <linearGradient id="screen-se" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1e1b4b"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <filter id="shadow-se" x="-10%" y="-10%" width="120%" height="125%">
+      <feDropShadow dx="0" dy="10" stdDeviation="14" flood-color="#000000" flood-opacity="0.2"/>
+    </filter>
+  </defs>
+  <rect x="78" y="25" width="144" height="300" rx="30" fill="url(#chassis-se)" stroke="#3f3f46" stroke-width="2.5" filter="url(#shadow-se)"/>
+  <!-- Top Bezel Area -->
+  <rect x="82" y="29" width="136" height="292" rx="26" fill="#000000"/>
+  <!-- Classic Screen -->
+  <rect x="86" y="65" width="128" height="220" rx="4" fill="url(#screen-se)"/>
+  <!-- Speaker & Camera -->
+  <rect x="135" y="44" width="30" height="4" rx="2" fill="#27272a"/>
+  <circle cx="120" cy="46" r="3" fill="#27272a"/>
+  <!-- Touch ID Home Button -->
+  <circle cx="150" cy="300" r="14" fill="#000000" stroke="#71717a" stroke-width="1.5"/>
+  <text x="150" y="140" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="24" font-weight="700" fill="#ffffff" text-anchor="middle">09:41</text>
+  <text x="150" y="156" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="9" font-weight="600" fill="#a1a1aa" text-anchor="middle">iPhone SE / iPhone 8</text>
+  <rect x="74" y="80" width="3" height="18" rx="1.5" fill="#3f3f46"/>
+  <rect x="74" y="110" width="3" height="34" rx="1.5" fill="#3f3f46"/>
+  <rect x="74" y="150" width="3" height="34" rx="1.5" fill="#3f3f46"/>
+  <rect x="223" y="110" width="3" height="40" rx="1.5" fill="#3f3f46"/>
+</svg>

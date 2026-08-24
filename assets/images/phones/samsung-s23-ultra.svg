@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 360" width="100%" height="100%">
+  <defs>
+    <linearGradient id="body-grad-s23" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b"/>
+      <stop offset="100%" stop-color="#020617"/>
+    </linearGradient>
+    <linearGradient id="screen-grad-s23" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1e3a8a"/>
+      <stop offset="60%" stop-color="#172554"/>
+      <stop offset="100%" stop-color="#020617"/>
+    </linearGradient>
+    <filter id="shadow-s23" x="-10%" y="-10%" width="120%" height="125%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#000000" flood-opacity="0.2"/>
+    </filter>
+  </defs>
+  <!-- Sharp Flagship Ultra Body Corners -->
+  <rect x="73" y="24" width="154" height="302" rx="10" fill="url(#body-grad-s23)" stroke="#475569" stroke-width="2" filter="url(#shadow-s23)"/>
+  <rect x="76" y="27" width="148" height="296" rx="8" fill="#000000"/>
+  <rect x="79" y="30" width="142" height="290" rx="6" fill="url(#screen-grad-s23)"/>
+  <!-- Center Punch Hole Camera -->
+  <circle cx="150" cy="42" r="4.5" fill="#000000"/>
+  <circle cx="150" cy="42" r="2" fill="#0f172a"/>
+  <!-- Curved Edge Highlight -->
+  <line x1="82" y1="40" x2="82" y2="310" stroke="#38bdf8" stroke-width="1.2" opacity="0.4"/>
+  <line x1="218" y1="40" x2="218" y2="310" stroke="#38bdf8" stroke-width="1.2" opacity="0.4"/>
+  <!-- Screen Graphic -->
+  <circle cx="150" cy="180" r="50" fill="#3b82f6" opacity="0.4" filter="blur(20px)"/>
+  <text x="150" y="115" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="28" font-weight="700" fill="#ffffff" text-anchor="middle">10:08</text>
+  <text x="150" y="132" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="10" font-weight="500" fill="#bfdbfe" text-anchor="middle">Samsung S23 Ultra • 200MP</text>
+  <g transform="translate(100, 240)">
+    <rect width="100" height="26" rx="13" fill="#0284c7" opacity="0.95"/>
+    <text x="50" y="17" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="10" font-weight="700" fill="#ffffff" text-anchor="middle">⚡ FLAGSHIP</text>
+  </g>
+  <rect x="228" y="100" width="3" height="40" rx="1.5" fill="#64748b"/>
+  <rect x="228" y="150" width="3" height="25" rx="1.5" fill="#64748b"/>
+</svg>

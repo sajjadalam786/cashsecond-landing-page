@@ -1,0 +1,1792 @@
+/**
+ * CashSecond - Apple-Inspired iPhone Buyback & Used iPhone Selling Platform
+ * Design Tokens & Visual Hierarchy:
+ *   - Primary Dark: #0B0D10
+ *   - Primary Text: #111111
+ *   - Secondary Text: #6E6E73
+ *   - Light BG: #F5F5F7
+ *   - Card White: #FFFFFF
+ *   - Apple CTA Blue: #0071E3 (Hover: #0077ED)
+ *   - Border: #E5E5E7
+ *   - WhatsApp: #25D366
+ */
+
+/* ============================================================
+   1. RESET & CSS VARIABLES
+   ============================================================ */
+:root {
+    --color-dark: #0B0D10;
+    --color-text-primary: #111111;
+    --color-text-secondary: #6E6E73;
+    --color-text-muted: #86868B;
+    --color-bg-page: #F5F5F7;
+    --color-bg-card: #FFFFFF;
+    --color-bg-subtle: #FAFAFC;
+    --color-cta: #0071E3;
+    --color-cta-hover: #0077ED;
+    --color-cta-active: #0062C4;
+    --color-border: #E5E5E7;
+    --color-border-subtle: #F0F0F2;
+    --color-success: #1E8E3E;
+    --color-whatsapp: #25D366;
+    --color-whatsapp-hover: #20BA5A;
+
+    --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-heading: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+
+    --radius-sm: 8px;
+    --radius-md: 14px;
+    --radius-lg: 18px;
+    --radius-pill: 9999px;
+
+    --shadow-subtle: 0 2px 8px rgba(0, 0, 0, 0.04);
+    --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.06);
+    --shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.09);
+    --shadow-modal: 0 20px 50px rgba(0, 0, 0, 0.14);
+
+    --transition: all 0.22s cubic-bezier(0.25, 0.1, 0.25, 1);
+    --container-max: 1120px;
+}
+
+*, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font-size: 16px;
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    font-family: var(--font-sans);
+    font-weight: 400;
+    line-height: 1.5;
+    color: var(--color-text-primary);
+    background-color: var(--color-bg-page);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+    padding-bottom: 68px; /* For mobile sticky bar */
+}
+
+@media (min-width: 768px) {
+    body {
+        padding-bottom: 0;
+    }
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+a {
+    color: var(--color-cta);
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+a:hover {
+    color: var(--color-cta-hover);
+}
+
+button {
+    font-family: inherit;
+    cursor: pointer;
+    border: none;
+    background: none;
+    outline: none;
+}
+
+/* ============================================================
+   2. UTILITIES & TYPOGRAPHY
+   ============================================================ */
+.container {
+    width: 100%;
+    max-width: var(--container-max);
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+.text-center { text-align: center; }
+.text-muted { color: var(--color-text-muted); }
+.text-secondary { color: var(--color-text-secondary); }
+.text-success { color: var(--color-success); }
+.fw-bold { font-weight: 700; }
+.fw-semibold { font-weight: 600; }
+.fw-medium { font-weight: 500; }
+
+.section-container {
+    padding: 56px 0;
+}
+
+@media (min-width: 768px) {
+    .section-container {
+        padding: 80px 0;
+    }
+}
+
+.section-header {
+    max-width: 660px;
+    margin: 0 auto 36px auto;
+}
+
+.section-eyebrow {
+    display: inline-block;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-cta);
+    margin-bottom: 8px;
+}
+
+.section-title {
+    font-family: var(--font-heading);
+    font-size: 1.875rem;
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--color-dark);
+    letter-spacing: -0.025em;
+    margin-bottom: 10px;
+}
+
+@media (min-width: 768px) {
+    .section-title {
+        font-size: 2.25rem;
+    }
+}
+
+.section-subtitle {
+    font-size: 1rem;
+    color: var(--color-text-secondary);
+    line-height: 1.55;
+}
+
+@media (min-width: 768px) {
+    .section-subtitle {
+        font-size: 1.0625rem;
+    }
+}
+
+/* ============================================================
+   3. BUTTONS & CTAs
+   ============================================================ */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 0.9375rem;
+    font-weight: 600;
+    padding: 12px 24px;
+    border-radius: var(--radius-pill);
+    transition: var(--transition);
+    text-decoration: none;
+    white-space: nowrap;
+    border: 1px solid transparent;
+}
+
+.btn-primary {
+    background-color: var(--color-cta);
+    color: #FFFFFF;
+}
+
+.btn-primary:hover {
+    background-color: var(--color-cta-hover);
+    color: #FFFFFF;
+    box-shadow: 0 4px 14px rgba(0, 113, 227, 0.28);
+    transform: translateY(-1px);
+}
+
+.btn-secondary {
+    background-color: #FFFFFF;
+    color: var(--color-dark);
+    border-color: var(--color-border);
+}
+
+.btn-secondary:hover {
+    background-color: var(--color-bg-subtle);
+    border-color: var(--color-text-secondary);
+    color: var(--color-dark);
+}
+
+.btn-whatsapp {
+    background-color: var(--color-whatsapp);
+    color: #FFFFFF;
+}
+
+.btn-whatsapp:hover {
+    background-color: var(--color-whatsapp-hover);
+    color: #FFFFFF;
+    box-shadow: 0 4px 14px rgba(37, 211, 102, 0.28);
+}
+
+.btn-sm {
+    padding: 8px 16px;
+    font-size: 0.8125rem;
+}
+
+.btn-lg {
+    padding: 13px 28px;
+    font-size: 0.9375rem;
+}
+
+.btn-full {
+    width: 100%;
+}
+
+/* ============================================================
+   4. HEADER & NAVIGATION
+   ============================================================ */
+.site-header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background-color: rgba(255, 255, 255, 0.90);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.top-bar-notice {
+    background-color: var(--color-dark);
+    color: #FFFFFF;
+    font-size: 0.75rem;
+    font-weight: 500;
+    padding: 6px 12px;
+    text-align: center;
+    letter-spacing: 0.02em;
+}
+
+.header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 58px;
+}
+
+.brand-logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-dark);
+    letter-spacing: -0.03em;
+}
+
+.brand-logo img {
+    height: 30px;
+    width: auto;
+}
+
+.nav-menu {
+    display: none;
+    align-items: center;
+    gap: 24px;
+}
+
+@media (min-width: 992px) {
+    .nav-menu {
+        display: flex;
+    }
+}
+
+.nav-link {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+}
+
+.nav-link:hover {
+    color: var(--color-dark);
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.hamburger-btn {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 36px;
+    height: 36px;
+    padding: 6px;
+    border-radius: var(--radius-sm);
+}
+
+@media (min-width: 992px) {
+    .hamburger-btn {
+        display: none;
+    }
+}
+
+.hamburger-btn span {
+    display: block;
+    width: 100%;
+    height: 2px;
+    background-color: var(--color-dark);
+    border-radius: 2px;
+    transition: var(--transition);
+}
+
+.mobile-nav-drawer {
+    display: none;
+    position: fixed;
+    top: 58px;
+    left: 0;
+    width: 100%;
+    background-color: #FFFFFF;
+    border-bottom: 1px solid var(--color-border);
+    padding: 20px;
+    box-shadow: var(--shadow-modal);
+    z-index: 999;
+}
+
+.mobile-nav-drawer.active {
+    display: block;
+}
+
+.mobile-nav-links {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-bottom: 18px;
+}
+
+.mobile-nav-links .nav-link {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-dark);
+    padding: 6px 0;
+    border-bottom: 1px solid var(--color-border-subtle);
+}
+
+/* ============================================================
+   5. HERO SECTION
+   ============================================================ */
+.hero-section {
+    position: relative;
+    padding: 40px 0 28px 0;
+    background: linear-gradient(180deg, #FFFFFF 0%, var(--color-bg-page) 100%);
+    overflow: hidden;
+}
+
+@media (min-width: 992px) {
+    .hero-section {
+        padding: 56px 0 36px 0;
+    }
+}
+
+.hero-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 32px;
+    align-items: center;
+}
+
+@media (min-width: 992px) {
+    .hero-grid {
+        grid-template-columns: 1.1fr 0.9fr;
+        gap: 40px;
+    }
+}
+
+.hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background-color: rgba(0, 113, 227, 0.08);
+    color: var(--color-cta);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    padding: 5px 12px;
+    border-radius: var(--radius-pill);
+    margin-bottom: 14px;
+}
+
+.hero-title {
+    font-family: var(--font-heading);
+    font-size: 2.125rem;
+    font-weight: 700;
+    line-height: 1.15;
+    color: var(--color-dark);
+    letter-spacing: -0.03em;
+    margin-bottom: 14px;
+}
+
+@media (min-width: 768px) {
+    .hero-title {
+        font-size: 2.875rem;
+    }
+}
+
+.hero-subtitle {
+    font-size: 1rem;
+    color: var(--color-text-secondary);
+    line-height: 1.55;
+    margin-bottom: 20px;
+    max-width: 520px;
+}
+
+@media (min-width: 768px) {
+    .hero-subtitle {
+        font-size: 1.125rem;
+    }
+}
+
+.hero-cta-group {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.hero-trust-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    padding-top: 4px;
+}
+
+.hero-trust-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.hero-trust-dot {
+    color: var(--color-border);
+}
+
+.hero-visual-card {
+    position: relative;
+    background: #FFFFFF;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    box-shadow: var(--shadow-card);
+    text-align: center;
+}
+
+.hero-visual-img {
+    max-height: 260px;
+    margin: 0 auto 14px auto;
+    object-fit: contain;
+    filter: drop-shadow(0 12px 24px rgba(0,0,0,0.10));
+}
+
+.hero-visual-caption {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-dark);
+}
+
+.hero-visual-sub {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+}
+
+/* ============================================================
+   6. GLOBAL LIVE SEARCH AUTOCOMPLETE & PRODUCT CARDS
+   ============================================================ */
+.hero-search-wrapper {
+    position: relative;
+    margin-bottom: 20px;
+    max-width: 560px;
+}
+
+.search-input-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.search-icon-left {
+    position: absolute;
+    left: 14px;
+    color: var(--color-text-muted);
+    font-size: 1.125rem;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+}
+
+.hero-search-input {
+    width: 100%;
+    height: 48px;
+    padding: 10px 42px 10px 44px;
+    background-color: #FFFFFF;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-pill);
+    font-size: 0.9375rem;
+    color: var(--color-dark);
+    box-shadow: var(--shadow-subtle);
+    transition: var(--transition);
+}
+
+.hero-search-input:focus {
+    outline: none;
+    border-color: var(--color-cta);
+    box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.14);
+}
+
+.search-clear-btn {
+    position: absolute;
+    right: 12px;
+    display: none;
+    color: var(--color-text-muted);
+    font-size: 1.25rem;
+    line-height: 1;
+    padding: 4px 8px;
+    cursor: pointer;
+}
+
+.search-clear-btn:hover {
+    color: var(--color-dark);
+}
+
+.search-autocomplete-dropdown {
+    display: none;
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    width: 100%;
+    min-width: 300px;
+    background-color: #FFFFFF;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-modal);
+    max-height: 440px;
+    overflow-y: auto;
+    z-index: 1000;
+    padding: 14px;
+}
+
+@media (min-width: 640px) {
+    .search-autocomplete-dropdown {
+        width: 120%;
+        left: -10%;
+    }
+}
+
+.search-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--color-border-subtle);
+}
+
+.search-section-title {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-text-muted);
+}
+
+.search-products-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+@media (min-width: 520px) {
+    .search-products-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+    }
+}
+
+.search-product-card {
+    background-color: #FFFFFF;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 12px 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.search-product-card:hover {
+    border-color: var(--color-cta);
+    box-shadow: var(--shadow-card);
+    transform: translateY(-2px);
+}
+
+.search-product-img-wrap {
+    width: 100%;
+    height: 75px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 8px;
+}
+
+.search-product-img {
+    max-height: 100%;
+    max-width: 100%;
+    object-fit: contain;
+}
+
+.search-product-name {
+    font-size: 0.8125rem;
+    font-weight: 700;
+    color: var(--color-dark);
+    line-height: 1.25;
+    margin-bottom: 6px;
+    flex-grow: 1;
+}
+
+.search-product-cta {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--color-cta);
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+}
+
+.search-empty-state {
+    padding: 28px 16px;
+    text-align: center;
+}
+
+.search-empty-title {
+    font-size: 0.9375rem;
+    font-weight: 700;
+    color: var(--color-dark);
+    margin-bottom: 4px;
+}
+
+.search-empty-sub {
+    font-size: 0.8125rem;
+    color: var(--color-text-secondary);
+    line-height: 1.4;
+}
+
+/* ============================================================
+   7. VALUATION CALCULATOR SECTION
+   ============================================================ */
+.valuation-section {
+    padding: 24px 0 56px 0;
+}
+
+.valuation-card {
+    background-color: #FFFFFF;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+    overflow: hidden;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.valuation-header {
+    background-color: var(--color-bg-subtle);
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--color-border);
+    text-align: center;
+}
+
+.valuation-header h2 {
+    font-size: 1.375rem;
+    font-weight: 700;
+    color: var(--color-dark);
+    margin-bottom: 4px;
+    letter-spacing: -0.02em;
+}
+
+.valuation-header p {
+    font-size: 0.875rem;
+    color: var(--color-text-secondary);
+}
+
+.valuation-stepper {
+    display: flex;
+    justify-content: space-between;
+    padding: 14px 24px;
+    background-color: #FFFFFF;
+    border-bottom: 1px solid var(--color-border-subtle);
+}
+
+.step-node {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--color-text-muted);
+}
+
+.step-node.active {
+    color: var(--color-cta);
+}
+
+.step-node.completed {
+    color: var(--color-success);
+}
+
+.step-num {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.6875rem;
+    background-color: var(--color-bg-page);
+    color: var(--color-text-secondary);
+}
+
+.step-node.active .step-num {
+    background-color: var(--color-cta);
+    color: #FFFFFF;
+}
+
+.step-node.completed .step-num {
+    background-color: var(--color-success);
+    color: #FFFFFF;
+}
+
+.valuation-body {
+    padding: 24px;
+}
+
+@media (max-width: 640px) {
+    .valuation-body {
+        padding: 18px 14px;
+    }
+}
+
+.wizard-panel {
+    display: none;
+}
+
+.wizard-panel.active {
+    display: block;
+}
+
+.wizard-panel-title {
+    font-size: 1.0625rem;
+    font-weight: 700;
+    color: var(--color-dark);
+    margin-bottom: 4px;
+}
+
+.wizard-panel-sub {
+    font-size: 0.8125rem;
+    color: var(--color-text-secondary);
+    margin-bottom: 16px;
+}
+
+.model-search-box {
+    margin-bottom: 16px;
+}
+
+.model-search-input {
+    width: 100%;
+    height: 44px;
+    padding: 10px 14px;
+    font-size: 0.9375rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-pill);
+    background-color: var(--color-bg-subtle);
+    color: var(--color-dark);
+    transition: var(--transition);
+}
+
+.model-search-input:focus {
+    outline: none;
+    background-color: #FFFFFF;
+    border-color: var(--color-cta);
+    box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.12);
+}
+
+.models-grid-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    max-height: 420px;
+    overflow-y: auto;
+    padding: 4px;
+}
+
+@media (min-width: 580px) {
+    .models-grid-list {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 14px;
+    }
+}
+
+@media (min-width: 768px) {
+    .models-grid-list {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 14px;
+    }
+}
+
+.model-product-card {
+    background-color: #FFFFFF;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 14px 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.model-product-card:hover, .model-product-card.active {
+    border-color: var(--color-cta);
+    box-shadow: var(--shadow-card);
+    transform: translateY(-2px);
+}
+
+.model-product-img-wrap {
+    width: 100%;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 8px;
+}
+
+.model-product-img {
+    max-height: 100%;
+    max-width: 100%;
+    object-fit: contain;
+}
+
+.model-product-name {
+    font-size: 0.8125rem;
+    font-weight: 700;
+    color: var(--color-dark);
+    line-height: 1.25;
+    margin-bottom: 8px;
+    flex-grow: 1;
+}
+
+.model-product-cta {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--color-cta);
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+}
+
+.variant-chips-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+@media (min-width: 640px) {
+    .variant-chips-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+.variant-chip {
+    padding: 14px 10px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background-color: #FFFFFF;
+    text-align: center;
+    transition: var(--transition);
+    cursor: pointer;
+}
+
+.variant-chip:hover, .variant-chip.active {
+    border-color: var(--color-cta);
+    background-color: rgba(0, 113, 227, 0.04);
+}
+
+.variant-chip.active {
+    box-shadow: 0 0 0 2px var(--color-cta);
+}
+
+.variant-storage {
+    font-size: 1.0625rem;
+    font-weight: 700;
+    color: var(--color-dark);
+}
+
+.variant-ram {
+    font-size: 0.6875rem;
+    color: var(--color-text-muted);
+}
+
+.condition-group {
+    background-color: var(--color-bg-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 14px 16px;
+    margin-bottom: 12px;
+}
+
+.condition-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-dark);
+    margin-bottom: 2px;
+}
+
+.condition-desc {
+    font-size: 0.75rem;
+    color: var(--color-text-secondary);
+    margin-bottom: 10px;
+}
+
+.radio-options-row {
+    display: flex;
+    gap: 14px;
+}
+
+.radio-option-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--color-dark);
+    cursor: pointer;
+}
+
+.quote-result-box {
+    text-align: center;
+    padding: 24px;
+    background: linear-gradient(180deg, #FFFFFF 0%, var(--color-bg-subtle) 100%);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    margin-bottom: 20px;
+}
+
+.quote-device-name {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-dark);
+    margin-bottom: 2px;
+}
+
+.quote-device-specs {
+    font-size: 0.8125rem;
+    color: var(--color-text-secondary);
+    margin-bottom: 14px;
+}
+
+.quote-price-tag {
+    font-size: 2.125rem;
+    font-weight: 800;
+    color: var(--color-cta);
+    letter-spacing: -0.03em;
+    margin-bottom: 6px;
+}
+
+.quote-disclaimer {
+    font-size: 0.75rem;
+    color: var(--color-text-muted);
+}
+
+.quote-actions-row {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 440px;
+    margin: 0 auto;
+}
+
+@media (min-width: 540px) {
+    .quote-actions-row {
+        flex-direction: row;
+    }
+}
+
+.wizard-nav-btns {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+.btn-back-step {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.btn-back-step:hover {
+    color: var(--color-dark);
+}
+
+/* ============================================================
+   8. TRUST CARDS ("Why Sell Your iPhone With Us?")
+   ============================================================ */
+.trust-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+}
+
+@media (min-width: 992px) {
+    .trust-cards-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 18px;
+    }
+}
+
+.trust-card {
+    background-color: #FFFFFF;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 20px 18px;
+    box-shadow: var(--shadow-subtle);
+    transition: var(--transition);
+    display: flex;
+    flex-direction: column;
+}
+
+.trust-card:hover {
+    border-color: var(--color-cta);
+    box-shadow: var(--shadow-card);
+    transform: translateY(-2px);
+}
+
+.trust-icon-box {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-sm);
+    background-color: rgba(0, 113, 227, 0.08);
+    color: var(--color-cta);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 14px;
+}
+
+.trust-card-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--color-dark);
+    margin-bottom: 6px;
+    line-height: 1.3;
+}
+
+.trust-card-desc {
+    font-size: 0.8125rem;
+    color: var(--color-text-secondary);
+    line-height: 1.5;
+}
+
+/* ============================================================
+   9. IPHONE MODEL SERIES SECTION
+   ============================================================ */
+.series-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+}
+
+@media (min-width: 768px) {
+    .series-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 18px;
+    }
+}
+
+@media (min-width: 1024px) {
+    .series-grid {
+        grid-template-columns: repeat(6, 1fr);
+        gap: 14px;
+    }
+}
+
+.series-card {
+    background-color: #FFFFFF;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 18px 14px;
+    text-align: center;
+    box-shadow: var(--shadow-subtle);
+    transition: var(--transition);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.series-card:hover {
+    border-color: var(--color-cta);
+    box-shadow: var(--shadow-card);
+    transform: translateY(-2px);
+}
+
+.series-icon-circle {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background-color: var(--color-bg-page);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    margin-bottom: 10px;
+    color: var(--color-dark);
+}
+
+.series-name {
+    font-size: 0.9375rem;
+    font-weight: 700;
+    color: var(--color-dark);
+    margin-bottom: 4px;
+}
+
+.series-sub {
+    font-size: 0.6875rem;
+    color: var(--color-text-muted);
+    margin-bottom: 12px;
+}
+
+.series-cta-link {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--color-cta);
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+}
+
+/* ============================================================
+   10. TRUST PROOF STRIP
+   ============================================================ */
+.trust-proof-strip {
+    background-color: #FFFFFF;
+    border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+    padding: 16px 0;
+}
+
+.proof-items-row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+
+@media (min-width: 768px) {
+    .proof-items-row {
+        grid-template-columns: repeat(4, 1fr);
+        text-align: center;
+    }
+}
+
+.proof-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--color-dark);
+    justify-content: center;
+}
+
+.proof-item svg {
+    color: var(--color-cta);
+    flex-shrink: 0;
+}
+
+/* ============================================================
+   11. "YOUR IPHONE IS SAFE WITH US" SECTION
+   ============================================================ */
+.security-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 16px;
+}
+
+@media (min-width: 640px) {
+    .security-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 992px) {
+    .security-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+.security-card {
+    background-color: #FFFFFF;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 22px 18px;
+    box-shadow: var(--shadow-subtle);
+}
+
+.security-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-sm);
+    background-color: rgba(0, 113, 227, 0.08);
+    color: var(--color-cta);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 12px;
+}
+
+.security-title {
+    font-size: 0.9375rem;
+    font-weight: 700;
+    color: var(--color-dark);
+    margin-bottom: 6px;
+}
+
+.security-desc {
+    font-size: 0.8125rem;
+    color: var(--color-text-secondary);
+    line-height: 1.5;
+}
+
+/* ============================================================
+   12. 32-POINT IPHONE INSPECTION SECTION
+   ============================================================ */
+.inspection-section {
+    background-color: #FFFFFF;
+    border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.inspection-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+@media (min-width: 640px) {
+    .inspection-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+    }
+}
+
+@media (min-width: 992px) {
+    .inspection-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 14px;
+    }
+}
+
+.inspection-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    background-color: var(--color-bg-page);
+    border: 1px solid var(--color-border-subtle);
+    border-radius: var(--radius-sm);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--color-dark);
+}
+
+.inspection-check-icon {
+    color: var(--color-cta);
+    font-size: 0.9375rem;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+/* ============================================================
+   13. HOW IT WORKS & PROCESS FLOW
+   ============================================================ */
+.how-it-works-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 18px;
+    margin-bottom: 32px;
+}
+
+@media (min-width: 768px) {
+    .how-it-works-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.how-step-card {
+    background-color: #FFFFFF;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 24px 20px;
+    box-shadow: var(--shadow-subtle);
+}
+
+.how-step-num {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--color-cta);
+    letter-spacing: 0.05em;
+    margin-bottom: 10px;
+}
+
+.how-step-title {
+    font-size: 1.0625rem;
+    font-weight: 700;
+    color: var(--color-dark);
+    margin-bottom: 6px;
+}
+
+.how-step-desc {
+    font-size: 0.8125rem;
+    color: var(--color-text-secondary);
+    line-height: 1.5;
+}
+
+/* Transparent Process Badge Bar */
+.process-flow-banner {
+    background-color: #FFFFFF;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 16px 20px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 8px 14px;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--color-dark);
+    margin-bottom: 24px;
+}
+
+.flow-node {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.flow-arrow {
+    color: var(--color-text-muted);
+}
+
+/* What Happens After Submit Card */
+.after-submit-card {
+    background-color: #FFFFFF;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 22px 24px;
+    max-width: 720px;
+    margin: 0 auto;
+}
+
+.after-submit-title {
+    font-size: 0.9375rem;
+    font-weight: 700;
+    color: var(--color-dark);
+    margin-bottom: 12px;
+}
+
+.after-submit-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 0.8125rem;
+    color: var(--color-text-secondary);
+}
+
+.after-submit-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+.after-submit-list li span.bullet-num {
+    color: var(--color-cta);
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+/* ============================================================
+   14. CUSTOMER REVIEWS SECTION
+   ============================================================ */
+.reviews-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 18px;
+}
+
+@media (min-width: 768px) {
+    .reviews-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.review-card {
+    background-color: #FFFFFF;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 22px 20px;
+    box-shadow: var(--shadow-subtle);
+}
+
+.review-stars {
+    color: #F5A623;
+    font-size: 0.875rem;
+    margin-bottom: 10px;
+    letter-spacing: 2px;
+}
+
+.review-text {
+    font-size: 0.875rem;
+    color: var(--color-text-primary);
+    line-height: 1.55;
+    margin-bottom: 14px;
+}
+
+.review-author {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.75rem;
+    padding-top: 10px;
+    border-top: 1px solid var(--color-border-subtle);
+}
+
+.author-name {
+    font-weight: 700;
+    color: var(--color-dark);
+}
+
+.author-model {
+    color: var(--color-text-muted);
+}
+
+/* ============================================================
+   15. REAL BUSINESS TRUST & ABOUT
+   ============================================================ */
+.about-trust-card {
+    background: linear-gradient(135deg, var(--color-dark) 0%, #151c28 100%);
+    color: #FFFFFF;
+    border-radius: var(--radius-lg);
+    padding: 36px 24px;
+    text-align: center;
+    max-width: 820px;
+    margin: 0 auto;
+}
+
+.about-trust-card h2 {
+    font-size: 1.625rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: #FFFFFF;
+}
+
+.about-trust-card p {
+    font-size: 0.9375rem;
+    color: rgba(255, 255, 255, 0.85);
+    line-height: 1.6;
+    max-width: 620px;
+    margin: 0 auto 20px auto;
+}
+
+/* ============================================================
+   16. FAQ ACCORDION
+   ============================================================ */
+.faq-container {
+    max-width: 720px;
+    margin: 0 auto;
+}
+
+.faq-accordion {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.faq-item {
+    background-color: #FFFFFF;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    transition: var(--transition);
+}
+
+.faq-item.active {
+    border-color: var(--color-cta);
+}
+
+.faq-btn {
+    width: 100%;
+    padding: 16px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-dark);
+    text-align: left;
+}
+
+.faq-icon {
+    font-size: 1.125rem;
+    color: var(--color-text-muted);
+    transition: var(--transition);
+}
+
+.faq-item.active .faq-icon {
+    transform: rotate(45deg);
+    color: var(--color-cta);
+}
+
+.faq-content {
+    display: none;
+    padding: 0 18px 16px 18px;
+    font-size: 0.8125rem;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+}
+
+.faq-item.active .faq-content {
+    display: block;
+}
+
+/* ============================================================
+   17. FINAL CTA & BOOKING FORM
+   ============================================================ */
+.final-cta-section {
+    background-color: #FFFFFF;
+    border-top: 1px solid var(--color-border);
+    padding: 56px 0;
+}
+
+.lead-form-card {
+    background-color: var(--color-bg-page);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 28px 20px;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+@media (min-width: 640px) {
+    .lead-form-card {
+        padding: 36px 32px;
+    }
+}
+
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-label {
+    display: block;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--color-dark);
+    margin-bottom: 5px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 11px 13px;
+    font-size: 0.875rem;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    background-color: #FFFFFF;
+    color: var(--color-dark);
+    transition: var(--transition);
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--color-cta);
+    box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.12);
+}
+
+.form-consent-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 0.75rem;
+    color: var(--color-text-secondary);
+    margin-bottom: 18px;
+}
+
+.form-consent-row input {
+    margin-top: 2px;
+}
+
+.form-status-alert {
+    padding: 12px 14px;
+    border-radius: var(--radius-sm);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    margin-top: 14px;
+    display: none;
+}
+
+.form-status-alert.alert-success {
+    background-color: #E6F4EA;
+    color: #137333;
+    border: 1px solid #CEEAD6;
+}
+
+.form-status-alert.alert-error {
+    background-color: #FCE8E6;
+    color: #C5221F;
+    border: 1px solid #FAD2CF;
+}
+
+/* ============================================================
+   18. CONTACT & LOCATION SECTION
+   ============================================================ */
+.contact-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+}
+
+@media (min-width: 768px) {
+    .contact-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+.contact-card {
+    background-color: #FFFFFF;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 24px;
+}
+
+.contact-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin-bottom: 14px;
+    font-size: 0.8125rem;
+    color: var(--color-text-secondary);
+}
+
+.contact-icon {
+    color: var(--color-cta);
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.contact-map-embed {
+    width: 100%;
+    height: 100%;
+    min-height: 230px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border);
+}
+
+/* ============================================================
+   19. FOOTER & POLICIES
+   ============================================================ */
+.site-footer {
+    background-color: #FFFFFF;
+    border-top: 1px solid var(--color-border);
+    padding: 36px 0 20px 0;
+    font-size: 0.8125rem;
+    color: var(--color-text-muted);
+}
+
+.footer-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+@media (min-width: 768px) {
+    .footer-inner {
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+}
+
+.footer-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+}
+
+.footer-links a {
+    color: var(--color-text-secondary);
+}
+
+.footer-links a:hover {
+    color: var(--color-dark);
+}
+
+.trademark-disclaimer {
+    font-size: 0.6875rem;
+    color: var(--color-text-muted);
+    line-height: 1.5;
+    margin-top: 18px;
+    padding-top: 14px;
+    border-top: 1px solid var(--color-border-subtle);
+}
+
+/* ============================================================
+   20. MOBILE STICKY CTA BAR
+   ============================================================ */
+.mobile-sticky-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 990;
+    background-color: rgba(255, 255, 255, 0.96);
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    border-top: 1px solid var(--color-border);
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.05);
+}
+
+@media (min-width: 768px) {
+    .mobile-sticky-bar {
+        display: none !important;
+    }
+}
+
+.mobile-sticky-bar .btn {
+    flex: 1;
+    padding: 11px 10px;
+    font-size: 0.8125rem;
+}

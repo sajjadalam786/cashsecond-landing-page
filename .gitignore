@@ -1,0 +1,10 @@
+# Logs & dynamic lead data
+logs/*.csv
+logs/*.log
+
+# OS & Editor generated files
+.DS_Store
+Thumbs.db
+*.sublime-workspace
+.vscode/
+.idea/

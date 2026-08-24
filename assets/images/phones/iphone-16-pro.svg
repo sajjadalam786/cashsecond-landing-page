@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 360" width="100%" height="100%">
+  <defs>
+    <linearGradient id="chassis-16pro" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#44423f"/>
+      <stop offset="50%" stop-color="#2a2927"/>
+      <stop offset="100%" stop-color="#191817"/>
+    </linearGradient>
+    <linearGradient id="screen-16pro" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#0a0a0f"/>
+      <stop offset="50%" stop-color="#14141e"/>
+      <stop offset="100%" stop-color="#050508"/>
+    </linearGradient>
+    <filter id="shadow-16" x="-10%" y="-10%" width="120%" height="125%">
+      <feDropShadow dx="0" dy="10" stdDeviation="14" flood-color="#000000" flood-opacity="0.22"/>
+    </filter>
+  </defs>
+  <!-- Chassis -->
+  <rect x="75" y="25" width="150" height="300" rx="32" fill="url(#chassis-16pro)" stroke="#635f59" stroke-width="2.5" filter="url(#shadow-16)"/>
+  <!-- Bezel -->
+  <rect x="79" y="29" width="142" height="292" rx="28" fill="#000000"/>
+  <!-- Screen -->
+  <rect x="82" y="32" width="136" height="286" rx="26" fill="url(#screen-16pro)"/>
+  <!-- Dynamic Island -->
+  <rect x="126" y="40" width="48" height="12" rx="6" fill="#000000"/>
+  <circle cx="163" cy="46" r="3" fill="#1b1c24"/>
+  <!-- Accent Graphic -->
+  <circle cx="150" cy="165" r="46" fill="#d97706" opacity="0.2" filter="blur(16px)"/>
+  <circle cx="160" cy="190" r="40" fill="#0284c7" opacity="0.2" filter="blur(18px)"/>
+  <!-- Text -->
+  <text x="150" y="110" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="26" font-weight="700" fill="#ffffff" text-anchor="middle">09:41</text>
+  <text x="150" y="126" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="9.5" font-weight="600" fill="#cbd5e1" text-anchor="middle">iPhone 16 Pro • A18 Pro</text>
+  <!-- Camera Control Button -->
+  <rect x="226" y="210" width="3" height="24" rx="1.5" fill="#635f59"/>
+  <!-- Side buttons -->
+  <rect x="71" y="75" width="3" height="18" rx="1.5" fill="#44423f"/>
+  <rect x="71" y="105" width="3" height="36" rx="1.5" fill="#44423f"/>
+  <rect x="71" y="148" width="3" height="36" rx="1.5" fill="#44423f"/>
+  <rect x="226" y="105" width="3" height="44" rx="1.5" fill="#44423f"/>
+</svg>

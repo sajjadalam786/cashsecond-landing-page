@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /config/
+Disallow: /forms/
+Disallow: /logs/
+
+Sitemap: http://localhost/cashsecond-landing-page/sitemap.xml

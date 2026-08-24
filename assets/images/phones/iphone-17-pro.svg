@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 360" width="100%" height="100%">
+  <defs>
+    <linearGradient id="chassis-17" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ea580c"/>
+      <stop offset="50%" stop-color="#9a3412"/>
+      <stop offset="100%" stop-color="#431407"/>
+    </linearGradient>
+    <linearGradient id="screen-17" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#18181b"/>
+      <stop offset="50%" stop-color="#27272a"/>
+      <stop offset="100%" stop-color="#09090b"/>
+    </linearGradient>
+    <filter id="shadow-17" x="-10%" y="-10%" width="120%" height="125%">
+      <feDropShadow dx="0" dy="10" stdDeviation="14" flood-color="#000000" flood-opacity="0.22"/>
+    </filter>
+  </defs>
+  <rect x="75" y="25" width="150" height="300" rx="34" fill="url(#chassis-17)" stroke="#fb923c" stroke-width="2.5" filter="url(#shadow-17)"/>
+  <rect x="79" y="29" width="142" height="292" rx="30" fill="#000000"/>
+  <rect x="82" y="32" width="136" height="286" rx="28" fill="url(#screen-17)"/>
+  <rect x="126" y="39" width="48" height="11" rx="5.5" fill="#000000"/>
+  <circle cx="163" cy="44.5" r="2.5" fill="#18181b"/>
+  <circle cx="150" cy="165" r="46" fill="#f97316" opacity="0.25" filter="blur(16px)"/>
+  <text x="150" y="110" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="26" font-weight="700" fill="#ffffff" text-anchor="middle">09:41</text>
+  <text x="150" y="126" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="9.5" font-weight="600" fill="#fed7aa" text-anchor="middle">iPhone 17 Pro • A19 Pro</text>
+  <rect x="71" y="75" width="3" height="18" rx="1.5" fill="#9a3412"/>
+  <rect x="71" y="105" width="3" height="36" rx="1.5" fill="#9a3412"/>
+  <rect x="71" y="148" width="3" height="36" rx="1.5" fill="#9a3412"/>
+  <rect x="226" y="105" width="3" height="44" rx="1.5" fill="#9a3412"/>
+</svg>

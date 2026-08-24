@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 360" width="100%" height="100%">
+  <defs>
+    <linearGradient id="body-grad-13" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4c1d95"/>
+      <stop offset="100%" stop-color="#1e1b4b"/>
+    </linearGradient>
+    <linearGradient id="screen-grad-13" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#311042"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <filter id="shadow-13" x="-10%" y="-10%" width="120%" height="125%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#000000" flood-opacity="0.18"/>
+    </filter>
+  </defs>
+  <rect x="75" y="25" width="150" height="300" rx="30" fill="url(#body-grad-13)" stroke="#818cf8" stroke-width="1.5" filter="url(#shadow-13)"/>
+  <rect x="80" y="30" width="140" height="290" rx="26" fill="#000000"/>
+  <rect x="83" y="33" width="134" height="284" rx="24" fill="url(#screen-grad-13)"/>
+  <path d="M126 33 H174 V46 C174 50 171 53 167 53 H133 C129 53 126 50 126 46 Z" fill="#000000"/>
+  <circle cx="158" cy="42" r="3" fill="#1e293b"/>
+  <circle cx="150" cy="180" r="45" fill="#c084fc" opacity="0.3" filter="blur(18px)"/>
+  <text x="150" y="115" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="28" font-weight="700" fill="#ffffff" text-anchor="middle">09:41</text>
+  <text x="150" y="132" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="10" font-weight="500" fill="#e9d5ff" text-anchor="middle">Apple iPhone 13 • 128GB</text>
+  <g transform="translate(100, 240)">
+    <rect width="100" height="26" rx="13" fill="#8b5cf6" opacity="0.95"/>
+    <text x="50" y="17" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="10" font-weight="700" fill="#ffffff" text-anchor="middle">⚡ HIGH VALUE</text>
+  </g>
+  <rect x="71" y="80" width="3" height="22" rx="1.5" fill="#6366f1"/>
+  <rect x="71" y="112" width="3" height="38" rx="1.5" fill="#6366f1"/>
+  <rect x="71" y="158" width="3" height="38" rx="1.5" fill="#6366f1"/>
+  <rect x="226" y="110" width="3" height="48" rx="1.5" fill="#6366f1"/>
+</svg>

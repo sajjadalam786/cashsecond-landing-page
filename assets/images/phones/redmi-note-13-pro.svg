@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 360" width="100%" height="100%">
+  <defs>
+    <linearGradient id="body-grad-rd" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#312e81"/>
+      <stop offset="100%" stop-color="#0f172a"/>
+    </linearGradient>
+    <linearGradient id="screen-grad-rd" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1e1b4b"/>
+      <stop offset="50%" stop-color="#312e81"/>
+      <stop offset="100%" stop-color="#020617"/>
+    </linearGradient>
+    <filter id="shadow-rd" x="-10%" y="-10%" width="120%" height="125%">
+      <feDropShadow dx="0" dy="12" stdDeviation="16" flood-color="#000000" flood-opacity="0.18"/>
+    </filter>
+  </defs>
+  <rect x="76" y="26" width="148" height="298" rx="20" fill="url(#body-grad-rd)" stroke="#818cf8" stroke-width="1.5" filter="url(#shadow-rd)"/>
+  <rect x="80" y="30" width="140" height="290" rx="16" fill="#000000"/>
+  <rect x="83" y="33" width="134" height="284" rx="14" fill="url(#screen-grad-rd)"/>
+  <circle cx="150" cy="44" r="4.5" fill="#000000"/>
+  <circle cx="150" cy="180" r="45" fill="#818cf8" opacity="0.35" filter="blur(16px)"/>
+  <text x="150" y="115" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="28" font-weight="700" fill="#ffffff" text-anchor="middle">10:08</text>
+  <text x="150" y="132" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="10" font-weight="500" fill="#c7d2fe" text-anchor="middle">Redmi Note 13 Pro • 200MP</text>
+  <g transform="translate(100, 240)">
+    <rect width="100" height="26" rx="13" fill="#4f46e5" opacity="0.95"/>
+    <text x="50" y="17" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="10" font-weight="700" fill="#ffffff" text-anchor="middle">★ VALUE PICK</text>
+  </g>
+  <rect x="225" y="100" width="3" height="40" rx="1.5" fill="#6366f1"/>
+  <rect x="225" y="150" width="3" height="25" rx="1.5" fill="#6366f1"/>
+</svg>

@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 60" width="120" height="36" fill="currentColor">
+  <rect x="10" y="10" width="40" height="40" rx="10" fill="#ff6700"/>
+  <path d="M22 23h5v9c0 1.5.8 2 2 2s2-.5 2-2v-9h5v9c0 3.5-2.5 5.5-6.5 5.5s-6.5-2-6.5-5.5v-9zm16 0h5v14h-5v-14z" fill="#ffffff"/>
+  <text x="60" y="38" font-family="'Segoe UI', -apple-system, Roboto, sans-serif" font-size="26" font-weight="800">Xiaomi</text>
+</svg>

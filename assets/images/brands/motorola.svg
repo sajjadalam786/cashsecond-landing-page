@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 60" width="120" height="36" fill="currentColor">
+  <circle cx="28" cy="30" r="18" fill="#0f172a"/>
+  <path d="M20 37c2-8 5-11 8-11s6 3 8 11h-3c-1.5-6-3.5-8-5-8s-3.5 2-5 8h-3z" fill="#ffffff"/>
+  <text x="56" y="38" font-family="'Segoe UI', -apple-system, Roboto, sans-serif" font-size="24" font-weight="700" fill="#0f172a">motorola</text>
+</svg>
