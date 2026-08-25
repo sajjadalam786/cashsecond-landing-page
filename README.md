@@ -75,7 +75,7 @@ cashsecond-landing-page/
 │   ├── js/
 │   │   └── script.js         # AJAX form, filters, accordion, tracking dispatchers
 │   └── images/
-│       ├── logo.svg          # Vector brand logo
+│       ├── cashsecond-logo.png # Official brand logo (Cyan icon + wordmark + ®)
 │       ├── brands/           # Vector brand logos (Apple, Samsung, OnePlus, etc.)
 │       └── phones/           # Vector smartphone mockups (iPhone, Galaxy, etc.)
 ├── forms/

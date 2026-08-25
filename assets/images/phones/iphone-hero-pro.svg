@@ -1,0 +1,200 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 750" width="100%" height="100%">
+  <defs>
+    <!-- Background Ambient Glow Filter -->
+    <radialGradient id="heroGlow" cx="50%" cy="45%" r="50%">
+      <stop offset="0%" stop-color="#0071E3" stop-opacity="0.16"/>
+      <stop offset="60%" stop-color="#64D2FF" stop-opacity="0.04"/>
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Drop Shadow for Phones -->
+    <filter id="phoneShadow" x="-20%" y="-20%" width="150%" height="150%">
+      <feDropShadow dx="0" dy="24" stdDeviation="28" flood-color="#000000" flood-opacity="0.18"/>
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#000000" flood-opacity="0.12"/>
+    </filter>
+
+    <filter id="softShadow" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="16" stdDeviation="20" flood-color="#000000" flood-opacity="0.14"/>
+    </filter>
+
+    <!-- Titanium Metal Gradients -->
+    <linearGradient id="desertTitanium" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#D4BBA5"/>
+      <stop offset="30%" stop-color="#C5A88E"/>
+      <stop offset="50%" stop-color="#E8D5C4"/>
+      <stop offset="70%" stop-color="#B89B82"/>
+      <stop offset="100%" stop-color="#9C8068"/>
+    </linearGradient>
+
+    <linearGradient id="naturalTitanium" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#9E9E9C"/>
+      <stop offset="25%" stop-color="#D2D2CF"/>
+      <stop offset="50%" stop-color="#7C7C7A"/>
+      <stop offset="75%" stop-color="#B5B5B2"/>
+      <stop offset="100%" stop-color="#6E6E6C"/>
+    </linearGradient>
+
+    <linearGradient id="blackTitanium" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3A3A3C"/>
+      <stop offset="40%" stop-color="#1C1C1E"/>
+      <stop offset="70%" stop-color="#48484A"/>
+      <stop offset="100%" stop-color="#151516"/>
+    </linearGradient>
+
+    <!-- Bezel & Glass Gradients -->
+    <linearGradient id="screenBezel" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1A1A1A"/>
+      <stop offset="100%" stop-color="#080808"/>
+    </linearGradient>
+
+    <!-- Apple Screen Wallpaper (iOS 18 / 16 Pro Style Vivid Dark Mesh) -->
+    <linearGradient id="screenWallpaper" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0B0E14"/>
+      <stop offset="35%" stop-color="#0D2040"/>
+      <stop offset="70%" stop-color="#1A4A8A"/>
+      <stop offset="90%" stop-color="#0071E3"/>
+      <stop offset="100%" stop-color="#64D2FF"/>
+    </linearGradient>
+
+    <!-- Glass Specular Highlight -->
+    <linearGradient id="glassGloss" x1="0%" y1="0%" x2="100%" y2="80%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.28"/>
+      <stop offset="25%" stop-color="#FFFFFF" stop-opacity="0.08"/>
+      <stop offset="50%" stop-color="#FFFFFF" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0.04"/>
+    </linearGradient>
+
+    <!-- Camera Lens Sapphire Radial Gradients -->
+    <radialGradient id="cameraLens" cx="40%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#2C3440"/>
+      <stop offset="45%" stop-color="#10151C"/>
+      <stop offset="80%" stop-color="#05070A"/>
+      <stop offset="100%" stop-color="#001830"/>
+    </radialGradient>
+
+    <radialGradient id="lensRing" cx="30%" cy="30%" r="70%">
+      <stop offset="0%" stop-color="#E8D5C4"/>
+      <stop offset="60%" stop-color="#A88B73"/>
+      <stop offset="100%" stop-color="#5C4837"/>
+    </radialGradient>
+
+    <linearGradient id="backGlassDesert" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#CBB5A1"/>
+      <stop offset="50%" stop-color="#BEA692"/>
+      <stop offset="100%" stop-color="#AD937E"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Ambient Glow Background behind phones -->
+  <ellipse cx="460" cy="380" rx="380" ry="280" fill="url(#heroGlow)"/>
+
+  <!-- Phone 1 (Back View - Natural/Desert Titanium Rear with Triple Camera System) -->
+  <g transform="translate(140, 100) rotate(-10 160 280)" filter="url(#softShadow)">
+    <!-- Chassis Outer Rim -->
+    <rect x="0" y="0" width="310" height="620" rx="54" fill="url(#desertTitanium)"/>
+    <!-- Back Matte Frosted Glass Plate -->
+    <rect x="4" y="4" width="302" height="612" rx="50" fill="url(#backGlassDesert)"/>
+
+    <!-- Apple Logo in Reflective Chrome -->
+    <g transform="translate(133, 270) scale(0.95)" opacity="0.32" fill="#FFFFFF">
+      <path d="M22.5 12.8c-1.2 1.4-3.1 2.4-4.8 2.3-.2-1.9.6-3.8 1.7-5.1 1.2-1.4 3.2-2.4 4.8-2.3.2 1.9-.5 3.8-1.7 5.1zm2.3 2.6c-2.6-.2-4.9 1.5-6.1 1.5-1.3 0-3.2-1.4-5.3-1.4-2.7.1-5.3 1.6-6.7 4-2.9 5-0.7 12.3 2.1 16.3 1.4 2 3 4.1 5.1 4 2.1-.1 2.9-1.3 5.4-1.3 2.4 0 3.2 1.3 5.3 1.3 2.2 0 3.6-1.9 5-3.9 1.6-2.3 2.2-4.5 2.3-4.6-.1-.1-4.3-1.7-4.3-6.6 0-4.1 3.4-6.1 3.5-6.2-2-2.9-5-3.1-6-3.1z"/>
+    </g>
+
+    <!-- Camera Island Module (Rounded Square Bump) -->
+    <rect x="18" y="18" width="138" height="142" rx="34" fill="url(#desertTitanium)" opacity="0.9"/>
+    <rect x="20" y="20" width="134" height="138" rx="32" fill="#B39982" opacity="0.6"/>
+
+    <!-- Lens 1 (Top Left - Main 48MP Fusion) -->
+    <circle cx="56" cy="56" r="28" fill="url(#lensRing)"/>
+    <circle cx="56" cy="56" r="24" fill="url(#cameraLens)"/>
+    <circle cx="50" cy="50" r="8" fill="#4A80C0" opacity="0.6"/>
+    <circle cx="48" cy="48" r="3" fill="#FFFFFF" opacity="0.85"/>
+
+    <!-- Lens 2 (Bottom Left - 5x Telephoto Periscope) -->
+    <circle cx="56" cy="122" r="28" fill="url(#lensRing)"/>
+    <circle cx="56" cy="122" r="24" fill="url(#cameraLens)"/>
+    <circle cx="50" cy="116" r="8" fill="#3D6898" opacity="0.6"/>
+    <circle cx="48" cy="114" r="3" fill="#FFFFFF" opacity="0.85"/>
+
+    <!-- Lens 3 (Right Center - 48MP Ultra Wide) -->
+    <circle cx="118" cy="89" r="28" fill="url(#lensRing)"/>
+    <circle cx="118" cy="89" r="24" fill="url(#cameraLens)"/>
+    <circle cx="112" cy="83" r="8" fill="#4A80C0" opacity="0.6"/>
+    <circle cx="110" cy="81" r="3" fill="#FFFFFF" opacity="0.85"/>
+
+    <!-- LiDAR Scanner & TrueTone Flash -->
+    <circle cx="118" cy="42" r="9" fill="#FFF2DF" stroke="#D4BBA5" stroke-width="2"/>
+    <circle cx="118" cy="134" r="7" fill="#1C1C1E"/>
+    <circle cx="88" cy="134" r="2.5" fill="#1C1C1E"/> <!-- Mic hole -->
+  </g>
+
+  <!-- Phone 2 (Front View - iPhone 16 Pro Max with Active ProMotion OLED Screen) -->
+  <g transform="translate(420, 50) rotate(6 160 300)" filter="url(#phoneShadow)">
+    <!-- Chassis Outer Titanium Frame -->
+    <rect x="0" y="0" width="330" height="660" rx="56" fill="url(#naturalTitanium)"/>
+    <!-- Ultra-Thin Black Display Border (1.2mm Apple Bezel) -->
+    <rect x="4" y="4" width="322" height="652" rx="52" fill="url(#screenBezel)"/>
+    
+    <!-- OLED Screen Surface with Wallpaper -->
+    <rect x="7" y="7" width="316" height="646" rx="49" fill="url(#screenWallpaper)"/>
+
+    <!-- Dynamic Island (Pill Shape with Camera & FaceID Sensors) -->
+    <g transform="translate(122, 18)">
+      <rect x="0" y="0" width="86" height="26" rx="13" fill="#000000"/>
+      <!-- Front Camera Lens -->
+      <circle cx="68" cy="13" r="5" fill="#0A1828"/>
+      <circle cx="67" cy="12" r="1.5" fill="#3D70B2" opacity="0.7"/>
+      <!-- Face ID TrueDepth sensor -->
+      <circle cx="24" cy="13" r="3.5" fill="#0D0D11"/>
+    </g>
+
+    <!-- Screen UI Content (Clean iOS Presentation) -->
+    <!-- Time & Date -->
+    <text x="165" y="118" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif" font-size="13" font-weight="600" fill="rgba(255,255,255,0.75)" text-anchor="middle" letter-spacing="0.5">Tuesday, September 16</text>
+    <text x="165" y="185" font-family="-apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif" font-size="64" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="-1.5">9:41</text>
+
+    <!-- Live Resale Value Widget Card on Screen -->
+    <g transform="translate(24, 250)">
+      <!-- Glassmorphic Card -->
+      <rect x="0" y="0" width="282" height="150" rx="24" fill="rgba(255, 255, 255, 0.12)" stroke="rgba(255, 255, 255, 0.28)" stroke-width="1.2"/>
+      
+      <!-- Verified Badge -->
+      <rect x="16" y="16" width="118" height="24" rx="12" fill="rgba(0, 113, 227, 0.85)"/>
+      <text x="75" y="32" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="10.5" font-weight="700" fill="#FFFFFF" text-anchor="middle" letter-spacing="0.5">★ INSTANT VALUE</text>
+      
+      <!-- Device Name -->
+      <text x="16" y="66" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="15" font-weight="700" fill="#FFFFFF">iPhone 16 Pro Max</text>
+      <text x="16" y="84" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="11" font-weight="500" fill="rgba(255, 255, 255, 0.8)">256GB • Flawless Condition</text>
+      
+      <!-- Value Amount -->
+      <text x="16" y="126" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="28" font-weight="800" fill="#64D2FF" letter-spacing="-0.5">₹1,05,000</text>
+      <text x="175" y="126" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="11.5" font-weight="600" fill="#34C759">On-Spot Payout ✓</text>
+    </g>
+
+    <!-- Features Micro Pills on Screen -->
+    <g transform="translate(24, 420)">
+      <rect x="0" y="0" width="134" height="42" rx="14" fill="rgba(0, 0, 0, 0.35)" stroke="rgba(255, 255, 255, 0.12)"/>
+      <text x="67" y="19" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="10" font-weight="600" fill="rgba(255,255,255,0.7)" text-anchor="middle">DOORSTEP</text>
+      <text x="67" y="33" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="11" font-weight="700" fill="#FFFFFF" text-anchor="middle">Free Mumbai Pickup</text>
+
+      <rect x="146" y="0" width="136" height="42" rx="14" fill="rgba(0, 0, 0, 0.35)" stroke="rgba(255, 255, 255, 0.12)"/>
+      <text x="214" y="19" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="10" font-weight="600" fill="rgba(255,255,255,0.7)" text-anchor="middle">DATA SECURITY</text>
+      <text x="214" y="33" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="11" font-weight="700" fill="#FFFFFF" text-anchor="middle">100% Secure Reset</text>
+    </g>
+
+    <!-- Bottom Home Indicator Bar -->
+    <rect x="95" y="636" width="140" height="5" rx="2.5" fill="#FFFFFF" opacity="0.8"/>
+
+    <!-- Glass Specular Lighting Overlay (Curved High-Gloss Reflection) -->
+    <path d="M7 7 L240 7 Q323 180 323 420 L323 653 L7 653 Z" fill="url(#glassGloss)" rx="49" opacity="0.6"/>
+  </g>
+
+  <!-- Floating Value Pill Badge (Top Right of Hero Visual) -->
+  <g transform="translate(620, 110)" filter="url(#softShadow)">
+    <rect x="0" y="0" width="220" height="68" rx="20" fill="#FFFFFF" stroke="#E5E5E7" stroke-width="1.2"/>
+    <circle cx="34" cy="34" r="18" fill="#EBF3FD"/>
+    <path d="M26 34 L32 40 L43 28" fill="none" stroke="#0071E3" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    <text x="64" y="29" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="10.5" font-weight="700" fill="#0071E3" letter-spacing="0.5">INSTANT CASH PAYOUT</text>
+    <text x="64" y="50" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="14.5" font-weight="800" fill="#111111">Best Market Rate</text>
+  </g>
+</svg>

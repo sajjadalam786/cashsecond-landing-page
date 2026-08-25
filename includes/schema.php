@@ -20,7 +20,7 @@ $localBusinessSchema = [
     '@type'      => 'ElectronicsStore',
     '@id'        => $site_url . '/#business',
     'name'       => $business['name'],
-    'image'      => $site_url . '/assets/images/logo.svg',
+    'image'      => $site_url . '/assets/images/cashsecond-logo.png',
     'url'        => $site_url,
     'telephone'  => $business['phone_raw'],
     'priceRange' => $business['price_range'] ?? '₹₹',
@@ -71,8 +71,8 @@ foreach ($faqs as $faq) {
 $productCatalogSchema = [
     '@context'        => 'https://schema.org',
     '@type'           => 'ItemList',
-    'name'            => 'Supported Apple iPhone Models for Valuation and Buyback at CashSecond',
-    'description'     => 'Verified Apple iPhone models eligible for instant online valuation, doorstep inspection, and buyback in Mumbai.',
+    'name'            => 'Apple iPhone Models for Valuation and Resale',
+    'description'     => 'Apple iPhone models eligible for instant online valuation, doorstep inspection, and buyback in India.',
     'itemListElement' => [],
 ];
 
@@ -83,7 +83,7 @@ foreach ($iphoneModels as $item) {
         'position' => $itemPosition++,
         'item'     => [
             '@type'       => 'Product',
-            'name'        => $item['product_name'],
+            'name'        => $item['seo_name'] ?? $item['product_name'],
             'image'       => $site_url . '/' . ltrim($item['image'] ?? 'assets/images/phones/iphone-15.svg', '/'),
             'brand'       => [
                 '@type' => 'Brand',

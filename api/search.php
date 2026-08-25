@@ -39,7 +39,7 @@ if ($action === 'search' || $action === 'autocomplete') {
 
     // Search Buy products
     foreach ($buyProducts as $p) {
-        $pSearch = strtolower($p['model'] . ' ' . $p['brand'] . ' ' . $p['variant'] . ' ' . $p['storage']);
+        $pSearch = strtolower($p['model'] . ' ' . ($p['seo_name'] ?? '') . ' ' . $p['brand'] . ' ' . $p['variant'] . ' ' . $p['storage'] . ' ' . ($p['keywords'] ?? '') . ' sell buy resale price');
         $pMatch = true;
         foreach ($tokens as $t) {
             if (strpos($pSearch, $t) === false) {
@@ -55,7 +55,10 @@ if ($action === 'search' || $action === 'autocomplete') {
     // Search Sell models across all brands
     foreach ($sellBrands as $bName => $models) {
         foreach ($models as $m) {
-            $mSearch = strtolower($m['product_name'] . ' ' . $bName);
+            $mKeywords = $m['keywords'] ?? 'sell resale buyback exchange price value used old valuation trade-in';
+            $mSeoName = $m['seo_name'] ?? $m['product_name'];
+            $mSearch = strtolower($m['product_name'] . ' ' . $mSeoName . ' ' . $mKeywords . ' ' . $bName . ' sell resale buyback exchange price value used old valuation');
+            
             $mMatch = true;
             foreach ($tokens as $t) {
                 if (strpos($mSearch, $t) === false) {
@@ -65,11 +68,13 @@ if ($action === 'search' || $action === 'autocomplete') {
             }
             if ($mMatch) {
                 $sellMatches[] = [
-                    'product_id' => $m['product_id'],
+                    'product_id'   => $m['product_id'],
                     'product_name' => $m['product_name'],
-                    'brand' => $bName,
-                    'image' => $m['image'] ?? 'assets/images/phones/iphone-15.svg',
-                    'series' => $m['series'] ?? ''
+                    'seo_name'     => $mSeoName,
+                    'brand'        => $bName,
+                    'image'        => $m['image'] ?? 'assets/images/phones/iphone-15.svg',
+                    'alt_text'     => $m['alt_text'] ?? $mSeoName,
+                    'series'       => $m['series'] ?? ''
                 ];
                 if (count($sellMatches) >= 40) {
                     break 2;

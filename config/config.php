@@ -61,22 +61,25 @@ return [
     ],
 
     // ============================================================
-    // SEO & META CONFIGURATION (Google Ads Landing Page Optimization)
+    // SEO & META CONFIGURATION (Google Ads & Organic Search Optimization)
     // ============================================================
     'seo' => [
-        'site_url'         => 'http://localhost/cashsecond-landing-page', // Replace with production URL (e.g., https://cashsecond.in)
-        'meta_title'       => 'Sell Your iPhone at a Fair Price | CashSecond',
-        'meta_description' => 'Get a transparent valuation for your used Apple iPhone with a simple, secure and hassle-free selling process in Mumbai. Free doorstep pickup & instant payment.',
-        'keywords'         => 'Sell Used iPhone, Sell Old iPhone, Sell iPhone Online, iPhone Buyback, Used iPhone Buyers, iPhone Resale, Sell iPhone for Cash, Mumbai iPhone buyback',
-        'og_image'         => '/assets/images/logo.svg',
+        'site_url'         => 'http://localhost/cashsecond-landing-page', // Production URL (e.g., https://cashsecond.com)
+        'meta_title'       => 'Sell iPhone Online & Check Resale Value | CashSecond',
+        'meta_description' => 'Sell your used or old iPhone online. Check your iPhone resale value with a simple and transparent valuation process and convenient selling options.',
+        'keywords'         => 'Sell iPhone, Sell Used iPhone, Sell Old iPhone, iPhone Resale Value, Sell iPhone Online, iPhone Valuation, iPhone Resale Price, Sell iPhone for Cash, Used iPhone Value, iPhone Selling Process, iPhone Exchange Value, Sell iPhone in India, sell my iPhone, sell old iPhone online, check iPhone resale value, best price for used iPhone, sell used iPhone online, iPhone resale value in India',
+        'og_image'         => '/assets/images/cashsecond-logo.png',
         'theme_color'      => '#0B0D10',
     ],
 
     // ============================================================
-    // INTEGRATION SETTINGS (FREE Google Sheets Webhook via Apps Script)
+    // INTEGRATION SETTINGS (Google Sheets via Apps Script Web App)
+    // Paste your deployed Google Apps Script Web App URL below.
+    // Leads will automatically sync to your Google Sheet with all 12 columns.
     // ============================================================
     'integrations' => [
-        'google_sheets_webhook_url' => '', 
+        'google_sheets_web_app_url' => '', // Paste Google Apps Script Web App URL here (e.g. https://script.google.com/macros/s/XXXXX/exec)
+        'google_sheets_webhook_url' => '', // Backward-compatibility alias
         'notification_email'        => 'cashsecondofficial@gmail.com',
         'enable_local_lead_log'     => true,
     ],
@@ -117,27 +120,48 @@ return [
 
     // ============================================================
     // FAQ DATA FOR SEO & ANSWER ENGINE OPTIMIZATION (AEO)
+    // 10 Targeted Conversion & Search Questions
     // ============================================================
     'faqs' => [
         [
-            'q' => 'How is my iPhone\'s value calculated?',
-            'a' => 'Your iPhone\'s estimated value is calculated based on its exact model, storage capacity, physical screen/body condition, functional checks (Face ID, cameras, battery health) and current pre-owned market rates.'
+            'q' => 'How can I sell my iPhone?',
+            'a' => 'Selling your iPhone is simple: select your exact iPhone model and storage capacity on our valuation calculator, choose its physical condition, get an instant estimated resale quote, and schedule a convenient doorstep pickup with on-spot payout.'
         ],
         [
-            'q' => 'Do you provide doorstep pickup?',
-            'a' => 'Yes. We offer convenient, free doorstep executive pickup across Mumbai, Navi Mumbai and Thane at your preferred date and time slot.'
+            'q' => 'How is my iPhone resale value calculated?',
+            'a' => 'Your iPhone resale value is calculated based on current market demand, factoring in your device model, storage capacity, physical condition (screen & body), battery health, and functional status of features like Face ID and cameras.'
         ],
         [
-            'q' => 'When will I receive payment?',
-            'a' => 'You receive instant, on-spot payment immediately after the 5-minute diagnostic inspection at your doorstep via UPI (Google Pay / PhonePe / Paytm), instant Bank Transfer (IMPS), or Cash.'
+            'q' => 'How much can I get for my iPhone?',
+            'a' => 'Payouts depend on the model generation, storage tier, and device condition. Newer models like the iPhone 15 and 16 series in flawless condition receive top market value, while older generations still command competitive resale prices.'
         ],
         [
-            'q' => 'What happens if the final inspection changes the estimated value?',
-            'a' => 'If undisclosed flaws (such as screen burn-in, non-genuine parts, or functional issues) are detected during testing, the executive will explain the diagnostic findings and provide a revised fair offer. You are under no obligation to sell and can decline with zero penalty.'
+            'q' => 'Can I sell an old or used iPhone?',
+            'a' => 'Yes, you can sell used, older, and out-of-warranty iPhones. We evaluate devices across flawless, good, and average condition grades so you get an honest and fair market price regardless of age.'
         ],
         [
-            'q' => 'Is my personal data safe?',
-            'a' => 'Yes, absolutely. Our executive ensures your iCloud account is signed out and guides you to perform a complete factory reset (Erase All Content and Settings) in front of you before handover.'
+            'q' => 'Which iPhone models can I sell?',
+            'a' => 'You can sell virtually any Apple iPhone model including iPhone 16 Pro Max, 16 Pro, 16 Plus, 16, 15 series, 14 series, 13 series, 12 series, 11 series, iPhone SE, and earlier generations.'
+        ],
+        [
+            'q' => 'What affects my iPhone\'s resale value?',
+            'a' => 'The main factors are cosmetic condition (scratches, dents, back glass), display originality and touch responsiveness, battery health percentage, functional hardware (Face ID, cameras, speakers), and internal storage capacity.'
+        ],
+        [
+            'q' => 'Can I sell an iPhone with a damaged screen?',
+            'a' => 'Yes. Devices with minor scratches, display wear, or cracked glass can be evaluated through our condition selector, and you will receive a transparent estimated valuation reflecting the actual condition.'
+        ],
+        [
+            'q' => 'How does the iPhone selling process work?',
+            'a' => 'The process follows 4 simple steps: 1) Select your model and condition online to check estimated value, 2) Schedule a doorstep appointment, 3) 5-minute diagnostic verification with iCloud reset, and 4) Instant payment via UPI, IMPS, or Cash before handover.'
+        ],
+        [
+            'q' => 'How does pickup work?',
+            'a' => 'Our verified executive visits your home or office at your selected time slot across Mumbai, performs a quick 32-point inspection, assists with complete factory data reset, and initiates your instant payment on the spot.'
+        ],
+        [
+            'q' => 'When do I receive payment?',
+            'a' => 'You receive payment instantly during the doorstep pickup appointment. The executive transfers funds directly via UPI (Google Pay / PhonePe / Paytm), instant IMPS bank transfer, or cash before you hand over the device.'
         ]
     ]
 ];

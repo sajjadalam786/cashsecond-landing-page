@@ -28,14 +28,14 @@ $canonical_url = $seo['site_url'] ?? 'http://localhost/cashsecond-landing-page/'
     <meta property="og:description" content="<?= htmlspecialchars($page_description); ?>">
     <meta property="og:url" content="<?= htmlspecialchars($canonical_url); ?>">
     <meta property="og:type" content="website">
-    <meta property="og:image" content="<?= htmlspecialchars(rtrim($canonical_url, '/') . '/assets/images/phones/iphone-16-pro.svg'); ?>">
+    <meta property="og:image" content="<?= htmlspecialchars(rtrim($canonical_url, '/') . '/assets/images/cashsecond-logo.png'); ?>">
 
     <!-- Preconnect Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
     <!-- Main Stylesheet -->
-    <link rel="stylesheet" href="assets/css/style.css?v=6.0">
+    <link rel="stylesheet" href="assets/css/style.css?v=15.0">
 </head>
 <body id="top">
     <!-- 1. Top Moving Announcement Strip (Infinite Marquee) -->
@@ -55,8 +55,7 @@ $canonical_url = $seo['site_url'] ?? 'http://localhost/cashsecond-landing-page/'
         <div class="container header-inner">
             <!-- Brand Logo -->
             <a href="#top" class="brand-logo" aria-label="CashSecond Home">
-                <img src="assets/images/logo.svg" alt="CashSecond Logo" width="30" height="30">
-                <span>CashSecond</span>
+                <img src="assets/images/cashsecond-logo.png" alt="CashSecond" class="brand-logo-img" width="108" height="36" loading="eager">
             </a>
 
             <!-- Desktop Nav Menu -->

@@ -78,6 +78,154 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ============================================================
+    // 1b. TOP GLOBAL SEARCH BAR CONTROLLER
+    // ============================================================
+    const topSearchInput = document.getElementById('top-iphone-search-input');
+    const topSearchClearBtn = document.getElementById('top-search-clear-btn');
+    const topSearchDropdown = document.getElementById('top-search-autocomplete');
+    const topSearchResultsList = document.getElementById('top-search-results-list');
+    const topSearchEmptyState = document.getElementById('top-search-empty-state');
+    const globalSearchWrapper = document.getElementById('global-search-wrapper');
+
+    if (topSearchInput && topSearchDropdown) {
+        function getIphoneList() {
+            if (Array.isArray(window.allIphoneCatalog) && window.allIphoneCatalog.length > 0) {
+                return window.allIphoneCatalog;
+            }
+            if (catalogModels && catalogModels.length > 0) {
+                return catalogModels;
+            }
+            const domCards = document.querySelectorAll('.model-product-card');
+            return Array.from(domCards).map(c => ({
+                product_name: c.getAttribute('data-name'),
+                product_id: c.getAttribute('data-id'),
+                image: c.getAttribute('data-image')
+            }));
+        }
+
+        function renderSearchResults(query) {
+            const trimmed = query.trim().toLowerCase();
+            if (!trimmed) {
+                topSearchDropdown.style.display = 'none';
+                topSearchInput.setAttribute('aria-expanded', 'false');
+                if (topSearchClearBtn) topSearchClearBtn.style.display = 'none';
+                return;
+            }
+
+            if (topSearchClearBtn) topSearchClearBtn.style.display = 'flex';
+
+            const iphoneList = getIphoneList();
+            const tokens = trimmed.split(/\s+/).filter(Boolean);
+            const matches = iphoneList.filter(item => {
+                const name = (item.product_name || '').toLowerCase();
+                const seoName = (item.seo_name || '').toLowerCase();
+                const keywords = (item.keywords || 'sell resale buyback exchange price value used old valuation trade-in').toLowerCase();
+                const searchHaystack = `${name} ${seoName} ${keywords} apple iphone buyback resale price value online india`;
+                return tokens.every(token => searchHaystack.includes(token));
+            });
+
+            topSearchResultsList.innerHTML = '';
+
+            if (matches.length > 0) {
+                topSearchEmptyState.style.display = 'none';
+                matches.slice(0, 8).forEach(item => {
+                    const el = document.createElement('a');
+                    el.href = '#valuation';
+                    el.className = 'top-search-item';
+                    el.setAttribute('role', 'option');
+                    const displayName = item.seo_name || item.product_name;
+                    el.setAttribute('data-name', item.product_name);
+                    el.setAttribute('data-id', item.product_id);
+                    el.setAttribute('data-image', item.image || 'assets/images/phones/iphone-15.svg');
+
+                    el.innerHTML = `
+                        <img src="${item.image || 'assets/images/phones/iphone-15.svg'}" alt="${escapeHtml(item.alt_text || displayName)}" class="top-search-item-img" loading="lazy" width="32" height="38">
+                        <div class="top-search-item-info">
+                            <span class="top-search-item-name">${escapeHtml(displayName)}</span>
+                            <span class="top-search-item-series">Apple iPhone Buyback</span>
+                        </div>
+                        <span class="top-search-item-action">Check Resale Value &rarr;</span>
+                    `;
+
+                    el.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        topSearchDropdown.style.display = 'none';
+                        topSearchInput.setAttribute('aria-expanded', 'false');
+                        topSearchInput.value = item.product_name;
+
+                        if (typeof startValuationWithModel === 'function') {
+                            startValuationWithModel(item.product_name, item.product_id, item.image || 'assets/images/phones/iphone-15.svg');
+                        }
+                        const valSection = document.getElementById('valuation');
+                        if (valSection) {
+                            valSection.scrollIntoView({ behavior: 'smooth' });
+                        }
+                    });
+
+                    topSearchResultsList.appendChild(el);
+                });
+            } else {
+                topSearchEmptyState.style.display = 'block';
+            }
+
+            topSearchDropdown.style.display = 'block';
+            topSearchInput.setAttribute('aria-expanded', 'true');
+        }
+
+        topSearchInput.addEventListener('input', (e) => {
+            renderSearchResults(e.target.value);
+        });
+
+        topSearchInput.addEventListener('focus', () => {
+            if (topSearchInput.value.trim()) {
+                renderSearchResults(topSearchInput.value);
+            }
+        });
+
+        if (topSearchClearBtn) {
+            topSearchClearBtn.addEventListener('click', () => {
+                topSearchInput.value = '';
+                topSearchInput.focus();
+                topSearchDropdown.style.display = 'none';
+                topSearchInput.setAttribute('aria-expanded', 'false');
+                topSearchClearBtn.style.display = 'none';
+            });
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (globalSearchWrapper && !globalSearchWrapper.contains(e.target)) {
+                topSearchDropdown.style.display = 'none';
+                topSearchInput.setAttribute('aria-expanded', 'false');
+            }
+        });
+
+        // Keydown Enter on input
+        topSearchInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                const firstResult = topSearchResultsList.querySelector('.top-search-item');
+                if (firstResult) {
+                    e.preventDefault();
+                    firstResult.click();
+                } else {
+                    const modelFilterInput = document.getElementById('model-filter-input');
+                    if (modelFilterInput) {
+                        modelFilterInput.value = topSearchInput.value;
+                        if (typeof applyModelFilters === 'function') applyModelFilters();
+                    }
+                    const valSection = document.getElementById('valuation');
+                    if (valSection) {
+                        valSection.scrollIntoView({ behavior: 'smooth' });
+                    }
+                    topSearchDropdown.style.display = 'none';
+                }
+            } else if (e.key === 'Escape') {
+                topSearchDropdown.style.display = 'none';
+            }
+        });
+    }
+
+    // ============================================================
     // 2. HERO PROMOTIONAL BANNER SLIDER (MOBILE-FIRST)
     // ============================================================
     const promoSliderContainer = document.getElementById('hero-promo-slider');
@@ -206,82 +354,187 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ============================================================
-    // 3. "SELL iPHONES" 4-CARD HORIZONTAL PRODUCT CAROUSEL
+    // 3. "BETTER FOR POCKET. BUY REFURBISHED" HORIZONTAL CAROUSEL
     // ============================================================
-    const modelsCarouselTrack = document.getElementById('models-horizontal-carousel');
-    const modelsCarouselPrev = document.getElementById('models-carousel-prev-btn');
-    const modelsCarouselNext = document.getElementById('models-carousel-next-btn');
-    const productCarouselCards = document.querySelectorAll('.product-carousel-card');
+    const refurbishedTrack = document.getElementById('refurbished-cards-track');
+    const refurbishedPrevBtn = document.getElementById('refurbished-arrow-prev');
+    const refurbishedNextBtn = document.getElementById('refurbished-arrow-next');
+    const refurbishedCards = document.querySelectorAll('.refurbished-card');
 
-    if (modelsCarouselTrack) {
+    if (refurbishedTrack) {
         // Arrow Navigation
-        const getCardScrollStep = () => {
-            const card = modelsCarouselTrack.querySelector('.product-carousel-card');
-            return card ? (card.offsetWidth + 8) * 3 : 280;
+        const getRefurbishedScrollStep = () => {
+            const card = refurbishedTrack.querySelector('.refurbished-card');
+            return card ? (card.offsetWidth + 12) * 2 : 320;
         };
 
-        if (modelsCarouselPrev) {
-            modelsCarouselPrev.addEventListener('click', () => {
-                modelsCarouselTrack.scrollBy({ left: -getCardScrollStep(), behavior: 'smooth' });
+        if (refurbishedPrevBtn) {
+            refurbishedPrevBtn.addEventListener('click', () => {
+                pauseRefurbishedAutoscroll();
+                refurbishedTrack.scrollBy({ left: -getRefurbishedScrollStep(), behavior: 'smooth' });
+                resumeRefurbishedAutoscroll();
             });
         }
 
-        if (modelsCarouselNext) {
-            modelsCarouselNext.addEventListener('click', () => {
-                modelsCarouselTrack.scrollBy({ left: getCardScrollStep(), behavior: 'smooth' });
+        if (refurbishedNextBtn) {
+            refurbishedNextBtn.addEventListener('click', () => {
+                pauseRefurbishedAutoscroll();
+                refurbishedTrack.scrollBy({ left: getRefurbishedScrollStep(), behavior: 'smooth' });
+                resumeRefurbishedAutoscroll();
             });
         }
+
+        // Smooth Auto-scroll Controller
+        let autoscrollInterval = null;
+        let isUserInteracting = false;
+        let scrollDirection = 1; // 1 = right, -1 = left
+
+        function startRefurbishedAutoscroll() {
+            if (autoscrollInterval || isUserInteracting) return;
+            autoscrollInterval = setInterval(() => {
+                if (isUserInteracting || !refurbishedTrack) return;
+                
+                const maxScrollLeft = refurbishedTrack.scrollWidth - refurbishedTrack.clientWidth;
+                if (maxScrollLeft <= 5) return;
+
+                if (refurbishedTrack.scrollLeft >= maxScrollLeft - 10) {
+                    scrollDirection = -1;
+                } else if (refurbishedTrack.scrollLeft <= 5) {
+                    scrollDirection = 1;
+                }
+
+                refurbishedTrack.scrollLeft += (scrollDirection * 1);
+            }, 35);
+        }
+
+        function pauseRefurbishedAutoscroll() {
+            if (autoscrollInterval) {
+                clearInterval(autoscrollInterval);
+                autoscrollInterval = null;
+            }
+        }
+
+        let resumeTimer = null;
+        function resumeRefurbishedAutoscroll() {
+            if (resumeTimer) clearTimeout(resumeTimer);
+            resumeTimer = setTimeout(() => {
+                if (!isUserInteracting) {
+                    startRefurbishedAutoscroll();
+                }
+            }, 2500);
+        }
+
+        startRefurbishedAutoscroll();
+
+        // Mouse hover / interaction
+        refurbishedTrack.addEventListener('mouseenter', () => {
+            isUserInteracting = true;
+            pauseRefurbishedAutoscroll();
+        });
+
+        refurbishedTrack.addEventListener('mouseleave', () => {
+            isUserInteracting = false;
+            resumeRefurbishedAutoscroll();
+        });
 
         // Desktop Mouse Drag to Scroll
-        let isDownTrack = false;
-        let startXTrack;
-        let scrollLeftTrack;
+        let isDownRefurb = false;
+        let startXRefurb = 0;
+        let scrollLeftRefurb = 0;
 
-        modelsCarouselTrack.addEventListener('mousedown', (e) => {
-            isDownTrack = true;
-            modelsCarouselTrack.style.cursor = 'grabbing';
-            startXTrack = e.pageX - modelsCarouselTrack.offsetLeft;
-            scrollLeftTrack = modelsCarouselTrack.scrollLeft;
+        refurbishedTrack.addEventListener('mousedown', (e) => {
+            isDownRefurb = true;
+            isUserInteracting = true;
+            pauseRefurbishedAutoscroll();
+            refurbishedTrack.style.cursor = 'grabbing';
+            startXRefurb = e.pageX - refurbishedTrack.offsetLeft;
+            scrollLeftRefurb = refurbishedTrack.scrollLeft;
         });
 
-        modelsCarouselTrack.addEventListener('mouseleave', () => {
-            isDownTrack = false;
-            modelsCarouselTrack.style.cursor = '';
+        window.addEventListener('mouseup', () => {
+            if (isDownRefurb) {
+                isDownRefurb = false;
+                refurbishedTrack.style.cursor = '';
+                isUserInteracting = false;
+                resumeRefurbishedAutoscroll();
+            }
         });
 
-        modelsCarouselTrack.addEventListener('mouseup', () => {
-            isDownTrack = false;
-            modelsCarouselTrack.style.cursor = '';
-        });
-
-        modelsCarouselTrack.addEventListener('mousemove', (e) => {
-            if (!isDownTrack) return;
+        refurbishedTrack.addEventListener('mousemove', (e) => {
+            if (!isDownRefurb) return;
             e.preventDefault();
-            const x = e.pageX - modelsCarouselTrack.offsetLeft;
-            const walk = (x - startXTrack) * 1.5;
-            modelsCarouselTrack.scrollLeft = scrollLeftTrack - walk;
+            const x = e.pageX - refurbishedTrack.offsetLeft;
+            const walk = (x - startXRefurb) * 1.5;
+            refurbishedTrack.scrollLeft = scrollLeftRefurb - walk;
         });
+
+        // Touch handling (passive listeners for mobile swipe)
+        refurbishedTrack.addEventListener('touchstart', () => {
+            isUserInteracting = true;
+            pauseRefurbishedAutoscroll();
+        }, { passive: true });
+
+        refurbishedTrack.addEventListener('touchend', () => {
+            isUserInteracting = false;
+            resumeRefurbishedAutoscroll();
+        }, { passive: true });
     }
 
-    // Product Carousel Card Click & Keyboard Selection
-    productCarouselCards.forEach(card => {
-        const selectProductModel = () => {
+    // Refurbished Card Click & Keyboard Selection
+    refurbishedCards.forEach(card => {
+        const selectRefurbishedModel = (e) => {
             const name = card.getAttribute('data-name');
             const id = card.getAttribute('data-id');
             const image = card.getAttribute('data-image');
 
-            productCarouselCards.forEach(c => c.classList.remove('active'));
+            refurbishedCards.forEach(c => c.classList.remove('active'));
             card.classList.add('active');
 
-            startValuationWithModel(name, id, image);
+            if (name && (name.includes('iPhone') || name.includes('Apple'))) {
+                startValuationWithModel(name, id, image);
+            } else {
+                // For non-iPhone devices, scroll smoothly to valuation
+                const valSec = document.getElementById('valuation');
+                if (valSec) {
+                    valSec.scrollIntoView({ behavior: 'smooth' });
+                }
+            }
         };
 
-        card.addEventListener('click', selectProductModel);
+        card.addEventListener('click', selectRefurbishedModel);
 
         card.addEventListener('keydown', (e) => {
             if (e.key === 'Enter' || e.key === ' ') {
                 e.preventDefault();
-                selectProductModel();
+                selectRefurbishedModel(e);
+            }
+        });
+
+        const ctaBtn = card.querySelector('.refurbished-card-cta');
+        if (ctaBtn) {
+            ctaBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                selectRefurbishedModel(e);
+            });
+        }
+    });
+
+    // iPhone Strip Pills Click Handler
+    const iphonePillCards = document.querySelectorAll('.iphone-pill-card');
+    iphonePillCards.forEach(pill => {
+        pill.addEventListener('click', (e) => {
+            e.preventDefault();
+            const name = pill.getAttribute('data-name');
+            const id = pill.getAttribute('data-id');
+            const image = pill.getAttribute('data-image');
+
+            if (name && typeof startValuationWithModel === 'function') {
+                startValuationWithModel(name, id, image);
+                const valSec = document.getElementById('valuation');
+                if (valSec) {
+                    valSec.scrollIntoView({ behavior: 'smooth' });
+                }
             }
         });
     });
@@ -302,11 +555,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
         let visibleCount = 0;
         modelCards.forEach(card => {
-            const cardName = card.getAttribute('data-name').toLowerCase();
+            const cardName = (card.getAttribute('data-name') || '').toLowerCase();
+            const cardSeoName = (card.getAttribute('data-seo-name') || '').toLowerCase();
+            const cardKeywords = (card.getAttribute('data-keywords') || 'sell resale buyback exchange price value used old valuation').toLowerCase();
             const cardSeries = card.getAttribute('data-series');
 
+            const cardHaystack = `${cardName} ${cardSeoName} ${cardKeywords} apple iphone buyback resale price value india`;
+
             let matchesTab = (seriesFilter === 'all') || (cardSeries === seriesFilter);
-            let matchesSearch = tokens.length === 0 || tokens.every(t => cardName.includes(t));
+            let matchesSearch = tokens.length === 0 || tokens.every(t => cardHaystack.includes(t));
 
             if (matchesTab && matchesSearch) {
                 card.style.display = 'flex';
@@ -423,23 +680,11 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    const btnBackToStep2 = document.getElementById('btn-back-to-step-2');
-    if (btnBackToStep2) {
-        btnBackToStep2.addEventListener('click', () => goToStep(2));
-    }
-
-    // Step 4: Calculate & Animated Number Counter
-    const btnCalculate = document.getElementById('btn-calculate-value');
-    const calculatingBox = document.getElementById('calculating-state-box');
-    const quoteResultContainer = document.getElementById('quote-result-container');
-    const quoteDeviceName = document.getElementById('quote-device-name-display');
-    const quoteDeviceSpecs = document.getElementById('quote-device-specs-display');
-    const quoteAnimatedPrice = document.getElementById('quote-animated-price-val');
-    const quoteWaLink = document.getElementById('btn-quote-wa-link');
-    const leadFormModelInput = document.getElementById('form_phone_model');
-
-    function computePrice() {
-        const mLower = selectedModel.name.toLowerCase();
+    // ============================================================
+    // 5. UNIFIED PRICE CALCULATION ENGINE
+    // ============================================================
+    function getEstimatedPrice(modelName, storageStr, conditionStr) {
+        const mLower = (modelName || '').toLowerCase();
         let base = 25000;
 
         for (const [key, val] of Object.entries(baseModelValuations)) {
@@ -451,16 +696,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Storage multiplier
         let storageMultiplier = 1.0;
-        if (selectedModel.storage === '256GB') storageMultiplier = 1.12;
-        else if (selectedModel.storage === '512GB') storageMultiplier = 1.25;
-        else if (selectedModel.storage === '1TB') storageMultiplier = 1.38;
+        const stor = (storageStr || '').toUpperCase();
+        if (stor.includes('256')) storageMultiplier = 1.12;
+        else if (stor.includes('512')) storageMultiplier = 1.25;
+        else if (stor.includes('1 TB') || stor.includes('1TB')) storageMultiplier = 1.38;
 
         // Condition multiplier
-        let conditionMultiplier = 1.0;
-        if (selectedModel.condition === 'good') conditionMultiplier = 0.88;
-        else if (selectedModel.condition === 'average') conditionMultiplier = 0.74;
+        let conditionMultiplier = 0.88;
+        const cond = (conditionStr || '').toLowerCase();
+        if (cond.includes('like new') || cond.includes('flawless') || cond.includes('excellent')) conditionMultiplier = 1.0;
+        else if (cond.includes('good')) conditionMultiplier = 0.88;
+        else if (cond.includes('fair') || cond.includes('average')) conditionMultiplier = 0.74;
+        else if (cond.includes('damaged') || cond.includes('poor')) conditionMultiplier = 0.55;
 
-        // Warranty bonus
+        // Warranty bonus if radio checked
         const warrantyRadio = document.querySelector('input[name="warranty_status"]:checked');
         if (warrantyRadio && warrantyRadio.value === 'under_warranty') {
             base += 3000;
@@ -468,6 +717,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const calculated = Math.round((base * storageMultiplier * conditionMultiplier) / 500) * 500;
         return Math.max(calculated, 4000);
+    }
+
+    function computePrice() {
+        return getEstimatedPrice(selectedModel.name, selectedModel.storage, selectedModel.condition);
     }
 
     function animatePriceCounter(startVal, endVal, durationMs) {
@@ -490,6 +743,16 @@ document.addEventListener('DOMContentLoaded', () => {
         requestAnimationFrame(updateCounter);
     }
 
+    // Step 4: Calculate & Animated Number Counter
+    const btnCalculate = document.getElementById('btn-calculate-estimate') || document.getElementById('btn-calculate-value');
+    const calculatingBox = document.getElementById('calculating-state-box');
+    const quoteResultContainer = document.getElementById('quote-result-container');
+    const quoteDeviceName = document.getElementById('quote-device-name-display') || document.getElementById('estimate-model-name');
+    const quoteDeviceSpecs = document.getElementById('quote-device-specs-display');
+    const quoteAnimatedPrice = document.getElementById('quote-animated-price-val') || document.getElementById('estimate-amount');
+    const quoteWaLink = document.getElementById('btn-quote-wa-link');
+    const leadFormModelInput = document.getElementById('form_phone_model');
+
     if (btnCalculate) {
         btnCalculate.addEventListener('click', () => {
             goToStep(4);
@@ -506,11 +769,32 @@ document.addEventListener('DOMContentLoaded', () => {
                     quoteResultContainer.style.animation = 'fade-in-scale 0.3s ease-out';
                 }
 
-                if (quoteDeviceName) quoteDeviceName.textContent = selectedModel.name;
+                if (quoteDeviceName) quoteDeviceName.textContent = `${selectedModel.name} (${selectedModel.storage})`;
                 if (quoteDeviceSpecs) {
                     const condText = selectedModel.condition.charAt(0).toUpperCase() + selectedModel.condition.slice(1);
                     quoteDeviceSpecs.textContent = `${selectedModel.storage} Storage • ${condText} Condition`;
                 }
+
+                const basePriceElem = document.getElementById('breakdown-base-price');
+                if (basePriceElem) basePriceElem.textContent = '₹' + finalPrice.toLocaleString('en-IN');
+
+                const rangeTextElem = document.getElementById('estimate-range-text');
+                if (rangeTextElem) {
+                    const low = Math.round((finalPrice * 0.95) / 500) * 500;
+                    const high = Math.round((finalPrice * 1.05) / 500) * 500;
+                    rangeTextElem.textContent = `Expected range: ₹${low.toLocaleString('en-IN')} – ₹${high.toLocaleString('en-IN')}`;
+                }
+
+                // Update hidden inputs for wizard lead form
+                const wzModel = document.getElementById('wizard_form_model');
+                const wzStorage = document.getElementById('wizard_form_storage');
+                const wzCond = document.getElementById('wizard_form_condition');
+                const wzEstVal = document.getElementById('wizard_form_est_val');
+
+                if (wzModel) wzModel.value = selectedModel.name;
+                if (wzStorage) wzStorage.value = selectedModel.storage;
+                if (wzCond) wzCond.value = selectedModel.condition;
+                if (wzEstVal) wzEstVal.value = '₹' + finalPrice.toLocaleString('en-IN');
 
                 animatePriceCounter(0, finalPrice, 900);
 
@@ -520,7 +804,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     quoteWaLink.href = `https://wa.me/918976332211?text=${encodeURIComponent(text)}`;
                 }
 
-                // Prefill Lead Form
+                // Prefill bottom Lead Form
                 if (leadFormModelInput) {
                     leadFormModelInput.value = `${selectedModel.name} ${selectedModel.storage} (Est: ₹${finalPrice.toLocaleString('en-IN')})`;
                 }
@@ -533,16 +817,75 @@ document.addEventListener('DOMContentLoaded', () => {
         btnRecalculate.addEventListener('click', () => goToStep(1));
     }
 
-    const schedulePickupTrigger = document.getElementById('btn-schedule-pickup-trigger');
-    if (schedulePickupTrigger) {
-        schedulePickupTrigger.addEventListener('click', (e) => {
+    // Wizard Step 5 Lead Form AJAX Submission
+    const wizardLeadForm = document.getElementById('wizard-lead-form');
+    const wizardSubmitBtn = document.getElementById('wizard-form-submit-btn');
+    const wizardStatusAlert = document.getElementById('wizard-form-status');
+
+    if (wizardLeadForm) {
+        wizardLeadForm.addEventListener('submit', (e) => {
             e.preventDefault();
-            const leadFormSection = document.getElementById('enquire');
-            if (leadFormSection) {
-                leadFormSection.scrollIntoView({ behavior: 'smooth' });
-                const nameInput = document.getElementById('form_full_name');
-                if (nameInput) setTimeout(() => nameInput.focus(), 400);
+
+            const name = (document.getElementById('wizard_full_name') || {}).value || '';
+            const phone = (document.getElementById('wizard_phone_number') || {}).value || '';
+
+            if (!name.trim() || !phone.trim()) {
+                if (wizardStatusAlert) {
+                    wizardStatusAlert.className = 'form-status-alert alert-error';
+                    wizardStatusAlert.textContent = 'Please enter your Full Name and Mobile Number.';
+                    wizardStatusAlert.style.display = 'block';
+                }
+                return;
             }
+
+            if (wizardSubmitBtn) {
+                wizardSubmitBtn.disabled = true;
+                wizardSubmitBtn.innerHTML = '<span>Processing valuation...</span>';
+            }
+
+            const formData = new FormData(wizardLeadForm);
+
+            fetch('forms/submit.php', {
+                method: 'POST',
+                body: formData,
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    if (wizardStatusAlert) {
+                        wizardStatusAlert.className = 'form-status-alert alert-success';
+                        wizardStatusAlert.innerHTML = `
+                            <p style="font-weight: 700; color: #34C759; margin-bottom: 4px; font-size: 1rem;">✓ Thank You! Your iPhone details have been received.</p>
+                            <p style="color: var(--color-text-secondary); font-size: 0.8125rem; margin-bottom: 12px;">Our team will contact you shortly regarding your iPhone valuation.</p>
+                            <a href="${data.whatsapp_direct_url || '#'}" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp btn-full" style="text-decoration:none;">
+                                <span>CONTINUE ON WHATSAPP &rarr;</span>
+                            </a>
+                        `;
+                        wizardStatusAlert.style.display = 'block';
+                    }
+                    wizardLeadForm.reset();
+                } else {
+                    if (wizardStatusAlert) {
+                        wizardStatusAlert.className = 'form-status-alert alert-error';
+                        wizardStatusAlert.textContent = data.message || 'Something went wrong. Please try again.';
+                        wizardStatusAlert.style.display = 'block';
+                    }
+                }
+            })
+            .catch(() => {
+                if (wizardStatusAlert) {
+                    wizardStatusAlert.className = 'form-status-alert alert-error';
+                    wizardStatusAlert.textContent = 'Something went wrong. Please try again or WhatsApp us directly.';
+                    wizardStatusAlert.style.display = 'block';
+                }
+            })
+            .finally(() => {
+                if (wizardSubmitBtn) {
+                    wizardSubmitBtn.disabled = false;
+                    wizardSubmitBtn.innerHTML = '<span>GET MY IPHONE VALUE &rarr;</span>';
+                }
+            });
         });
     }
 
@@ -583,13 +926,106 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // ============================================================
-    // 7. FAQ ACCORDION
+    // 6.5 MASTER EXPANDABLE CUSTOMER REVIEWS PANEL
     // ============================================================
+    const reviewsMasterPanel = document.getElementById('reviewsMasterPanel');
+    const reviewsMasterToggle = document.getElementById('reviewsMasterToggle');
+
+    function toggleMasterReviews(forceState) {
+        if (!reviewsMasterPanel || !reviewsMasterToggle) return;
+        const willOpen = typeof forceState === 'boolean' 
+            ? forceState 
+            : !reviewsMasterPanel.classList.contains('open');
+
+        if (willOpen) {
+            reviewsMasterPanel.classList.add('open');
+            reviewsMasterToggle.setAttribute('aria-expanded', 'true');
+        } else {
+            reviewsMasterPanel.classList.remove('open');
+            reviewsMasterToggle.setAttribute('aria-expanded', 'false');
+        }
+    }
+
+    if (reviewsMasterToggle && reviewsMasterPanel) {
+        reviewsMasterToggle.addEventListener('click', () => {
+            toggleMasterReviews();
+        });
+
+        // Ensure Keyboard trigger with Enter/Space
+        reviewsMasterToggle.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                toggleMasterReviews();
+            }
+        });
+    }
+
+    // Auto-open master Reviews panel if user clicks #reviews link or URL lands on #reviews
+    const reviewLinks = document.querySelectorAll('a[href="#reviews"]');
+    reviewLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            toggleMasterReviews(true);
+        });
+    });
+
+    if (window.location.hash === '#reviews') {
+        toggleMasterReviews(true);
+    }
+
+    // ============================================================
+    // 7. MASTER EXPANDABLE FAQ PANEL & INNER ACCORDION
+    // ============================================================
+    const faqMasterPanel = document.getElementById('faqMasterPanel');
+    const faqMasterToggle = document.getElementById('faqMasterToggle');
+
+    function toggleMasterFaq(forceState) {
+        if (!faqMasterPanel || !faqMasterToggle) return;
+        const willOpen = typeof forceState === 'boolean' 
+            ? forceState 
+            : !faqMasterPanel.classList.contains('open');
+
+        if (willOpen) {
+            faqMasterPanel.classList.add('open');
+            faqMasterToggle.setAttribute('aria-expanded', 'true');
+        } else {
+            faqMasterPanel.classList.remove('open');
+            faqMasterToggle.setAttribute('aria-expanded', 'false');
+        }
+    }
+
+    if (faqMasterToggle && faqMasterPanel) {
+        faqMasterToggle.addEventListener('click', () => {
+            toggleMasterFaq();
+        });
+
+        // Ensure Keyboard trigger with Enter/Space
+        faqMasterToggle.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                toggleMasterFaq();
+            }
+        });
+    }
+
+    // Auto-open master FAQ panel if user clicks #faq link or URL lands on #faq
+    const faqLinks = document.querySelectorAll('a[href="#faq"]');
+    faqLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            toggleMasterFaq(true);
+        });
+    });
+
+    if (window.location.hash === '#faq') {
+        toggleMasterFaq(true);
+    }
+
+    // Inner Individual FAQ Questions Accordion
     const faqItems = document.querySelectorAll('.faq-item');
     faqItems.forEach(item => {
         const btn = item.querySelector('.faq-btn');
         if (btn) {
-            btn.addEventListener('click', () => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation(); // Prevent bubbling to master container
                 const isActive = item.classList.contains('active');
                 faqItems.forEach(i => {
                     i.classList.remove('active');
@@ -652,7 +1088,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (submitBtn) {
                 submitBtn.disabled = true;
-                submitBtn.innerHTML = '<span>Submitting enquiry...</span>';
+                submitBtn.innerHTML = '<span>Processing valuation...</span>';
             }
 
             const formData = new FormData(leadForm);
@@ -667,31 +1103,500 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (data.status === 'success') {
                     if (statusAlert) {
                         statusAlert.className = 'form-status-alert alert-success';
-                        statusAlert.textContent = data.message || 'Thank you! Your pickup request has been received. Our coordinator will contact you shortly.';
+                        statusAlert.innerHTML = `
+                            <p style="font-weight: 700; color: #34C759; margin-bottom: 4px; font-size: 1rem;">✓ Thank You! Your iPhone details have been received.</p>
+                            <p style="color: rgba(255, 255, 255, 0.85); font-size: 0.875rem; margin-bottom: 12px;">Our team will contact you shortly regarding your iPhone valuation.</p>
+                            <a href="${data.whatsapp_direct_url || '#'}" target="_blank" rel="noopener noreferrer" class="btn btn-whatsapp btn-full" style="text-decoration:none;">
+                                <span>CONTINUE ON WHATSAPP &rarr;</span>
+                            </a>
+                        `;
                         statusAlert.style.display = 'block';
                     }
                     leadForm.reset();
                 } else {
                     if (statusAlert) {
                         statusAlert.className = 'form-status-alert alert-error';
-                        statusAlert.textContent = data.message || 'Something went wrong. Please try again or WhatsApp us directly.';
+                        statusAlert.textContent = data.message || 'Something went wrong. Please try again.';
                         statusAlert.style.display = 'block';
                     }
                 }
             })
             .catch(() => {
                 if (statusAlert) {
-                    statusAlert.className = 'form-status-alert alert-success';
-                    statusAlert.textContent = 'Thank you! Your enquiry has been received. We will contact you on WhatsApp/Call shortly.';
+                    statusAlert.className = 'form-status-alert alert-error';
+                    statusAlert.textContent = 'Something went wrong. Please try again or WhatsApp us directly.';
                     statusAlert.style.display = 'block';
                 }
             })
             .finally(() => {
                 if (submitBtn) {
                     submitBtn.disabled = false;
-                    submitBtn.innerHTML = '<span>Schedule Free Doorstep Pickup</span>';
+                    submitBtn.innerHTML = '<span>GET MY IPHONE VALUE &rarr;</span>';
                 }
             });
         });
+    }
+
+    // ============================================================
+    // 16. POPUP LEAD MODAL CONTROLLER (Auto-Opens on Load & 30s Loop)
+    // ============================================================
+    // ============================================================
+    // 16. HIGH-CONVERTING MULTI-STEP iPHONE VALUATION POPUP ENGINE
+    // ============================================================
+    const leadPopupModal       = document.getElementById('lead-popup-modal');
+    const leadModalBackdrop    = document.getElementById('lead-modal-backdrop');
+    const leadModalCloseBtn    = document.getElementById('lead-modal-close-btn');
+    const popupLeadForm        = document.getElementById('popup-lead-form');
+    const popupStepCounter     = document.getElementById('popup-step-counter');
+    const popupProgressDots    = document.querySelectorAll('.prog-dot');
+    const popupModalHeading    = document.getElementById('popup-modal-heading');
+    const popupModalSubheading = document.getElementById('popup-modal-subheading');
+    const popupSubmitBtn       = document.getElementById('btn-popup-submit');
+    const popupStatusAlert     = document.getElementById('popup-form-status');
+    const popupProgressHeader  = document.getElementById('popup-progress-header');
+    const popupHeaderBlock     = document.getElementById('popup-header-block');
+
+    // Multi-Step Internal State
+    let popupState = {
+        currentStep: 1,
+        model: 'Apple iPhone 16 Pro',
+        storage: '128 GB',
+        condition: 'Good',
+        conditionMult: 0.88,
+        estimatedPrice: 56500,
+        isExitIntent: false
+    };
+
+    function setPopupStep(stepNum) {
+        popupState.currentStep = stepNum;
+
+        // 1. Update Step Counter Text
+        if (popupStepCounter) {
+            popupStepCounter.textContent = `Step ${stepNum} of 4`;
+        }
+
+        // 2. Update Progress Dots
+        popupProgressDots.forEach((dot, idx) => {
+            const dotStep = idx + 1;
+            dot.classList.remove('active', 'completed');
+            if (dotStep === stepNum) {
+                dot.classList.add('active');
+            } else if (dotStep < stepNum) {
+                dot.classList.add('completed');
+            }
+        });
+
+        // 3. Switch Step Panels
+        for (let i = 1; i <= 4; i++) {
+            const panel = document.getElementById(`popup-panel-${i}`);
+            if (panel) {
+                panel.classList.toggle('active', i === stepNum);
+            }
+        }
+
+        // Hide success / failure panels when navigating steps
+        const successPanel = document.getElementById('popup-panel-success');
+        const failurePanel = document.getElementById('popup-panel-failure');
+        if (successPanel) successPanel.style.display = 'none';
+        if (failurePanel) failurePanel.style.display = 'none';
+        if (popupProgressHeader) popupProgressHeader.style.display = 'flex';
+        if (popupHeaderBlock) popupHeaderBlock.style.display = 'block';
+
+        // 4. Update Step 2 Header Badge
+        if (stepNum === 2) {
+            const step2Badge = document.getElementById('popup-step2-badge');
+            if (step2Badge) {
+                step2Badge.textContent = `Selected: ${popupState.model}`;
+            }
+        }
+
+        // 5. Update Step 3 Header Badge
+        if (stepNum === 3) {
+            const step3Badge = document.getElementById('popup-step3-badge');
+            if (step3Badge) {
+                step3Badge.textContent = `${popupState.model} • ${popupState.storage}`;
+            }
+        }
+
+        // 6. Update Step 4 Live Price Calculation & Badges
+        if (stepNum === 4) {
+            const calculatedVal = getEstimatedPrice(popupState.model, popupState.storage, popupState.condition);
+            popupState.estimatedPrice = calculatedVal;
+
+            const low = Math.round((calculatedVal * 0.95) / 500) * 500;
+            const high = Math.round((calculatedVal * 1.05) / 500) * 500;
+
+            const estPriceElem = document.getElementById('popup-estimate-price-val');
+            if (estPriceElem) {
+                estPriceElem.textContent = `₹${low.toLocaleString('en-IN')} – ₹${high.toLocaleString('en-IN')}`;
+            }
+
+            const estSpecsElem = document.getElementById('popup-estimate-specs-summary');
+            if (estSpecsElem) {
+                estSpecsElem.textContent = `${popupState.model} (${popupState.storage}) • ${popupState.condition} Condition`;
+            }
+
+            // Sync Hidden Inputs
+            const hidModel = document.getElementById('popup_hidden_model');
+            const hidStorage = document.getElementById('popup_hidden_storage');
+            const hidCond = document.getElementById('popup_hidden_condition');
+            const hidEst = document.getElementById('popup_hidden_est_val');
+
+            if (hidModel) hidModel.value = popupState.model;
+            if (hidStorage) hidStorage.value = popupState.storage;
+            if (hidCond) hidCond.value = popupState.condition;
+            if (hidEst) hidEst.value = `₹${calculatedVal.toLocaleString('en-IN')}`;
+        }
+    }
+
+    function openMultiStepPopup(isExitIntent = false, preselectedModel = null) {
+        if (!leadPopupModal) return;
+        if (sessionStorage.getItem('cs_lead_submitted') === '1') return;
+
+        popupState.isExitIntent = isExitIntent;
+
+        if (preselectedModel) {
+            popupState.model = preselectedModel;
+            const hidModel = document.getElementById('popup_hidden_model');
+            if (hidModel) hidModel.value = preselectedModel;
+        }
+
+        // Customize Header for Exit Intent vs Normal
+        if (isExitIntent) {
+            if (popupModalHeading) popupModalHeading.textContent = "Before You Go — Check Your iPhone's Value";
+            if (popupModalSubheading) popupModalSubheading.textContent = "Get a quick resale estimate before you leave.";
+            if (popupSubmitBtn) {
+                const btnSpan = popupSubmitBtn.querySelector('span');
+                if (btnSpan) btnSpan.textContent = "CHECK MY VALUE →";
+            }
+        } else {
+            if (popupModalHeading) popupModalHeading.textContent = "How Much Is Your iPhone Worth?";
+            if (popupModalSubheading) popupModalSubheading.textContent = "Get your estimated resale value in under 60 seconds.";
+            if (popupSubmitBtn) {
+                const btnSpan = popupSubmitBtn.querySelector('span');
+                if (btnSpan) btnSpan.textContent = "GET MY IPHONE VALUE →";
+            }
+        }
+
+        // Start at Step 1 or Step 2 if model is already selected
+        setPopupStep(preselectedModel ? 2 : 1);
+
+        leadPopupModal.style.display = 'flex';
+        void leadPopupModal.offsetHeight;
+        leadPopupModal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeMultiStepPopup() {
+        if (!leadPopupModal) return;
+        leadPopupModal.classList.remove('active');
+        document.body.style.overflow = '';
+        setTimeout(() => {
+            if (!leadPopupModal.classList.contains('active')) {
+                leadPopupModal.style.display = 'none';
+            }
+        }, 280);
+    }
+
+    if (leadPopupModal) {
+        // Close Button & Backdrop Listeners
+        if (leadModalCloseBtn) {
+            leadModalCloseBtn.addEventListener('click', closeMultiStepPopup);
+        }
+        if (leadModalBackdrop) {
+            leadModalBackdrop.addEventListener('click', closeMultiStepPopup);
+        }
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && leadPopupModal.classList.contains('active')) {
+                closeMultiStepPopup();
+            }
+        });
+
+        // ==========================================
+        // STEP 1: Search & Model Card Selection
+        // ==========================================
+        const popupModelSearch = document.getElementById('popup-model-search-input');
+        const popupSearchClear = document.getElementById('popup-search-clear');
+        const popupModelCards  = document.querySelectorAll('.popup-model-card');
+        const popupModelEmpty  = document.getElementById('popup-model-empty');
+
+        if (popupModelSearch) {
+            popupModelSearch.addEventListener('input', (e) => {
+                const query = e.target.value.toLowerCase().trim();
+                const tokens = query.split(/\s+/).filter(Boolean);
+                let matchCount = 0;
+
+                if (popupSearchClear) {
+                    popupSearchClear.style.display = query ? 'block' : 'none';
+                }
+
+                popupModelCards.forEach(card => {
+                    const name = (card.getAttribute('data-name') || '').toLowerCase();
+                    const series = (card.getAttribute('data-series') || '').toLowerCase();
+                    const haystack = `${name} ${series} sell apple iphone resale buyback price value`;
+
+                    const matches = tokens.length === 0 || tokens.every(t => haystack.includes(t));
+                    if (matches) {
+                        card.style.display = 'flex';
+                        matchCount++;
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+
+                if (popupModelEmpty) {
+                    popupModelEmpty.style.display = matchCount === 0 ? 'block' : 'none';
+                }
+            });
+
+            if (popupSearchClear) {
+                popupSearchClear.addEventListener('click', () => {
+                    popupModelSearch.value = '';
+                    popupModelSearch.dispatchEvent(new Event('input'));
+                    popupModelSearch.focus();
+                });
+            }
+        }
+
+        popupModelCards.forEach(card => {
+            card.addEventListener('click', () => {
+                const name = card.getAttribute('data-name');
+                if (name) {
+                    popupState.model = name;
+                    popupModelCards.forEach(c => c.classList.toggle('active', c === card));
+                    setPopupStep(2);
+                }
+            });
+        });
+
+        // ==========================================
+        // STEP 2: Storage Selection
+        // ==========================================
+        const storageCards = document.querySelectorAll('.storage-card');
+        storageCards.forEach(card => {
+            card.addEventListener('click', () => {
+                const storage = card.getAttribute('data-storage') || '128 GB';
+                popupState.storage = storage;
+                storageCards.forEach(c => c.classList.toggle('active', c === card));
+                setPopupStep(3);
+            });
+        });
+
+        const btnBackTo1 = document.getElementById('popup-back-to-1');
+        if (btnBackTo1) {
+            btnBackTo1.addEventListener('click', () => setPopupStep(1));
+        }
+
+        const btnNextTo3 = document.getElementById('popup-next-to-3');
+        if (btnNextTo3) {
+            btnNextTo3.addEventListener('click', () => setPopupStep(3));
+        }
+
+        // ==========================================
+        // STEP 3: Condition Selection
+        // ==========================================
+        const conditionCards = document.querySelectorAll('.condition-card');
+        conditionCards.forEach(card => {
+            card.addEventListener('click', () => {
+                const cond = card.getAttribute('data-condition') || 'Good';
+                const mult = parseFloat(card.getAttribute('data-mult') || 0.88);
+                popupState.condition = cond;
+                popupState.conditionMult = mult;
+                conditionCards.forEach(c => c.classList.toggle('active', c === card));
+                setPopupStep(4);
+            });
+        });
+
+        const btnBackTo2 = document.getElementById('popup-back-to-2');
+        if (btnBackTo2) {
+            btnBackTo2.addEventListener('click', () => setPopupStep(2));
+        }
+
+        const btnNextTo4 = document.getElementById('popup-next-to-4');
+        if (btnNextTo4) {
+            btnNextTo4.addEventListener('click', () => setPopupStep(4));
+        }
+
+        // ==========================================
+        // STEP 4: Lead Submission & Duplicate Protection
+        // ==========================================
+        const btnBackTo3 = document.getElementById('popup-back-to-3');
+        if (btnBackTo3) {
+            btnBackTo3.addEventListener('click', () => setPopupStep(3));
+        }
+
+        const btnTryAgain = document.getElementById('popup-try-again-btn');
+        if (btnTryAgain) {
+            btnTryAgain.addEventListener('click', () => {
+                setPopupStep(4);
+            });
+        }
+
+        if (popupLeadForm) {
+            popupLeadForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+
+                const nameInput  = document.getElementById('popup_full_name');
+                const phoneInput = document.getElementById('popup_phone_number');
+                const errName    = document.getElementById('popup-err-name');
+                const errPhone   = document.getElementById('popup-err-phone');
+
+                let isValid = true;
+
+                // Validate Name (min 2 chars)
+                const nameVal = nameInput ? nameInput.value.trim() : '';
+                if (!nameVal || nameVal.length < 2) {
+                    isValid = false;
+                    if (nameInput) nameInput.classList.add('input-error');
+                    if (errName) {
+                        errName.textContent = 'Please enter your full name (at least 2 characters).';
+                        errName.style.display = 'block';
+                    }
+                } else {
+                    if (nameInput) nameInput.classList.remove('input-error');
+                    if (errName) errName.style.display = 'none';
+                }
+
+                // Validate Phone (10 digits)
+                const phoneVal = phoneInput ? phoneInput.value.trim().replace(/[^0-9]/g, '') : '';
+                if (!phoneVal || phoneVal.length < 10) {
+                    isValid = false;
+                    if (phoneInput) phoneInput.classList.add('input-error');
+                    if (errPhone) {
+                        errPhone.textContent = 'Please enter a valid 10-digit mobile number.';
+                        errPhone.style.display = 'block';
+                    }
+                } else {
+                    if (phoneInput) phoneInput.classList.remove('input-error');
+                    if (errPhone) errPhone.style.display = 'none';
+                }
+
+                if (!isValid) return;
+
+                // Duplicate Protection: Disable Submit Button Immediately
+                if (popupSubmitBtn) {
+                    popupSubmitBtn.disabled = true;
+                    popupSubmitBtn.innerHTML = '<span>Processing valuation...</span>';
+                }
+
+                // Capture URL UTM Parameters
+                const urlParams = new URLSearchParams(window.location.search);
+                const utmSrcElem = document.getElementById('popup_utm_source');
+                const utmMedElem = document.getElementById('popup_utm_medium');
+                const utmCmpElem = document.getElementById('popup_utm_campaign');
+
+                if (utmSrcElem) utmSrcElem.value = urlParams.get('utm_source') || (document.referrer ? (document.referrer.includes('google') ? 'Google Organic' : 'Referral') : 'Direct');
+                if (utmMedElem) utmMedElem.value = urlParams.get('utm_medium') || 'Organic';
+                if (utmCmpElem) utmCmpElem.value = urlParams.get('utm_campaign') || 'None';
+
+                const formData = new FormData(popupLeadForm);
+
+                fetch('forms/submit.php', {
+                    method: 'POST',
+                    body: formData,
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        // Mark Lead Submitted in session
+                        sessionStorage.setItem('cs_lead_submitted', '1');
+
+                        // Hide progress & header block
+                        if (popupProgressHeader) popupProgressHeader.style.display = 'none';
+                        if (popupHeaderBlock) popupHeaderBlock.style.display = 'none';
+
+                        // Hide Step Panels
+                        for (let i = 1; i <= 4; i++) {
+                            const p = document.getElementById(`popup-panel-${i}`);
+                            if (p) p.classList.remove('active');
+                        }
+
+                        // Populate and Show Success Panel
+                        const popSuccModel = document.getElementById('pop-succ-model');
+                        const popSuccStorage = document.getElementById('pop-succ-storage');
+                        const popSuccCondition = document.getElementById('pop-succ-condition');
+                        const popSuccEstimate = document.getElementById('pop-succ-estimate');
+                        const popupWaBtn = document.getElementById('popup-wa-continue-btn');
+
+                        if (popSuccModel) popSuccModel.textContent = popupState.model;
+                        if (popSuccStorage) popSuccStorage.textContent = popupState.storage;
+                        if (popSuccCondition) popSuccCondition.textContent = popupState.condition;
+                        if (popSuccEstimate) popSuccEstimate.textContent = `₹${popupState.estimatedPrice.toLocaleString('en-IN')}`;
+                        if (popupWaBtn && data.whatsapp_direct_url) {
+                            popupWaBtn.href = data.whatsapp_direct_url;
+                        }
+
+                        const successPanel = document.getElementById('popup-panel-success');
+                        if (successPanel) {
+                            successPanel.style.display = 'block';
+                            successPanel.classList.add('active');
+                        }
+                    } else {
+                        // Show Failure Panel
+                        showFailureScreen();
+                    }
+                })
+                .catch(() => {
+                    showFailureScreen();
+                })
+                .finally(() => {
+                    if (popupSubmitBtn) {
+                        popupSubmitBtn.disabled = false;
+                        popupSubmitBtn.innerHTML = '<span>GET MY IPHONE VALUE &rarr;</span>';
+                    }
+                });
+
+                function showFailureScreen() {
+                    if (popupProgressHeader) popupProgressHeader.style.display = 'none';
+                    if (popupHeaderBlock) popupHeaderBlock.style.display = 'none';
+
+                    for (let i = 1; i <= 4; i++) {
+                        const p = document.getElementById(`popup-panel-${i}`);
+                        if (p) p.classList.remove('active');
+                    }
+
+                    const failurePanel = document.getElementById('popup-panel-failure');
+                    if (failurePanel) {
+                        failurePanel.style.display = 'block';
+                        failurePanel.classList.add('active');
+                    }
+                }
+            });
+        }
+
+        // ==========================================
+        // TRIGGER 1: Global CTA Button Interceptor
+        // ==========================================
+        const valuationCtaLinks = document.querySelectorAll('a[href="#valuation"], .hero-cta-wrapper a, #mobile-sticky-valuation-btn');
+        valuationCtaLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                // If link is clicked, smoothly open multi-step popup
+                e.preventDefault();
+                openMultiStepPopup(false);
+            });
+        });
+
+        // ==========================================
+        // TRIGGER 2: Desktop Exit Intent (Once per session)
+        // ==========================================
+        document.addEventListener('mouseleave', (e) => {
+            if (e.clientY <= 10) {
+                if (!sessionStorage.getItem('cs_exit_shown') && !sessionStorage.getItem('cs_lead_submitted')) {
+                    sessionStorage.setItem('cs_exit_shown', '1');
+                    openMultiStepPopup(true);
+                }
+            }
+        });
+
+        // ==========================================
+        // TRIGGER 3: Mobile Non-Aggressive Timer (Once per session after 25s)
+        // ==========================================
+        setTimeout(() => {
+            if (!sessionStorage.getItem('cs_popup_shown') && !sessionStorage.getItem('cs_lead_submitted')) {
+                sessionStorage.setItem('cs_popup_shown', '1');
+                openMultiStepPopup(false);
+            }
+        }, 25000);
     }
 });
