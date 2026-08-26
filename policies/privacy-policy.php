@@ -79,7 +79,6 @@ $canonical_url    = rtrim($seo['site_url'], '/') . "/policies/privacy-policy.php
                 <p>
                     <strong>CashSecond</strong><br>
                     Office Number 1307, 13th Floor, Arcadia Building, NCPA Marg, Nariman Point, Mumbai – 400021<br>
-                    Phone: <a href="tel:+918976332211">+91 897633 2211</a><br>
                     Email: <a href="mailto:cashsecondofficial@gmail.com">cashsecondofficial@gmail.com</a>
                 </p>
             </div>

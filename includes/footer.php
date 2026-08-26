@@ -19,7 +19,7 @@ $current_year = date('Y');
                     <img src="assets/images/cashsecond-logo.png" alt="CashSecond - Best Value For Your iPhone" class="footer-logo-img" width="420" height="140" loading="lazy">
                 </a>
                 <p>Office 1307, 13th Floor, Arcadia Building, NCPA Marg, Nariman Point, Mumbai – 400021</p>
-                <p style="margin-top: 4px;">Phone: <a href="tel:+918976332211" style="color: var(--color-cta);">+91 897633 2211</a> • Email: <a href="mailto:cashsecondofficial@gmail.com" style="color: var(--color-cta);">cashsecondofficial@gmail.com</a></p>
+                <p style="margin-top: 4px;">Email: <a href="mailto:cashsecondofficial@gmail.com" style="color: var(--color-cta);">cashsecondofficial@gmail.com</a></p>
             </div>
 
             <!-- Quick Navigation & Legal Policy Links -->
