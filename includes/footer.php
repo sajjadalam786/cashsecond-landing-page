@@ -21,35 +21,35 @@ $current_year = date('Y');
             <div class="footer-models-strip" aria-label="iPhone Model Series Quick Links">
                 <span class="footer-models-label">Popular Series:</span>
                 <div class="footer-models-pills">
-                    <a href="<?= $base_path ?>index.php#valuation-entry" class="footer-model-pill" aria-label="Sell iPhone 16 Series">
+                    <a href="<?= $base_path ?>index.php#iphone-models" class="footer-model-pill start-exact-valuation-btn" data-model="Apple iPhone 16 Pro Max" aria-label="Sell iPhone 16 Series">
                         <svg class="footer-phone-icon" width="14" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                             <rect x="5" y="2" width="14" height="20" rx="3" ry="3"/>
                             <line x1="12" y1="18" x2="12.01" y2="18"/>
                         </svg>
                         <span>iPhone 16 Series</span>
                     </a>
-                    <a href="<?= $base_path ?>index.php#valuation-entry" class="footer-model-pill" aria-label="Sell iPhone 15 Series">
+                    <a href="<?= $base_path ?>index.php#iphone-models" class="footer-model-pill start-exact-valuation-btn" data-model="Apple iPhone 15 Pro Max" aria-label="Sell iPhone 15 Series">
                         <svg class="footer-phone-icon" width="14" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                             <rect x="5" y="2" width="14" height="20" rx="3" ry="3"/>
                             <line x1="12" y1="18" x2="12.01" y2="18"/>
                         </svg>
                         <span>iPhone 15 Series</span>
                     </a>
-                    <a href="<?= $base_path ?>index.php#valuation-entry" class="footer-model-pill" aria-label="Sell iPhone 14 Series">
+                    <a href="<?= $base_path ?>index.php#iphone-models" class="footer-model-pill start-exact-valuation-btn" data-model="Apple iPhone 14 Pro Max" aria-label="Sell iPhone 14 Series">
                         <svg class="footer-phone-icon" width="14" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                             <rect x="5" y="2" width="14" height="20" rx="3" ry="3"/>
                             <line x1="12" y1="18" x2="12.01" y2="18"/>
                         </svg>
                         <span>iPhone 14 Series</span>
                     </a>
-                    <a href="<?= $base_path ?>index.php#valuation-entry" class="footer-model-pill" aria-label="Sell iPhone 13 Series">
+                    <a href="<?= $base_path ?>index.php#iphone-models" class="footer-model-pill start-exact-valuation-btn" data-model="Apple iPhone 13" aria-label="Sell iPhone 13 Series">
                         <svg class="footer-phone-icon" width="14" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                             <rect x="5" y="2" width="14" height="20" rx="3" ry="3"/>
                             <line x1="12" y1="18" x2="12.01" y2="18"/>
                         </svg>
                         <span>iPhone 13 Series</span>
                     </a>
-                    <a href="<?= $base_path ?>index.php#valuation-entry" class="footer-model-pill" aria-label="Sell iPhone 12 & Older">
+                    <a href="<?= $base_path ?>index.php#iphone-models" class="footer-model-pill start-exact-valuation-btn" data-model="Apple iPhone 12" aria-label="Sell iPhone 12 & Older">
                         <svg class="footer-phone-icon" width="14" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                             <rect x="5" y="2" width="14" height="20" rx="3" ry="3"/>
                             <line x1="12" y1="18" x2="12.01" y2="18"/>
@@ -91,13 +91,13 @@ $current_year = date('Y');
                         <span>Sell by Model</span>
                     </h4>
                     <ul class="footer-links-list">
-                        <li><a href="<?= $base_path ?>index.php#valuation-entry">Sell iPhone 16 Pro Max</a></li>
-                        <li><a href="<?= $base_path ?>index.php#valuation-entry">Sell iPhone 16 Pro / 16</a></li>
-                        <li><a href="<?= $base_path ?>index.php#valuation-entry">Sell iPhone 15 Pro Max</a></li>
-                        <li><a href="<?= $base_path ?>index.php#valuation-entry">Sell iPhone 15 Pro / 15</a></li>
-                        <li><a href="<?= $base_path ?>index.php#valuation-entry">Sell iPhone 14 Pro Max / 14</a></li>
-                        <li><a href="<?= $base_path ?>index.php#valuation-entry">Sell iPhone 13 Pro / 13</a></li>
-                        <li><a href="<?= $base_path ?>index.php#valuation-entry">Sell iPhone 12 &amp; 11 Series</a></li>
+                        <li><a href="<?= $base_path ?>index.php#iphone-models" class="start-exact-valuation-btn" data-model="Apple iPhone 16 Pro Max">Sell iPhone 16 Pro Max</a></li>
+                        <li><a href="<?= $base_path ?>index.php#iphone-models" class="start-exact-valuation-btn" data-model="Apple iPhone 16 Pro">Sell iPhone 16 Pro / 16</a></li>
+                        <li><a href="<?= $base_path ?>index.php#iphone-models" class="start-exact-valuation-btn" data-model="Apple iPhone 15 Pro Max">Sell iPhone 15 Pro Max</a></li>
+                        <li><a href="<?= $base_path ?>index.php#iphone-models" class="start-exact-valuation-btn" data-model="Apple iPhone 15 Pro">Sell iPhone 15 Pro / 15</a></li>
+                        <li><a href="<?= $base_path ?>index.php#iphone-models" class="start-exact-valuation-btn" data-model="Apple iPhone 14 Pro Max">Sell iPhone 14 Pro Max / 14</a></li>
+                        <li><a href="<?= $base_path ?>index.php#iphone-models" class="start-exact-valuation-btn" data-model="Apple iPhone 13">Sell iPhone 13 Pro / 13</a></li>
+                        <li><a href="<?= $base_path ?>index.php#iphone-models" class="start-exact-valuation-btn" data-model="Apple iPhone 12">Sell iPhone 12 &amp; Older</a></li>
                     </ul>
                 </div>
 
@@ -108,11 +108,9 @@ $current_year = date('Y');
                         <span>Why CashSecond</span>
                     </h4>
                     <ul class="footer-links-list">
+                        <li><a href="<?= $base_path ?>index.php#buyback-advantages">Verified Advantages</a></li>
                         <li><a href="<?= $base_path ?>index.php#how-it-works">How It Works</a></li>
-                        <li><a href="<?= $base_path ?>index.php#valuation-entry">Instant Valuation Engine</a></li>
-                        <li><a href="<?= $base_path ?>index.php#how-it-works">Free Doorstep Pickup</a></li>
-                        <li><a href="<?= $base_path ?>index.php#smart-exchange">Smart iPhone Exchange</a></li>
-                        <li><a href="<?= $base_path ?>index.php#reviews">Verified Reviews</a></li>
+                        <li><a href="<?= $base_path ?>index.php#iphone-models">Supported iPhone Models</a></li>
                         <li><a href="<?= $base_path ?>index.php#faq">Frequently Asked Questions</a></li>
                         <li><a href="<?= $base_path ?>index.php#contact">Contact Store Team</a></li>
                     </ul>
@@ -179,7 +177,7 @@ $current_year = date('Y');
 
     <!-- Main JavaScript Engine (Deferred for high speed & non-blocking execution) -->
     <script src="<?= $base_path ?>assets/js/script.js?v=14.0" defer></script>
-    <script src="<?= $base_path ?>assets/js/questionnaire.js?v=3.0" defer></script>
+    <script src="<?= $base_path ?>assets/js/questionnaire.js?v=3.1" defer></script>
 </body>
 </html>
 

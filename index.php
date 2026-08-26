@@ -249,7 +249,7 @@ require __DIR__ . '/includes/header.php';
 <!-- ============================================================
      2. iPHONE MODELS HORIZONTAL SCROLLING STRIP (AUTO-SCROLL MARQUEE)
      ============================================================ -->
-<div class="iphone-strip-section" aria-label="Featured iPhone Models for Resale">
+<div class="iphone-strip-section" id="iphone-models" aria-label="Featured iPhone Models for Resale">
     <div class="iphone-strip-wrapper">
         <div class="iphone-strip-track">
             <!-- Sell iPhone 16 Pro Max -->

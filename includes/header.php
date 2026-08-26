@@ -50,7 +50,7 @@ $canonical_url = $canonical_url ?? ($seo['site_url'] ?? 'http://localhost/cashse
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <!-- Main Stylesheet -->
-    <link rel="stylesheet" href="<?= $base_path ?>assets/css/style.css?v=34.0">
+    <link rel="stylesheet" href="<?= $base_path ?>assets/css/style.css?v=35.0">
     <link rel="stylesheet" href="<?= $base_path ?>assets/css/questionnaire.css?v=2.0">
 </head>
 <body id="top">
@@ -64,17 +64,16 @@ $canonical_url = $canonical_url ?? ($seo['site_url'] ?? 'http://localhost/cashse
 
             <!-- Desktop Navigation Menu -->
             <nav class="nav-menu" aria-label="Main Navigation">
-                <a href="<?= $base_path ?>index.php#valuation-entry" class="nav-link">Sell iPhone</a>
+                <a href="<?= $base_path ?>index.php#buyback-advantages" class="nav-link">Why Us</a>
                 <a href="<?= $base_path ?>index.php#how-it-works" class="nav-link">How It Works</a>
-                <a href="<?= $base_path ?>index.php#top-search-bar" class="nav-link">iPhone Models</a>
-                <a href="<?= $base_path ?>index.php#reviews" class="nav-link">Reviews</a>
+                <a href="<?= $base_path ?>index.php#iphone-models" class="nav-link">iPhone Models</a>
                 <a href="<?= $base_path ?>index.php#faq" class="nav-link">FAQs</a>
                 <a href="<?= $base_path ?>index.php#contact" class="nav-link">Contact</a>
             </nav>
 
             <!-- Desktop Header Quick Actions -->
             <div class="header-cta-group">
-                <a href="<?= $base_path ?>index.php#valuation-entry" class="btn-header-quote" aria-haspopup="dialog" aria-controls="buybackQuestionnaireModal">
+                <a href="#valuation" class="btn-header-quote start-exact-valuation-btn" data-model="Apple iPhone 16 Pro" data-variant="128 GB" aria-haspopup="dialog" aria-controls="buybackQuestionnaireModal">
                     <svg class="btn-click-icon" width="16" height="19" viewBox="0 0 24 28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                         <line x1="12" y1="1.5" x2="12" y2="4.5"/>
                         <line x1="6.5" y1="3.5" x2="8.6" y2="5.6"/>
