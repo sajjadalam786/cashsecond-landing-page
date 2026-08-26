@@ -30,12 +30,19 @@ $canonical_url = $seo['site_url'] ?? 'http://localhost/cashsecond-landing-page/'
     <meta property="og:type" content="website">
     <meta property="og:image" content="<?= htmlspecialchars(rtrim($canonical_url, '/') . '/assets/images/cashsecond-logo.png'); ?>">
 
-    <!-- Preconnect Fonts -->
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="<?= htmlspecialchars($page_title); ?>">
+    <meta name="twitter:description" content="<?= htmlspecialchars($page_description); ?>">
+    <meta name="twitter:image" content="<?= htmlspecialchars(rtrim($canonical_url, '/') . '/assets/images/cashsecond-logo.png'); ?>">
+
+    <!-- Preconnect & Luxury Typography Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <!-- Main Stylesheet -->
-    <link rel="stylesheet" href="assets/css/style.css?v=15.0">
+    <link rel="stylesheet" href="assets/css/style.css?v=16.0">
     <link rel="stylesheet" href="assets/css/questionnaire.css?v=1.1">
 </head>
 <body id="top">

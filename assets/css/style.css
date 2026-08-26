@@ -22,8 +22,8 @@
     --color-whatsapp: #25D366;
     --color-whatsapp-hover: #20BA5A;
 
-    --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    --font-heading: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+    --font-sans: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Inter", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-heading: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Inter", "Segoe UI", Roboto, sans-serif;
 
     --radius-sm: 8px;
     --radius-md: 14px;
@@ -37,7 +37,7 @@
     --shadow-modal: 0 20px 50px rgba(0, 0, 0, 0.14);
 
     --transition: all 0.24s cubic-bezier(0.25, 0.1, 0.25, 1);
-    --container-max: 1120px;
+    --container-max: 1280px;
 }
 
 *, *::before, *::after {

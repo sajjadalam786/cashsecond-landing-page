@@ -132,6 +132,32 @@ $serviceSchema = [
     ],
     'description' => 'Sell your iPhone online for the best price with instant iPhone valuation, free doorstep pickup, secure data wipe, and fast payment. Trusted iPhone buyers for used, second hand, and old Apple iPhones in Mumbai.',
 ];
+
+// 6. BreadcrumbList Schema for Rich Search Snippets & GEO
+$breadcrumbSchema = [
+    '@context'        => 'https://schema.org',
+    '@type'           => 'BreadcrumbList',
+    'itemListElement' => [
+        [
+            '@type'    => 'ListItem',
+            'position' => 1,
+            'name'     => 'Home',
+            'item'     => $site_url,
+        ],
+        [
+            '@type'    => 'ListItem',
+            'position' => 2,
+            'name'     => 'Sell iPhone',
+            'item'     => $site_url . '/#valuation',
+        ],
+        [
+            '@type'    => 'ListItem',
+            'position' => 3,
+            'name'     => 'iPhone Resale Models',
+            'item'     => $site_url . '/#models',
+        ],
+    ],
+];
 ?>
 
 <!-- JSON-LD Structured Data for LocalBusiness -->
@@ -159,3 +185,7 @@ $serviceSchema = [
 <?= json_encode($serviceSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT); ?>
 </script>
 
+<!-- JSON-LD Structured Data for Breadcrumbs -->
+<script type="application/ld+json">
+<?= json_encode($breadcrumbSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT); ?>
+</script>
