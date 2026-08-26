@@ -597,6 +597,17 @@
                         <div id="qnFormErrorAlert" class="qn-alert-box" style="display:none;"></div>
 
                         <button type="submit" class="btn-qn-reveal-submit" id="qnSubmitRevealBtn">
+                            <svg class="btn-click-icon" width="20" height="23" viewBox="0 0 24 28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <line x1="12" y1="1.5" x2="12" y2="4.5"/>
+                                <line x1="6.5" y1="3.5" x2="8.6" y2="5.6"/>
+                                <line x1="17.5" y1="3.5" x2="15.4" y2="5.6"/>
+                                <line x1="4" y1="9" x2="7" y2="9"/>
+                                <line x1="20" y1="9" x2="17" y2="9"/>
+                                <path d="M10.5 13V8a1.5 1.5 0 0 1 3 0v5"/>
+                                <path d="M13.5 12a1.4 1.4 0 0 1 2.8 0v2.5"/>
+                                <path d="M16.3 13.5a1.4 1.4 0 0 1 2.8 0v2"/>
+                                <path d="M19.1 15a1.4 1.4 0 0 1 2.8 0v3.5a6.5 6.5 0 0 1-6.5 6.5h-3a5.5 5.5 0 0 1-4.2-2L5.8 19.2a1.5 1.5 0 0 1 2.2-2.1l2.5 1.9V13"/>
+                            </svg>
                             <span>Send Valuation to WhatsApp</span>
                             <img src="assets/images/iphone-value-check-button.png" alt="iPhone" class="btn-iphone-thumb" width="22" height="38">
                         </button>
@@ -728,14 +739,14 @@
                         showError(res.message || 'We could not save your valuation. Please check details and try again.');
                         if (submitBtn) {
                             submitBtn.disabled = false;
-                            submitBtn.innerHTML = '<span>Send Valuation to WhatsApp</span><img src="assets/images/iphone-value-check-button.png" alt="iPhone" class="btn-iphone-thumb" width="22" height="38">';
+                            submitBtn.innerHTML = '<svg class="btn-click-icon" width="20" height="23" viewBox="0 0 24 28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="1.5" x2="12" y2="4.5"/><line x1="6.5" y1="3.5" x2="8.6" y2="5.6"/><line x1="17.5" y1="3.5" x2="15.4" y2="5.6"/><line x1="4" y1="9" x2="7" y2="9"/><line x1="20" y1="9" x2="17" y2="9"/><path d="M10.5 13V8a1.5 1.5 0 0 1 3 0v5"/><path d="M13.5 12a1.4 1.4 0 0 1 2.8 0v2.5"/><path d="M16.3 13.5a1.4 1.4 0 0 1 2.8 0v2"/><path d="M19.1 15a1.4 1.4 0 0 1 2.8 0v3.5a6.5 6.5 0 0 1-6.5 6.5h-3a5.5 5.5 0 0 1-4.2-2L5.8 19.2a1.5 1.5 0 0 1 2.2-2.1l2.5 1.9V13"/></svg><span>Send Valuation to WhatsApp</span><img src="assets/images/iphone-value-check-button.png" alt="iPhone" class="btn-iphone-thumb" width="22" height="38">';
                         }
                     }
                 } catch (err) {
                     showError('Network error. Please check your internet connection and retry.');
                     if (submitBtn) {
                         submitBtn.disabled = false;
-                        submitBtn.innerHTML = '<span>Retry Submission</span><img src="assets/images/iphone-value-check-button.png" alt="iPhone" class="btn-iphone-thumb" width="22" height="38">';
+                        submitBtn.innerHTML = '<svg class="btn-click-icon" width="20" height="23" viewBox="0 0 24 28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="1.5" x2="12" y2="4.5"/><line x1="6.5" y1="3.5" x2="8.6" y2="5.6"/><line x1="17.5" y1="3.5" x2="15.4" y2="5.6"/><line x1="4" y1="9" x2="7" y2="9"/><line x1="20" y1="9" x2="17" y2="9"/><path d="M10.5 13V8a1.5 1.5 0 0 1 3 0v5"/><path d="M13.5 12a1.4 1.4 0 0 1 2.8 0v2.5"/><path d="M16.3 13.5a1.4 1.4 0 0 1 2.8 0v2"/><path d="M19.1 15a1.4 1.4 0 0 1 2.8 0v3.5a6.5 6.5 0 0 1-6.5 6.5h-3a5.5 5.5 0 0 1-4.2-2L5.8 19.2a1.5 1.5 0 0 1 2.2-2.1l2.5 1.9V13"/></svg><span>Retry Submission</span><img src="assets/images/iphone-value-check-button.png" alt="iPhone" class="btn-iphone-thumb" width="22" height="38">';
                     }
                 }
             });

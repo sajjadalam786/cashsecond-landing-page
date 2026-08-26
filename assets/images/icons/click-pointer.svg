@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="btn-click-icon" aria-hidden="true">
+  <!-- Burst Click Rays -->
+  <line x1="12" y1="1.5" x2="12" y2="4.5"/>
+  <line x1="6.5" y1="3.5" x2="8.6" y2="5.6"/>
+  <line x1="17.5" y1="3.5" x2="15.4" y2="5.6"/>
+  <line x1="4" y1="9" x2="7" y2="9"/>
+  <line x1="20" y1="9" x2="17" y2="9"/>
+  
+  <!-- Clicking Hand Pointer -->
+  <path d="M10.5 13V8a1.5 1.5 0 0 1 3 0v5"/>
+  <path d="M13.5 12a1.4 1.4 0 0 1 2.8 0v2.5"/>
+  <path d="M16.3 13.5a1.4 1.4 0 0 1 2.8 0v2"/>
+  <path d="M19.1 15a1.4 1.4 0 0 1 2.8 0v3.5a6.5 6.5 0 0 1-6.5 6.5h-3a5.5 5.5 0 0 1-4.2-2L5.8 19.2a1.5 1.5 0 0 1 2.2-2.1l2.5 1.9V13"/>
+</svg>

@@ -246,6 +246,29 @@ button {
     width: 100%;
 }
 
+/* Click Pointer SVG on Buttons */
+.btn-click-icon {
+    display: inline-block;
+    vertical-align: middle;
+    width: 20px;
+    height: 23px;
+    flex-shrink: 0;
+    margin-right: 8px;
+    transition: transform 0.25s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+button:hover .btn-click-icon,
+a:hover .btn-click-icon,
+.btn:hover .btn-click-icon {
+    transform: scale(1.2) translateY(-2px);
+}
+
+.btn-header-quote .btn-click-icon {
+    width: 17px;
+    height: 20px;
+    margin-right: 6px;
+}
+
 /* Realistic iPhone Visual inside Buttons */
 .btn-iphone-thumb {
     display: inline-block;
@@ -976,96 +999,179 @@ a:hover .btn-iphone-thumb {
 }
 
 /* ============================================================
-   SECTION 1: iPHONE KEYWORDS (SINGLE HORIZONTAL ROW DESKTOP)
+   BENTO TRUST PILLARS MATRIX (8 PILLARS)
    ============================================================ */
-.hero-keywords-wrapper {
-    width: 100% !important;
-    margin-top: 24px !important;
-    padding-top: 16px !important;
-    border-top: 1px solid rgba(0, 0, 0, 0.06) !important;
+.trust-pillars-section {
+    padding: 52px 0 44px 0;
+    background: #FAFAFC;
+    border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
 }
 
-.keyword-container {
-    display: flex !important;
-    flex-direction: row !important;
-    flex-wrap: nowrap !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 6px !important;
-    width: 100% !important;
-    overflow: visible !important;
-    box-sizing: border-box !important;
+.trust-pillars-header {
+    margin-bottom: 32px;
 }
 
-.keyword-pill {
-    display: inline-flex !important;
-    flex-direction: row !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 5px !important;
-    background: #FFFFFF !important;
-    border: 1px solid var(--color-border) !important;
-    border-radius: 20px !important;
-    padding: 6px 10px !important;
-    font-size: 0.75rem !important;
-    font-weight: 500 !important;
-    line-height: 1.2 !important;
-    color: var(--color-dark) !important;
-    white-space: nowrap !important;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04) !important;
-    transition: all 0.2s ease !important;
-    user-select: none !important;
-    flex-shrink: 0 !important;
+.pillars-eyebrow-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 14px;
+    background: rgba(0, 113, 227, 0.08);
+    color: var(--color-cta, #0071E3);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    border-radius: 30px;
+    margin-bottom: 10px;
 }
 
-.keyword-pill svg {
-    width: 12px !important;
-    height: 12px !important;
-    color: var(--color-cta) !important;
-    flex-shrink: 0 !important;
+.pillars-eyebrow-tag svg {
+    color: var(--color-cta, #0071E3);
 }
 
-.keyword-pill:hover {
-    border-color: var(--color-cta) !important;
-    background-color: rgba(0, 113, 227, 0.03) !important;
-    box-shadow: 0 2px 8px rgba(0, 113, 227, 0.1) !important;
+.pillars-section-title {
+    font-family: var(--font-heading, -apple-system, sans-serif);
+    font-size: clamp(1.4rem, 2.5vw, 1.85rem);
+    font-weight: 800;
+    color: var(--color-dark, #1C1C1E);
+    margin: 0 0 8px 0;
+    letter-spacing: -0.02em;
+    line-height: 1.25;
 }
 
-@media (max-width: 1200px) {
-    .keyword-pill {
-        padding: 5px 8px !important;
-        font-size: 0.7rem !important;
-        gap: 4px !important;
+.pillars-section-subtitle {
+    font-size: 0.9375rem;
+    color: var(--color-text-secondary, #636366);
+    margin: 0 auto;
+    max-width: 620px;
+    line-height: 1.5;
+}
+
+.trust-bento-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+}
+
+.bento-pillar-card {
+    background: #FFFFFF;
+    border: 1px solid var(--color-border);
+    border-radius: 20px;
+    padding: 22px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
+    transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+    box-sizing: border-box;
+    position: relative;
+    overflow: hidden;
+}
+
+.bento-pillar-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: transparent;
+    transition: background 0.28s ease;
+}
+
+.bento-pillar-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--color-cta, #0071E3);
+    box-shadow: 0 12px 32px rgba(0, 113, 227, 0.1);
+}
+
+.bento-pillar-card:hover::before {
+    background: linear-gradient(90deg, #0071E3, #34C759);
+}
+
+.bento-pillar-icon-box {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.bento-pillar-icon-box.icon-blue    { background: #E8F2FF; color: #0071E3; }
+.bento-pillar-icon-box.icon-cyan    { background: #E0F7FA; color: #00838F; }
+.bento-pillar-icon-box.icon-green   { background: #E8F5E9; color: #2E7D32; }
+.bento-pillar-icon-box.icon-indigo  { background: #EDE7F6; color: #4527A0; }
+.bento-pillar-icon-box.icon-purple  { background: #F3E5F5; color: #6A1B9A; }
+.bento-pillar-icon-box.icon-amber   { background: #FFF8E1; color: #E65100; }
+.bento-pillar-icon-box.icon-teal    { background: #E0F2F1; color: #00695C; }
+.bento-pillar-icon-box.icon-emerald { background: #E8F8EE; color: #0E7C3A; }
+
+.bento-pillar-content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.bento-pillar-title {
+    font-family: var(--font-heading, sans-serif);
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--color-dark, #1C1C1E);
+    margin: 0;
+    line-height: 1.3;
+}
+
+.bento-pillar-desc {
+    font-size: 0.78125rem;
+    color: var(--color-text-secondary, #636366);
+    margin: 0;
+    line-height: 1.45;
+}
+
+/* Tablet & Mobile Bento Layout */
+@media (max-width: 1080px) {
+    .trust-bento-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 14px;
     }
 }
 
-@media (max-width: 991px) {
-    .hero-keywords-wrapper {
-        margin-top: 16px !important;
-        padding-top: 12px !important;
+@media (max-width: 640px) {
+    .trust-pillars-section {
+        padding: 36px 0 30px 0;
     }
 
-    .keyword-container {
-        flex-wrap: wrap !important;
-        justify-content: center !important;
-        gap: 6px !important;
+    .trust-pillars-header {
+        margin-bottom: 22px;
     }
 
-    .keyword-pill {
-        flex-shrink: 1 !important;
-        padding: 5px 9px !important;
-        font-size: 0.71875rem !important;
-    }
-}
-
-@media (max-width: 600px) {
-    .keyword-container {
-        gap: 5px 6px !important;
+    .trust-bento-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
     }
 
-    .keyword-pill {
-        padding: 4px 8px !important;
-        font-size: 0.6875rem !important;
+    .bento-pillar-card {
+        flex-direction: row;
+        align-items: center;
+        padding: 16px 16px;
+        gap: 14px;
+        border-radius: 16px;
+    }
+
+    .bento-pillar-icon-box {
+        width: 40px;
+        height: 40px;
+    }
+
+    .bento-pillar-title {
+        font-size: 0.9rem;
+    }
+
+    .bento-pillar-desc {
+        font-size: 0.75rem;
     }
 }
 
@@ -5710,3 +5816,335 @@ a:hover .btn-iphone-thumb {
         font-size: 1.5rem;
     }
 }
+
+/* ============================================================
+   POLICY & LEGAL PAGES
+   ============================================================ */
+.policy-page {
+    padding: 56px 0 88px;
+    background: #FAFAFC;
+    min-height: 70vh;
+}
+
+.policy-card {
+    background: #FFFFFF;
+    border: 1px solid var(--color-border);
+    border-radius: 24px;
+    padding: 44px 36px;
+    max-width: 860px;
+    margin: 0 auto;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
+}
+
+.policy-card h1 {
+    font-family: var(--font-heading, -apple-system, sans-serif);
+    font-size: 2.125rem;
+    font-weight: 800;
+    color: var(--color-dark, #1C1C1E);
+    margin-bottom: 6px;
+    letter-spacing: -0.02em;
+}
+
+.policy-card .updated-date {
+    color: var(--color-text-muted, #8E8E93);
+    font-size: 0.8125rem;
+    margin-bottom: 28px;
+    font-weight: 500;
+}
+
+.policy-card h2 {
+    font-family: var(--font-heading, -apple-system, sans-serif);
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin: 32px 0 12px;
+    color: var(--color-dark, #1C1C1E);
+}
+
+.policy-card p,
+.policy-card ul {
+    color: var(--color-text-secondary, #636366);
+    font-size: 0.9375rem;
+    line-height: 1.7;
+    margin-bottom: 16px;
+}
+
+.policy-card ul {
+    padding-left: 24px;
+    list-style: disc;
+}
+
+.policy-card li {
+    margin-bottom: 8px;
+}
+
+.policy-card a {
+    color: var(--color-cta, #0071E3);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.back-nav {
+    margin-bottom: 24px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: var(--color-cta, #0071E3);
+    text-decoration: none !important;
+    transition: transform 0.2s ease;
+}
+
+.back-nav:hover {
+    transform: translateX(-3px);
+}
+
+@media (max-width: 768px) {
+    .policy-page {
+        padding: 32px 0 60px;
+    }
+    
+    .policy-card {
+        padding: 28px 20px;
+        border-radius: 18px;
+    }
+    
+    .policy-card h1 {
+        font-size: 1.625rem;
+    }
+    
+    .policy-card h2 {
+        font-size: 1.125rem;
+    }
+    
+    .policy-card p,
+    .policy-card ul {
+        font-size: 0.875rem;
+    }
+}
+
+/* ============================================================
+   THANK YOU / CONFIRMATION PAGE
+   ============================================================ */
+.thankyou-page-wrapper {
+    min-height: 70vh;
+    background: linear-gradient(180deg, #F5F5F7 0%, #FFFFFF 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 48px 0 64px 0;
+}
+
+.thankyou-card-container {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 0 20px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.thankyou-card {
+    background: #FFFFFF;
+    border: 1px solid var(--color-border, #E5E5EA);
+    border-radius: 24px;
+    padding: 38px 32px;
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.06);
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+.thankyou-icon-wrap {
+    width: 72px;
+    height: 72px;
+    border-radius: 50%;
+    background: rgba(37, 211, 102, 0.14);
+    color: #25D366;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    animation: iconPop 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes iconPop {
+    0% { transform: scale(0.4); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.thankyou-title {
+    font-family: var(--font-heading, sans-serif);
+    font-size: 1.65rem;
+    font-weight: 800;
+    color: var(--color-dark, #1C1C1E);
+    margin: 0 0 8px 0;
+    letter-spacing: -0.02em;
+}
+
+.thankyou-subtitle {
+    font-size: 0.95rem;
+    color: var(--color-text-secondary, #636366);
+    line-height: 1.5;
+    margin: 0 0 24px 0;
+}
+
+.thankyou-valuation-deck {
+    background: #F5F5F7;
+    border: 1px solid #E5E5EA;
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 24px;
+    text-align: left;
+}
+
+.valuation-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 0;
+    border-bottom: 1px dashed rgba(0, 0, 0, 0.08);
+    font-size: 0.875rem;
+}
+
+.valuation-row:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.valuation-row .label {
+    color: #636366;
+    font-weight: 500;
+}
+
+.valuation-row .value {
+    color: #1C1C1E;
+    font-weight: 700;
+}
+
+.valuation-highlight-row {
+    margin-top: 10px;
+    padding-top: 12px;
+    border-top: 1.5px solid #E5E5EA;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* Blurred Valuation Payout */
+.valuation-blurred-wrap {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.valuation-blurred-amount {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--color-cta, #0071E3);
+    filter: blur(8px);
+    user-select: none;
+    -webkit-user-select: none;
+    opacity: 0.6;
+    letter-spacing: 2px;
+}
+
+.valuation-lock-pill {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #0071E3;
+    color: #FFFFFF;
+    font-size: 0.6875rem;
+    font-weight: 800;
+    padding: 4px 12px;
+    border-radius: 20px;
+    box-shadow: 0 4px 12px rgba(0, 113, 227, 0.3);
+    white-space: nowrap;
+}
+
+.whatsapp-redirect-box {
+    background: #E8F8EE;
+    border: 1.5px solid #25D366;
+    border-radius: 16px;
+    padding: 18px 20px;
+    margin-bottom: 24px;
+    text-align: center;
+}
+
+.whatsapp-spinner-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #0E7C3A;
+    margin-bottom: 8px;
+}
+
+.pulse-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #25D366;
+    animation: pulse 1.2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(0.9); opacity: 0.7; }
+    50% { transform: scale(1.4); opacity: 1; }
+    100% { transform: scale(0.9); opacity: 0.7; }
+}
+
+.btn-whatsapp-direct {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    padding: 15px 24px;
+    background: #25D366;
+    color: #FFFFFF;
+    font-size: 1rem;
+    font-weight: 700;
+    border-radius: 14px;
+    text-decoration: none;
+    box-shadow: 0 4px 16px rgba(37, 211, 102, 0.35);
+    transition: all 0.22s ease;
+    box-sizing: border-box;
+}
+
+.btn-whatsapp-direct:hover {
+    background: #1EBE5D;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(37, 211, 102, 0.45);
+    color: #FFFFFF;
+}
+
+.thankyou-trust-strip {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    font-size: 0.75rem;
+    color: #8E8E93;
+    margin-top: 16px;
+    flex-wrap: wrap;
+}
+
+@media (max-width: 600px) {
+    .thankyou-page-wrapper {
+        padding: 24px 0 40px 0;
+    }
+    .thankyou-card {
+        padding: 28px 20px;
+    }
+    .thankyou-title {
+        font-size: 1.4rem;
+    }
+}
+
+

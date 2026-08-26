@@ -96,87 +96,151 @@ require __DIR__ . '/includes/header.php';
             <div class="hero-banner-overlay">
                 <h1 class="hero-main-title">Sell Old iPhone From Your Doorstep</h1>
                 <p class="hero-main-subtitle">Get an instant valuation, free doorstep pickup in Mumbai, secure data wipe, and spot payment.</p>
-            </div>
-        </div>
-
-        <!-- 1B. High-Converting Valuation Entry & Verified Trust Deck -->
-        <div class="hero-action-deck-grid">
-            <!-- Left Card: Step 1 Phone Valuation Entry Card -->
-            <div class="questionnaire-entry-card" id="valuation-entry">
-                <div class="entry-card-phone-visual">
-                    <div class="entry-phone-img-wrap">
-                        <img src="assets/images/phones/iphone-13.svg" alt="Apple iPhone 13 Resale" class="entry-phone-img" width="56" height="70" loading="lazy">
-                    </div>
-                    <div class="entry-card-info">
-                        <h3 class="entry-card-model" id="entrySelectedModel">Apple iPhone 13 (128 GB)</h3>
-                        <div class="entry-card-upto-box">
-                            <span class="entry-card-upto-label">Get Upto</span>
-                            <strong class="entry-card-upto-price" id="entrySelectedPrice">₹23,220</strong>
-                        </div>
-                        <p class="entry-card-trust-note">Free doorstep pickup in Mumbai • Spot cash/UPI payment</p>
-                    </div>
-                </div>
-                <div class="entry-card-action">
-                    <button type="button" class="btn-get-exact-value start-exact-valuation-btn" id="startExactValuationBtn" data-model="Apple iPhone 13" data-variant="128 GB" aria-haspopup="dialog" aria-controls="buybackQuestionnaireModal">
+                <div class="hero-banner-cta-wrap" style="margin-top: 18px;">
+                    <a href="#valuation" class="btn btn-primary btn-lg start-exact-valuation-btn" id="startExactValuationBtn" aria-haspopup="dialog" aria-controls="buybackQuestionnaireModal">
+                        <svg class="btn-click-icon" width="20" height="23" viewBox="0 0 24 28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <line x1="12" y1="1.5" x2="12" y2="4.5"/>
+                            <line x1="6.5" y1="3.5" x2="8.6" y2="5.6"/>
+                            <line x1="17.5" y1="3.5" x2="15.4" y2="5.6"/>
+                            <line x1="4" y1="9" x2="7" y2="9"/>
+                            <line x1="20" y1="9" x2="17" y2="9"/>
+                            <path d="M10.5 13V8a1.5 1.5 0 0 1 3 0v5"/>
+                            <path d="M13.5 12a1.4 1.4 0 0 1 2.8 0v2.5"/>
+                            <path d="M16.3 13.5a1.4 1.4 0 0 1 2.8 0v2"/>
+                            <path d="M19.1 15a1.4 1.4 0 0 1 2.8 0v3.5a6.5 6.5 0 0 1-6.5 6.5h-3a5.5 5.5 0 0 1-4.2-2L5.8 19.2a1.5 1.5 0 0 1 2.2-2.1l2.5 1.9V13"/>
+                        </svg>
                         <span>Check Your iPhone Value</span>
                         <img src="assets/images/iphone-value-check-button.png" alt="iPhone" class="btn-iphone-thumb" width="22" height="38" loading="eager">
-                    </button>
+                    </a>
                 </div>
-            </div>
-
-            <!-- Right Card: Verified Trust Markers & Value Deck -->
-            <div class="hero-brand-statement-card">
-                <div class="trust-badge-row" aria-label="Verified Trust Credentials">
-                    <span class="trust-badge-pill">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-                        <span>GST Registered &amp; Verified</span>
-                    </span>
-                    <span class="trust-badge-pill">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-                        <span>Trusted by 500+ Customers</span>
-                    </span>
-                </div>
-                <p class="hero-slogan-title">Your iPhone Deserves Its Best Value.</p>
-                <p class="hero-slogan-subtitle">Fair pricing • Trusted buyers • Fast &amp; secure doorstep service</p>
-                <p class="hero-slogan-note">Trusted iPhone buyers • Free doorstep pickup • No obligation</p>
             </div>
         </div>
+    </div>
+</section>
 
-        <!-- Section 1: All 8 iPhone Keywords - Clean Single Horizontal Row -->
-        <div class="hero-keywords-wrapper">
-            <div class="keyword-container" aria-label="Certified iPhone Resale Benefits and Services">
-                <span class="keyword-pill">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-                    <span>Certified iPhone Buyer</span>
-                </span>
-                <span class="keyword-pill">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-                    <span>Instant iPhone Valuation</span>
-                </span>
-                <span class="keyword-pill">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-                    <span>Best Market Price</span>
-                </span>
-                <span class="keyword-pill">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-                    <span>Free Doorstep Pickup</span>
-                </span>
-                <span class="keyword-pill">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-                    <span>Secure Data Protection</span>
-                </span>
-                <span class="keyword-pill">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-                    <span>Fast &amp; Secure Payment</span>
-                </span>
-                <span class="keyword-pill">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-                    <span>Used iPhone Trade-In</span>
-                </span>
-                <span class="keyword-pill">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-                    <span>Hassle-Free iPhone Buyback</span>
-                </span>
+<!-- ============================================================
+     SECTION 1B: CERTIFIED iPHONE BUYBACK ADVANTAGES (8 BENTO PILLARS)
+     ============================================================ -->
+<section class="trust-pillars-section" id="buyback-advantages" aria-label="Why Sell Your iPhone to CashSecond">
+    <div class="container trust-pillars-container">
+        <div class="trust-pillars-header text-center">
+            
+            <h2 class="pillars-section-title">The Smarter, Safer Way to Sell Your iPhone</h2>
+            <p class="pillars-section-subtitle">Mumbai's top-rated doorstep buyback network engineered for speed, transparency, and top value.</p>
+        </div>
+
+        <div class="trust-bento-grid">
+            <!-- 1. Certified iPhone Buyer -->
+            <div class="bento-pillar-card">
+                <div class="bento-pillar-icon-box icon-blue">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    </svg>
+                </div>
+                <div class="bento-pillar-content">
+                    <h3 class="bento-pillar-title">Certified iPhone Buyer</h3>
+                    <p class="bento-pillar-desc">GST registered &amp; officially verified pre-owned device platform.</p>
+                </div>
+            </div>
+
+            <!-- 2. Instant iPhone Valuation -->
+            <div class="bento-pillar-card">
+                <div class="bento-pillar-icon-box icon-cyan">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                    </svg>
+                </div>
+                <div class="bento-pillar-content">
+                    <h3 class="bento-pillar-title">Instant iPhone Valuation</h3>
+                    <p class="bento-pillar-desc">Transparent diagnostic engine calculating exact live market quotes.</p>
+                </div>
+            </div>
+
+            <!-- 3. Best Market Price -->
+            <div class="bento-pillar-card">
+                <div class="bento-pillar-icon-box icon-green">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <line x1="12" y1="1" x2="12" y2="23"/>
+                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                    </svg>
+                </div>
+                <div class="bento-pillar-content">
+                    <h3 class="bento-pillar-title">Best Market Price</h3>
+                    <p class="bento-pillar-desc">Up to 15% higher resale valuation with zero hidden deductions.</p>
+                </div>
+            </div>
+
+            <!-- 4. Free Doorstep Pickup -->
+            <div class="bento-pillar-card">
+                <div class="bento-pillar-icon-box icon-indigo">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <rect x="1" y="3" width="15" height="13"/>
+                        <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
+                        <circle cx="5.5" cy="18.5" r="2.5"/>
+                        <circle cx="18.5" cy="18.5" r="2.5"/>
+                    </svg>
+                </div>
+                <div class="bento-pillar-content">
+                    <h3 class="bento-pillar-title">Free Doorstep Pickup</h3>
+                    <p class="bento-pillar-desc">Express doorstep inspection across all Mumbai pin codes.</p>
+                </div>
+            </div>
+
+            <!-- 5. Secure Data Protection -->
+            <div class="bento-pillar-card">
+                <div class="bento-pillar-icon-box icon-purple">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                    </svg>
+                </div>
+                <div class="bento-pillar-content">
+                    <h3 class="bento-pillar-title">Secure Data Protection</h3>
+                    <p class="bento-pillar-desc">DoD-grade certified on-spot data wipe protecting complete privacy.</p>
+                </div>
+            </div>
+
+            <!-- 6. Fast & Secure Payment -->
+            <div class="bento-pillar-card">
+                <div class="bento-pillar-icon-box icon-amber">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
+                        <line x1="1" y1="10" x2="23" y2="10"/>
+                    </svg>
+                </div>
+                <div class="bento-pillar-content">
+                    <h3 class="bento-pillar-title">Fast &amp; Secure Payment</h3>
+                    <p class="bento-pillar-desc">Direct bank UPI, IMPS transfer, or spot cash upon device handover.</p>
+                </div>
+            </div>
+
+            <!-- 7. Used iPhone Trade-In -->
+            <div class="bento-pillar-card">
+                <div class="bento-pillar-icon-box icon-teal">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <polyline points="23 4 23 10 17 10"/>
+                        <polyline points="1 20 1 14 7 14"/>
+                        <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+                    </svg>
+                </div>
+                <div class="bento-pillar-content">
+                    <h3 class="bento-pillar-title">Used iPhone Trade-In</h3>
+                    <p class="bento-pillar-desc">Maximize your resale value toward your next iPhone upgrade.</p>
+                </div>
+            </div>
+
+            <!-- 8. Hassle-Free iPhone Buyback -->
+            <div class="bento-pillar-card">
+                <div class="bento-pillar-icon-box icon-emerald">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                        <polyline points="22 4 12 14.01 9 11.01"/>
+                    </svg>
+                </div>
+                <div class="bento-pillar-content">
+                    <h3 class="bento-pillar-title">Hassle-Free Buyback</h3>
+                    <p class="bento-pillar-desc">Zero haggling, zero paperwork delays, and certified peace of mind.</p>
+                </div>
             </div>
         </div>
     </div>
@@ -390,6 +454,17 @@ require __DIR__ . '/includes/header.php';
                 <h3 class="promo-banner-title">Your iPhone Deserves a Better Value.</h3>
                 <p class="promo-banner-desc">Check your iPhone's value in seconds and get a hassle-free pickup.</p>
                 <a href="#valuation" class="btn promo-banner-cta btn-promo-dark" id="heroCheckValueBtn" aria-haspopup="dialog" aria-controls="buybackQuestionnaireModal">
+                    <svg class="btn-click-icon" width="20" height="23" viewBox="0 0 24 28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <line x1="12" y1="1.5" x2="12" y2="4.5"/>
+                        <line x1="6.5" y1="3.5" x2="8.6" y2="5.6"/>
+                        <line x1="17.5" y1="3.5" x2="15.4" y2="5.6"/>
+                        <line x1="4" y1="9" x2="7" y2="9"/>
+                        <line x1="20" y1="9" x2="17" y2="9"/>
+                        <path d="M10.5 13V8a1.5 1.5 0 0 1 3 0v5"/>
+                        <path d="M13.5 12a1.4 1.4 0 0 1 2.8 0v2.5"/>
+                        <path d="M16.3 13.5a1.4 1.4 0 0 1 2.8 0v2"/>
+                        <path d="M19.1 15a1.4 1.4 0 0 1 2.8 0v3.5a6.5 6.5 0 0 1-6.5 6.5h-3a5.5 5.5 0 0 1-4.2-2L5.8 19.2a1.5 1.5 0 0 1 2.2-2.1l2.5 1.9V13"/>
+                    </svg>
                     <span>Check Your iPhone Value</span>
                     <img src="assets/images/iphone-value-check-button.png" alt="iPhone" class="btn-iphone-thumb" width="22" height="38" loading="lazy">
                 </a>
@@ -408,63 +483,6 @@ require __DIR__ . '/includes/header.php';
     </div>
 </div>
 
-<!-- ============================================================
-     6. CUSTOMER REVIEWS (Master Expandable Section)
-     ============================================================ -->
-<section class="section-container reviews-section-wrapper" id="reviews">
-    <div class="container">
-        <div class="reviews-card-panel" id="reviewsMasterPanel">
-            <!-- Master Clickable Header / Card Trigger -->
-            <button type="button" class="reviews-master-header" id="reviewsMasterToggle" aria-expanded="false" aria-controls="reviewsMasterBody" aria-label="Toggle Customer Experiences panel">
-                <div class="reviews-master-header-text">
-                    <span class="section-eyebrow reviews-eyebrow">Customer Experiences</span>
-                    <h2 class="section-title reviews-master-title">What Our Customers Say</h2>
-                </div>
-                <div class="reviews-master-toggle-indicator" aria-hidden="true">
-                    <span class="reviews-master-icon">
-                        <svg class="reviews-chevron-svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                            <polyline points="6 9 12 15 18 9"></polyline>
-                        </svg>
-                    </span>
-                </div>
-            </button>
-
-            <!-- Collapsible Body Containing Subtitle and Full Testimonials Grid -->
-            <div class="reviews-master-collapse" id="reviewsMasterBody">
-                <div class="reviews-master-body-inner">
-                    <p class="section-subtitle reviews-master-subtitle">Real feedback from iPhone sellers across Mumbai who traded through CashSecond.</p>
-
-                    <div class="reviews-grid">
-                        <div class="review-card">
-                            <div class="review-stars">★★★★★</div>
-                            <p class="review-text">"Sold my iPhone 14 Pro directly through CashSecond. The executive arrived in Bandra within 2 hours, verified the screen and battery health, and transferred the agreed amount on Google Pay immediately. Super transparent!"</p>
-                            <div class="review-author">
-                                <span class="author-name">Rahul S. • Bandra West</span>
-                                <span class="author-model">iPhone 14 Pro 128GB</span>
-                            </div>
-                        </div>
-                        <div class="review-card">
-                            <div class="review-stars">★★★★★</div>
-                            <p class="review-text">"Great experience getting a value for my iPhone 13. Very honest valuation with no last-minute deductions since my condition answers were accurate. The pickup executive was very polite."</p>
-                            <div class="review-author">
-                                <span class="author-name">Pooja M. • Andheri</span>
-                                <span class="author-model">iPhone 13 128GB</span>
-                            </div>
-                        </div>
-                        <div class="review-card">
-                            <div class="review-stars">★★★★★</div>
-                            <p class="review-text">"Checked the value online and scheduled doorstep pickup at Nariman Point office. The transaction took barely 10 minutes. Fast payment and complete data reset assistance."</p>
-                            <div class="review-author">
-                                <span class="author-name">Vikram K. • South Mumbai</span>
-                                <span class="author-model">iPhone 15 256GB</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
 
 <!-- ============================================================
      7. PROMOTIONAL BANNER 2 (Light Apple Theme: Instant Payment)
@@ -477,6 +495,17 @@ require __DIR__ . '/includes/header.php';
                 <h3 class="promo-banner-title">From Your iPhone to Instant Payment.</h3>
                 <p class="promo-banner-desc">Transparent valuation, doorstep pickup and secure data handling — all in one simple experience.</p>
                 <a href="#valuation" class="btn promo-banner-cta btn-promo-light" id="transparentValuationBtn" aria-haspopup="dialog" aria-controls="buybackQuestionnaireModal">
+                    <svg class="btn-click-icon" width="20" height="23" viewBox="0 0 24 28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <line x1="12" y1="1.5" x2="12" y2="4.5"/>
+                        <line x1="6.5" y1="3.5" x2="8.6" y2="5.6"/>
+                        <line x1="17.5" y1="3.5" x2="15.4" y2="5.6"/>
+                        <line x1="4" y1="9" x2="7" y2="9"/>
+                        <line x1="20" y1="9" x2="17" y2="9"/>
+                        <path d="M10.5 13V8a1.5 1.5 0 0 1 3 0v5"/>
+                        <path d="M13.5 12a1.4 1.4 0 0 1 2.8 0v2.5"/>
+                        <path d="M16.3 13.5a1.4 1.4 0 0 1 2.8 0v2"/>
+                        <path d="M19.1 15a1.4 1.4 0 0 1 2.8 0v3.5a6.5 6.5 0 0 1-6.5 6.5h-3a5.5 5.5 0 0 1-4.2-2L5.8 19.2a1.5 1.5 0 0 1 2.2-2.1l2.5 1.9V13"/>
+                    </svg>
                     <span>Check Your iPhone Value</span>
                     <img src="assets/images/iphone-value-check-button.png" alt="iPhone" class="btn-iphone-thumb" width="22" height="38" loading="lazy">
                 </a>
