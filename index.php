@@ -118,75 +118,75 @@ require __DIR__ . '/includes/header.php';
      ============================================================ -->
 <section class="hero-section" id="promo-hero">
     <div class="container hero-container">
-        <div class="hero-grid">
-            <!-- Left Column: High-Converting Hero Content -->
-            <div class="hero-content">
+        <!-- 1A. Full-Width Panoramic Visual Hero Banner with Overlaid Headline -->
+        <div class="hero-panoramic-banner">
+            <img 
+                src="assets/images/sell-your-iphone-with-cashsecond.webp" 
+                alt="Sell Old iPhone From Your Doorstep with CashSecond" 
+                class="hero-panoramic-bg" 
+                width="1280" 
+                height="560" 
+                loading="eager"
+                fetchpriority="high"
+                decoding="async"
+            >
+            <div class="hero-banner-overlay">
                 <div class="hero-tag-badge">
                     <span class="hero-tag-dot"></span>
                     <span class="hero-tag-text">SELL YOUR iPHONE</span>
                 </div>
 
-                <h1 class="hero-main-title">Get the Best Value for Your iPhone</h1>
+                <h1 class="hero-main-title">Sell Old iPhone From Your Doorstep</h1>
                 
-                <p class="hero-main-subtitle">Get an instant valuation, sell your iPhone online, enjoy free doorstep pickup, secure data wipe, and fast payment.</p>
+                <p class="hero-main-subtitle">Get an instant valuation, free doorstep pickup in Mumbai, secure data wipe, and spot payment.</p>
 
-                <!-- Premium Brand Value Statement -->
-                <div class="hero-brand-statement">
-                    <p class="hero-slogan-title">Your iPhone Deserves Its Best Value.</p>
-                    <p class="hero-slogan-subtitle">Fair pricing • Trusted buyers • Fast &amp; secure doorstep service</p>
-                    
-                    <!-- Section 2: Trust / Proof Badges - Clean Single Horizontal Row -->
-                    <div class="trust-badge-row" aria-label="Verified Trust Credentials">
-                        <span class="trust-badge-pill">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-                            <span>GST Registered &amp; Verified</span>
-                        </span>
-                        <span class="trust-badge-pill">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-                            <span>Trusted by 500+ Customers</span>
-                        </span>
+                <div class="hero-banner-cta-row">
+                    <a href="#valuation-entry" class="btn btn-primary btn-hero-banner-cta start-exact-valuation-btn" data-model="Apple iPhone 13" data-variant="128 GB" aria-haspopup="dialog" aria-controls="buybackQuestionnaireModal">
+                        <span>Get Instant Valuation &rarr;</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 1B. High-Converting Valuation Entry & Verified Trust Deck -->
+        <div class="hero-action-deck-grid">
+            <!-- Left Card: Step 1 Phone Valuation Entry Card -->
+            <div class="questionnaire-entry-card" id="valuation-entry">
+                <div class="entry-card-phone-visual">
+                    <div class="entry-phone-img-wrap">
+                        <img src="assets/images/phones/iphone-13.svg" alt="Apple iPhone 13 Resale" class="entry-phone-img" width="56" height="70" loading="lazy">
                     </div>
-
-                    <!-- STEP 1: PHONE VALUATION ENTRY CARD -->
-                    <div class="questionnaire-entry-card" id="valuation-entry" style="margin-top: 14px;">
-                        <div class="entry-card-phone-visual">
-                            <div class="entry-phone-img-wrap">
-                                <img src="assets/images/phones/iphone-13.svg" alt="Apple iPhone 13 Resale" class="entry-phone-img" width="56" height="70" loading="lazy">
-                            </div>
-                            <div class="entry-card-info">
-                                <h3 class="entry-card-model" id="entrySelectedModel">Apple iPhone 13 (128 GB)</h3>
-                                <div class="entry-card-upto-box">
-                                    <span class="entry-card-upto-label">Get Upto</span>
-                                    <strong class="entry-card-upto-price" id="entrySelectedPrice">₹23,220</strong>
-                                </div>
-                                <p class="entry-card-trust-note">Free doorstep pickup in Mumbai • Spot cash/UPI payment</p>
-                            </div>
+                    <div class="entry-card-info">
+                        <h3 class="entry-card-model" id="entrySelectedModel">Apple iPhone 13 (128 GB)</h3>
+                        <div class="entry-card-upto-box">
+                            <span class="entry-card-upto-label">Get Upto</span>
+                            <strong class="entry-card-upto-price" id="entrySelectedPrice">₹23,220</strong>
                         </div>
-                        <div class="entry-card-action">
-                            <button type="button" class="btn-get-exact-value start-exact-valuation-btn" id="startExactValuationBtn" data-model="Apple iPhone 13" data-variant="128 GB" aria-haspopup="dialog" aria-controls="buybackQuestionnaireModal">
-                                <span>Get Exact Value &rarr;</span>
-                            </button>
-                        </div>
+                        <p class="entry-card-trust-note">Free doorstep pickup in Mumbai • Spot cash/UPI payment</p>
                     </div>
-
-                    <p class="hero-slogan-note" style="margin-top: 8px;">Trusted iPhone buyers • Free doorstep pickup • No obligation</p>
+                </div>
+                <div class="entry-card-action">
+                    <button type="button" class="btn-get-exact-value start-exact-valuation-btn" id="startExactValuationBtn" data-model="Apple iPhone 13" data-variant="128 GB" aria-haspopup="dialog" aria-controls="buybackQuestionnaireModal">
+                        <span>Get Exact Value &rarr;</span>
+                    </button>
                 </div>
             </div>
 
-            <!-- Right Column: Studio Commercial Product Visual -->
-            <div class="hero-visual-col">
-                <div class="hero-product-stage">
-                    <img 
-                        src="assets/images/hero-iphone-showcase.png" 
-                        alt="Sell Apple iPhone at best resale value with CashSecond" 
-                        class="hero-product-img" 
-                        width="1024" 
-                        height="682" 
-                        loading="eager"
-                        fetchpriority="high"
-                        decoding="async"
-                    >
+            <!-- Right Card: Verified Trust Markers & Value Deck -->
+            <div class="hero-brand-statement-card">
+                <div class="trust-badge-row" aria-label="Verified Trust Credentials">
+                    <span class="trust-badge-pill">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                        <span>GST Registered &amp; Verified</span>
+                    </span>
+                    <span class="trust-badge-pill">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                        <span>Trusted by 500+ Customers</span>
+                    </span>
                 </div>
+                <p class="hero-slogan-title">Your iPhone Deserves Its Best Value.</p>
+                <p class="hero-slogan-subtitle">Fair pricing • Trusted buyers • Fast &amp; secure doorstep service</p>
+                <p class="hero-slogan-note">Trusted iPhone buyers • Free doorstep pickup • No obligation</p>
             </div>
         </div>
 
