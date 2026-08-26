@@ -118,33 +118,24 @@ require __DIR__ . '/includes/header.php';
      ============================================================ -->
 <section class="hero-section" id="promo-hero">
     <div class="container hero-container">
-        <!-- 1A. Full-Width Panoramic Visual Hero Banner with Overlaid Headline -->
+        <!-- 1A. Full-Width Panoramic Visual Hero Banner with Responsive Mobile/Desktop Images -->
         <div class="hero-panoramic-banner">
-            <img 
-                src="assets/images/sell-your-iphone-with-cashsecond.webp" 
-                alt="Sell Old iPhone From Your Doorstep with CashSecond" 
-                class="hero-panoramic-bg" 
-                width="1280" 
-                height="560" 
-                loading="eager"
-                fetchpriority="high"
-                decoding="async"
-            >
+            <picture class="hero-banner-picture">
+                <source media="(max-width: 767px)" srcset="assets/images/banners/mobile/sell-your-iphone-with-cashsecond-for-mobile-view.webp">
+                <img 
+                    src="assets/images/banners/desktop/sell-your-iphone-with-cashsecond.webp" 
+                    alt="Sell Old iPhone From Your Doorstep with CashSecond" 
+                    class="hero-panoramic-bg" 
+                    width="1280" 
+                    height="560" 
+                    loading="eager"
+                    fetchpriority="high"
+                    decoding="async"
+                >
+            </picture>
             <div class="hero-banner-overlay">
-                <div class="hero-tag-badge">
-                    <span class="hero-tag-dot"></span>
-                    <span class="hero-tag-text">SELL YOUR iPHONE</span>
-                </div>
-
                 <h1 class="hero-main-title">Sell Old iPhone From Your Doorstep</h1>
-                
                 <p class="hero-main-subtitle">Get an instant valuation, free doorstep pickup in Mumbai, secure data wipe, and spot payment.</p>
-
-                <div class="hero-banner-cta-row">
-                    <a href="#valuation-entry" class="btn btn-primary btn-hero-banner-cta start-exact-valuation-btn" data-model="Apple iPhone 13" data-variant="128 GB" aria-haspopup="dialog" aria-controls="buybackQuestionnaireModal">
-                        <span>Get Instant Valuation &rarr;</span>
-                    </a>
-                </div>
             </div>
         </div>
 

@@ -42,7 +42,7 @@ $canonical_url = $seo['site_url'] ?? 'http://localhost/cashsecond-landing-page/'
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <!-- Main Stylesheet -->
-    <link rel="stylesheet" href="assets/css/style.css?v=19.0">
+    <link rel="stylesheet" href="assets/css/style.css?v=21.0">
     <link rel="stylesheet" href="assets/css/questionnaire.css?v=1.1">
 </head>
 <body id="top">

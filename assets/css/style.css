@@ -748,103 +748,93 @@ button {
 .hero-panoramic-banner {
     position: relative;
     width: 100%;
-    min-height: 380px;
     border-radius: var(--radius-xl);
     overflow: hidden;
     background-color: #FFFFFF;
     border: 1px solid rgba(0, 0, 0, 0.08);
     box-shadow: 0 14px 40px rgba(0, 0, 0, 0.06);
     display: flex;
-    align-items: center;
+    flex-direction: column;
 }
 
 @media (min-width: 768px) {
     .hero-panoramic-banner {
-        min-height: 440px;
+        flex-direction: row;
+        align-items: center;
+        min-height: 450px;
     }
 }
 
 @media (min-width: 1200px) {
     .hero-panoramic-banner {
-        min-height: 480px;
+        min-height: 490px;
+    }
+}
+
+.hero-banner-picture {
+    position: relative;
+    width: 100%;
+    display: block;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    background-color: #FFFFFF;
+    z-index: 1;
+}
+
+@media (min-width: 768px) {
+    .hero-banner-picture {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        aspect-ratio: auto;
     }
 }
 
 .hero-panoramic-bg {
-    position: absolute;
-    top: 0;
-    left: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
-    object-position: right center;
-    z-index: 1;
+    object-position: center top;
     display: block;
 }
 
-/* Glassmorphic/Gradient Text Overlay on the clean left side of banner */
-.hero-banner-overlay {
-    position: relative;
-    z-index: 2;
-    max-width: 580px;
-    padding: 36px 28px;
-    background: linear-gradient(90deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.90) 68%, rgba(255, 255, 255, 0) 100%);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border-radius: var(--radius-xl) 0 0 var(--radius-xl);
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-}
-
-@media (max-width: 767px) {
-    .hero-banner-overlay {
-        max-width: 100%;
-        width: 100%;
-        padding: 24px 18px;
-        background: linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 255, 255, 0.88) 75%, rgba(255, 255, 255, 0.35) 100%);
-        border-radius: var(--radius-xl);
+@media (min-width: 768px) {
+    .hero-panoramic-bg {
+        object-position: right center;
     }
 }
 
-/* Eyebrow badge */
-.hero-tag-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: rgba(0, 113, 227, 0.08);
-    border: 1px solid rgba(0, 113, 227, 0.2);
-    padding: 5px 13px;
-    border-radius: var(--radius-pill);
-    margin-bottom: 12px;
+/* Transparent Clean Text Overlay (Overlaid on Desktop, Clean Below Image on Mobile) */
+.hero-banner-overlay {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    padding: 20px 20px 22px 20px;
+    background: #FFFFFF;
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    box-sizing: border-box;
 }
 
-.hero-tag-dot {
-    width: 8px;
-    height: 8px;
-    background-color: var(--color-cta);
-    border-radius: 50%;
-    box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.2);
-    animation: heroDotPulse 2s infinite ease-in-out;
-}
-
-@keyframes heroDotPulse {
-    0%, 100% { transform: scale(1); opacity: 1; }
-    50% { transform: scale(1.25); opacity: 0.7; }
-}
-
-.hero-tag-text {
-    font-size: 0.72rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    color: var(--color-cta);
+@media (min-width: 768px) {
+    .hero-banner-overlay {
+        max-width: 530px;
+        padding: 44px 38px;
+        background: transparent;
+        border-top: none;
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+    }
 }
 
 /* Headline Over Banner */
 .hero-main-title {
     font-family: var(--font-heading);
-    font-size: clamp(1.8rem, 3.8vw, 3rem);
+    font-size: clamp(1.85rem, 3.8vw, 3.15rem);
     font-weight: 800;
     line-height: 1.12;
     color: var(--color-dark);
@@ -854,11 +844,11 @@ button {
 
 /* Subtitle Over Banner */
 .hero-main-subtitle {
-    font-size: clamp(0.9375rem, 1.6vw, 1.0625rem);
-    color: #333336;
+    font-size: clamp(0.9375rem, 1.5vw, 1.0625rem);
+    color: #3A3A3C;
     line-height: 1.5;
-    margin-bottom: 18px;
-    max-width: 480px;
+    margin-bottom: 0;
+    max-width: 440px;
     font-weight: 500;
 }
 

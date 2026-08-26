@@ -51,7 +51,7 @@ $current_year = date('Y');
     <!-- Mobile Sticky Conversion Bar -->
     <div class="mobile-sticky-bar" aria-label="Quick Actions">
         <div class="mobile-sticky-inner">
-            <span class="mobile-sticky-subtext">Free • 60 sec • No obligation</span>
+            
             <a href="#valuation" class="btn btn-primary btn-full" id="mobile-sticky-valuation-btn" aria-haspopup="dialog" aria-controls="buybackQuestionnaireModal">
                 <span>CHECK MY IPHONE VALUE &rarr;</span>
             </a>
