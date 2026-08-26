@@ -326,12 +326,15 @@ button {
 }
 
 /* ============================================================
-   5. HEADER & BRAND LOGO AREA (LEFT-ALIGNED BRAND LOGO)
+   5. HEADER & BRAND LOGO AREA (DESKTOP LOGO + MENU + CTA)
    ============================================================ */
 .site-header {
-    position: relative;
+    position: sticky;
+    top: 0;
     z-index: 1000;
-    background-color: #FFFFFF;
+    background-color: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     border-bottom: 1px solid var(--color-border);
     transition: var(--transition);
 }
@@ -339,12 +342,14 @@ button {
 .header-inner {
     display: flex;
     align-items: center;
-    justify-content: flex-start;
-    padding: 20px 36px;
+    justify-content: space-between;
+    padding: 12px 24px;
     height: auto;
-    min-height: auto;
-    text-align: left;
+    min-height: 64px;
     box-sizing: border-box;
+    width: 100%;
+    max-width: var(--container-max);
+    margin: 0 auto;
 }
 
 .brand-logo {
@@ -354,16 +359,15 @@ button {
     text-decoration: none;
     line-height: 1;
     margin: 0;
-    width: auto;
-    max-width: 420px;
+    flex-shrink: 0;
 }
 
 .brand-logo img,
 .brand-logo-img {
     width: auto;
-    max-width: 420px;
-    height: auto;
-    max-height: 140px;
+    height: 42px;
+    max-height: 46px;
+    max-width: 175px;
     object-fit: contain;
     display: block;
     margin: 0;
@@ -371,34 +375,119 @@ button {
 }
 
 .brand-logo:hover .brand-logo-img {
-    transform: scale(1.02);
+    transform: scale(1.03);
 }
 
-/* Tablet sizing (640px - 991px) */
-@media (max-width: 991px) and (min-width: 640px) {
-    .header-inner {
-        padding: 16px 24px;
-        justify-content: flex-start;
-    }
-    
-    .brand-logo {
-        margin: 0;
-        max-width: 340px;
-    }
-
-    .brand-logo img,
-    .brand-logo-img {
-        margin: 0;
-        max-width: 340px;
-        max-height: 115px;
-    }
+/* Desktop Navigation Menu */
+.nav-menu {
+    display: flex;
+    align-items: center;
+    gap: 26px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
 }
 
-/* Mobile sizing (under 640px) */
-@media (max-width: 639px) {
+.nav-link {
+    font-family: var(--font-sans);
+    font-size: 14px;
+    font-weight: 500;
+    color: #1D1D1F;
+    text-decoration: none;
+    position: relative;
+    padding: 6px 0;
+    transition: color 0.2s ease;
+    letter-spacing: -0.01em;
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: var(--color-cta);
+    border-radius: 2px;
+    transition: width 0.22s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+.nav-link:hover {
+    color: var(--color-cta);
+}
+
+.nav-link:hover::after {
+    width: 100%;
+}
+
+/* Desktop Header CTA & Quick Phone Group */
+.header-cta-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+}
+
+.header-phone-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--font-sans);
+    font-size: 13px;
+    font-weight: 600;
+    color: #1D1D1F;
+    padding: 7px 14px;
+    border-radius: 20px;
+    background-color: #F5F5F7;
+    border: 1px solid #E5E5E7;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    line-height: 1.4;
+}
+
+.header-phone-link:hover {
+    background-color: #ECECEE;
+    color: var(--color-cta);
+    border-color: #D2D2D7;
+    transform: translateY(-1px);
+}
+
+.btn-header-quote {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--color-cta);
+    color: #FFFFFF;
+    font-family: var(--font-sans);
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 16px;
+    border-radius: 20px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 6px rgba(0, 113, 227, 0.22);
+    line-height: 1.4;
+    white-space: nowrap;
+}
+
+.btn-header-quote:hover {
+    background-color: var(--color-cta-hover);
+    box-shadow: 0 4px 12px rgba(0, 113, 227, 0.32);
+    transform: translateY(-1px);
+    color: #FFFFFF;
+}
+
+/* Tablet & Mobile header overrides (mobile header stays clean) */
+@media (max-width: 991px) {
+    .nav-menu,
+    .header-cta-group {
+        display: none !important;
+    }
+
     .header-inner {
         padding: 12px 20px;
         justify-content: flex-start;
+        min-height: auto;
     }
     
     .brand-logo {
@@ -410,7 +499,8 @@ button {
     .brand-logo-img {
         margin: 0;
         max-width: 275px;
-        max-height: 92px;
+        max-height: 85px;
+        height: auto;
     }
 }
 
@@ -418,19 +508,16 @@ button {
 @media (max-width: 360px) {
     .header-inner {
         padding: 10px 16px;
-        justify-content: flex-start;
     }
 
     .brand-logo {
-        margin: 0;
         max-width: 215px;
     }
 
     .brand-logo img,
     .brand-logo-img {
-        margin: 0;
         max-width: 215px;
-        max-height: 72px;
+        max-height: 70px;
     }
 }
 

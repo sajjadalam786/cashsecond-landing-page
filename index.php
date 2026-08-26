@@ -656,33 +656,6 @@ require __DIR__ . '/includes/header.php';
     </div>
 </section>
 
-<!-- ============================================================
-     13. COMPACT SMART EXCHANGE / DEVICE CHECK FOOTER WIDGET
-     ============================================================ -->
-<section class="smart-exchange-widget-section" id="smart-exchange" aria-label="Smart iPhone Exchange & Device Diagnostics">
-    <div class="container">
-        <div class="smart-exchange-mini-card">
-            <div class="smart-exchange-mini-content">
-                <div class="smart-exchange-mini-icon-wrap">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
-                        <path d="M12 18h.01"></path>
-                        <path d="M9 10l2 2 4-4"></path>
-                    </svg>
-                </div>
-                <div class="smart-exchange-mini-text">
-                    <h3 class="smart-exchange-mini-title">Smart iPhone Exchange</h3>
-                    <p class="smart-exchange-mini-desc">Check your iPhone condition and get an estimated exchange value.</p>
-                </div>
-            </div>
-            <div class="smart-exchange-mini-action">
-                <button type="button" class="btn btn-primary smart-exchange-open-btn" id="openSmartExchangeBtn" aria-haspopup="dialog" aria-controls="buybackQuestionnaireModal">
-                    <span>Start Device Check &rarr;</span>
-                </button>
-            </div>
-        </div>
-    </div>
-</section>
 
 <!-- ============================================================
      FREE CONSULTATION MODAL / POPUP
