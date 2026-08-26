@@ -423,7 +423,7 @@ $current_year = date('Y');
     <!-- Structured Data Schema.org (JSON-LD) -->
     <?php require __DIR__ . '/schema.php'; ?>
 
-    <!-- Main JavaScript Engine -->
-    <script src="assets/js/script.js?v=12.0"></script>
+    <!-- Main JavaScript Engine (Deferred for high speed & non-blocking execution) -->
+    <script src="assets/js/script.js?v=13.0" defer></script>
 </body>
 </html>

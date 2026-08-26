@@ -123,6 +123,8 @@ require __DIR__ . '/includes/header.php';
                         width="1024" 
                         height="682" 
                         loading="eager"
+                        fetchpriority="high"
+                        decoding="async"
                     >
                 </div>
             </div>
