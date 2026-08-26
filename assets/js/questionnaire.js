@@ -11,18 +11,26 @@
         models: {
             'Apple iPhone 16 Pro Max': { maxVal: 72000, mrp: 144900, biometrics: 'Face ID', variants: ['256 GB', '512 GB', '1 TB'], img: 'assets/images/phones/iphone-16-pro.svg' },
             'Apple iPhone 16 Pro':     { maxVal: 62000, mrp: 119900, biometrics: 'Face ID', variants: ['128 GB', '256 GB', '512 GB', '1 TB'], img: 'assets/images/phones/iphone-16-pro.svg' },
+            'Apple iPhone 16 Plus':    { maxVal: 52000, mrp: 89900,  biometrics: 'Face ID', variants: ['128 GB', '256 GB', '512 GB'], img: 'assets/images/phones/iphone-16.svg' },
             'Apple iPhone 16':         { maxVal: 48500, mrp: 79900,  biometrics: 'Face ID', variants: ['128 GB', '256 GB', '512 GB'], img: 'assets/images/phones/iphone-16.svg' },
             'Apple iPhone 15 Pro Max': { maxVal: 54000, mrp: 134900, biometrics: 'Face ID', variants: ['256 GB', '512 GB', '1 TB'], img: 'assets/images/phones/iphone-15-pro.svg' },
             'Apple iPhone 15 Pro':     { maxVal: 48000, mrp: 109900, biometrics: 'Face ID', variants: ['128 GB', '256 GB', '512 GB', '1 TB'], img: 'assets/images/phones/iphone-15-pro.svg' },
+            'Apple iPhone 15 Plus':    { maxVal: 43000, mrp: 79900,  biometrics: 'Face ID', variants: ['128 GB', '256 GB', '512 GB'], img: 'assets/images/phones/iphone-15.svg' },
             'Apple iPhone 15':         { maxVal: 38500, mrp: 69900,  biometrics: 'Face ID', variants: ['128 GB', '256 GB', '512 GB'], img: 'assets/images/phones/iphone-15.svg' },
             'Apple iPhone 14 Pro Max': { maxVal: 46000, mrp: 129900, biometrics: 'Face ID', variants: ['128 GB', '256 GB', '512 GB', '1 TB'], img: 'assets/images/phones/iphone-14-pro.svg' },
             'Apple iPhone 14 Pro':     { maxVal: 41000, mrp: 104900, biometrics: 'Face ID', variants: ['128 GB', '256 GB', '512 GB'], img: 'assets/images/phones/iphone-14-pro.svg' },
+            'Apple iPhone 14 Plus':    { maxVal: 35000, mrp: 69900,  biometrics: 'Face ID', variants: ['128 GB', '256 GB', '512 GB'], img: 'assets/images/phones/iphone-14.svg' },
             'Apple iPhone 14':         { maxVal: 32000, mrp: 59900,  biometrics: 'Face ID', variants: ['128 GB', '256 GB', '512 GB'], img: 'assets/images/phones/iphone-14.svg' },
             'Apple iPhone 13 Pro Max': { maxVal: 44000, mrp: 119900, biometrics: 'Face ID', variants: ['128 GB', '256 GB', '512 GB', '1 TB'], img: 'assets/images/phones/iphone-13.svg' },
             'Apple iPhone 13 Pro':     { maxVal: 39500, mrp: 99900,  biometrics: 'Face ID', variants: ['128 GB', '256 GB', '512 GB'], img: 'assets/images/phones/iphone-13.svg' },
             'Apple iPhone 13':         { maxVal: 23220, mrp: 49900,  biometrics: 'Face ID', variants: ['128 GB', '256 GB', '512 GB'], img: 'assets/images/phones/iphone-13.svg' },
+            'Apple iPhone 13 Mini':    { maxVal: 21000, mrp: 44900,  biometrics: 'Face ID', variants: ['128 GB', '256 GB', '512 GB'], img: 'assets/images/phones/iphone-13.svg' },
+            'Apple iPhone 12 Pro Max': { maxVal: 29000, mrp: 99900,  biometrics: 'Face ID', variants: ['128 GB', '256 GB', '512 GB'], img: 'assets/images/phones/iphone-12.svg' },
             'Apple iPhone 12 Pro':     { maxVal: 24500, mrp: 84900,  biometrics: 'Face ID', variants: ['128 GB', '256 GB', '512 GB'], img: 'assets/images/phones/iphone-12.svg' },
             'Apple iPhone 12':         { maxVal: 19500, mrp: 44900,  biometrics: 'Face ID', variants: ['64 GB', '128 GB', '256 GB'], img: 'assets/images/phones/iphone-12.svg' },
+            'Apple iPhone 12 Mini':    { maxVal: 16500, mrp: 39900,  biometrics: 'Face ID', variants: ['64 GB', '128 GB', '256 GB'], img: 'assets/images/phones/iphone-12.svg' },
+            'Apple iPhone 11 Pro Max': { maxVal: 21000, mrp: 89900,  biometrics: 'Face ID', variants: ['64 GB', '256 GB', '512 GB'], img: 'assets/images/phones/iphone-11.svg' },
+            'Apple iPhone 11 Pro':     { maxVal: 18000, mrp: 79900,  biometrics: 'Face ID', variants: ['64 GB', '256 GB', '512 GB'], img: 'assets/images/phones/iphone-11.svg' },
             'Apple iPhone 11':         { maxVal: 14500, mrp: 39900,  biometrics: 'Face ID', variants: ['64 GB', '128 GB', '256 GB'], img: 'assets/images/phones/iphone-11.svg' },
             'Apple iPhone SE (2022)':  { maxVal: 13500, mrp: 39900,  biometrics: 'Touch ID', variants: ['64 GB', '128 GB', '256 GB'], img: 'assets/images/phones/iphone-13.svg' }
         },
@@ -34,6 +42,23 @@
             '1 TB':   1.38
         }
     };
+
+    function normalizeModelName(input) {
+        if (!input) return 'Apple iPhone 13';
+        const trimmed = String(input).trim();
+        if (BUYBACK_CONFIG.models[trimmed]) return trimmed;
+        if (!trimmed.toLowerCase().startsWith('apple')) {
+            const withApple = 'Apple ' + trimmed;
+            if (BUYBACK_CONFIG.models[withApple]) return withApple;
+        }
+        const lower = trimmed.toLowerCase();
+        for (const key of Object.keys(BUYBACK_CONFIG.models)) {
+            if (key.toLowerCase() === lower || key.toLowerCase().replace('apple ', '') === lower) {
+                return key;
+            }
+        }
+        return 'Apple iPhone 13';
+    }
 
     // 2. COMPLETE QUESTIONNAIRE STEP DEFINITIONS (Steps 1 to 17)
     const QUESTION_STEPS = [
@@ -627,11 +652,20 @@
 
     // 5. POPUP OPEN / CLOSE & STEP NAVIGATION
     function openQuestionnaire(selectedModel, selectedVariant) {
-        if (selectedModel && BUYBACK_CONFIG.models[selectedModel]) {
-            state.model = selectedModel;
+        state.answers = {};
+        state.calculatedValue = 0;
+        state.deductions = [];
+
+        const normalized = normalizeModelName(selectedModel);
+        if (normalized && BUYBACK_CONFIG.models[normalized]) {
+            state.model = normalized;
         }
-        if (selectedVariant) {
+
+        const modelData = BUYBACK_CONFIG.models[state.model] || BUYBACK_CONFIG.models['Apple iPhone 13'];
+        if (selectedVariant && modelData.variants && modelData.variants.includes(selectedVariant)) {
             state.variant = selectedVariant;
+        } else if (modelData.variants && modelData.variants.length > 0) {
+            state.variant = modelData.variants.includes('128 GB') ? '128 GB' : modelData.variants[0];
         }
 
         const overlay = document.getElementById('buybackQuestionnaireModal');
@@ -707,9 +741,21 @@
         let contentHtml = '';
 
         if (stepDef.type === 'phone_intro') {
-            // STEP 1 — PHONE INTRO CARD INSIDE POPUP
+            // STEP 1 — PHONE INTRO CARD INSIDE POPUP WITH MODEL SELECTOR
+            let modelOptionsHtml = '';
+            Object.keys(BUYBACK_CONFIG.models).forEach(m => {
+                const isSelected = (m === state.model);
+                modelOptionsHtml += `<option value="${m}" ${isSelected ? 'selected' : ''}>${m}</option>`;
+            });
+
             contentHtml = `
                 <div class="qn-intro-phone-card" style="text-align:center; padding:18px 14px;">
+                    <div style="margin:0 auto 14px auto; display:inline-flex; align-items:center; gap:8px; background:#F2F2F7; border:1px solid #E5E5EA; border-radius:12px; padding:6px 12px; max-width:100%; box-sizing:border-box;">
+                        <span style="font-size:0.75rem; color:#636366; font-weight:700; text-transform:uppercase;">Device:</span>
+                        <select id="qnModelSelectDropdown" style="font-size:0.875rem; font-weight:700; color:#1C1C1E; border:none; background:transparent; outline:none; cursor:pointer; max-width:210px;">
+                            ${modelOptionsHtml}
+                        </select>
+                    </div>
                     <div style="width:96px; height:120px; margin:0 auto 12px auto; display:flex; align-items:center; justify-content:center; background:#F2F2F7; border-radius:18px; padding:10px;">
                         <img src="${modelData.img || 'assets/images/phones/iphone-13.svg'}" alt="${state.model}" style="max-width:100%; max-height:100%; object-fit:contain;">
                     </div>
@@ -812,6 +858,20 @@
             if (startBtn) {
                 startBtn.addEventListener('click', () => {
                     advanceNextStep();
+                });
+            }
+            const modelDropdown = container.querySelector('#qnModelSelectDropdown');
+            if (modelDropdown) {
+                modelDropdown.addEventListener('change', (e) => {
+                    const newModel = normalizeModelName(e.target.value);
+                    if (BUYBACK_CONFIG.models[newModel]) {
+                        state.model = newModel;
+                        const newModelData = BUYBACK_CONFIG.models[newModel];
+                        state.variant = (newModelData.variants && newModelData.variants.includes(state.variant))
+                            ? state.variant
+                            : (newModelData.variants ? newModelData.variants[0] : '128 GB');
+                        renderCurrentStep();
+                    }
                 });
             }
         } else if (stepDef.type === 'variant_select') {
@@ -1081,16 +1141,43 @@
         const nextBtn = document.getElementById('qnNextBtn');
         if (nextBtn) nextBtn.addEventListener('click', advanceNextStep);
 
-        // Triggers for "Get Exact Value" buttons on landing page
-        const startBtns = document.querySelectorAll('#startExactValuationBtn, .start-exact-valuation-btn, #mobile-sticky-valuation-btn, .iphone-pill-card, a[href="#valuation"], #heroCheckValueBtn');
+        // Triggers for all valuation buttons on landing page
+        const triggerSelector = [
+            '#startExactValuationBtn',
+            '.start-exact-valuation-btn',
+            '#heroCheckValueBtn',
+            '#transparentValuationBtn',
+            '.btn-promo-light',
+            '.btn-promo-dark',
+            '.promo-banner-cta',
+            '#openSmartExchangeBtn',
+            '.smart-exchange-open-btn',
+            '#mobile-sticky-valuation-btn',
+            '.iphone-pill-card',
+            'a[href="#valuation"]'
+        ].join(', ');
+
+        const startBtns = document.querySelectorAll(triggerSelector);
         startBtns.forEach(btn => {
             btn.addEventListener('click', (e) => {
                 e.preventDefault();
-                const model = btn.getAttribute('data-name') || btn.getAttribute('data-model') || 'Apple iPhone 13';
+                e.stopPropagation();
+                const rawModel = btn.getAttribute('data-name') || btn.getAttribute('data-model') || state.model || 'Apple iPhone 13';
+                const model = normalizeModelName(rawModel);
                 const variant = btn.getAttribute('data-variant') || '128 GB';
                 openQuestionnaire(model, variant);
             });
         });
+
+        // Backdrop click to close (clicking outside modal dialog)
+        const overlay = document.getElementById('buybackQuestionnaireModal');
+        if (overlay) {
+            overlay.addEventListener('click', (e) => {
+                if (e.target === overlay) {
+                    closeQuestionnaire();
+                }
+            });
+        }
 
         // Close on Escape key
         document.addEventListener('keydown', (e) => {
@@ -1101,6 +1188,8 @@
         });
     });
 
-    // Expose global API
+    // Expose unified global API
+    window.openValuationFlow = openQuestionnaire;
     window.openBuybackQuestionnaire = openQuestionnaire;
+    window.openSmartExchange = openQuestionnaire;
 })();

@@ -153,12 +153,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         topSearchInput.setAttribute('aria-expanded', 'false');
                         topSearchInput.value = item.product_name;
 
-                        if (typeof startValuationWithModel === 'function') {
-                            startValuationWithModel(item.product_name, item.product_id, item.image || 'assets/images/phones/iphone-15.svg');
-                        }
-                        const valSection = document.getElementById('valuation');
-                        if (valSection) {
-                            valSection.scrollIntoView({ behavior: 'smooth' });
+                        if (typeof window.openValuationFlow === 'function') {
+                            window.openValuationFlow(item.product_name, '128 GB');
                         }
                     });
 
@@ -526,15 +522,8 @@ document.addEventListener('DOMContentLoaded', () => {
         pill.addEventListener('click', (e) => {
             e.preventDefault();
             const name = pill.getAttribute('data-name');
-            const id = pill.getAttribute('data-id');
-            const image = pill.getAttribute('data-image');
-
-            if (name && typeof startValuationWithModel === 'function') {
-                startValuationWithModel(name, id, image);
-                const valSec = document.getElementById('valuation');
-                if (valSec) {
-                    valSec.scrollIntoView({ behavior: 'smooth' });
-                }
+            if (name && typeof window.openValuationFlow === 'function') {
+                window.openValuationFlow(name, '128 GB');
             }
         });
     });
@@ -1612,36 +1601,28 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // ==========================================
-        // TRIGGER 1: Global CTA Button Interceptor
-        // ==========================================
-        const valuationCtaLinks = document.querySelectorAll('a[href="#valuation"], .hero-cta-wrapper a, #mobile-sticky-valuation-btn');
-        valuationCtaLinks.forEach(link => {
-            link.addEventListener('click', (e) => {
-                // If link is clicked, smoothly open multi-step popup
-                e.preventDefault();
-                openMultiStepPopup(false);
-            });
-        });
-
-        // ==========================================
-        // TRIGGER 2: Desktop Exit Intent (Once per session)
+        // TRIGGER 1: Desktop Exit Intent (Once per session)
         // ==========================================
         document.addEventListener('mouseleave', (e) => {
             if (e.clientY <= 10) {
                 if (!sessionStorage.getItem('cs_exit_shown') && !sessionStorage.getItem('cs_lead_submitted')) {
                     sessionStorage.setItem('cs_exit_shown', '1');
-                    openMultiStepPopup(true);
+                    if (typeof window.openValuationFlow === 'function') {
+                        window.openValuationFlow();
+                    }
                 }
             }
         });
 
         // ==========================================
-        // TRIGGER 3: Mobile Non-Aggressive Timer (Once per session after 25s)
+        // TRIGGER 2: Mobile Non-Aggressive Timer (Once per session after 25s)
         // ==========================================
         setTimeout(() => {
             if (!sessionStorage.getItem('cs_popup_shown') && !sessionStorage.getItem('cs_lead_submitted')) {
                 sessionStorage.setItem('cs_popup_shown', '1');
-                openMultiStepPopup(false);
+                if (typeof window.openValuationFlow === 'function') {
+                    window.openValuationFlow();
+                }
             }
         }, 25000);
     }
@@ -1831,201 +1812,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     consultSubmitBtn.innerHTML = '<span>Get Free Consultation &rarr;</span>';
                 }
             }
-        });
-    }
-
-    // ============================================================
-    // 19. COMPACT SMART EXCHANGE / DIAGNOSTIC ENGINE CONTROLLER
-    // ============================================================
-    const openSmartExBtn = document.getElementById('openSmartExchangeBtn');
-    const smartExModal = document.getElementById('smartExchangeModal');
-    const smartExBackdrop = document.getElementById('smartExchangeBackdrop');
-    const smartExCloseBtn = document.getElementById('smartExchangeCloseBtn');
-    const smartExModelSelect = document.getElementById('smartExchangeModelSelect');
-    const smartExDeviceName = document.getElementById('smartExchangeDeviceName');
-    const diagReportModelName = document.getElementById('diagReportModelName');
-    const diagReportEstimatedVal = document.getElementById('diagReportEstimatedVal');
-    const totalPassCountElem = document.getElementById('totalPassCount');
-    const totalFailCountElem = document.getElementById('totalFailCount');
-    const diagRequestPickupBtn = document.getElementById('diagRequestPickupBtn');
-    const diagWhatsAppBtn = document.getElementById('diagWhatsAppBtn');
-
-    function openSmartExchangeModal() {
-        if (!smartExModal) return;
-        smartExModal.classList.add('active');
-        smartExModal.setAttribute('aria-hidden', 'false');
-        document.body.style.overflow = 'hidden';
-        recalculateDiagnostics();
-    }
-
-    function closeSmartExchangeModal() {
-        if (!smartExModal) return;
-        smartExModal.classList.remove('active');
-        smartExModal.setAttribute('aria-hidden', 'true');
-        document.body.style.overflow = '';
-    }
-
-    if (openSmartExBtn) {
-        openSmartExBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            openSmartExchangeModal();
-        });
-    }
-
-    if (smartExCloseBtn) {
-        smartExCloseBtn.addEventListener('click', closeSmartExchangeModal);
-    }
-
-    if (smartExBackdrop) {
-        smartExBackdrop.addEventListener('click', closeSmartExchangeModal);
-    }
-
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && smartExModal && smartExModal.classList.contains('active')) {
-            closeSmartExchangeModal();
-        }
-    });
-
-    // Accordion Category Header Toggles
-    const diagCatHeaders = document.querySelectorAll('.diag-cat-header');
-    diagCatHeaders.forEach(header => {
-        header.addEventListener('click', (e) => {
-            e.preventDefault();
-            const card = header.closest('.diag-cat-card');
-            if (card) {
-                const isActive = card.classList.contains('active');
-                card.classList.toggle('active', !isActive);
-                header.setAttribute('aria-expanded', String(!isActive));
-            }
-        });
-    });
-
-    // Toggle individual test items
-    const diagTestRows = document.querySelectorAll('.diag-test-row');
-    diagTestRows.forEach(row => {
-        const toggleBtn = row.querySelector('.diag-toggle-btn');
-        if (toggleBtn) {
-            toggleBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                toggleTestRow(row);
-            });
-        }
-        row.addEventListener('click', (e) => {
-            if (e.target.closest('.diag-toggle-btn')) return;
-            toggleTestRow(row);
-        });
-    });
-
-    function toggleTestRow(row) {
-        const isPass = row.getAttribute('data-status') === 'pass';
-        const newStatus = isPass ? 'fail' : 'pass';
-        row.setAttribute('data-status', newStatus);
-
-        const toggleBtn = row.querySelector('.diag-toggle-btn');
-        if (toggleBtn) {
-            toggleBtn.className = `diag-toggle-btn ${newStatus}`;
-            const indicator = toggleBtn.querySelector('.diag-check-indicator');
-            if (indicator) {
-                indicator.textContent = (newStatus === 'pass') ? '✓' : '✕';
-            }
-        }
-
-        recalculateDiagnostics();
-    }
-
-    function recalculateDiagnostics() {
-        let totalPass = 0;
-        let totalFail = 0;
-        let totalPenalty = 0;
-
-        const categories = document.querySelectorAll('.diag-cat-card');
-        categories.forEach(cat => {
-            const catType = cat.getAttribute('data-category');
-            const rows = cat.querySelectorAll('.diag-test-row');
-            let catPass = 0;
-            let catFail = 0;
-
-            rows.forEach(r => {
-                const status = r.getAttribute('data-status');
-                const penalty = parseInt(r.getAttribute('data-penalty') || '1000', 10);
-                if (status === 'pass') {
-                    catPass++;
-                    totalPass++;
-                } else {
-                    catFail++;
-                    totalFail++;
-                    totalPenalty += penalty;
-                }
-            });
-
-            const pill = document.getElementById(`stat-pill-${catType}`);
-            if (pill) {
-                pill.innerHTML = `<span class="stat-pass">${catPass} Passed</span> | <span class="stat-fail">${catFail} Failed</span>`;
-            }
-        });
-
-        if (totalPassCountElem) totalPassCountElem.textContent = totalPass;
-        if (totalFailCountElem) totalFailCountElem.textContent = totalFail;
-
-        let basePrice = 42500;
-        let modelLabel = 'iPhone 13 Pro • 128 GB';
-        let fullModelName = 'Apple iPhone 13 Pro';
-        let selectedStorage = '128GB';
-
-        if (smartExModelSelect) {
-            const selectedOpt = smartExModelSelect.options[smartExModelSelect.selectedIndex];
-            if (selectedOpt) {
-                const parts = selectedOpt.value.split('|');
-                fullModelName = parts[0];
-                basePrice = parseInt(parts[1] || '42500', 10);
-                modelLabel = selectedOpt.textContent;
-                selectedStorage = selectedOpt.getAttribute('data-storage') || '128GB';
-            }
-        }
-
-        const minVal = Math.round(basePrice * 0.35);
-        const finalEstVal = Math.max(minVal, basePrice - totalPenalty);
-        const formattedVal = '₹' + finalEstVal.toLocaleString('en-IN');
-
-        if (diagReportEstimatedVal) diagReportEstimatedVal.textContent = formattedVal;
-        if (smartExDeviceName) smartExDeviceName.textContent = `${fullModelName} (${selectedStorage})`;
-        if (diagReportModelName) diagReportModelName.textContent = modelLabel;
-
-        if (diagWhatsAppBtn) {
-            const waText = encodeURIComponent(`Hi CashSecond, I completed the Smart Exchange device check for my ${modelLabel} (${totalPass} Passed, ${totalFail} Failed). Estimated Exchange Value: ${formattedVal}. Please schedule free doorstep pickup.`);
-            diagWhatsAppBtn.href = `https://wa.me/918976332211?text=${waText}`;
-        }
-    }
-
-    if (smartExModelSelect) {
-        smartExModelSelect.addEventListener('change', () => {
-            recalculateDiagnostics();
-        });
-    }
-
-    if (diagRequestPickupBtn) {
-        diagRequestPickupBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            closeSmartExchangeModal();
-
-            setTimeout(() => {
-                if (typeof openConsultationModal === 'function') {
-                    openConsultationModal();
-                } else if (consultModal) {
-                    consultModal.classList.add('active');
-                    consultModal.setAttribute('aria-hidden', 'false');
-                    document.body.style.overflow = 'hidden';
-                }
-
-                const problemField = document.getElementById('consult_problem');
-                if (problemField) {
-                    const currentModel = smartExModelSelect ? smartExModelSelect.options[smartExModelSelect.selectedIndex].textContent : 'iPhone 13 Pro 128GB';
-                    const currentVal = diagReportEstimatedVal ? diagReportEstimatedVal.textContent : '₹42,500';
-                    const passes = totalPassCountElem ? totalPassCountElem.textContent : '17';
-                    const fails = totalFailCountElem ? totalFailCountElem.textContent : '2';
-                    problemField.value = `Smart Exchange Diagnostic: ${currentModel} | ${passes} Passed, ${fails} Failed | Estimated Exchange Value: ${currentVal}. Please arrange doorstep pickup.`;
-                }
-            }, 300);
         });
     }
 });

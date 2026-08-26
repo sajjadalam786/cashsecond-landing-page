@@ -52,7 +52,7 @@ $current_year = date('Y');
     <div class="mobile-sticky-bar" aria-label="Quick Actions">
         <div class="mobile-sticky-inner">
             <span class="mobile-sticky-subtext">Free • 60 sec • No obligation</span>
-            <a href="#valuation" class="btn btn-primary btn-full" id="mobile-sticky-valuation-btn">
+            <a href="#valuation" class="btn btn-primary btn-full" id="mobile-sticky-valuation-btn" aria-haspopup="dialog" aria-controls="buybackQuestionnaireModal">
                 <span>CHECK MY IPHONE VALUE &rarr;</span>
             </a>
         </div>
@@ -425,7 +425,6 @@ $current_year = date('Y');
 
     <!-- Main JavaScript Engine -->
     <script src="assets/js/script.js?v=12.0"></script>
-    <script src="assets/js/smart-exchange.js?v=1.0"></script>
-    <script src="assets/js/questionnaire.js?v=1.0"></script>
+    <script src="assets/js/questionnaire.js?v=1.1"></script>
 </body>
 </html>

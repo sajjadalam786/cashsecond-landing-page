@@ -36,8 +36,7 @@ $canonical_url = $seo['site_url'] ?? 'http://localhost/cashsecond-landing-page/'
 
     <!-- Main Stylesheet -->
     <link rel="stylesheet" href="assets/css/style.css?v=15.0">
-    <link rel="stylesheet" href="assets/css/smart-exchange.css?v=1.0">
-    <link rel="stylesheet" href="assets/css/questionnaire.css?v=1.0">
+    <link rel="stylesheet" href="assets/css/questionnaire.css?v=1.1">
 </head>
 <body id="top">
     <!-- Main Brand Header (Large Centered Logo Area) -->
