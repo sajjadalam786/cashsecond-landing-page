@@ -40,12 +40,12 @@ return [
         'email'            => 'cashsecondofficial@gmail.com',
         
         // Exact Office Address:
-        // Office Number 1307, 13th Floor, Arcadia Building, NCPA Marg, Nariman Point, Mumbai – 400021
-        'address_line1'    => 'Office Number 1307, 13th Floor',
-        'address_building' => 'Arcadia Building',
+        // Arcadia Bldg, NCPA Marg, Nariman Point, Mumbai 400021
+        'address_line1'    => 'Arcadia Bldg',
+        'address_building' => 'Arcadia Bldg',
         'address_street'   => 'NCPA Marg, Nariman Point',
-        'address'          => 'Office Number 1307, 13th Floor, Arcadia Building, NCPA Marg, Nariman Point',
-        'full_address'     => 'Office Number 1307, 13th Floor, Arcadia Building, NCPA Marg, Nariman Point, Mumbai – 400021',
+        'address'          => 'Arcadia Bldg, NCPA Marg, Nariman Point',
+        'full_address'     => 'Arcadia Bldg, NCPA Marg, Nariman Point, Mumbai 400021',
         
         'city'             => 'Mumbai',
         'state'            => 'Maharashtra',

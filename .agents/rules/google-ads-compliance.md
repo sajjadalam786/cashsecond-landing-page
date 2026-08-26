@@ -5,7 +5,7 @@ This document governs the compliance checklist for running paid traffic (Google 
 ---
 
 ## 1. Destination Transparency & Business Identity
-- **Physical Address:** The exact physical office location must be visibly displayed in the header, footer, and schema (Office Number 1307, 13th Floor, Arcadia Building, NCPA Marg, Nariman Point, Mumbai – 400021).
+- **Physical Address:** The exact physical office location must be visibly displayed in the header, footer, and schema (Arcadia Bldg, NCPA Marg, Nariman Point, Mumbai 400021).
 - **Direct Contact:** Real, functional telephone (`+91 897633 2211`) and official email (`cashsecondofficial@gmail.com`) must be accessible via direct clickable links (`tel:` and `mailto:`).
 - **Operating Hours:** Business hours (Mon-Sun: 10:00 AM – 9:00 PM) must be clearly stated.
 
