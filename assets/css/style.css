@@ -881,11 +881,25 @@ a:hover .btn-iphone-thumb {
 @media (min-width: 768px) {
     .hero-banner-overlay {
         max-width: 530px;
-        padding: 44px 38px;
+        padding: 100px 38px 36px 38px;
         background: transparent;
         border-top: none;
         backdrop-filter: none;
         -webkit-backdrop-filter: none;
+    }
+}
+
+@media (min-width: 992px) {
+    .hero-banner-overlay {
+        max-width: 540px;
+        padding: 120px 44px 40px 44px;
+    }
+}
+
+@media (min-width: 1200px) {
+    .hero-banner-overlay {
+        max-width: 560px;
+        padding: 135px 50px 44px 50px;
     }
 }
 

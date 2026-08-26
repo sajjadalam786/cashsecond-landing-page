@@ -50,7 +50,7 @@ $canonical_url = $canonical_url ?? ($seo['site_url'] ?? 'http://localhost/cashse
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <!-- Main Stylesheet -->
-    <link rel="stylesheet" href="<?= $base_path ?>assets/css/style.css?v=35.0">
+    <link rel="stylesheet" href="<?= $base_path ?>assets/css/style.css?v=36.0">
     <link rel="stylesheet" href="<?= $base_path ?>assets/css/questionnaire.css?v=2.0">
 </head>
 <body id="top">
