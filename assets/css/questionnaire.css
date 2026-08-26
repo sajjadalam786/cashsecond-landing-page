@@ -118,6 +118,25 @@
     box-shadow: 0 6px 20px rgba(0, 113, 227, 0.4);
 }
 
+.btn-get-exact-value .btn-iphone-thumb {
+    display: inline-block;
+    vertical-align: middle;
+    height: 32px;
+    width: auto;
+    max-height: 32px;
+    object-fit: contain;
+    margin-left: 10px;
+    flex-shrink: 0;
+    transition: transform 0.25s cubic-bezier(0.25, 0.1, 0.25, 1),
+                filter 0.25s ease;
+    filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.16));
+}
+
+.btn-get-exact-value:hover .btn-iphone-thumb {
+    transform: scale(1.18) rotate(5deg);
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.24));
+}
+
 @media (max-width: 768px) {
     .questionnaire-entry-card {
         flex-direction: column;

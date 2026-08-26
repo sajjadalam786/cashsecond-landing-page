@@ -120,48 +120,121 @@ return [
 
     // ============================================================
     // FAQ DATA FOR SEO & ANSWER ENGINE OPTIMIZATION (AEO)
-    // 10 Targeted Conversion & Search Questions
+    // 20 Short, Categorized Questions (No 'All' Category)
     // ============================================================
+    'faq_categories' => [
+        'valuation' => 'Valuation & Pricing',
+        'pickup'    => 'Doorstep Pickup',
+        'payment'   => 'Instant Payments',
+        'security'  => 'Data Security & Prep'
+    ],
     'faqs' => [
+        // Category 1: Valuation & Pricing
         [
-            'q' => 'How can I sell my iPhone?',
-            'a' => 'Selling your iPhone is simple: select your exact iPhone model and storage capacity on our valuation calculator, choose its physical condition, get an instant estimated resale quote, and schedule a convenient doorstep pickup with on-spot payout.'
+            'category' => 'valuation',
+            'q'        => 'How is my iPhone resale price calculated?',
+            'a'        => 'Pricing is calculated using live market demand in Mumbai, factoring in your exact iPhone model, storage size, physical condition, battery health, and functional hardware tests.'
         ],
         [
-            'q' => 'How is my iPhone resale value calculated?',
-            'a' => 'Your iPhone resale value is calculated based on current market demand, factoring in your device model, storage capacity, physical condition (screen & body), battery health, and functional status of features like Face ID and cameras.'
+            'category' => 'valuation',
+            'q'        => 'Is the online estimated quote guaranteed?',
+            'a'        => 'Yes. The online quote is fully honored as long as the device condition accurately matches the 5-minute physical inspection at your doorstep.'
         ],
         [
-            'q' => 'How much can I get for my iPhone?',
-            'a' => 'Payouts depend on the model generation, storage tier, and device condition. Newer models like the iPhone 15 and 16 series in flawless condition receive top market value, while older generations still command competitive resale prices.'
+            'category' => 'valuation',
+            'q'        => 'Does having the original box and bill increase my payout?',
+            'a'        => 'Yes. Providing the original purchase invoice, retail box, and genuine Apple charging cable adds up to ₹1,500 extra value to your final payout.'
         ],
         [
-            'q' => 'Can I sell an old or used iPhone?',
-            'a' => 'Yes, you can sell used, older, and out-of-warranty iPhones. We evaluate devices across flawless, good, and average condition grades so you get an honest and fair market price regardless of age.'
+            'category' => 'valuation',
+            'q'        => 'How do you determine iPhone condition grades?',
+            'a'        => 'We grade devices into Flawless (like new), Good (minor usage marks), and Average (visible scratches or dents) using our standard 32-point diagnostic checklist.'
         ],
         [
-            'q' => 'Which iPhone models can I sell?',
-            'a' => 'You can sell virtually any Apple iPhone model including iPhone 16 Pro Max, 16 Pro, 16 Plus, 16, 15 series, 14 series, 13 series, 12 series, 11 series, iPhone SE, and earlier generations.'
+            'category' => 'valuation',
+            'q'        => 'Can I sell older iPhone models like iPhone 11 or 12?',
+            'a'        => 'Yes. We purchase all iPhone generations from iPhone 8 and SE up to the latest iPhone 16 Pro Max at competitive resale prices.'
+        ],
+
+        // Category 2: Doorstep Pickup
+        [
+            'category' => 'pickup',
+            'q'        => 'Is doorstep pickup completely free in Mumbai?',
+            'a'        => 'Yes. Doorstep pickup is 100% free across all Mumbai, Navi Mumbai, and Thane suburbs with zero hidden charges or travel fees.'
         ],
         [
-            'q' => 'What affects my iPhone\'s resale value?',
-            'a' => 'The main factors are cosmetic condition (scratches, dents, back glass), display originality and touch responsiveness, battery health percentage, functional hardware (Face ID, cameras, speakers), and internal storage capacity.'
+            'category' => 'pickup',
+            'q'        => 'How quickly can I get my iPhone picked up?',
+            'a'        => 'Same-day pickup is available within 2 to 4 hours of booking, or you can choose any future date and time slot that suits your schedule.'
         ],
         [
-            'q' => 'Can I sell an iPhone with a damaged screen?',
-            'a' => 'Yes. Devices with minor scratches, display wear, or cracked glass can be evaluated through our condition selector, and you will receive a transparent estimated valuation reflecting the actual condition.'
+            'category' => 'pickup',
+            'q'        => 'Can I schedule pickup at my office or a cafe?',
+            'a'        => 'Yes. Our verified executive can meet you at your home, workplace, co-working space, or any convenient public location in Mumbai.'
         ],
         [
-            'q' => 'How does the iPhone selling process work?',
-            'a' => 'The process follows 4 simple steps: 1) Select your model and condition online to check estimated value, 2) Schedule a doorstep appointment, 3) 5-minute diagnostic verification with iCloud reset, and 4) Instant payment via UPI, IMPS, or Cash before handover.'
+            'category' => 'pickup',
+            'q'        => 'What happens during the doorstep appointment?',
+            'a'        => 'Our executive conducts a quick 5-minute physical and functional check, assists you with factory reset, and transfers your payment on the spot.'
         ],
         [
-            'q' => 'How does pickup work?',
-            'a' => 'Our verified executive visits your home or office at your selected time slot across Mumbai, performs a quick 32-point inspection, assists with complete factory data reset, and initiates your instant payment on the spot.'
+            'category' => 'pickup',
+            'q'        => 'Can I cancel the pickup if I change my mind?',
+            'a'        => 'Yes. You can cancel or reschedule anytime with zero penalty or cancellation fees. Our valuation service is 100% no-obligation.'
+        ],
+
+        // Category 3: Instant Payments
+        [
+            'category' => 'payment',
+            'q'        => 'When and how do I receive payment for my iPhone?',
+            'a'        => 'Payment is transferred instantly on the spot before you hand over your phone via UPI (GPay, PhonePe, Paytm), IMPS bank transfer, or cash.'
         ],
         [
-            'q' => 'When do I receive payment?',
-            'a' => 'You receive payment instantly during the doorstep pickup appointment. The executive transfers funds directly via UPI (Google Pay / PhonePe / Paytm), instant IMPS bank transfer, or cash before you hand over the device.'
+            'category' => 'payment',
+            'q'        => 'Are there any hidden deductions or evaluation fees?',
+            'a'        => 'No. There are absolutely zero evaluation, service, or processing fees. You receive 100% of the agreed valuation amount.'
+        ],
+        [
+            'category' => 'payment',
+            'q'        => 'Can I receive payment in someone else\'s bank account?',
+            'a'        => 'Yes. You can specify any valid UPI ID or bank account during the doorstep inspection, provided ownership verification is completed.'
+        ],
+        [
+            'category' => 'payment',
+            'q'        => 'Do I get an official sales receipt after selling?',
+            'a'        => 'Yes. You receive a digitally signed CashSecond purchase invoice and payment confirmation slip sent directly to your email.'
+        ],
+        [
+            'category' => 'payment',
+            'q'        => 'What ID proof is required to sell my iPhone?',
+            'a'        => 'A valid government-issued photo ID (such as Aadhaar Card, PAN Card, or Driving License) is required for legal ownership verification.'
+        ],
+
+        // Category 4: Data Security & Prep
+        [
+            'category' => 'security',
+            'q'        => 'Is my personal data safe when selling to CashSecond?',
+            'a'        => 'Yes. We follow strict data protection protocols and ensure your iPhone is fully factory reset and data-wiped in front of you.'
+        ],
+        [
+            'category' => 'security',
+            'q'        => 'Do I need to sign out of iCloud and Find My iPhone?',
+            'a'        => 'Yes. iCloud and Find My iPhone must be turned off prior to sale. Our executive will guide you through the quick sign-out process if needed.'
+        ],
+        [
+            'category' => 'security',
+            'q'        => 'Can I sell an iPhone with a cracked screen or back glass?',
+            'a'        => 'Yes. We purchase iPhones with cracked screens, damaged back glass, or cosmetic flaws at transparent adjusted market prices.'
+        ],
+        [
+            'category' => 'security',
+            'q'        => 'What if my iPhone battery health is below 80%?',
+            'a'        => 'You can still sell it easily. Our valuation engine accounts for battery degradation and provides a fair, adjusted payout.'
+        ],
+        [
+            'category' => 'security',
+            'q'        => 'Should I charge my iPhone before the executive arrives?',
+            'a'        => 'Yes. Please keep your device charged to at least 30% so our executive can test the screen, cameras, and buttons without delays.'
         ]
     ]
 ];

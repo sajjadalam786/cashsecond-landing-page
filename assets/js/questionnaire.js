@@ -766,7 +766,8 @@
                     </div>
                     <p style="font-size:0.8125rem; color:#8E8E93; margin:0 0 20px 0;">Free doorstep pickup in Mumbai • Instant spot payment</p>
                     <button type="button" class="btn-get-exact-value" id="qnStartValuationBtn" style="width:100%; justify-content:center; padding:14px; font-size:1rem; border-radius:14px;">
-                        <span>Get Exact Value &rarr;</span>
+                        <span>Check Your iPhone Value</span>
+                        <img src="assets/images/iphone-value-check-button.png" alt="iPhone" class="btn-iphone-thumb" width="22" height="38" loading="eager">
                     </button>
                 </div>
             `;

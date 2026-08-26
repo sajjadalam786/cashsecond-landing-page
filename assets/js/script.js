@@ -1008,69 +1008,77 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ============================================================
-    // 7. MASTER EXPANDABLE FAQ PANEL & INNER ACCORDION
+    // 7. CATEGORIZED FAQ ACCORDION & CATEGORY TAB SWITCHER
     // ============================================================
-    const faqMasterPanel = document.getElementById('faqMasterPanel');
-    const faqMasterToggle = document.getElementById('faqMasterToggle');
+    const faqCatBtns = document.querySelectorAll('.faq-category-btn');
+    const faqItems = document.querySelectorAll('.faq-item');
 
-    function toggleMasterFaq(forceState) {
-        if (!faqMasterPanel || !faqMasterToggle) return;
-        const willOpen = typeof forceState === 'boolean' 
-            ? forceState 
-            : !faqMasterPanel.classList.contains('open');
+    function switchFaqCategory(targetCat) {
+        if (!targetCat) return;
 
-        if (willOpen) {
-            faqMasterPanel.classList.add('open');
-            faqMasterToggle.setAttribute('aria-expanded', 'true');
-        } else {
-            faqMasterPanel.classList.remove('open');
-            faqMasterToggle.setAttribute('aria-expanded', 'false');
-        }
-    }
-
-    if (faqMasterToggle && faqMasterPanel) {
-        faqMasterToggle.addEventListener('click', () => {
-            toggleMasterFaq();
+        // Update Tab Buttons
+        faqCatBtns.forEach(btn => {
+            const isMatch = btn.getAttribute('data-category') === targetCat;
+            btn.classList.toggle('active', isMatch);
+            btn.setAttribute('aria-selected', isMatch ? 'true' : 'false');
         });
 
-        // Ensure Keyboard trigger with Enter/Space
-        faqMasterToggle.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                toggleMasterFaq();
+        // Filter and display matching FAQ items
+        faqItems.forEach(item => {
+            const itemCat = item.getAttribute('data-category');
+            if (itemCat === targetCat) {
+                item.style.display = 'block';
+            } else {
+                item.style.display = 'none';
+                item.classList.remove('active');
+                const btn = item.querySelector('.faq-btn');
+                if (btn) {
+                    btn.setAttribute('aria-expanded', 'false');
+                    const icon = btn.querySelector('.faq-icon');
+                    if (icon) icon.textContent = '+';
+                }
             }
         });
     }
 
-    // Auto-open master FAQ panel if user clicks #faq link or URL lands on #faq
-    const faqLinks = document.querySelectorAll('a[href="#faq"]');
-    faqLinks.forEach(link => {
-        link.addEventListener('click', () => {
-            toggleMasterFaq(true);
+    faqCatBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const cat = btn.getAttribute('data-category');
+            if (cat) switchFaqCategory(cat);
         });
     });
 
-    if (window.location.hash === '#faq') {
-        toggleMasterFaq(true);
-    }
-
-    // Inner Individual FAQ Questions Accordion
-    const faqItems = document.querySelectorAll('.faq-item');
+    // Individual Question Accordion Toggle
     faqItems.forEach(item => {
         const btn = item.querySelector('.faq-btn');
         if (btn) {
-            btn.addEventListener('click', (e) => {
-                e.stopPropagation(); // Prevent bubbling to master container
+            btn.addEventListener('click', () => {
                 const isActive = item.classList.contains('active');
-                faqItems.forEach(i => {
-                    i.classList.remove('active');
-                    const b = i.querySelector('.faq-btn');
-                    if (b) b.setAttribute('aria-expanded', 'false');
+                const icon = btn.querySelector('.faq-icon');
+
+                // Close other items in the same visible category for clean reading
+                const currentCategory = item.getAttribute('data-category');
+                faqItems.forEach(otherItem => {
+                    if (otherItem !== item && otherItem.getAttribute('data-category') === currentCategory) {
+                        otherItem.classList.remove('active');
+                        const otherBtn = otherItem.querySelector('.faq-btn');
+                        if (otherBtn) {
+                            otherBtn.setAttribute('aria-expanded', 'false');
+                            const otherIcon = otherBtn.querySelector('.faq-icon');
+                            if (otherIcon) otherIcon.textContent = '+';
+                        }
+                    }
                 });
 
-                if (!isActive) {
+                // Toggle target item
+                if (isActive) {
+                    item.classList.remove('active');
+                    btn.setAttribute('aria-expanded', 'false');
+                    if (icon) icon.textContent = '+';
+                } else {
                     item.classList.add('active');
                     btn.setAttribute('aria-expanded', 'true');
+                    if (icon) icon.textContent = '−';
                 }
             });
         }

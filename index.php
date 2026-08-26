@@ -15,6 +15,12 @@ $business = $config['business'] ?? [];
 $sellBrands = $config['sell_brands'] ?? [];
 $iphoneModels = $sellBrands['Apple'] ?? [];
 $faqs = $config['faqs'] ?? [];
+$faqCategories = $config['faq_categories'] ?? [
+    'valuation' => 'Valuation & Pricing',
+    'pickup'    => 'Doorstep Pickup',
+    'payment'   => 'Instant Payments',
+    'security'  => 'Data Security & Prep'
+];
 
 // Sorted 35 iPhone Models for the Showcase Strip (iPhone 17 down to iPhone 8)
 $orderMap = [
@@ -158,7 +164,8 @@ require __DIR__ . '/includes/header.php';
                 </div>
                 <div class="entry-card-action">
                     <button type="button" class="btn-get-exact-value start-exact-valuation-btn" id="startExactValuationBtn" data-model="Apple iPhone 13" data-variant="128 GB" aria-haspopup="dialog" aria-controls="buybackQuestionnaireModal">
-                        <span>Get Exact Value &rarr;</span>
+                        <span>Check Your iPhone Value</span>
+                        <img src="assets/images/iphone-value-check-button.png" alt="iPhone" class="btn-iphone-thumb" width="22" height="38" loading="eager">
                     </button>
                 </div>
             </div>
@@ -430,7 +437,7 @@ require __DIR__ . '/includes/header.php';
                 <p class="promo-banner-desc">Check your iPhone's value in seconds and get a hassle-free pickup.</p>
                 <a href="#valuation" class="btn promo-banner-cta btn-promo-dark" id="heroCheckValueBtn" aria-haspopup="dialog" aria-controls="buybackQuestionnaireModal">
                     <span>Check Your iPhone Value</span>
-                    <span class="promo-cta-arrow" aria-hidden="true">&rarr;</span>
+                    <img src="assets/images/iphone-value-check-button.png" alt="iPhone" class="btn-iphone-thumb" width="22" height="38" loading="lazy">
                 </a>
             </div>
             <div class="promo-banner-visual">
@@ -516,8 +523,8 @@ require __DIR__ . '/includes/header.php';
                 <h3 class="promo-banner-title">From Your iPhone to Instant Payment.</h3>
                 <p class="promo-banner-desc">Transparent valuation, doorstep pickup and secure data handling — all in one simple experience.</p>
                 <a href="#valuation" class="btn promo-banner-cta btn-promo-light" id="transparentValuationBtn" aria-haspopup="dialog" aria-controls="buybackQuestionnaireModal">
-                    <span>Get Your iPhone Value</span>
-                    <span class="promo-cta-arrow" aria-hidden="true">&rarr;</span>
+                    <span>Check Your iPhone Value</span>
+                    <img src="assets/images/iphone-value-check-button.png" alt="iPhone" class="btn-iphone-thumb" width="22" height="38" loading="lazy">
                 </a>
             </div>
             <div class="promo-banner-visual">
@@ -535,45 +542,47 @@ require __DIR__ . '/includes/header.php';
 </div>
 
 <!-- ============================================================
-     8. FAQ ACCORDION SECTION (10 SEO & AEO Questions)
+     8. FAQ ACCORDION SECTION (20 Categorized AEO & SEO Questions)
      ============================================================ -->
 <section class="section-container faq-section-wrapper" id="faq">
     <div class="container">
-        <div class="faq-card-panel" id="faqMasterPanel">
-            <!-- Master Clickable Header / Card Trigger -->
-            <button type="button" class="faq-master-header" id="faqMasterToggle" aria-expanded="false" aria-controls="faqMasterBody" aria-label="Toggle Frequently Asked Questions panel">
-                <div class="faq-master-header-text">
-                    <span class="section-eyebrow faq-eyebrow">Got Questions?</span>
-                    <h2 class="section-title faq-master-title">Frequently Asked Questions</h2>
-                </div>
-                <div class="faq-master-toggle-indicator" aria-hidden="true">
-                    <span class="faq-master-icon">
-                        <svg class="faq-chevron-svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                            <polyline points="6 9 12 15 18 9"></polyline>
-                        </svg>
-                    </span>
-                </div>
-            </button>
+        <div class="section-header text-center faq-header">
+            <span class="section-eyebrow">Got Questions?</span>
+            <h2 class="section-title">Frequently Asked Questions</h2>
+            <p class="section-subtitle">Short, transparent answers to help you sell your old iPhone with total confidence.</p>
+        </div>
 
-            <!-- Collapsible Body Containing Subtitle and Full FAQ List -->
-            <div class="faq-master-collapse" id="faqMasterBody">
-                <div class="faq-master-body-inner">
-                    <p class="section-subtitle faq-master-subtitle">Everything you need to know about our iPhone valuation, doorstep pickup, and instant payouts.</p>
-                    
-                    <div class="faq-accordion">
-                        <?php foreach ($faqs as $idx => $faq): ?>
-                        <div class="faq-item <?= $idx === 0 ? 'active' : '' ?>">
-                            <button type="button" class="faq-btn" aria-expanded="<?= $idx === 0 ? 'true' : 'false' ?>">
-                                <span><?= htmlspecialchars($faq['q']) ?></span>
-                                <span class="faq-icon">+</span>
-                            </button>
-                            <div class="faq-content">
-                                <p><?= htmlspecialchars($faq['a']) ?></p>
-                            </div>
-                        </div>
-                        <?php endforeach; ?>
+        <!-- Category Switching Buttons (No 'All' Category) -->
+        <div class="faq-category-nav-wrapper">
+            <div class="faq-category-nav" role="tablist" aria-label="FAQ Categories">
+                <?php $catIdx = 0; foreach ($faqCategories as $catKey => $catName): ?>
+                <button type="button" 
+                        class="faq-category-btn <?= $catIdx === 0 ? 'active' : '' ?>" 
+                        data-category="<?= htmlspecialchars($catKey) ?>" 
+                        role="tab" 
+                        aria-selected="<?= $catIdx === 0 ? 'true' : 'false' ?>">
+                    <span><?= htmlspecialchars($catName) ?></span>
+                </button>
+                <?php $catIdx++; endforeach; ?>
+            </div>
+        </div>
+
+        <!-- Categorized FAQ Accordion List -->
+        <div class="faq-accordion-wrap">
+            <div class="faq-accordion" id="faqAccordion">
+                <?php foreach ($faqs as $idx => $faq): ?>
+                <div class="faq-item" 
+                     data-category="<?= htmlspecialchars($faq['category'] ?? 'valuation') ?>" 
+                     style="<?= ($faq['category'] ?? 'valuation') === 'valuation' ? '' : 'display: none;' ?>">
+                    <button type="button" class="faq-btn" aria-expanded="false">
+                        <span class="faq-question-text"><?= htmlspecialchars($faq['q']) ?></span>
+                        <span class="faq-icon" aria-hidden="true">+</span>
+                    </button>
+                    <div class="faq-content">
+                        <p><?= htmlspecialchars($faq['a']) ?></p>
                     </div>
                 </div>
+                <?php endforeach; ?>
             </div>
         </div>
     </div>

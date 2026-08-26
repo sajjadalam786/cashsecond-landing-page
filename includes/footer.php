@@ -154,7 +154,8 @@ $current_year = date('Y');
         <div class="mobile-sticky-inner">
             
             <a href="#valuation" class="btn btn-primary btn-full" id="mobile-sticky-valuation-btn" aria-haspopup="dialog" aria-controls="buybackQuestionnaireModal">
-                <span>CHECK MY IPHONE VALUE &rarr;</span>
+                <span>Check Your iPhone Value</span>
+                <img src="assets/images/iphone-value-check-button.png" alt="iPhone" class="btn-iphone-thumb" width="20" height="34" loading="eager">
             </a>
         </div>
     </div>
@@ -522,7 +523,7 @@ $current_year = date('Y');
     <?php require __DIR__ . '/schema.php'; ?>
 
     <!-- Main JavaScript Engine (Deferred for high speed & non-blocking execution) -->
-    <script src="assets/js/script.js?v=13.0" defer></script>
-    <script src="assets/js/questionnaire.js?v=1.1" defer></script>
+    <script src="assets/js/script.js?v=14.0" defer></script>
+    <script src="assets/js/questionnaire.js?v=1.2" defer></script>
 </body>
 </html>
