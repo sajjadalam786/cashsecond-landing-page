@@ -4201,117 +4201,294 @@ button {
 }
 
 /* ============================================================
-   17. FOOTER & POLICIES
+   17. LUXURY APPLE-GRADE LIGHT FOOTER
    ============================================================ */
 .site-footer {
-    background-color: #FFFFFF;
-    border-top: 1px solid var(--color-border);
-    padding: 44px 0 28px 0;
+    background-color: #F5F5F7;
+    color: #6E6E73;
+    border-top: 1px solid #E5E5EA;
+    padding: 48px 0 28px 0;
     font-size: 0.8125rem;
-    color: var(--color-text-muted);
+    position: relative;
 }
 
-.footer-inner {
-    display: flex;
-    flex-direction: column;
-    gap: 28px;
+.footer-container {
+    max-width: var(--container-max);
+    margin: 0 auto;
+    padding: 0 20px;
 }
 
-@media (min-width: 992px) {
-    .footer-inner {
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: flex-start;
-        gap: 40px;
+@media (min-width: 768px) {
+    .footer-container {
+        padding: 0 28px;
     }
 }
 
-.footer-brand-col {
+/* 1. Top Phone Series Quick-Access Strip */
+.footer-models-strip {
+    background: #FFFFFF;
+    border: 1px solid #E5E5EA;
+    border-radius: 18px;
+    padding: 14px 18px;
+    margin-bottom: 40px;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    max-width: 480px;
-    width: 100%;
+    gap: 12px;
+    box-shadow: 0 4px 18px rgba(0, 0, 0, 0.04);
 }
 
-.footer-brand-logo {
+@media (min-width: 900px) {
+    .footer-models-strip {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        padding: 12px 22px;
+    }
+}
+
+.footer-models-label {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #1D1D1F;
     display: inline-flex;
     align-items: center;
-    margin-bottom: 16px;
-    text-decoration: none;
-    line-height: 1;
-    max-width: 100%;
+    gap: 6px;
+    flex-shrink: 0;
 }
 
-.footer-logo-img {
+.footer-models-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 10px;
+    align-items: center;
+}
+
+.footer-model-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: #F5F5F7;
+    border: 1px solid #E5E5EA;
+    border-radius: 10px;
+    padding: 6px 13px;
+    color: #1D1D1F;
+    font-size: 12.5px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.22s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+.footer-phone-icon {
+    color: var(--color-cta);
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.footer-model-pill:hover {
+    background: var(--color-cta);
+    border-color: var(--color-cta);
+    color: #FFFFFF;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 14px rgba(0, 113, 227, 0.3);
+}
+
+.footer-model-pill:hover .footer-phone-icon {
+    color: #FFFFFF;
+    transform: scale(1.12);
+}
+
+/* 2. Main 4-Column Architectural Grid */
+.footer-main-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 32px;
+    margin-bottom: 38px;
+}
+
+@media (min-width: 600px) and (max-width: 991px) {
+    .footer-main-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 32px 24px;
+    }
+}
+
+@media (min-width: 992px) {
+    .footer-main-grid {
+        grid-template-columns: 1.4fr 1fr 1fr 1fr;
+        gap: 36px;
+    }
+}
+
+.footer-grid-col {
+    display: flex;
+    flex-direction: column;
+}
+
+.footer-col-title {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #1D1D1F;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.footer-col-title svg {
+    color: var(--color-cta);
+    flex-shrink: 0;
+}
+
+.footer-links-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.footer-links-list li a {
+    color: #6E6E73;
+    font-size: 13px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+}
+
+.footer-links-list li a:hover {
+    color: var(--color-cta);
+    transform: translateX(3px);
+}
+
+.footer-wa-link {
+    color: #128C7E !important;
+    font-weight: 600 !important;
+    gap: 6px !important;
+}
+
+.footer-wa-link:hover {
+    color: #075E54 !important;
+}
+
+/* Brand Column */
+.footer-col-brand .footer-brand-logo {
+    display: inline-flex;
+    align-items: center;
+    margin-bottom: 12px;
+    text-decoration: none;
+    line-height: 1;
+}
+
+.footer-col-brand .footer-logo-img {
     width: 100%;
-    max-width: 420px;
+    max-width: 150px;
     height: auto;
-    max-height: 140px;
+    max-height: 48px;
     object-fit: contain;
     display: block;
     transition: transform 0.22s ease;
 }
 
-.footer-brand-logo:hover .footer-logo-img {
-    transform: scale(1.02);
+.footer-col-brand .footer-brand-logo:hover .footer-logo-img {
+    transform: scale(1.03);
 }
 
-.footer-links {
+.footer-brand-tagline {
+    font-size: 12.5px;
+    color: #6E6E73;
+    line-height: 1.55;
+    margin-bottom: 16px;
+    max-width: 320px;
+}
+
+.footer-contact-block {
     display: flex;
+    flex-direction: column;
+    gap: 9px;
+    font-size: 12px;
+    color: #515154;
+}
+
+.footer-contact-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    line-height: 1.45;
+}
+
+.footer-contact-row svg {
+    color: var(--color-cta);
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.footer-contact-row a {
+    color: var(--color-cta);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.footer-contact-row a:hover {
+    text-decoration: underline;
+}
+
+/* 3. Bottom Legal & Trademark Disclaimer Bar */
+.footer-bottom-deck {
+    border-top: 1px solid #E5E5EA;
+    padding-top: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.footer-disclaimer-card {
+    background: #FFFFFF;
+    border: 1px solid #E5E5EA;
+    border-left: 3px solid var(--color-cta);
+    border-radius: 10px;
+    padding: 12px 16px;
+}
+
+.footer-disclaimer-card .trademark-disclaimer {
+    font-size: 11px;
+    color: #86868B;
+    line-height: 1.55;
+    margin: 0;
+}
+
+.footer-disclaimer-card strong {
+    color: #515154;
+}
+
+.footer-copyright-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     flex-wrap: wrap;
-    gap: 14px 20px;
-    max-width: 560px;
+    gap: 12px;
+    font-size: 11.5px;
+    color: #86868B;
 }
 
-.footer-links a {
-    color: var(--color-text-secondary);
-    transition: var(--transition);
+.footer-back-to-top {
+    color: var(--color-cta);
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.2s ease;
 }
 
-.footer-links a:hover {
-    color: var(--color-dark);
-}
-
-/* Tablet sizing (640px - 991px) */
-@media (max-width: 991px) and (min-width: 640px) {
-    .footer-logo-img {
-        max-width: 340px;
-        max-height: 115px;
-    }
-}
-
-/* Mobile sizing (under 640px) */
-@media (max-width: 639px) {
-    .site-footer {
-        padding: 32px 0 20px 0;
-    }
-
-    .footer-brand-logo {
-        margin-bottom: 12px;
-    }
-
-    .footer-logo-img {
-        max-width: 275px;
-        max-height: 92px;
-    }
-}
-
-/* Small mobile (under 360px) */
-@media (max-width: 360px) {
-    .footer-logo-img {
-        max-width: 215px;
-        max-height: 72px;
-    }
-}
-
-.trademark-disclaimer {
-    font-size: 0.6875rem;
-    color: var(--color-text-muted);
-    line-height: 1.5;
-    margin-top: 24px;
-    padding-top: 18px;
-    border-top: 1px solid var(--color-border-subtle);
+.footer-back-to-top:hover {
+    color: var(--color-cta-hover);
+    transform: translateY(-2px);
 }
 
 /* ============================================================

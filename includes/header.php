@@ -23,6 +23,10 @@ $canonical_url = $seo['site_url'] ?? 'http://localhost/cashsecond-landing-page/'
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="<?= htmlspecialchars($canonical_url); ?>">
 
+    <!-- Favicon & Touch Icons -->
+    <link rel="icon" type="image/webp" href="assets/images/CashSecond-Fevicon-icon.webp">
+    <link rel="apple-touch-icon" href="assets/images/CashSecond-Fevicon-icon.webp">
+
     <!-- Open Graph Meta Tags -->
     <meta property="og:title" content="<?= htmlspecialchars($page_title); ?>">
     <meta property="og:description" content="<?= htmlspecialchars($page_description); ?>">
@@ -42,7 +46,7 @@ $canonical_url = $seo['site_url'] ?? 'http://localhost/cashsecond-landing-page/'
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <!-- Main Stylesheet -->
-    <link rel="stylesheet" href="assets/css/style.css?v=21.0">
+    <link rel="stylesheet" href="assets/css/style.css?v=23.0">
     <link rel="stylesheet" href="assets/css/questionnaire.css?v=1.1">
 </head>
 <body id="top">

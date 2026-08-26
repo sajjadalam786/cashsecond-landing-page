@@ -20,6 +20,8 @@ $canonical_url    = rtrim($seo['site_url'], '/') . "/policies/buyback-policy.php
     <meta name="description" content="<?= htmlspecialchars($page_description); ?>">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="<?= htmlspecialchars($canonical_url); ?>">
+    <link rel="icon" type="image/webp" href="../assets/images/CashSecond-Fevicon-icon.webp">
+    <link rel="apple-touch-icon" href="../assets/images/CashSecond-Fevicon-icon.webp">
     <link rel="stylesheet" href="../assets/css/style.css?v=5.0">
     <style>
       .policy-page { padding: 48px 0 80px; }
