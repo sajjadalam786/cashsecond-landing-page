@@ -36,60 +36,16 @@ $canonical_url = $seo['site_url'] ?? 'http://localhost/cashsecond-landing-page/'
 
     <!-- Main Stylesheet -->
     <link rel="stylesheet" href="assets/css/style.css?v=15.0">
+    <link rel="stylesheet" href="assets/css/smart-exchange.css?v=1.0">
+    <link rel="stylesheet" href="assets/css/questionnaire.css?v=1.0">
 </head>
 <body id="top">
-    <!-- 1. Top Moving Announcement Strip (Infinite Marquee) -->
-    <div class="marquee-wrapper marquee-top-bar" aria-label="Announcements">
-        <div class="marquee-track">
-            <span class="marquee-item">SELL YOUR iPHONE <span class="marquee-dot">•</span> GET INSTANT VALUE <span class="marquee-dot">•</span> FREE DOORSTEP PICKUP <span class="marquee-dot">•</span> SECURE DATA WIPE <span class="marquee-dot">•</span> FAST PAYMENT <span class="marquee-dot">•</span> BEST VALUE FOR YOUR iPHONE <span class="marquee-dot">•</span></span>
-            <span class="marquee-item">SELL YOUR iPHONE <span class="marquee-dot">•</span> GET INSTANT VALUE <span class="marquee-dot">•</span> FREE DOORSTEP PICKUP <span class="marquee-dot">•</span> SECURE DATA WIPE <span class="marquee-dot">•</span> FAST PAYMENT <span class="marquee-dot">•</span> BEST VALUE FOR YOUR iPHONE <span class="marquee-dot">•</span></span>
-        </div>
-        <div class="marquee-track" aria-hidden="true">
-            <span class="marquee-item">SELL YOUR iPHONE <span class="marquee-dot">•</span> GET INSTANT VALUE <span class="marquee-dot">•</span> FREE DOORSTEP PICKUP <span class="marquee-dot">•</span> SECURE DATA WIPE <span class="marquee-dot">•</span> FAST PAYMENT <span class="marquee-dot">•</span> BEST VALUE FOR YOUR iPHONE <span class="marquee-dot">•</span></span>
-            <span class="marquee-item">SELL YOUR iPHONE <span class="marquee-dot">•</span> GET INSTANT VALUE <span class="marquee-dot">•</span> FREE DOORSTEP PICKUP <span class="marquee-dot">•</span> SECURE DATA WIPE <span class="marquee-dot">•</span> FAST PAYMENT <span class="marquee-dot">•</span> BEST VALUE FOR YOUR iPHONE <span class="marquee-dot">•</span></span>
-        </div>
-    </div>
-
-    <!-- 2. Sticky Header -->
+    <!-- Main Brand Header (Large Centered Logo Area) -->
     <header class="site-header" id="site-header">
         <div class="container header-inner">
-            <!-- Brand Logo -->
+            <!-- Large Centered Brand Logo -->
             <a href="#top" class="brand-logo" aria-label="CashSecond Home">
-                <img src="assets/images/cashsecond-logo.png" alt="CashSecond" class="brand-logo-img" width="108" height="36" loading="eager">
-            </a>
-
-            <!-- Desktop Nav Menu -->
-            <nav class="nav-menu" aria-label="Main Navigation">
-                <a href="#valuation" class="nav-link">Sell iPhone</a>
-                <a href="#how-it-works" class="nav-link">How It Works</a>
-                <a href="#models" class="nav-link">iPhone Models</a>
-                <a href="#showcase" class="nav-link">Showcase</a>
-                <a href="#why-us" class="nav-link">Why Us</a>
-                <a href="#faq" class="nav-link">FAQs</a>
-            </nav>
-
-            <!-- Mobile Hamburger Button -->
-            <button type="button" class="hamburger-btn" id="hamburger-menu-btn" aria-label="Toggle Menu" aria-expanded="false">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-        </div>
-
-        <!-- Mobile Navigation Drawer -->
-        <div class="mobile-nav-drawer" id="mobile-nav-drawer" aria-label="Mobile Navigation">
-            <nav class="mobile-nav-links">
-                <a href="#valuation" class="nav-link mobile-drawer-link">Sell iPhone</a>
-                <a href="#how-it-works" class="nav-link mobile-drawer-link">How It Works</a>
-                <a href="#models" class="nav-link mobile-drawer-link">iPhone Models</a>
-                <a href="#showcase" class="nav-link mobile-drawer-link">Interactive Showcase</a>
-                <a href="#why-us" class="nav-link mobile-drawer-link">Why Choose Us</a>
-                <a href="#inspection" class="nav-link mobile-drawer-link">32-Point Check</a>
-                <a href="#faq" class="nav-link mobile-drawer-link">FAQs</a>
-                <a href="#contact" class="nav-link mobile-drawer-link">Contact Store</a>
-            </nav>
-            <a href="#valuation" class="btn btn-primary btn-full mobile-drawer-link">
-                <span>Get Instant Price &rarr;</span>
+                <img src="assets/images/cashsecond-logo.png" alt="CashSecond - Best Value For Your iPhone" class="brand-logo-img" width="420" height="140" loading="eager">
             </a>
         </div>
     </header>

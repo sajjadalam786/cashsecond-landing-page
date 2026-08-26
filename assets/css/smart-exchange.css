@@ -1,0 +1,903 @@
+/**
+ * CashSecond - Smart Exchange & Phone Valuation System Stylesheet
+ * Mobile-First, Modular, Apple Aesthetic Diagnostic UI
+ */
+
+/* App Container & Fullscreen / Modal Host */
+.smart-app-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 99999;
+    background-color: rgba(11, 13, 16, 0.78);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    overflow: hidden;
+    padding: 12px;
+    box-sizing: border-box;
+}
+
+.smart-app-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.smart-app-container {
+    width: 100%;
+    max-width: 680px;
+    height: 92vh;
+    max-height: 860px;
+    background: #FFFFFF;
+    border: 1px solid var(--color-border, #E5E5EA);
+    border-radius: 24px;
+    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.28);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    position: relative;
+    transform: scale(0.96) translateY(14px);
+    transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1);
+    box-sizing: border-box;
+}
+
+.smart-app-overlay.active .smart-app-container {
+    transform: scale(1) translateY(0);
+}
+
+/* App Header & Stepper */
+.smart-app-header {
+    padding: 16px 20px 12px 20px;
+    background: #FAFAFC;
+    border-bottom: 1px solid var(--color-border, #E5E5EA);
+    flex-shrink: 0;
+}
+
+.smart-header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.smart-brand-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--color-cta, #0071E3);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.smart-brand-tag svg {
+    width: 14px;
+    height: 14px;
+}
+
+.smart-app-close-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #EBEBED;
+    border: none;
+    font-size: 1.25rem;
+    line-height: 1;
+    color: #48484A;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.smart-app-close-btn:hover {
+    background: #D1D1D6;
+    color: #1C1C1E;
+    transform: scale(1.08);
+}
+
+/* Progress Step Bar */
+.smart-progress-track {
+    width: 100%;
+    height: 5px;
+    background: #E5E5EA;
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 8px;
+}
+
+.smart-progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #0071E3, #00C7BE);
+    width: 20%;
+    transition: width 0.35s ease;
+}
+
+.smart-step-nav {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.71875rem;
+    font-weight: 600;
+    color: #8E8E93;
+}
+
+.smart-step-nav .step-node.active {
+    color: var(--color-cta, #0071E3);
+    font-weight: 700;
+}
+
+/* Scrollable Viewport */
+.smart-app-viewport {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px 22px;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+}
+
+/* Step Views */
+.smart-step-view {
+    display: none;
+    flex-direction: column;
+    gap: 16px;
+    animation: fadeInStep 0.28s ease-out;
+}
+
+.smart-step-view.active {
+    display: flex;
+}
+
+@keyframes fadeInStep {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.step-title-box {
+    margin-bottom: 6px;
+}
+
+.step-main-title {
+    font-family: var(--font-heading, -apple-system, sans-serif);
+    font-size: 1.375rem;
+    font-weight: 800;
+    color: #1C1C1E;
+    margin: 0 0 4px 0;
+    line-height: 1.25;
+}
+
+.step-subtitle {
+    font-size: 0.84375rem;
+    color: #636366;
+    margin: 0;
+    line-height: 1.4;
+}
+
+/* Device Selector Cards */
+.brand-tab-group {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+}
+
+.brand-tab-pill {
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1px solid #E5E5EA;
+    background: #FFFFFF;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: #48484A;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+}
+
+.brand-tab-pill.active {
+    background: #0071E3;
+    color: #FFFFFF;
+    border-color: #0071E3;
+}
+
+/* Model Grid */
+.device-select-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+.device-card-opt {
+    border: 1.5px solid #E5E5EA;
+    border-radius: 14px;
+    padding: 12px 14px;
+    background: #FFFFFF;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: left;
+}
+
+.device-card-opt:hover {
+    border-color: #0071E3;
+    background: rgba(0, 113, 227, 0.02);
+}
+
+.device-card-opt.selected {
+    border-color: #0071E3;
+    background: rgba(0, 113, 227, 0.05);
+    box-shadow: 0 2px 8px rgba(0, 113, 227, 0.12);
+}
+
+.device-card-icon {
+    font-size: 1.25rem;
+    line-height: 1;
+}
+
+.device-card-name {
+    font-size: 0.84375rem;
+    font-weight: 700;
+    color: #1C1C1E;
+    line-height: 1.2;
+}
+
+/* Storage & Battery Pills */
+.spec-title-label {
+    font-size: 0.8125rem;
+    font-weight: 700;
+    color: #3A3A3C;
+    margin: 8px 0 6px 0;
+}
+
+.storage-pill-row, .battery-presets-row {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.spec-pill-btn {
+    flex: 1;
+    min-width: 60px;
+    padding: 10px 12px;
+    background: #FFFFFF;
+    border: 1.5px solid #E5E5EA;
+    border-radius: 12px;
+    font-size: 0.84375rem;
+    font-weight: 700;
+    color: #1C1C1E;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s ease;
+}
+
+.spec-pill-btn:hover {
+    border-color: #0071E3;
+}
+
+.spec-pill-btn.selected {
+    background: #0071E3;
+    color: #FFFFFF;
+    border-color: #0071E3;
+}
+
+/* Battery Slider Control */
+.battery-slider-wrap {
+    background: #FAFAFC;
+    border: 1px solid #E5E5EA;
+    border-radius: 14px;
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.battery-slider-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.battery-slider-val {
+    font-size: 1.125rem;
+    font-weight: 800;
+    color: #0071E3;
+}
+
+.battery-slider {
+    width: 100%;
+    accent-color: #0071E3;
+    height: 6px;
+    cursor: pointer;
+}
+
+/* Live Valuation Header Bar */
+.live-valuation-header-bar {
+    background: #F2F2F7;
+    border-radius: 12px;
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.live-val-device {
+    font-size: 0.8125rem;
+    font-weight: 700;
+    color: #1C1C1E;
+}
+
+.live-val-price {
+    font-family: var(--font-heading, sans-serif);
+    font-size: 1.125rem;
+    font-weight: 800;
+    color: #0071E3;
+}
+
+/* Live Category Pass/Fail Counters */
+.category-counter-strip {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.cat-counter-card {
+    flex: 1;
+    background: #FFFFFF;
+    border: 1px solid #E5E5EA;
+    border-radius: 12px;
+    padding: 8px 10px;
+    text-align: center;
+    font-size: 0.71875rem;
+}
+
+.cat-counter-card strong {
+    display: block;
+    font-size: 0.8125rem;
+    color: #1C1C1E;
+}
+
+.cat-counter-card .badge-pass {
+    color: #34C759;
+    font-weight: 700;
+}
+
+.cat-counter-card .badge-fail {
+    color: #FF3B30;
+    font-weight: 700;
+}
+
+/* Interactive Question Cards (Physical Condition) */
+.question-card-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.question-card-item {
+    background: #FFFFFF;
+    border: 1.5px solid #E5E5EA;
+    border-radius: 14px;
+    padding: 12px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    transition: all 0.2s ease;
+}
+
+.question-card-item:hover {
+    border-color: #C7C7CC;
+}
+
+.question-card-info {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    flex: 1;
+}
+
+.question-cat-tag {
+    font-size: 0.6875rem;
+    font-weight: 700;
+    color: #0071E3;
+    text-transform: uppercase;
+}
+
+.question-text {
+    font-size: 0.84375rem;
+    font-weight: 600;
+    color: #1C1C1E;
+    margin: 2px 0 0 0;
+    line-height: 1.3;
+}
+
+.question-btn-group {
+    display: flex;
+    gap: 6px;
+    flex-shrink: 0;
+}
+
+.choice-btn {
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    border: 1.5px solid #E5E5EA;
+    background: #FFFFFF;
+    color: #48484A;
+    cursor: pointer;
+    transition: all 0.18s ease;
+}
+
+.choice-btn.yes.selected {
+    background: #E8F5E9;
+    border-color: #34C759;
+    color: #1E8E3E;
+}
+
+.choice-btn.no.selected {
+    background: #FFEBEE;
+    border-color: #FF3B30;
+    color: #D32F2F;
+}
+
+/* Interactive Hardware Diagnostic Rows */
+.hardware-test-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.hardware-test-card {
+    background: #FFFFFF;
+    border: 1.5px solid #E5E5EA;
+    border-radius: 14px;
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    transition: all 0.2s ease;
+}
+
+.hardware-test-card:hover {
+    border-color: #C7C7CC;
+}
+
+.test-card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.test-card-title-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.test-card-icon {
+    font-size: 1.15rem;
+}
+
+.test-card-name {
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: #1C1C1E;
+}
+
+.test-action-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding-top: 6px;
+    border-top: 1px solid #F2F2F7;
+}
+
+.test-instr-note {
+    font-size: 0.75rem;
+    color: #636366;
+}
+
+.run-test-trigger-btn {
+    padding: 6px 12px;
+    border-radius: 8px;
+    background: #0071E3;
+    color: #FFFFFF;
+    font-size: 0.75rem;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    transition: all 0.2s ease;
+}
+
+.run-test-trigger-btn:hover {
+    background: #005BB5;
+}
+
+/* Live Video/Canvas Camera Testing Overlay inside Modal */
+.interactive-submodal {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #000000;
+    z-index: 100;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #FFFFFF;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.interactive-submodal.active {
+    display: flex;
+}
+
+.camera-preview-video {
+    width: 100%;
+    max-width: 380px;
+    height: 260px;
+    border-radius: 16px;
+    background: #1C1C1E;
+    object-fit: cover;
+    margin-bottom: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.submodal-title {
+    font-size: 1.125rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+    text-align: center;
+}
+
+.submodal-desc {
+    font-size: 0.8125rem;
+    color: #A1A1A6;
+    margin-bottom: 18px;
+    text-align: center;
+    max-width: 320px;
+}
+
+.submodal-actions {
+    display: flex;
+    gap: 12px;
+}
+
+/* Full Screen Pixel Test Canvas */
+.pixel-test-canvas-view {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 110;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+    padding-bottom: 30px;
+    box-sizing: border-box;
+    cursor: pointer;
+}
+
+.pixel-test-canvas-view.active {
+    display: flex;
+}
+
+.pixel-test-overlay-controls {
+    background: rgba(0, 0, 0, 0.75);
+    padding: 12px 18px;
+    border-radius: 30px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    color: #FFFFFF;
+}
+
+/* Live Audio Meter */
+.audio-meter-bar {
+    width: 100%;
+    height: 8px;
+    background: #E5E5EA;
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 8px 0;
+}
+
+.audio-meter-fill {
+    width: 0%;
+    height: 100%;
+    background: #34C759;
+    transition: width 0.1s ease;
+}
+
+/* Final Report Summary View */
+.report-hero-card {
+    background: linear-gradient(135deg, #0071E3, #004DB3);
+    border-radius: 20px;
+    padding: 24px 20px;
+    color: #FFFFFF;
+    text-align: center;
+    box-shadow: 0 12px 32px rgba(0, 113, 227, 0.28);
+}
+
+.report-hero-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+
+.report-hero-device {
+    font-size: 1.125rem;
+    font-weight: 700;
+    margin: 0 0 2px 0;
+}
+
+.report-hero-specs {
+    font-size: 0.8125rem;
+    opacity: 0.85;
+    margin: 0 0 14px 0;
+}
+
+.report-hero-val-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    opacity: 0.8;
+}
+
+.report-hero-price {
+    font-family: var(--font-heading, sans-serif);
+    font-size: 2.25rem;
+    font-weight: 800;
+    margin: 2px 0 14px 0;
+    line-height: 1.1;
+}
+
+.report-stat-pills {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+}
+
+.report-stat-pill {
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.78125rem;
+    font-weight: 700;
+}
+
+.report-stat-pill.passed {
+    background: rgba(52, 199, 89, 0.25);
+    color: #A3FFA8;
+}
+
+.report-stat-pill.failed {
+    background: rgba(255, 59, 48, 0.25);
+    color: #FFB3AE;
+}
+
+/* Category Diagnostic Breakdown Accordion */
+.report-breakdown-section {
+    margin-top: 14px;
+}
+
+.report-breakdown-title {
+    font-size: 0.9375rem;
+    font-weight: 700;
+    color: #1C1C1E;
+    margin-bottom: 8px;
+}
+
+.report-cat-accordion {
+    border: 1px solid #E5E5EA;
+    border-radius: 14px;
+    margin-bottom: 8px;
+    overflow: hidden;
+}
+
+.report-cat-summary-btn {
+    width: 100%;
+    padding: 12px 14px;
+    background: #FAFAFC;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    color: #1C1C1E;
+}
+
+.report-cat-summary-btn span.counters {
+    font-size: 0.71875rem;
+    color: #636366;
+}
+
+.report-cat-details {
+    display: none;
+    padding: 10px 14px;
+    border-top: 1px solid #E5E5EA;
+    background: #FFFFFF;
+}
+
+.report-cat-accordion.open .report-cat-details {
+    display: block;
+}
+
+.report-test-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.78125rem;
+    padding: 6px 0;
+    border-bottom: 1px solid #F2F2F7;
+}
+
+.report-test-row:last-child {
+    border-bottom: none;
+}
+
+.status-badge {
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 0.6875rem;
+    font-weight: 700;
+}
+
+.status-badge.pass {
+    background: #E8F5E9;
+    color: #1E8E3E;
+}
+
+.status-badge.fail {
+    background: #FFEBEE;
+    color: #D32F2F;
+}
+
+/* Lead Capture Card */
+.lead-capture-card {
+    background: #FFFFFF;
+    border: 1.5px solid #E5E5EA;
+    border-radius: 18px;
+    padding: 18px 16px;
+    margin-top: 14px;
+}
+
+.lead-form-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.lead-input-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.lead-label {
+    font-size: 0.78125rem;
+    font-weight: 700;
+    color: #3A3A3C;
+}
+
+.lead-input {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1.5px solid #E5E5EA;
+    border-radius: 10px;
+    font-size: 0.84375rem;
+    color: #1C1C1E;
+    box-sizing: border-box;
+    transition: border-color 0.2s ease;
+}
+
+.lead-input:focus {
+    outline: none;
+    border-color: #0071E3;
+}
+
+/* App Footer Actions */
+.smart-app-footer {
+    padding: 14px 20px 18px 20px;
+    background: #FAFAFC;
+    border-top: 1px solid var(--color-border, #E5E5EA);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-shrink: 0;
+}
+
+.btn-nav-back {
+    padding: 11px 18px;
+    border-radius: 12px;
+    background: #E5E5EA;
+    color: #1C1C1E;
+    font-size: 0.84375rem;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-nav-back:hover {
+    background: #D1D1D6;
+}
+
+.btn-nav-next {
+    flex: 1;
+    padding: 12px 20px;
+    border-radius: 12px;
+    background: #0071E3;
+    color: #FFFFFF;
+    font-size: 0.875rem;
+    font-weight: 700;
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    transition: all 0.2s ease;
+}
+
+.btn-nav-next:hover {
+    background: #005BB5;
+    box-shadow: 0 4px 14px rgba(0, 113, 227, 0.25);
+}
+
+/* Mobile Optimizations */
+@media (max-width: 640px) {
+    .smart-app-overlay {
+        padding: 0;
+    }
+
+    .smart-app-container {
+        height: 100vh;
+        max-height: 100vh;
+        border-radius: 0;
+    }
+
+    .smart-app-viewport {
+        padding: 14px 16px;
+    }
+
+    .device-select-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .report-hero-price {
+        font-size: 1.875rem;
+    }
+}

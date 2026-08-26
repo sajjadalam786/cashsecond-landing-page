@@ -600,6 +600,52 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // ============================================================
+    // 4B. iPHONE MODELS SHOWCASE STRIP CONTROLLER
+    // ============================================================
+    const showcaseTrack = document.getElementById('models-showcase-track');
+    const showcaseScrollPrev = document.getElementById('showcase-scroll-prev');
+    const showcaseScrollNext = document.getElementById('showcase-scroll-next');
+    const showcaseCards = document.querySelectorAll('.showcase-model-card');
+
+    if (showcaseTrack) {
+        if (showcaseScrollPrev) {
+            showcaseScrollPrev.addEventListener('click', () => {
+                showcaseTrack.scrollBy({ left: -320, behavior: 'smooth' });
+            });
+        }
+        if (showcaseScrollNext) {
+            showcaseScrollNext.addEventListener('click', () => {
+                showcaseTrack.scrollBy({ left: 320, behavior: 'smooth' });
+            });
+        }
+    }
+
+    showcaseCards.forEach(card => {
+        const selectShowcaseModel = (e) => {
+            e.preventDefault();
+            const name = card.getAttribute('data-name');
+            const id = card.getAttribute('data-id');
+            const image = card.getAttribute('data-image');
+
+            if (name && typeof startValuationWithModel === 'function') {
+                startValuationWithModel(name, id, image);
+                const valSec = document.getElementById('valuation');
+                if (valSec) {
+                    valSec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }
+        };
+
+        card.addEventListener('click', selectShowcaseModel);
+        card.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                selectShowcaseModel(e);
+            }
+        });
+    });
+
+    // ============================================================
     // 5. VALUATION WIZARD STEP NAVIGATION
     // ============================================================
     const stepNodes = document.querySelectorAll('.step-node');
@@ -1598,5 +1644,388 @@ document.addEventListener('DOMContentLoaded', () => {
                 openMultiStepPopup(false);
             }
         }, 25000);
+    }
+
+    // ============================================================
+    // FREE CONSULTATION MODAL & INTERACTIVE MAP PREVIEW
+    // ============================================================
+    const mapTrigger = document.getElementById('contact-map-trigger');
+    const consultModal = document.getElementById('consultationModal');
+    const consultBackdrop = document.getElementById('consultModalBackdrop');
+    const consultCloseBtn = document.getElementById('consultModalCloseBtn');
+    const consultForm = document.getElementById('consultation-lead-form');
+    const consultSubmitBtn = document.getElementById('consult-submit-btn');
+    const consultStatus = document.getElementById('consult-form-status');
+
+    function openConsultationModal() {
+        if (!consultModal) return;
+        consultModal.classList.add('active');
+        consultModal.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+        
+        if (consultStatus) {
+            consultStatus.style.display = 'none';
+            consultStatus.innerHTML = '';
+        }
+        
+        setTimeout(() => {
+            const firstInput = document.getElementById('consult_full_name');
+            if (firstInput) firstInput.focus();
+        }, 100);
+    }
+
+    function closeConsultationModal() {
+        if (!consultModal) return;
+        consultModal.classList.remove('active');
+        consultModal.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+    }
+
+    if (mapTrigger) {
+        mapTrigger.addEventListener('click', (e) => {
+            e.preventDefault();
+            openConsultationModal();
+        });
+
+        mapTrigger.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                openConsultationModal();
+            }
+        });
+    }
+
+    if (consultCloseBtn) {
+        consultCloseBtn.addEventListener('click', closeConsultationModal);
+    }
+
+    if (consultBackdrop) {
+        consultBackdrop.addEventListener('click', closeConsultationModal);
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && consultModal && consultModal.classList.contains('active')) {
+            closeConsultationModal();
+        }
+    });
+
+    if (consultForm) {
+        consultForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const errName = document.getElementById('err_consult_name');
+            const errPhone = document.getElementById('err_consult_phone');
+            const errEmail = document.getElementById('err_consult_email');
+            const errProblem = document.getElementById('err_consult_problem');
+            
+            if (errName) errName.textContent = '';
+            if (errPhone) errPhone.textContent = '';
+            if (errEmail) errEmail.textContent = '';
+            if (errProblem) errProblem.textContent = '';
+            if (consultStatus) {
+                consultStatus.style.display = 'none';
+                consultStatus.innerHTML = '';
+            }
+
+            const nameInput = document.getElementById('consult_full_name');
+            const phoneInput = document.getElementById('consult_phone_number');
+            const emailInput = document.getElementById('consult_email');
+            const problemInput = document.getElementById('consult_problem');
+
+            const nameVal = nameInput ? nameInput.value.trim() : '';
+            const phoneVal = phoneInput ? phoneInput.value.trim() : '';
+            const emailVal = emailInput ? emailInput.value.trim() : '';
+            const problemVal = problemInput ? problemInput.value.trim() : '';
+
+            let hasError = false;
+
+            if (nameVal.length < 2) {
+                if (errName) errName.textContent = 'Please enter your full name (at least 2 characters).';
+                if (!hasError && nameInput) nameInput.focus();
+                hasError = true;
+            }
+
+            const cleanDigits = phoneVal.replace(/[^0-9]/g, '');
+            const indianPhoneRegex = /^[6-9]\d{9}$/;
+            if (!indianPhoneRegex.test(cleanDigits)) {
+                if (errPhone) errPhone.textContent = 'Please enter a valid 10-digit mobile number.';
+                if (!hasError && phoneInput) phoneInput.focus();
+                hasError = true;
+            }
+
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(emailVal)) {
+                if (errEmail) errEmail.textContent = 'Please enter a valid email address.';
+                if (!hasError && emailInput) emailInput.focus();
+                hasError = true;
+            }
+
+            if (problemVal.length < 3) {
+                if (errProblem) errProblem.textContent = 'Please describe your problem or enquiry.';
+                if (!hasError && problemInput) problemInput.focus();
+                hasError = true;
+            }
+
+            if (hasError) return;
+
+            const formData = new FormData(consultForm);
+            if (consultSubmitBtn) {
+                consultSubmitBtn.disabled = true;
+                consultSubmitBtn.innerHTML = '<span>Submitting Request...</span>';
+            }
+
+            try {
+                const response = await fetch('forms/consultation.php', {
+                    method: 'POST',
+                    body: formData,
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                });
+
+                const result = await response.json();
+
+                if (response.ok && result.status === 'success') {
+                    if (consultStatus) {
+                        consultStatus.className = 'form-status-alert alert-success';
+                        consultStatus.style.display = 'block';
+                        consultStatus.style.backgroundColor = '#E8F5E9';
+                        consultStatus.style.color = '#1E8E3E';
+                        consultStatus.style.border = '1px solid #A5D6A7';
+                        consultStatus.innerHTML = `<strong>✓ Request Submitted!</strong><br>${result.message || 'Thank you! Our team will contact you shortly.'}`;
+                    }
+                    consultForm.reset();
+                    if (consultSubmitBtn) {
+                        consultSubmitBtn.innerHTML = '<span>✓ Request Sent</span>';
+                    }
+                    setTimeout(() => {
+                        closeConsultationModal();
+                        if (consultSubmitBtn) {
+                            consultSubmitBtn.disabled = false;
+                            consultSubmitBtn.innerHTML = '<span>Get Free Consultation &rarr;</span>';
+                        }
+                    }, 3500);
+                } else {
+                    if (consultStatus) {
+                        consultStatus.className = 'form-status-alert alert-danger';
+                        consultStatus.style.display = 'block';
+                        consultStatus.style.backgroundColor = '#FFEBEE';
+                        consultStatus.style.color = '#E53935';
+                        consultStatus.style.border = '1px solid #FFCDD2';
+                        consultStatus.innerHTML = `<strong>Submission Error:</strong> ${result.message || 'Please check your inputs and try again.'}`;
+                    }
+                    if (consultSubmitBtn) {
+                        consultSubmitBtn.disabled = false;
+                        consultSubmitBtn.innerHTML = '<span>Get Free Consultation &rarr;</span>';
+                    }
+                }
+            } catch (err) {
+                if (consultStatus) {
+                    consultStatus.className = 'form-status-alert alert-danger';
+                    consultStatus.style.display = 'block';
+                    consultStatus.style.backgroundColor = '#FFEBEE';
+                    consultStatus.style.color = '#E53935';
+                    consultStatus.style.border = '1px solid #FFCDD2';
+                    consultStatus.innerHTML = '<strong>Connection Error:</strong> Unable to submit form. Please try again.';
+                }
+                if (consultSubmitBtn) {
+                    consultSubmitBtn.disabled = false;
+                    consultSubmitBtn.innerHTML = '<span>Get Free Consultation &rarr;</span>';
+                }
+            }
+        });
+    }
+
+    // ============================================================
+    // 19. COMPACT SMART EXCHANGE / DIAGNOSTIC ENGINE CONTROLLER
+    // ============================================================
+    const openSmartExBtn = document.getElementById('openSmartExchangeBtn');
+    const smartExModal = document.getElementById('smartExchangeModal');
+    const smartExBackdrop = document.getElementById('smartExchangeBackdrop');
+    const smartExCloseBtn = document.getElementById('smartExchangeCloseBtn');
+    const smartExModelSelect = document.getElementById('smartExchangeModelSelect');
+    const smartExDeviceName = document.getElementById('smartExchangeDeviceName');
+    const diagReportModelName = document.getElementById('diagReportModelName');
+    const diagReportEstimatedVal = document.getElementById('diagReportEstimatedVal');
+    const totalPassCountElem = document.getElementById('totalPassCount');
+    const totalFailCountElem = document.getElementById('totalFailCount');
+    const diagRequestPickupBtn = document.getElementById('diagRequestPickupBtn');
+    const diagWhatsAppBtn = document.getElementById('diagWhatsAppBtn');
+
+    function openSmartExchangeModal() {
+        if (!smartExModal) return;
+        smartExModal.classList.add('active');
+        smartExModal.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+        recalculateDiagnostics();
+    }
+
+    function closeSmartExchangeModal() {
+        if (!smartExModal) return;
+        smartExModal.classList.remove('active');
+        smartExModal.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+    }
+
+    if (openSmartExBtn) {
+        openSmartExBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            openSmartExchangeModal();
+        });
+    }
+
+    if (smartExCloseBtn) {
+        smartExCloseBtn.addEventListener('click', closeSmartExchangeModal);
+    }
+
+    if (smartExBackdrop) {
+        smartExBackdrop.addEventListener('click', closeSmartExchangeModal);
+    }
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && smartExModal && smartExModal.classList.contains('active')) {
+            closeSmartExchangeModal();
+        }
+    });
+
+    // Accordion Category Header Toggles
+    const diagCatHeaders = document.querySelectorAll('.diag-cat-header');
+    diagCatHeaders.forEach(header => {
+        header.addEventListener('click', (e) => {
+            e.preventDefault();
+            const card = header.closest('.diag-cat-card');
+            if (card) {
+                const isActive = card.classList.contains('active');
+                card.classList.toggle('active', !isActive);
+                header.setAttribute('aria-expanded', String(!isActive));
+            }
+        });
+    });
+
+    // Toggle individual test items
+    const diagTestRows = document.querySelectorAll('.diag-test-row');
+    diagTestRows.forEach(row => {
+        const toggleBtn = row.querySelector('.diag-toggle-btn');
+        if (toggleBtn) {
+            toggleBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                toggleTestRow(row);
+            });
+        }
+        row.addEventListener('click', (e) => {
+            if (e.target.closest('.diag-toggle-btn')) return;
+            toggleTestRow(row);
+        });
+    });
+
+    function toggleTestRow(row) {
+        const isPass = row.getAttribute('data-status') === 'pass';
+        const newStatus = isPass ? 'fail' : 'pass';
+        row.setAttribute('data-status', newStatus);
+
+        const toggleBtn = row.querySelector('.diag-toggle-btn');
+        if (toggleBtn) {
+            toggleBtn.className = `diag-toggle-btn ${newStatus}`;
+            const indicator = toggleBtn.querySelector('.diag-check-indicator');
+            if (indicator) {
+                indicator.textContent = (newStatus === 'pass') ? '✓' : '✕';
+            }
+        }
+
+        recalculateDiagnostics();
+    }
+
+    function recalculateDiagnostics() {
+        let totalPass = 0;
+        let totalFail = 0;
+        let totalPenalty = 0;
+
+        const categories = document.querySelectorAll('.diag-cat-card');
+        categories.forEach(cat => {
+            const catType = cat.getAttribute('data-category');
+            const rows = cat.querySelectorAll('.diag-test-row');
+            let catPass = 0;
+            let catFail = 0;
+
+            rows.forEach(r => {
+                const status = r.getAttribute('data-status');
+                const penalty = parseInt(r.getAttribute('data-penalty') || '1000', 10);
+                if (status === 'pass') {
+                    catPass++;
+                    totalPass++;
+                } else {
+                    catFail++;
+                    totalFail++;
+                    totalPenalty += penalty;
+                }
+            });
+
+            const pill = document.getElementById(`stat-pill-${catType}`);
+            if (pill) {
+                pill.innerHTML = `<span class="stat-pass">${catPass} Passed</span> | <span class="stat-fail">${catFail} Failed</span>`;
+            }
+        });
+
+        if (totalPassCountElem) totalPassCountElem.textContent = totalPass;
+        if (totalFailCountElem) totalFailCountElem.textContent = totalFail;
+
+        let basePrice = 42500;
+        let modelLabel = 'iPhone 13 Pro • 128 GB';
+        let fullModelName = 'Apple iPhone 13 Pro';
+        let selectedStorage = '128GB';
+
+        if (smartExModelSelect) {
+            const selectedOpt = smartExModelSelect.options[smartExModelSelect.selectedIndex];
+            if (selectedOpt) {
+                const parts = selectedOpt.value.split('|');
+                fullModelName = parts[0];
+                basePrice = parseInt(parts[1] || '42500', 10);
+                modelLabel = selectedOpt.textContent;
+                selectedStorage = selectedOpt.getAttribute('data-storage') || '128GB';
+            }
+        }
+
+        const minVal = Math.round(basePrice * 0.35);
+        const finalEstVal = Math.max(minVal, basePrice - totalPenalty);
+        const formattedVal = '₹' + finalEstVal.toLocaleString('en-IN');
+
+        if (diagReportEstimatedVal) diagReportEstimatedVal.textContent = formattedVal;
+        if (smartExDeviceName) smartExDeviceName.textContent = `${fullModelName} (${selectedStorage})`;
+        if (diagReportModelName) diagReportModelName.textContent = modelLabel;
+
+        if (diagWhatsAppBtn) {
+            const waText = encodeURIComponent(`Hi CashSecond, I completed the Smart Exchange device check for my ${modelLabel} (${totalPass} Passed, ${totalFail} Failed). Estimated Exchange Value: ${formattedVal}. Please schedule free doorstep pickup.`);
+            diagWhatsAppBtn.href = `https://wa.me/918976332211?text=${waText}`;
+        }
+    }
+
+    if (smartExModelSelect) {
+        smartExModelSelect.addEventListener('change', () => {
+            recalculateDiagnostics();
+        });
+    }
+
+    if (diagRequestPickupBtn) {
+        diagRequestPickupBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            closeSmartExchangeModal();
+
+            setTimeout(() => {
+                if (typeof openConsultationModal === 'function') {
+                    openConsultationModal();
+                } else if (consultModal) {
+                    consultModal.classList.add('active');
+                    consultModal.setAttribute('aria-hidden', 'false');
+                    document.body.style.overflow = 'hidden';
+                }
+
+                const problemField = document.getElementById('consult_problem');
+                if (problemField) {
+                    const currentModel = smartExModelSelect ? smartExModelSelect.options[smartExModelSelect.selectedIndex].textContent : 'iPhone 13 Pro 128GB';
+                    const currentVal = diagReportEstimatedVal ? diagReportEstimatedVal.textContent : '₹42,500';
+                    const passes = totalPassCountElem ? totalPassCountElem.textContent : '17';
+                    const fails = totalFailCountElem ? totalFailCountElem.textContent : '2';
+                    problemField.value = `Smart Exchange Diagnostic: ${currentModel} | ${passes} Passed, ${fails} Failed | Estimated Exchange Value: ${currentVal}. Please arrange doorstep pickup.`;
+                }
+            }, 300);
+        });
     }
 });

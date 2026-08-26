@@ -114,6 +114,24 @@ $websiteSchema = [
         'query-input' => 'required name=search_term_string',
     ],
 ];
+
+// 5. Service Schema for iPhone Valuation, Buyback & Doorstep Resale (SEO / AEO)
+$serviceSchema = [
+    '@context'    => 'https://schema.org',
+    '@type'       => 'Service',
+    'name'        => 'Apple iPhone Buyback, Valuation & Doorstep Payout',
+    'serviceType' => 'iPhone Valuation, Resale, Doorstep Inspection, and Buyback',
+    'provider'    => [
+        '@type' => 'Organization',
+        'name'  => $business['name'],
+        'url'   => $site_url,
+    ],
+    'areaServed'  => [
+        '@type' => 'City',
+        'name'  => $business['city'] ?? 'Mumbai',
+    ],
+    'description' => 'Sell your iPhone online for the best price with instant iPhone valuation, free doorstep pickup, secure data wipe, and fast payment. Trusted iPhone buyers for used, second hand, and old Apple iPhones in Mumbai.',
+];
 ?>
 
 <!-- JSON-LD Structured Data for LocalBusiness -->
@@ -135,3 +153,9 @@ $websiteSchema = [
 <script type="application/ld+json">
 <?= json_encode($websiteSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT); ?>
 </script>
+
+<!-- JSON-LD Structured Data for Service (SEO / AEO) -->
+<script type="application/ld+json">
+<?= json_encode($serviceSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT); ?>
+</script>
+

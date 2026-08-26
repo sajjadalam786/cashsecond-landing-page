@@ -16,7 +16,7 @@ $current_year = date('Y');
             <!-- Brand & Location -->
             <div class="footer-brand-col">
                 <a href="#top" class="footer-brand-logo" aria-label="CashSecond Home">
-                    <img src="assets/images/cashsecond-logo.png" alt="CashSecond" class="footer-logo-img" width="120" height="40" loading="lazy">
+                    <img src="assets/images/cashsecond-logo.png" alt="CashSecond - Best Value For Your iPhone" class="footer-logo-img" width="420" height="140" loading="lazy">
                 </a>
                 <p>Office 1307, 13th Floor, Arcadia Building, NCPA Marg, Nariman Point, Mumbai – 400021</p>
                 <p style="margin-top: 4px;">Phone: <a href="tel:+918976332211" style="color: var(--color-cta);">+91 897633 2211</a> • Email: <a href="mailto:cashsecondofficial@gmail.com" style="color: var(--color-cta);">cashsecondofficial@gmail.com</a></p>
@@ -425,5 +425,7 @@ $current_year = date('Y');
 
     <!-- Main JavaScript Engine -->
     <script src="assets/js/script.js?v=12.0"></script>
+    <script src="assets/js/smart-exchange.js?v=1.0"></script>
+    <script src="assets/js/questionnaire.js?v=1.0"></script>
 </body>
 </html>
