@@ -38,10 +38,10 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-shrink: 0;
     background: #F2F2F7;
-    border-radius: 14px;
-    padding: 6px;
+    border-radius: 16px;
+    padding: 8px;
+    flex-shrink: 0;
 }
 
 .entry-phone-img {
@@ -151,32 +151,30 @@
 
     .btn-get-exact-value {
         width: 100%;
-        text-align: center;
         justify-content: center;
-        padding: 13px 20px;
     }
 }
 
 /* ============================================================
-   QUESTIONNAIRE APPLICATION MODAL
+   QUESTIONNAIRE FULL-SCREEN MODAL OVERLAY & CONTAINER
    ============================================================ */
 .qn-app-overlay {
     position: fixed;
     top: 0;
     left: 0;
-    width: 100vw;
-    height: 100vh;
-    z-index: 100000;
-    background-color: rgba(11, 13, 16, 0.78);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    right: 0;
+    bottom: 0;
+    background: rgba(11, 13, 16, 0.72);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    z-index: 999999;
     display: flex;
     align-items: center;
     justify-content: center;
+    padding: 16px;
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.28s ease, visibility 0.28s ease;
-    padding: 12px;
     box-sizing: border-box;
 }
 
@@ -186,16 +184,16 @@
 }
 
 .qn-app-modal {
-    width: 100%;
-    max-width: 640px;
-    height: 92vh;
-    max-height: 840px;
     background: #FFFFFF;
-    border: 1px solid var(--color-border, #E5E5EA);
-    border-radius: 24px;
-    box-shadow: 0 28px 70px rgba(0, 0, 0, 0.32);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 26px;
+    width: 100%;
+    max-width: 580px;
+    height: 90vh;
+    max-height: 720px;
     display: flex;
     flex-direction: column;
+    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.28);
     overflow: hidden;
     position: relative;
     transform: scale(0.96) translateY(12px);
@@ -207,7 +205,7 @@
     transform: scale(1) translateY(0);
 }
 
-/* Questionnaire Header */
+/* Header */
 .qn-app-header {
     padding: 16px 20px 12px 20px;
     background: #FAFAFC;
@@ -253,7 +251,7 @@
     transform: scale(1.08);
 }
 
-/* Progress Track & Step Indicators */
+/* Progress Track */
 .qn-progress-track {
     width: 100%;
     height: 5px;
@@ -266,7 +264,7 @@
 .qn-progress-fill {
     height: 100%;
     background: linear-gradient(90deg, #0071E3, #34C759);
-    width: 6%;
+    width: 8%;
     transition: width 0.3s ease;
 }
 
@@ -287,7 +285,7 @@
     white-space: nowrap;
 }
 
-/* Questionnaire Body Viewport */
+/* Body Viewport */
 .qn-app-body {
     flex: 1;
     overflow-y: auto;
@@ -297,11 +295,163 @@
     box-sizing: border-box;
 }
 
-/* Question Slide Animation */
+/* ============================================================
+   STEP 0: SEARCH BAR + iPHONE MODEL LIST
+   ============================================================ */
+.qn-model-select-step {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    animation: qnSlideIn 0.25s ease-out;
+}
+
+.qn-search-header-box {
+    margin-bottom: 14px;
+}
+
+.qn-search-input-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+    margin-top: 12px;
+}
+
+.qn-search-icon {
+    position: absolute;
+    left: 14px;
+    color: #8E8E93;
+    pointer-events: none;
+}
+
+.qn-model-search-field {
+    width: 100%;
+    padding: 13px 40px 13px 44px;
+    background: #F2F2F7;
+    border: 1.5px solid #E5E5EA;
+    border-radius: 14px;
+    font-size: 0.9375rem;
+    color: #1C1C1E;
+    outline: none;
+    box-sizing: border-box;
+    transition: all 0.2s ease;
+}
+
+.qn-model-search-field:focus {
+    background: #FFFFFF;
+    border-color: #0071E3;
+    box-shadow: 0 4px 16px rgba(0, 113, 227, 0.12);
+}
+
+.qn-search-clear-btn {
+    position: absolute;
+    right: 12px;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: #D1D1D6;
+    border: none;
+    color: #48484A;
+    font-size: 1rem;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.qn-models-grid-scroll {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    overflow-y: auto;
+    padding-right: 2px;
+    max-height: 440px;
+}
+
+.qn-model-pick-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 14px;
+    background: #FFFFFF;
+    border: 1.5px solid #E5E5EA;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.25, 0.1, 0.25, 1);
+    box-sizing: border-box;
+}
+
+.qn-model-pick-card:hover {
+    border-color: #0071E3;
+    background: #F9FBFF;
+    transform: translateX(4px);
+    box-shadow: 0 4px 14px rgba(0, 113, 227, 0.08);
+}
+
+.qn-model-pick-card.selected {
+    border-color: #0071E3;
+    background: #F0F6FE;
+}
+
+.qn-model-pick-img-wrap {
+    width: 44px;
+    height: 52px;
+    background: #F2F2F7;
+    border-radius: 10px;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-right: 14px;
+}
+
+.qn-model-pick-img-wrap img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.qn-model-pick-details {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.qn-model-pick-name {
+    font-size: 0.9375rem;
+    font-weight: 700;
+    color: #1C1C1E;
+    margin: 0;
+}
+
+.qn-model-pick-price {
+    font-size: 0.78125rem;
+    font-weight: 700;
+    color: #0071E3;
+}
+
+.qn-model-pick-arrow {
+    color: #8E8E93;
+    font-size: 1.1rem;
+    font-weight: 700;
+    padding-left: 8px;
+    transition: transform 0.2s ease;
+}
+
+.qn-model-pick-card:hover .qn-model-pick-arrow {
+    transform: translateX(3px);
+    color: #0071E3;
+}
+
+/* ============================================================
+   STEPS 1-12: QUESTION CARD STYLES
+   ============================================================ */
 .qn-question-view {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: 14px;
     animation: qnSlideIn 0.25s ease-out;
 }
 
@@ -313,33 +463,32 @@
 .qn-question-category-tag {
     font-size: 0.71875rem;
     font-weight: 700;
-    color: var(--color-cta, #0071E3);
+    color: #0071E3;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin-bottom: 2px;
+    letter-spacing: 0.06em;
 }
 
 .qn-question-heading {
     font-family: var(--font-heading, -apple-system, sans-serif);
-    font-size: 1.35rem;
+    font-size: 1.3rem;
     font-weight: 800;
     color: #1C1C1E;
-    margin: 0 0 6px 0;
+    margin: 0;
     line-height: 1.3;
 }
 
 .qn-question-desc {
     font-size: 0.84375rem;
     color: #636366;
-    margin: 0 0 14px 0;
+    margin: 0;
     line-height: 1.45;
 }
 
-/* Large Tactile YES / NO Buttons */
+/* Tactile YES / NO Grid */
 .qn-yes-no-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 14px;
+    gap: 12px;
     margin-top: 8px;
 }
 
@@ -347,7 +496,7 @@
     background: #FFFFFF;
     border: 2px solid #E5E5EA;
     border-radius: 18px;
-    padding: 20px 16px;
+    padding: 22px 16px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -360,15 +509,15 @@
 }
 
 .qn-choice-card:hover {
-    border-color: var(--color-cta, #0071E3);
-    background: rgba(0, 113, 227, 0.02);
+    border-color: #0071E3;
+    background: #F9FBFF;
     transform: translateY(-2px);
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
 }
 
 .qn-choice-card.selected {
-    border-color: var(--color-cta, #0071E3);
-    background: rgba(0, 113, 227, 0.06);
+    border-color: #0071E3;
+    background: #F0F6FE;
     box-shadow: 0 4px 16px rgba(0, 113, 227, 0.15);
 }
 
@@ -383,24 +532,18 @@
 }
 
 .qn-choice-icon {
-    font-size: 1.75rem;
+    font-size: 1.6rem;
     line-height: 1;
 }
 
 .qn-choice-title {
-    font-size: 1.0625rem;
+    font-size: 1rem;
     font-weight: 700;
     color: #1C1C1E;
     margin: 0;
 }
 
-.qn-choice-subtitle {
-    font-size: 0.75rem;
-    color: #8E8E93;
-    margin: 0;
-}
-
-/* Multi-Option Option Card Grid (e.g. Storage, Battery, Presets) */
+/* Storage Options Grid */
 .qn-options-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
@@ -412,7 +555,7 @@
     background: #FFFFFF;
     border: 1.5px solid #E5E5EA;
     border-radius: 14px;
-    padding: 14px 12px;
+    padding: 16px 12px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -423,19 +566,18 @@
 }
 
 .qn-option-pill-card:hover {
-    border-color: var(--color-cta, #0071E3);
+    border-color: #0071E3;
+    transform: translateY(-1px);
 }
 
 .qn-option-pill-card.selected {
-    border-color: var(--color-cta, #0071E3);
+    border-color: #0071E3;
     background: rgba(0, 113, 227, 0.06);
-    font-weight: 700;
-    color: var(--color-cta, #0071E3);
 }
 
 .qn-option-title {
-    font-size: 0.9375rem;
-    font-weight: 700;
+    font-size: 1rem;
+    font-weight: 800;
     color: #1C1C1E;
 }
 
@@ -445,249 +587,288 @@
     margin-top: 2px;
 }
 
-/* Multi-Select Replaced Component Chips */
-.qn-chips-group {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 10px;
-}
-
-.qn-chip-btn {
-    padding: 8px 16px;
-    border-radius: 20px;
-    border: 1.5px solid #E5E5EA;
-    background: #FFFFFF;
-    font-size: 0.8125rem;
-    font-weight: 600;
-    color: #3A3A3C;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.qn-chip-btn:hover {
-    border-color: var(--color-cta, #0071E3);
-}
-
-.qn-chip-btn.selected {
-    background: #0071E3;
-    color: #FFFFFF;
-    border-color: #0071E3;
-}
-
 /* ============================================================
-   FINAL VALUATION RESULT VIEW (STEP 22)
+   STEP 13: CONTACT FORM & HIDDEN VALUE REVEAL
    ============================================================ */
-.qn-result-view {
+.qn-contact-form-step {
     display: flex;
     flex-direction: column;
     gap: 16px;
     animation: qnSlideIn 0.28s ease-out;
 }
 
-.qn-result-hero-card {
-    background: linear-gradient(135deg, #0071E3, #004DB3);
-    border-radius: 22px;
-    padding: 24px 20px;
+.qn-locked-valuation-box {
+    background: linear-gradient(135deg, #1C1C1E 0%, #2C2C2E 100%);
+    border-radius: 18px;
+    padding: 18px 20px;
     color: #FFFFFF;
-    text-align: center;
-    box-shadow: 0 14px 36px rgba(0, 113, 227, 0.3);
+    text-align: left;
 }
 
-.qn-result-eyebrow {
-    font-size: 0.71875rem;
+.qn-lock-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(52, 199, 89, 0.2);
+    color: #34C759;
+    font-size: 0.75rem;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.06em;
-    opacity: 0.85;
-    margin-bottom: 4px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    margin-bottom: 8px;
 }
 
-.qn-result-model-title {
-    font-size: 1.25rem;
+.qn-locked-device-name {
+    font-size: 1.2rem;
     font-weight: 800;
-    margin: 0 0 2px 0;
+    color: #FFFFFF;
+    margin: 0 0 4px 0;
 }
 
-.qn-result-variant-tag {
+.qn-locked-desc {
     font-size: 0.8125rem;
-    opacity: 0.85;
-    margin: 0 0 14px 0;
-}
-
-.qn-result-price-label {
-    font-size: 0.75rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    opacity: 0.8;
-}
-
-.qn-result-price-amount {
-    font-family: var(--font-heading, sans-serif);
-    font-size: 2.5rem;
-    font-weight: 800;
-    margin: 2px 0 6px 0;
-    line-height: 1.1;
-}
-
-.qn-result-basis-note {
-    font-size: 0.75rem;
-    opacity: 0.8;
+    color: #D1D1D6;
+    line-height: 1.45;
     margin: 0;
 }
 
-/* Status Chips Row */
-.qn-summary-chips-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    margin-top: 14px;
-    justify-content: center;
-}
-
-.qn-status-chip {
-    padding: 4px 10px;
-    border-radius: 12px;
-    font-size: 0.71875rem;
-    font-weight: 700;
-}
-
-.qn-status-chip.pass {
-    background: rgba(52, 199, 89, 0.22);
-    color: #A3FFA8;
-}
-
-.qn-status-chip.fail {
-    background: rgba(255, 59, 48, 0.22);
-    color: #FFB3AE;
-}
-
-/* Expandable Diagnostic Audit Report */
-.qn-audit-accordion {
-    background: #FAFAFC;
-    border: 1px solid #E5E5EA;
-    border-radius: 16px;
-    overflow: hidden;
-}
-
-.qn-audit-toggle-btn {
-    width: 100%;
-    padding: 12px 16px;
-    background: #FAFAFC;
-    border: none;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    cursor: pointer;
-    font-size: 0.84375rem;
-    font-weight: 700;
-    color: #1C1C1E;
-}
-
-.qn-audit-details-panel {
-    display: none;
-    padding: 12px 16px;
-    border-top: 1px solid #E5E5EA;
-    background: #FFFFFF;
-    max-height: 240px;
-    overflow-y: auto;
-}
-
-.qn-audit-accordion.open .qn-audit-details-panel {
-    display: block;
-}
-
-.qn-audit-item-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 6px 0;
-    font-size: 0.78125rem;
-    border-bottom: 1px solid #F2F2F7;
-}
-
-.qn-audit-item-row:last-child {
-    border-bottom: none;
-}
-
-.qn-badge-tag {
-    padding: 2px 8px;
-    border-radius: 8px;
-    font-size: 0.6875rem;
-    font-weight: 700;
-}
-
-.qn-badge-tag.pass {
-    background: #E8F5E9;
-    color: #1E8E3E;
-}
-
-.qn-badge-tag.fail {
-    background: #FFEBEE;
-    color: #D32F2F;
-}
-
-/* ============================================================
-   CUSTOMER PICKUP DETAILS FORM (STEP 23)
-   ============================================================ */
-.qn-pickup-form-card {
+.qn-contact-card {
     background: #FFFFFF;
     border: 1.5px solid #E5E5EA;
     border-radius: 18px;
-    padding: 18px 16px;
+    padding: 20px 18px;
     box-sizing: border-box;
-}
-
-.qn-form-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
 }
 
 .qn-form-group {
     display: flex;
     flex-direction: column;
     gap: 4px;
+    margin-bottom: 12px;
 }
 
 .qn-form-label {
-    font-size: 0.78125rem;
+    font-size: 0.8125rem;
     font-weight: 700;
-    color: #3A3A3C;
+    color: #1C1C1E;
+}
+
+.qn-form-label .req {
+    color: #FF3B30;
 }
 
 .qn-form-input {
     width: 100%;
-    padding: 10px 12px;
+    padding: 12px 14px;
     border: 1.5px solid #E5E5EA;
-    border-radius: 10px;
-    font-size: 0.84375rem;
+    border-radius: 12px;
+    font-size: 0.9375rem;
     color: #1C1C1E;
     box-sizing: border-box;
-    transition: border-color 0.2s ease;
+    transition: all 0.2s ease;
 }
 
 .qn-form-input:focus {
     outline: none;
-    border-color: var(--color-cta, #0071E3);
+    border-color: #0071E3;
+    box-shadow: 0 4px 14px rgba(0, 113, 227, 0.12);
 }
 
-.qn-form-row-2 {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+.qn-phone-input-wrap {
+    display: flex;
+    align-items: center;
+    border: 1.5px solid #E5E5EA;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: border-color 0.2s ease;
+}
+
+.qn-phone-input-wrap:focus-within {
+    border-color: #0071E3;
+    box-shadow: 0 4px 14px rgba(0, 113, 227, 0.12);
+}
+
+.qn-phone-prefix {
+    padding: 12px 12px 12px 14px;
+    background: #F2F2F7;
+    font-size: 0.9375rem;
+    font-weight: 700;
+    color: #636366;
+    border-right: 1.5px solid #E5E5EA;
+}
+
+.qn-input-with-prefix {
+    border: none !important;
+    border-radius: 0 !important;
+    padding-left: 12px !important;
+}
+
+.qn-alert-box {
+    background: #FFEBEE;
+    color: #D32F2F;
+    border: 1px solid #FFCDD2;
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-size: 0.8125rem;
+    margin-bottom: 12px;
+}
+
+.btn-qn-reveal-submit {
+    width: 100%;
+    padding: 14px 20px;
+    background: #0071E3;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 14px;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    box-shadow: 0 6px 20px rgba(0, 113, 227, 0.35);
+    transition: all 0.22s ease;
+}
+
+.btn-qn-reveal-submit:hover {
+    background: #005BB5;
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(0, 113, 227, 0.45);
+}
+
+.btn-qn-reveal-submit .btn-iphone-thumb {
+    height: 28px;
+    width: auto;
+    margin-left: 6px;
+}
+
+.qn-form-trust-notes {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     gap: 10px;
-}
-
-.qn-disclaimer-note {
     font-size: 0.71875rem;
     color: #8E8E93;
-    line-height: 1.4;
-    margin: 10px 0 0 0;
-    text-align: center;
+    margin-top: 14px;
 }
 
-/* Questionnaire Footer Navigation */
+/* Value Unlocked Reveal Screen */
+.qn-revealed-view {
+    text-align: center;
+    padding: 20px 0;
+    animation: qnPopIn 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes qnPopIn {
+    from { transform: scale(0.85); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.qn-reveal-celebration-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #E8F5E9;
+    color: #1E8E3E;
+    font-size: 0.875rem;
+    font-weight: 800;
+    padding: 6px 16px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+}
+
+.qn-revealed-price-card {
+    background: linear-gradient(135deg, #0071E3, #004DB3);
+    border-radius: 22px;
+    padding: 24px 20px;
+    color: #FFFFFF;
+    box-shadow: 0 16px 40px rgba(0, 113, 227, 0.35);
+    margin-bottom: 20px;
+}
+
+.qn-revealed-device-label {
+    font-size: 0.875rem;
+    opacity: 0.9;
+    display: block;
+    margin-bottom: 4px;
+}
+
+.qn-revealed-amount-title {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    opacity: 0.85;
+}
+
+/* Blurred Price Wrap & Lock Pill Overlay */
+.qn-blurred-price-wrap {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 12px 0 14px 0;
+    width: 100%;
+}
+
+.qn-blurred-price-number {
+    font-family: var(--font-heading, sans-serif);
+    font-size: 2.8rem;
+    font-weight: 800;
+    color: #FFFFFF;
+    line-height: 1;
+    filter: blur(10px);
+    user-select: none;
+    -webkit-user-select: none;
+    opacity: 0.65;
+    letter-spacing: 3px;
+}
+
+.qn-blur-lock-pill {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #FFFFFF;
+    color: #0071E3;
+    font-size: 0.84375rem;
+    font-weight: 800;
+    padding: 8px 18px;
+    border-radius: 30px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+}
+
+.qn-revealed-note {
+    font-size: 0.78125rem;
+    opacity: 0.9;
+    margin: 0;
+}
+
+.qn-redirect-status-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: #0071E3;
+}
+
+.qn-spinner-pulse {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #0071E3;
+    animation: pulse 1s infinite;
+}
+
+/* Footer Navigation */
 .qn-app-footer {
     padding: 14px 20px 18px 20px;
     background: #FAFAFC;
@@ -753,11 +934,7 @@
         padding: 16px 14px;
     }
 
-    .qn-form-row-2 {
-        grid-template-columns: 1fr;
-    }
-
-    .qn-result-price-amount {
-        font-size: 2.125rem;
+    .qn-revealed-price-number {
+        font-size: 2.3rem;
     }
 }

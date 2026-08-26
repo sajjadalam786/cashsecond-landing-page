@@ -504,7 +504,7 @@ a:hover .btn-iphone-thumb {
     color: #FFFFFF;
 }
 
-/* Tablet & Mobile header overrides (mobile header stays clean) */
+/* Tablet & Mobile header overrides (mobile header center aligned logo) */
 @media (max-width: 991px) {
     .nav-menu,
     .header-cta-group {
@@ -513,18 +513,21 @@ a:hover .btn-iphone-thumb {
 
     .header-inner {
         padding: 12px 20px;
-        justify-content: flex-start;
+        justify-content: center;
+        text-align: center;
         min-height: auto;
     }
     
     .brand-logo {
-        margin: 0;
+        margin: 0 auto;
+        justify-content: center;
+        display: flex;
         max-width: 275px;
     }
 
     .brand-logo img,
     .brand-logo-img {
-        margin: 0;
+        margin: 0 auto;
         max-width: 275px;
         max-height: 85px;
         height: auto;
@@ -538,13 +541,18 @@ a:hover .btn-iphone-thumb {
     }
 
     .brand-logo {
+        margin: 0 auto;
+        justify-content: center;
+        display: flex;
         max-width: 215px;
     }
 
     .brand-logo img,
     .brand-logo-img {
+        margin: 0 auto;
         max-width: 215px;
         max-height: 70px;
+        height: auto;
     }
 }
 

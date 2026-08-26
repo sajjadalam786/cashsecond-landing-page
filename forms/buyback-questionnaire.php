@@ -59,8 +59,8 @@ date_default_timezone_set('Asia/Kolkata');
 $name        = isset($_POST['full_name']) ? htmlspecialchars(strip_tags(trim($_POST['full_name'])), ENT_QUOTES, 'UTF-8') : '';
 $phone       = isset($_POST['phone_number']) ? preg_replace('/[^0-9+]/', '', trim($_POST['phone_number'])) : '';
 $email       = isset($_POST['email']) ? filter_var(trim($_POST['email']), FILTER_SANITIZE_EMAIL) : '';
-$address     = isset($_POST['address']) ? htmlspecialchars(strip_tags(trim($_POST['address'])), ENT_QUOTES, 'UTF-8') : '';
-$pincode     = isset($_POST['pincode']) ? preg_replace('/[^0-9]/', '', trim($_POST['pincode'])) : '';
+$address     = isset($_POST['address']) && !empty(trim($_POST['address'])) ? htmlspecialchars(strip_tags(trim($_POST['address'])), ENT_QUOTES, 'UTF-8') : 'Mumbai (Doorstep Pickup)';
+$pincode     = isset($_POST['pincode']) && !empty(trim($_POST['pincode'])) ? preg_replace('/[^0-9]/', '', trim($_POST['pincode'])) : '400021';
 $pickup_date = isset($_POST['pickup_date']) ? htmlspecialchars(strip_tags(trim($_POST['pickup_date'])), ENT_QUOTES, 'UTF-8') : 'Today';
 $pickup_slot = isset($_POST['pickup_slot']) ? htmlspecialchars(strip_tags(trim($_POST['pickup_slot'])), ENT_QUOTES, 'UTF-8') : 'Express (Within 2 Hours)';
 
@@ -84,14 +84,6 @@ if (strlen($clean_digits) < 10 || strlen($clean_digits) > 13) {
 
 if (!empty($email) && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
     $errors['email'] = 'Please enter a valid email address.';
-}
-
-if (empty($address) || mb_strlen($address) < 4) {
-    $errors['address'] = 'Please enter your complete pickup address in Mumbai.';
-}
-
-if (empty($pincode) || strlen($pincode) !== 6) {
-    $errors['pincode'] = 'Please enter a valid 6-digit Mumbai pincode.';
 }
 
 if (!empty($errors)) {

@@ -72,52 +72,6 @@ usort($showcaseModels, function($a, $b) use ($orderMap) {
 require __DIR__ . '/includes/header.php';
 ?>
 
-<!-- ============================================================
-     TOP GLOBAL SEARCH BAR (BETWEEN HEADER & HERO BANNER)
-     ============================================================ -->
-<section class="top-search-section" id="top-search-bar" aria-label="Search iPhone Models">
-    <div class="container top-search-container">
-        <div class="top-search-wrapper" id="global-search-wrapper">
-            <div class="top-search-input-group">
-                <!-- Search Icon -->
-                <span class="top-search-icon" aria-hidden="true">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="11" cy="11" r="8"></circle>
-                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                    </svg>
-                </span>
-
-                <!-- Search Input Field -->
-                <input 
-                    type="search" 
-                    id="top-iphone-search-input" 
-                    class="top-search-input" 
-                    placeholder="Search iPhone Models" 
-                    autocomplete="off" 
-                    spellcheck="false"
-                    aria-label="Search iPhone Models"
-                    aria-expanded="false"
-                    aria-controls="top-search-autocomplete"
-                >
-
-                <!-- Clear Button -->
-                <button type="button" class="top-search-clear-btn" id="top-search-clear-btn" aria-label="Clear search" style="display: none;">
-                    &times;
-                </button>
-            </div>
-
-            <!-- Autocomplete Live Dropdown -->
-            <div class="top-search-dropdown" id="top-search-autocomplete" role="listbox" aria-label="Matching iPhone Models" style="display: none;">
-                <div class="top-search-results-list" id="top-search-results-list">
-                    <!-- Populated dynamically via JS from iPhone catalog -->
-                </div>
-                <div class="top-search-empty" id="top-search-empty-state" style="display: none;">
-                    <p>No iPhone model matching your search.</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
 
 <!-- ============================================================
      1. HERO SECTION — PREMIUM APPLE-INSPIRED PRODUCT PRESENTATION
@@ -651,71 +605,7 @@ require __DIR__ . '/includes/header.php';
 </section>
 
 
-<!-- ============================================================
-     FREE CONSULTATION MODAL / POPUP
-     ============================================================ -->
-<div class="consultation-modal-overlay" id="consultationModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="consultModalTitle">
-    <div class="consultation-modal-backdrop" id="consultModalBackdrop"></div>
-    <div class="consultation-modal-card">
-        <button type="button" class="consultation-modal-close-btn" id="consultModalCloseBtn" aria-label="Close consultation modal">&times;</button>
-        
-        <div class="consultation-modal-header text-center">
-            <span class="section-eyebrow">FREE EXPERT ASSISTANCE</span>
-            <h3 class="consultation-modal-title" id="consultModalTitle">Request Free Consultation</h3>
-            <p class="consultation-modal-subtitle">Fill in your details below and our team will get in touch with you shortly.</p>
-        </div>
 
-        <form id="consultation-lead-form" class="consultation-form" action="forms/consultation.php" method="POST" novalidate>
-            <!-- CSRF Protection -->
-            <input type="hidden" name="csrf_token" id="consult_csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token'] ?? '') ?>">
-            
-            <!-- Anti-Spam Honeypot -->
-            <div style="display:none !important;" aria-hidden="true">
-                <input type="text" name="website_hp" tabindex="-1" autocomplete="off">
-            </div>
-
-            <!-- Full Name -->
-            <div class="form-group">
-                <label for="consult_full_name" class="form-label">Full Name <span style="color:red;">*</span></label>
-                <input type="text" id="consult_full_name" name="full_name" class="form-control" placeholder="e.g. Rahul Sharma" required autocomplete="name">
-                <span class="field-error-msg" id="err_consult_name"></span>
-            </div>
-
-            <!-- WhatsApp / Phone Number -->
-            <div class="form-group">
-                <label for="consult_phone_number" class="form-label">WhatsApp / Phone Number <span style="color:red;">*</span></label>
-                <div class="phone-input-wrapper">
-                    <span class="phone-prefix">+91</span>
-                    <input type="tel" id="consult_phone_number" name="phone_number" class="form-control phone-input-field" placeholder="98200 12345" required autocomplete="tel" inputmode="tel" maxlength="10">
-                </div>
-                <span class="field-error-msg" id="err_consult_phone"></span>
-            </div>
-
-            <!-- Email Address -->
-            <div class="form-group">
-                <label for="consult_email" class="form-label">Email Address <span style="color:red;">*</span></label>
-                <input type="email" id="consult_email" name="email" class="form-control" placeholder="rahul@example.com" required autocomplete="email">
-                <span class="field-error-msg" id="err_consult_email"></span>
-            </div>
-
-            <!-- Describe Your Problem -->
-            <div class="form-group">
-                <label for="consult_problem" class="form-label">Describe Your Problem <span style="color:red;">*</span></label>
-                <textarea id="consult_problem" name="problem" class="form-control" rows="3" placeholder="Tell us about your iPhone model, condition, question, or valuation requirement..." required></textarea>
-                <span class="field-error-msg" id="err_consult_problem"></span>
-            </div>
-
-            <button type="submit" class="btn btn-primary btn-lg btn-full" id="consult-submit-btn">
-                <span>Get Free Consultation &rarr;</span>
-            </button>
-            
-            <p class="consult-trust-note">🔒 Fast response • 100% Free &amp; confidential • No obligation</p>
-
-            <!-- Status Alert Message -->
-            <div id="consult-form-status" class="form-status-alert" style="margin-top: 12px; display: none;"></div>
-        </form>
-    </div>
-</div>
 
 <!-- ============================================================
      COMPLETE PHONE BUYBACK QUESTIONNAIRE APPLICATION
