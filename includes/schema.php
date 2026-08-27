@@ -158,6 +158,73 @@ $breadcrumbSchema = [
         ],
     ],
 ];
+
+// 7. HowTo Schema for AEO & AI Engine Step-by-Step Direct Answers
+$howToSchema = [
+    '@context'      => 'https://schema.org',
+    '@type'         => 'HowTo',
+    'name'          => 'How to Sell Your Old iPhone Online with Free Doorstep Pickup',
+    'description'   => 'Follow these 3 simple steps to calculate your iPhone resale value, schedule a free Mumbai doorstep pickup, and receive spot payment.',
+    'totalTime'     => 'PT5M',
+    'estimatedCost' => [
+        '@type'    => 'MonetaryAmount',
+        'currency' => 'INR',
+        'value'    => '0',
+    ],
+    'supply' => [
+        [
+            '@type' => 'HowToSupply',
+            'name'  => 'Old or Used Apple iPhone',
+        ],
+    ],
+    'tool' => [
+        [
+            '@type' => 'HowToTool',
+            'name'  => 'CashSecond Online Valuation Calculator',
+        ],
+    ],
+    'step' => [
+        [
+            '@type'    => 'HowToStep',
+            'position' => 1,
+            'name'     => 'Select Your iPhone Model & Check Value',
+            'text'     => 'Choose your exact Apple iPhone model and storage capacity on the CashSecond valuation tool to see the estimated resale value.',
+            'url'      => $site_url . '/#valuation',
+        ],
+        [
+            '@type'    => 'HowToStep',
+            'position' => 2,
+            'name'     => 'Answer Condition Questions & Schedule Doorstep Pickup',
+            'text'     => 'Complete the short 32-point condition assessment and choose a convenient Mumbai doorstep pickup date and time slot.',
+            'url'      => $site_url . '/#valuation',
+        ],
+        [
+            '@type'    => 'HowToStep',
+            'position' => 3,
+            'name'     => '5-Minute Doorstep Diagnostic & Instant Spot Payment',
+            'text'     => 'Our verified technician inspects your device at your doorstep and provides instant payment via UPI, Bank Transfer, or Cash with a certified data wipe receipt.',
+            'url'      => $site_url . '/#how-it-works',
+        ],
+    ],
+];
+
+// 8. WebPage Schema with Speakable Specification for Voice Search & Answer Engines (AEO)
+$webPageSchema = [
+    '@context'    => 'https://schema.org',
+    '@type'       => 'WebPage',
+    '@id'         => $site_url . '/#webpage',
+    'url'         => $site_url,
+    'name'        => $config['seo']['meta_title'] ?? 'Sell Old iPhone Online | Free Mumbai Doorstep Pickup | CashSecond',
+    'description' => $config['seo']['meta_desc'] ?? 'Sell your iPhone online for the best price. Get instant valuation, free doorstep pickup across Mumbai, certified data wipe, and spot UPI / cash payment.',
+    'speakable'   => [
+        '@type'       => 'SpeakableSpecification',
+        'cssSelector' => ['.hero-main-title', '.hero-main-subtitle', '.faq-question-text', '.faq-content p'],
+    ],
+    'isPartOf' => [
+        '@type' => 'WebSite',
+        '@id'   => $site_url . '/#website',
+    ],
+];
 ?>
 
 <!-- JSON-LD Structured Data for LocalBusiness -->
@@ -168,6 +235,16 @@ $breadcrumbSchema = [
 <!-- JSON-LD Structured Data for FAQPage (AEO / Answer Engine Optimization) -->
 <script type="application/ld+json">
 <?= json_encode($faqSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT); ?>
+</script>
+
+<!-- JSON-LD Structured Data for HowTo (AEO / Step-by-Step AI Guidance) -->
+<script type="application/ld+json">
+<?= json_encode($howToSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT); ?>
+</script>
+
+<!-- JSON-LD Structured Data for WebPage with Speakable (Voice Search / Siri / Google Assistant) -->
+<script type="application/ld+json">
+<?= json_encode($webPageSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT); ?>
 </script>
 
 <!-- JSON-LD Structured Data for Supported iPhone Models ItemList -->
@@ -189,3 +266,4 @@ $breadcrumbSchema = [
 <script type="application/ld+json">
 <?= json_encode($breadcrumbSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT); ?>
 </script>
+
