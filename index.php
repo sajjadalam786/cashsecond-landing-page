@@ -476,26 +476,37 @@ require __DIR__ . '/includes/header.php';
 </div>
 
 <!-- ============================================================
-     7. PREMIUM 2-HOUR EXPRESS DOORSTEP COVERAGE (MUMBAI & NAVI MUMBAI)
+     7. EXPRESS DOORSTEP PICKUP COVERAGE (2-8 HOURS ACROSS FULL MUMBAI)
      ============================================================ -->
 <section class="section-container express-coverage-section" id="coverage">
     <div class="container">
         <div class="express-hero-bento">
             <!-- Left Column: Express Narrative & Speed Metrics -->
             <div class="express-hero-info">
+                <div class="express-live-pill">
+                    <span class="live-pulse-dot"></span>
+                    
+                    <h5 class="metric-val">For Mumbai Kar's</h5>
+                    
+                </div>
                 
-                <h2 class="express-hero-title">Need Instant Cash?<br><span class="gradient-text-amber">Doorstep Pickup in Under 2 Hours.</span></h2>
-                <p class="express-hero-desc">Selling your iPhone urgently? Our verified evaluation specialists are stationed across South Mumbai, Midtown, and Navi Mumbai hubs for rapid 120-minute doorstep arrival with instant spot payment.</p>
+                <h2 class="express-hero-title">Need Instant Cash Against Your Iphone?<br><span class="gradient-text-amber">Fastest Pickup in 2 to 8 Hours.</span></h2>
+                <p class="express-hero-desc">Resell your iPhone safely with a genuine, GST-verified brand. We offer priority <strong>under 2-hour express dispatch</strong> in major hubs and guaranteed <strong>under 8-hour same-day pickup across all Mumbai &amp; MMR</strong> with instant spot UPI or cash payment.</p>
                 
                 <div class="express-metric-strip">
                     <div class="express-metric-item">
-                        <div class="metric-val">&lt; 120m</div>
-                        <div class="metric-lbl">Express Arrival</div>
+                        <div class="metric-val">2 - 8 Hrs</div>
+                        <div class="metric-lbl">Full Mumbai Pickup</div>
                     </div>
                     <div class="metric-divider"></div>
                     <div class="express-metric-item">
-                        <div class="metric-val">₹0</div>
-                        <div class="metric-lbl">Doorstep Visit Fee</div>
+                        <div class="metric-val">GST Verified</div>
+                        <div class="metric-lbl">Genuine Brand</div>
+                    </div>
+                    <div class="metric-divider"></div>
+                    <div class="express-metric-item">
+                        <div class="metric-val">₹0 Fee</div>
+                        <div class="metric-lbl">Free Inspection</div>
                     </div>
                     <div class="metric-divider"></div>
                     <div class="express-metric-item">
@@ -506,11 +517,11 @@ require __DIR__ . '/includes/header.php';
 
                 <div class="express-cta-wrap">
                     <a href="#valuation" class="btn btn-primary start-exact-valuation-btn" aria-haspopup="dialog">
-                        <span>Book 2-Hour Express Pickup →</span>
+                        <span>Check iPhone Value &amp; Book Pickup →</span>
                     </a>
                     <div class="express-trust-note">
                         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#34C759" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
-                        <span>100% Free Inspection • Spot Payout • Certified Data Wipe</span>
+                        <span>Genuine GST Verified Brand • Spot Payment • Certified Data Destruction</span>
                     </div>
                 </div>
             </div>

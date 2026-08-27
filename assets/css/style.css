@@ -6891,7 +6891,13 @@ a:hover .btn-iphone-thumb {
     }
     .express-metric-strip {
         width: 100%;
-        justify-content: space-between;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        padding: 14px 16px;
+    }
+    .express-metric-strip .metric-divider {
+        display: none;
     }
     .express-cta-wrap .btn {
         width: 100%;
