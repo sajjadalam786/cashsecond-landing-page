@@ -6637,17 +6637,267 @@ a:hover .btn-iphone-thumb {
     flex-wrap: wrap;
 }
 
-@media (max-width: 600px) {
-    .thankyou-page-wrapper {
-        padding: 20px 0 36px 0;
+/* ============================================================
+   PREMIUM 2-HOUR EXPRESS DOORSTEP COVERAGE BENTO
+   ============================================================ */
+.express-coverage-section {
+    padding: 64px 0 56px 0;
+    background-color: var(--color-bg-page, #F5F5F7);
+}
+
+.express-hero-bento {
+    background: linear-gradient(145deg, #0B0D10 0%, #15181F 50%, #0D1117 100%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 28px;
+    padding: 44px 44px;
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 44px;
+    align-items: center;
+    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.35);
+    position: relative;
+    overflow: hidden;
+}
+
+.express-hero-bento::before {
+    content: '';
+    position: absolute;
+    top: -120px;
+    right: -120px;
+    width: 320px;
+    height: 320px;
+    background: radial-gradient(circle, rgba(0, 113, 227, 0.18) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.express-hero-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    position: relative;
+    z-index: 1;
+}
+
+.express-live-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(52, 199, 89, 0.12);
+    border: 1px solid rgba(52, 199, 89, 0.3);
+    color: #34C759;
+    padding: 6px 14px;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.03em;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+}
+
+.live-pulse-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #34C759;
+    box-shadow: 0 0 0 0 rgba(52, 199, 89, 0.7);
+    animation: live-pulse-green 1.8s infinite;
+}
+
+@keyframes live-pulse-green {
+    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(52, 199, 89, 0.7); }
+    70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(52, 199, 89, 0); }
+    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(52, 199, 89, 0); }
+}
+
+.express-hero-title {
+    font-size: 2.125rem;
+    font-weight: 800;
+    color: #FFFFFF;
+    line-height: 1.18;
+    letter-spacing: -0.025em;
+    margin: 0 0 14px 0;
+    font-family: var(--font-heading, sans-serif);
+}
+
+.gradient-text-amber {
+    background: linear-gradient(90deg, #FFB800 0%, #FF8A00 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.express-hero-desc {
+    font-size: 0.9375rem;
+    color: rgba(255, 255, 255, 0.72);
+    line-height: 1.55;
+    margin: 0 0 24px 0;
+    max-width: 540px;
+}
+
+.express-metric-strip {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-radius: 16px;
+    padding: 12px 20px;
+    margin-bottom: 24px;
+    width: fit-content;
+}
+
+.express-metric-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.metric-val {
+    font-size: 1.125rem;
+    font-weight: 800;
+    color: #FFFFFF;
+    font-family: var(--font-heading, sans-serif);
+}
+
+.metric-lbl {
+    font-size: 0.6875rem;
+    color: rgba(255, 255, 255, 0.55);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+.metric-divider {
+    width: 1px;
+    height: 28px;
+    background: rgba(255, 255, 255, 0.12);
+}
+
+.express-cta-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.express-trust-note {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.65);
+    font-weight: 600;
+}
+
+/* Right Hubs Deck */
+.express-hubs-deck {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    position: relative;
+    z-index: 1;
+}
+
+.express-hub-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.8);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 4px;
+}
+
+.express-hub-header svg {
+    color: #2997FF;
+}
+
+.express-hub-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.express-hub-card {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 16px 18px;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    transition: all 0.25s ease;
+}
+
+.express-hub-card:hover {
+    background: rgba(255, 255, 255, 0.07);
+    border-color: rgba(0, 113, 227, 0.5);
+    transform: translateX(4px);
+}
+
+.hub-card-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.hub-badge {
+    background: rgba(0, 113, 227, 0.25);
+    color: #2997FF;
+    border: 1px solid rgba(0, 113, 227, 0.4);
+    font-size: 0.65625rem;
+    font-weight: 800;
+    padding: 2px 7px;
+    border-radius: 5px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.hub-name {
+    font-size: 0.9375rem;
+    font-weight: 700;
+    color: #FFFFFF;
+    font-family: var(--font-heading, sans-serif);
+}
+
+.hub-cities {
+    font-size: 0.78125rem;
+    color: rgba(255, 255, 255, 0.65);
+    line-height: 1.5;
+    margin: 6px 0 0 0;
+}
+
+@media (max-width: 992px) {
+    .express-hero-bento {
+        grid-template-columns: 1fr;
+        padding: 32px 24px;
+        gap: 32px;
     }
-    .thankyou-card {
-        padding: 24px 16px;
-        border-radius: 20px;
-    }
-    .thankyou-title {
-        font-size: 1.45rem;
+    .express-hero-title {
+        font-size: 1.75rem;
     }
 }
+
+@media (max-width: 600px) {
+    .express-coverage-section {
+        padding: 36px 0;
+    }
+    .express-hero-bento {
+        padding: 24px 18px;
+        border-radius: 20px;
+    }
+    .express-hero-title {
+        font-size: 1.45rem;
+    }
+    .express-metric-strip {
+        width: 100%;
+        justify-content: space-between;
+    }
+    .express-cta-wrap .btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
 
 

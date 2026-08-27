@@ -475,8 +475,85 @@ require __DIR__ . '/includes/header.php';
     </div>
 </div>
 
+<!-- ============================================================
+     7. PREMIUM 2-HOUR EXPRESS DOORSTEP COVERAGE (MUMBAI & NAVI MUMBAI)
+     ============================================================ -->
+<section class="section-container express-coverage-section" id="coverage">
+    <div class="container">
+        <div class="express-hero-bento">
+            <!-- Left Column: Express Narrative & Speed Metrics -->
+            <div class="express-hero-info">
+                
+                <h2 class="express-hero-title">Need Instant Cash?<br><span class="gradient-text-amber">Doorstep Pickup in Under 2 Hours.</span></h2>
+                <p class="express-hero-desc">Selling your iPhone urgently? Our verified evaluation specialists are stationed across South Mumbai, Midtown, and Navi Mumbai hubs for rapid 120-minute doorstep arrival with instant spot payment.</p>
+                
+                <div class="express-metric-strip">
+                    <div class="express-metric-item">
+                        <div class="metric-val">&lt; 120m</div>
+                        <div class="metric-lbl">Express Arrival</div>
+                    </div>
+                    <div class="metric-divider"></div>
+                    <div class="express-metric-item">
+                        <div class="metric-val">₹0</div>
+                        <div class="metric-lbl">Doorstep Visit Fee</div>
+                    </div>
+                    <div class="metric-divider"></div>
+                    <div class="express-metric-item">
+                        <div class="metric-val">Instant</div>
+                        <div class="metric-lbl">Spot UPI / Cash</div>
+                    </div>
+                </div>
 
+                <div class="express-cta-wrap">
+                    <a href="#valuation" class="btn btn-primary start-exact-valuation-btn" aria-haspopup="dialog">
+                        <span>Book 2-Hour Express Pickup →</span>
+                    </a>
+                    <div class="express-trust-note">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#34C759" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+                        <span>100% Free Inspection • Spot Payout • Certified Data Wipe</span>
+                    </div>
+                </div>
+            </div>
 
+            <!-- Right Column: Premium Hub Clusters (South, Central, Navi Mumbai) -->
+            <div class="express-hubs-deck">
+                <div class="express-hub-header">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
+                    <span>Priority 2-Hour Service Hubs</span>
+                </div>
+
+                <div class="express-hub-cards">
+                    <!-- Hub 1: South Mumbai -->
+                    <div class="express-hub-card">
+                        <div class="hub-card-header">
+                            <span class="hub-badge">Zone 01</span>
+                            <span class="hub-name">South Mumbai</span>
+                        </div>
+                        <p class="hub-cities">Nariman Point • Colaba • Marine Lines • Fort • Malabar Hill • Girgaum • Kalbadevi • Ballard Pier</p>
+                    </div>
+
+                    <!-- Hub 2: Central Mumbai & Midtown -->
+                    <div class="express-hub-card">
+                        <div class="hub-card-header">
+                            <span class="hub-badge">Zone 02</span>
+                            <span class="hub-name">Central Mumbai &amp; Midtown</span>
+                        </div>
+                        <p class="hub-cities">Worli • Lower Parel • Dadar • Parel • Matunga • Mahim • Sewree • Jacob Circle</p>
+                    </div>
+
+                    <!-- Hub 3: Navi Mumbai & MMR -->
+                    <div class="express-hub-card">
+                        <div class="hub-card-header">
+                            <span class="hub-badge">Zone 03</span>
+                            <span class="hub-name">Navi Mumbai &amp; Suburbs</span>
+                        </div>
+                        <p class="hub-cities">Vashi • Sanpada • Nerul • Seawoods • CBD Belapur • Kharghar • Airoli • Ghansoli</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
 <!-- ============================================================
      8. FAQ ACCORDION SECTION (20 Categorized AEO & SEO Questions)
