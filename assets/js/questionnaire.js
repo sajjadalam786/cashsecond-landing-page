@@ -771,7 +771,6 @@
             '#openSmartExchangeBtn',
             '.smart-exchange-open-btn',
             '#mobile-sticky-valuation-btn',
-            '.iphone-pill-card',
             'a[href="#valuation"]',
             'a[href="#valuation-entry"]'
         ].join(', ');

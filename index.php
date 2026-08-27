@@ -225,134 +225,134 @@ require __DIR__ . '/includes/header.php';
     <div class="iphone-strip-wrapper">
         <div class="iphone-strip-track">
             <!-- Sell iPhone 16 Pro Max -->
-            <a href="#valuation" class="iphone-pill-card" data-name="Apple iPhone 16 Pro Max" data-id="1757" data-image="assets/images/phones/iphone-16-pro.svg" role="button" aria-label="Sell Apple iPhone 16 Pro Max">
+            <div class="iphone-pill-card">
                 <div class="iphone-pill-img-wrap">
-                    <img src="assets/images/phones/iphone-16-pro.svg" alt="Sell Apple iPhone 16 Pro Max" class="iphone-pill-img" width="28" height="34" loading="lazy">
+                    <img src="assets/images/phones/iphone-16-pro.svg" alt="Apple iPhone 16 Pro Max" class="iphone-pill-img" width="32" height="42" loading="lazy">
                 </div>
                 <span class="iphone-pill-title">Sell iPhone 16 Pro Max</span>
-            </a>
+            </div>
 
             <!-- iPhone 16 Pro Resale -->
-            <a href="#valuation" class="iphone-pill-card" data-name="Apple iPhone 16 Pro" data-id="1753" data-image="assets/images/phones/iphone-16-pro.svg" role="button" aria-label="iPhone 16 Pro Resale">
+            <div class="iphone-pill-card">
                 <div class="iphone-pill-img-wrap">
-                    <img src="assets/images/phones/iphone-16-pro.svg" alt="iPhone 16 Pro resale" class="iphone-pill-img" width="28" height="34" loading="lazy">
+                    <img src="assets/images/phones/iphone-16-pro.svg" alt="iPhone 16 Pro resale" class="iphone-pill-img" width="32" height="42" loading="lazy">
                 </div>
                 <span class="iphone-pill-title">iPhone 16 Pro Resale</span>
-            </a>
+            </div>
 
             <!-- Sell iPhone 16 -->
-            <a href="#valuation" class="iphone-pill-card" data-name="Apple iPhone 16" data-id="1747" data-image="assets/images/phones/iphone-16.svg" role="button" aria-label="Sell Apple iPhone 16">
+            <div class="iphone-pill-card">
                 <div class="iphone-pill-img-wrap">
-                    <img src="assets/images/phones/iphone-16.svg" alt="Sell Apple iPhone 16" class="iphone-pill-img" width="28" height="34" loading="lazy">
+                    <img src="assets/images/phones/iphone-16.svg" alt="Sell Apple iPhone 16" class="iphone-pill-img" width="32" height="42" loading="lazy">
                 </div>
                 <span class="iphone-pill-title">Sell iPhone 16</span>
-            </a>
+            </div>
 
             <!-- iPhone 15 Pro Max -->
-            <a href="#valuation" class="iphone-pill-card" data-name="Apple iPhone 15 Pro Max" data-id="1351" data-image="assets/images/phones/iphone-15-pro.svg" role="button" aria-label="iPhone 15 Pro Max Valuation">
+            <div class="iphone-pill-card">
                 <div class="iphone-pill-img-wrap">
-                    <img src="assets/images/phones/iphone-15-pro.svg" alt="iPhone 15 Pro Max valuation" class="iphone-pill-img" width="28" height="34" loading="lazy">
+                    <img src="assets/images/phones/iphone-15-pro.svg" alt="iPhone 15 Pro Max valuation" class="iphone-pill-img" width="32" height="42" loading="lazy">
                 </div>
                 <span class="iphone-pill-title">iPhone 15 Pro Max Value</span>
-            </a>
+            </div>
 
             <!-- iPhone 15 Pro -->
-            <a href="#valuation" class="iphone-pill-card" data-name="Apple iPhone 15 Pro" data-id="1347" data-image="assets/images/phones/iphone-15-pro.svg" role="button" aria-label="iPhone 15 Pro Resale Value">
+            <div class="iphone-pill-card">
                 <div class="iphone-pill-img-wrap">
-                    <img src="assets/images/phones/iphone-15-pro.svg" alt="iPhone 15 Pro resale" class="iphone-pill-img" width="28" height="34" loading="lazy">
+                    <img src="assets/images/phones/iphone-15-pro.svg" alt="iPhone 15 Pro resale" class="iphone-pill-img" width="32" height="42" loading="lazy">
                 </div>
                 <span class="iphone-pill-title">iPhone 15 Pro Resale</span>
-            </a>
+            </div>
 
             <!-- Sell iPhone 15 -->
-            <a href="#valuation" class="iphone-pill-card" data-name="Apple iPhone 15" data-id="1341" data-image="assets/images/phones/iphone-15.svg" role="button" aria-label="Sell Apple iPhone 15">
+            <div class="iphone-pill-card">
                 <div class="iphone-pill-img-wrap">
-                    <img src="assets/images/phones/iphone-15.svg" alt="Sell Apple iPhone 15" class="iphone-pill-img" width="28" height="34" loading="lazy">
+                    <img src="assets/images/phones/iphone-15.svg" alt="Sell Apple iPhone 15" class="iphone-pill-img" width="32" height="42" loading="lazy">
                 </div>
                 <span class="iphone-pill-title">Sell iPhone 15</span>
-            </a>
+            </div>
 
             <!-- iPhone 14 Pro -->
-            <a href="#valuation" class="iphone-pill-card" data-name="Apple iPhone 14 Pro" data-id="81" data-image="assets/images/phones/iphone-14-pro.svg" role="button" aria-label="iPhone 14 Pro Buyback">
+            <div class="iphone-pill-card">
                 <div class="iphone-pill-img-wrap">
-                    <img src="assets/images/phones/iphone-14-pro.svg" alt="iPhone 14 Pro buyback" class="iphone-pill-img" width="28" height="34" loading="lazy">
+                    <img src="assets/images/phones/iphone-14-pro.svg" alt="iPhone 14 Pro buyback" class="iphone-pill-img" width="32" height="42" loading="lazy">
                 </div>
                 <span class="iphone-pill-title">iPhone 14 Pro Buyback</span>
-            </a>
+            </div>
 
             <!-- Sell iPhone 14 -->
-            <a href="#valuation" class="iphone-pill-card" data-name="Apple iPhone 14" data-id="76" data-image="assets/images/phones/iphone-14.svg" role="button" aria-label="Sell Apple iPhone 14">
+            <div class="iphone-pill-card">
                 <div class="iphone-pill-img-wrap">
-                    <img src="assets/images/phones/iphone-14.svg" alt="Sell Apple iPhone 14" class="iphone-pill-img" width="28" height="34" loading="lazy">
+                    <img src="assets/images/phones/iphone-14.svg" alt="Sell Apple iPhone 14" class="iphone-pill-img" width="32" height="42" loading="lazy">
                 </div>
                 <span class="iphone-pill-title">Sell iPhone 14</span>
-            </a>
+            </div>
 
             <!-- Sell iPhone 13 -->
-            <a href="#valuation" class="iphone-pill-card" data-name="Apple iPhone 13" data-id="47" data-image="assets/images/phones/iphone-13.svg" role="button" aria-label="Sell Apple iPhone 13">
+            <div class="iphone-pill-card">
                 <div class="iphone-pill-img-wrap">
-                    <img src="assets/images/phones/iphone-13.svg" alt="Sell Apple iPhone 13" class="iphone-pill-img" width="28" height="34" loading="lazy">
+                    <img src="assets/images/phones/iphone-13.svg" alt="Sell Apple iPhone 13" class="iphone-pill-img" width="32" height="42" loading="lazy">
                 </div>
                 <span class="iphone-pill-title">Sell iPhone 13</span>
-            </a>
+            </div>
         </div>
 
         <!-- Exact Duplicate Track for 100% Seamless Infinite Loop -->
         <div class="iphone-strip-track" aria-hidden="true">
-            <a href="#valuation" class="iphone-pill-card" data-name="Apple iPhone 16 Pro Max" data-id="1757" data-image="assets/images/phones/iphone-16-pro.svg" tabindex="-1">
+            <div class="iphone-pill-card">
                 <div class="iphone-pill-img-wrap">
-                    <img src="assets/images/phones/iphone-16-pro.svg" alt="Sell Apple iPhone 16 Pro Max" class="iphone-pill-img" width="28" height="34" loading="lazy">
+                    <img src="assets/images/phones/iphone-16-pro.svg" alt="Apple iPhone 16 Pro Max" class="iphone-pill-img" width="32" height="42" loading="lazy">
                 </div>
                 <span class="iphone-pill-title">Sell iPhone 16 Pro Max</span>
-            </a>
-            <a href="#valuation" class="iphone-pill-card" data-name="Apple iPhone 16 Pro" data-id="1753" data-image="assets/images/phones/iphone-16-pro.svg" tabindex="-1">
+            </div>
+            <div class="iphone-pill-card">
                 <div class="iphone-pill-img-wrap">
-                    <img src="assets/images/phones/iphone-16-pro.svg" alt="iPhone 16 Pro resale" class="iphone-pill-img" width="28" height="34" loading="lazy">
+                    <img src="assets/images/phones/iphone-16-pro.svg" alt="iPhone 16 Pro resale" class="iphone-pill-img" width="32" height="42" loading="lazy">
                 </div>
                 <span class="iphone-pill-title">iPhone 16 Pro Resale</span>
-            </a>
-            <a href="#valuation" class="iphone-pill-card" data-name="Apple iPhone 16" data-id="1747" data-image="assets/images/phones/iphone-16.svg" tabindex="-1">
+            </div>
+            <div class="iphone-pill-card">
                 <div class="iphone-pill-img-wrap">
-                    <img src="assets/images/phones/iphone-16.svg" alt="Sell Apple iPhone 16" class="iphone-pill-img" width="28" height="34" loading="lazy">
+                    <img src="assets/images/phones/iphone-16.svg" alt="Sell Apple iPhone 16" class="iphone-pill-img" width="32" height="42" loading="lazy">
                 </div>
                 <span class="iphone-pill-title">Sell iPhone 16</span>
-            </a>
-            <a href="#valuation" class="iphone-pill-card" data-name="Apple iPhone 15 Pro Max" data-id="1351" data-image="assets/images/phones/iphone-15-pro.svg" tabindex="-1">
+            </div>
+            <div class="iphone-pill-card">
                 <div class="iphone-pill-img-wrap">
-                    <img src="assets/images/phones/iphone-15-pro.svg" alt="iPhone 15 Pro Max valuation" class="iphone-pill-img" width="28" height="34" loading="lazy">
+                    <img src="assets/images/phones/iphone-15-pro.svg" alt="iPhone 15 Pro Max valuation" class="iphone-pill-img" width="32" height="42" loading="lazy">
                 </div>
                 <span class="iphone-pill-title">iPhone 15 Pro Max Value</span>
-            </a>
-            <a href="#valuation" class="iphone-pill-card" data-name="Apple iPhone 15 Pro" data-id="1347" data-image="assets/images/phones/iphone-15-pro.svg" tabindex="-1">
+            </div>
+            <div class="iphone-pill-card">
                 <div class="iphone-pill-img-wrap">
-                    <img src="assets/images/phones/iphone-15-pro.svg" alt="iPhone 15 Pro resale" class="iphone-pill-img" width="28" height="34" loading="lazy">
+                    <img src="assets/images/phones/iphone-15-pro.svg" alt="iPhone 15 Pro resale" class="iphone-pill-img" width="32" height="42" loading="lazy">
                 </div>
                 <span class="iphone-pill-title">iPhone 15 Pro Resale</span>
-            </a>
-            <a href="#valuation" class="iphone-pill-card" data-name="Apple iPhone 15" data-id="1341" data-image="assets/images/phones/iphone-15.svg" tabindex="-1">
+            </div>
+            <div class="iphone-pill-card">
                 <div class="iphone-pill-img-wrap">
-                    <img src="assets/images/phones/iphone-15.svg" alt="Sell Apple iPhone 15" class="iphone-pill-img" width="28" height="34" loading="lazy">
+                    <img src="assets/images/phones/iphone-15.svg" alt="Sell Apple iPhone 15" class="iphone-pill-img" width="32" height="42" loading="lazy">
                 </div>
                 <span class="iphone-pill-title">Sell iPhone 15</span>
-            </a>
-            <a href="#valuation" class="iphone-pill-card" data-name="Apple iPhone 14 Pro" data-id="81" data-image="assets/images/phones/iphone-14-pro.svg" tabindex="-1">
+            </div>
+            <div class="iphone-pill-card">
                 <div class="iphone-pill-img-wrap">
-                    <img src="assets/images/phones/iphone-14-pro.svg" alt="iPhone 14 Pro buyback" class="iphone-pill-img" width="28" height="34" loading="lazy">
+                    <img src="assets/images/phones/iphone-14-pro.svg" alt="iPhone 14 Pro buyback" class="iphone-pill-img" width="32" height="42" loading="lazy">
                 </div>
                 <span class="iphone-pill-title">iPhone 14 Pro Buyback</span>
-            </a>
-            <a href="#valuation" class="iphone-pill-card" data-name="Apple iPhone 14" data-id="76" data-image="assets/images/phones/iphone-14.svg" tabindex="-1">
+            </div>
+            <div class="iphone-pill-card">
                 <div class="iphone-pill-img-wrap">
-                    <img src="assets/images/phones/iphone-14.svg" alt="Sell Apple iPhone 14" class="iphone-pill-img" width="28" height="34" loading="lazy">
+                    <img src="assets/images/phones/iphone-14.svg" alt="Sell Apple iPhone 14" class="iphone-pill-img" width="32" height="42" loading="lazy">
                 </div>
                 <span class="iphone-pill-title">Sell iPhone 14</span>
-            </a>
-            <a href="#valuation" class="iphone-pill-card" data-name="Apple iPhone 13" data-id="47" data-image="assets/images/phones/iphone-13.svg" tabindex="-1">
+            </div>
+            <div class="iphone-pill-card">
                 <div class="iphone-pill-img-wrap">
-                    <img src="assets/images/phones/iphone-13.svg" alt="Sell Apple iPhone 13" class="iphone-pill-img" width="28" height="34" loading="lazy">
+                    <img src="assets/images/phones/iphone-13.svg" alt="Sell Apple iPhone 13" class="iphone-pill-img" width="32" height="42" loading="lazy">
                 </div>
                 <span class="iphone-pill-title">Sell iPhone 13</span>
-            </a>
+            </div>
         </div>
     </div>
 </div>
@@ -362,54 +362,74 @@ require __DIR__ . '/includes/header.php';
 
 
 <!-- ============================================================
-     4. HOW IT WORKS (3 SIMPLE STEPS)
+     4. HOW IT WORKS (4 SIMPLE STEPS)
      ============================================================ -->
 <section class="section-container how-it-works-section" id="how-it-works">
     <div class="container">
         <div class="section-header text-center">
             <span class="section-eyebrow">HOW IT WORKS</span>
-            <h2 class="section-title">Sell Your iPhone in 3 Simple Steps</h2>
+            <h2 class="section-title">Sell Your iPhone in 4 Simple Steps</h2>
             <p class="section-subtitle">Experience a fast, transparent, and secure doorstep selling journey built exclusively for Apple users.</p>
         </div>
 
-        <div class="how-it-works-3grid">
-            <!-- Step 01 -->
-            <div class="how-step-card-3">
+        <div class="how-it-works-4grid">
+            <!-- Step 01: Model Selection -->
+            <div class="how-step-card-4">
                 <div class="how-step-badge">01</div>    
-                <div class="how-step-icon-wrap">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <div class="how-step-icon-wrap" aria-hidden="true">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
                         <line x1="12" y1="18" x2="12.01" y2="18"></line>
                     </svg>
                 </div>
-                <h3 class="how-step-heading">Select Your iPhone</h3>
+                <h3 class="how-step-heading">Select iPhone</h3>
                 <p class="how-step-text">Choose your exact model and storage capacity on our valuation calculator.</p>
             </div>
 
-            <!-- Step 02 -->
-            <div class="how-step-card-3">
+            <!-- Step 02: Instant Quote -->
+            <div class="how-step-card-4">
                 <div class="how-step-badge">02</div>
-                <div class="how-step-icon-wrap">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="12" y1="1" x2="12" y2="23"></line>
-                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+                <div class="how-step-icon-wrap" aria-hidden="true">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="4" y="3" width="16" height="18" rx="2"></rect>
+                        <line x1="8" y1="7" x2="16" y2="7"></line>
+                        <line x1="8" y1="11" x2="10" y2="11"></line>
+                        <line x1="14" y1="11" x2="16" y2="11"></line>
+                        <line x1="8" y1="15" x2="10" y2="15"></line>
+                        <line x1="14" y1="15" x2="16" y2="15"></line>
                     </svg>
                 </div>
-                <h3 class="how-step-heading">Get Your Value</h3>
-                <p class="how-step-text">Answer a few condition questions to receive an instant, market-accurate resale estimate.</p>
+                <h3 class="how-step-heading">Get Valuation</h3>
+                <p class="how-step-text">Answer simple condition questions to get a fair, market-accurate online quote.</p>
             </div>
 
-            <!-- Step 03 -->
-            <div class="how-step-card-3">
+            <!-- Step 03: Doorstep Pickup -->
+            <div class="how-step-card-4">
                 <div class="how-step-badge">03</div>
-                <div class="how-step-icon-wrap">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                <div class="how-step-icon-wrap" aria-hidden="true">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                        <polyline points="9 16 11 18 15 14"></polyline>
                     </svg>
                 </div>
-                <h3 class="how-step-heading">Pickup &amp; Get Paid</h3>
-                <p class="how-step-text">Our executive arrives at your doorstep, verifies the device, and transfers payment on the spot.</p>
+                <h3 class="how-step-heading">Schedule Pickup</h3>
+                <p class="how-step-text">Select your preferred date, time slot, and doorstep address anywhere in Mumbai.</p>
+            </div>
+
+            <!-- Step 04: Spot Payment & Wipe -->
+            <div class="how-step-card-4">
+                <div class="how-step-badge">04</div>
+                <div class="how-step-icon-wrap" aria-hidden="true">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                        <polyline points="9 12 11 14 15 10"></polyline>
+                    </svg>
+                </div>
+                <h3 class="how-step-heading">Paid Instantly Online</h3>
+                <p class="how-step-text">5-min doorstep diagnostic, instant UPI / cash payout, and certified data wipe.</p>
             </div>
         </div>
     </div>
