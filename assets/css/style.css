@@ -6217,9 +6217,23 @@ a:hover .btn-iphone-thumb {
     100% { transform: scale(1); opacity: 1; }
 }
 
+.thankyou-badge-confirmed {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: #E8F5E9;
+    color: #1E8E3E;
+    font-size: 0.8125rem;
+    font-weight: 800;
+    padding: 6px 14px;
+    border-radius: 20px;
+    margin-bottom: 12px;
+    border: 1px solid rgba(52, 199, 89, 0.25);
+}
+
 .thankyou-title {
-    font-family: var(--font-heading, sans-serif);
-    font-size: 1.65rem;
+    font-family: var(--font-heading, -apple-system, sans-serif);
+    font-size: 1.8rem;
     font-weight: 800;
     color: var(--color-dark, #1C1C1E);
     margin: 0 0 8px 0;
@@ -6227,18 +6241,220 @@ a:hover .btn-iphone-thumb {
 }
 
 .thankyou-subtitle {
-    font-size: 0.95rem;
+    font-size: 0.9375rem;
     color: var(--color-text-secondary, #636366);
     line-height: 1.5;
-    margin: 0 0 24px 0;
+    margin: 0 0 20px 0;
 }
 
-.thankyou-valuation-deck {
-    background: #F5F5F7;
+/* Hero Box for Resale Value */
+.thankyou-valuation-hero {
+    background: linear-gradient(135deg, #0071E3 0%, #004DB3 100%);
+    border-radius: 20px;
+    padding: 22px 20px;
+    color: #FFFFFF;
+    box-shadow: 0 12px 32px rgba(0, 113, 227, 0.28);
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.ty-device-name {
+    font-size: 0.9375rem;
+    font-weight: 700;
+    opacity: 0.95;
+    margin-bottom: 4px;
+}
+
+.ty-amount-caption {
+    font-size: 0.6875rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    opacity: 0.82;
+}
+
+.ty-amount-value {
+    font-family: var(--font-heading, -apple-system, sans-serif);
+    font-size: clamp(2.2rem, 5vw, 3rem);
+    font-weight: 800;
+    color: #FFFFFF;
+    line-height: 1.1;
+    margin: 6px 0 8px 0;
+    letter-spacing: -0.02em;
+}
+
+.ty-ref-pill {
+    display: inline-block;
+    background: rgba(255, 255, 255, 0.18);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: #FFFFFF;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    margin-bottom: 8px;
+}
+
+.ty-sub-note {
+    font-size: 0.78125rem;
+    opacity: 0.88;
+    margin: 0;
+    line-height: 1.4;
+}
+
+/* Feedback & Scheduling Box on Thank You Page */
+.ty-feedback-schedule-card {
+    background: #FFFFFF;
+    border: 1.5px solid #E5E5EA;
+    border-radius: 20px;
+    padding: 22px 20px;
+    margin-bottom: 20px;
+    text-align: left;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.04);
+}
+
+.ty-section-header {
+    margin-bottom: 10px;
+}
+
+.ty-section-title {
+    font-size: 0.9375rem;
+    font-weight: 800;
+    color: #1C1C1E;
+    margin: 0 0 2px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.ty-req-badge {
+    font-size: 0.6875rem;
+    font-weight: 700;
+    color: #FF3B30;
+    background: #FFEBEE;
+    padding: 2px 8px;
+    border-radius: 10px;
+}
+
+.ty-section-subtitle {
+    font-size: 0.78125rem;
+    color: #8E8E93;
+    margin: 0;
+}
+
+.ty-feedback-pills-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 10px;
+}
+
+.ty-feedback-pill {
+    flex: 1 1 calc(33.33% - 6px);
+    min-width: 90px;
+    background: #F2F2F7;
+    border: 1.5px solid transparent;
+    border-radius: 12px;
+    padding: 9px 8px;
+    font-size: 0.78125rem;
+    font-weight: 700;
+    color: #3A3A3C;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s ease;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.ty-feedback-pill:hover {
+    background: #E5E5EA;
+    color: #1C1C1E;
+}
+
+.ty-feedback-pill.selected {
+    background: #0071E3;
+    color: #FFFFFF;
+    border-color: #0071E3;
+    box-shadow: 0 3px 10px rgba(0, 113, 227, 0.28);
+    transform: translateY(-1px);
+}
+
+.ty-comment-textarea {
+    width: 100%;
+    padding: 10px 12px;
+    background: #F9F9FB;
     border: 1px solid #E5E5EA;
-    border-radius: 16px;
-    padding: 20px;
-    margin-bottom: 24px;
+    border-radius: 10px;
+    font-size: 0.8125rem;
+    color: #1C1C1E;
+    outline: none;
+    resize: none;
+    font-family: inherit;
+    box-sizing: border-box;
+    transition: all 0.2s ease;
+}
+
+.ty-comment-textarea:focus {
+    background: #FFFFFF;
+    border-color: #0071E3;
+    box-shadow: 0 2px 8px rgba(0, 113, 227, 0.12);
+}
+
+.ty-feedback-error {
+    color: #FF3B30;
+    font-size: 0.75rem;
+    font-weight: 700;
+    margin-top: 8px;
+    background: #FFEBEE;
+    padding: 6px 10px;
+    border-radius: 8px;
+    border: 1px solid #FFCDD2;
+}
+
+.ty-slots-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.ty-slot-pill {
+    flex: 1 1 calc(50% - 6px);
+    min-width: 120px;
+    background: #FFFFFF;
+    border: 1.5px solid #E5E5EA;
+    border-radius: 10px;
+    padding: 9px 10px;
+    font-size: 0.78125rem;
+    font-weight: 700;
+    color: #3A3A3C;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s ease;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.ty-slot-pill:hover {
+    border-color: #0071E3;
+    color: #0071E3;
+}
+
+.ty-slot-pill.selected {
+    background: #E8F0FE;
+    border-color: #0071E3;
+    color: #0071E3;
+    box-shadow: 0 2px 8px rgba(0, 113, 227, 0.15);
+}
+
+/* Specifications Table Deck */
+.thankyou-valuation-deck {
+    background: #F8F9FA;
+    border: 1px solid #E5E5EA;
+    border-radius: 18px;
+    padding: 16px 20px;
+    margin-bottom: 20px;
     text-align: left;
 }
 
@@ -6264,130 +6480,140 @@ a:hover .btn-iphone-thumb {
 .valuation-row .value {
     color: #1C1C1E;
     font-weight: 700;
+    text-align: right;
 }
 
-.valuation-highlight-row {
-    margin-top: 10px;
-    padding-top: 12px;
-    border-top: 1.5px solid #E5E5EA;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+/* What Happens Next Steps Card */
+.ty-next-steps-card {
+    background: #FFFFFF;
+    border: 1.5px solid #E5E5EA;
+    border-radius: 18px;
+    padding: 20px 20px 16px 20px;
+    text-align: left;
+    margin-bottom: 20px;
 }
 
-/* Blurred Valuation Payout */
-.valuation-blurred-wrap {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.valuation-blurred-amount {
-    font-size: 1.6rem;
+.ty-steps-title {
+    font-size: 0.9375rem;
     font-weight: 800;
-    color: var(--color-cta, #0071E3);
-    filter: blur(8px);
-    user-select: none;
-    -webkit-user-select: none;
-    opacity: 0.6;
-    letter-spacing: 2px;
+    color: #1C1C1E;
+    margin: 0 0 14px 0;
 }
 
-.valuation-lock-pill {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+.ty-step-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.ty-step-item:last-child {
+    margin-bottom: 0;
+}
+
+.ty-step-num {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
     background: #0071E3;
     color: #FFFFFF;
-    font-size: 0.6875rem;
+    font-size: 0.75rem;
     font-weight: 800;
-    padding: 4px 12px;
-    border-radius: 20px;
-    box-shadow: 0 4px 12px rgba(0, 113, 227, 0.3);
-    white-space: nowrap;
-}
-
-.whatsapp-redirect-box {
-    background: #E8F8EE;
-    border: 1.5px solid #25D366;
-    border-radius: 16px;
-    padding: 18px 20px;
-    margin-bottom: 24px;
-    text-align: center;
-}
-
-.whatsapp-spinner-row {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    font-size: 0.9rem;
-    font-weight: 700;
-    color: #0E7C3A;
-    margin-bottom: 8px;
-}
-
-.pulse-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background-color: #25D366;
-    animation: pulse 1.2s infinite;
-}
-
-@keyframes pulse {
-    0% { transform: scale(0.9); opacity: 0.7; }
-    50% { transform: scale(1.4); opacity: 1; }
-    100% { transform: scale(0.9); opacity: 0.7; }
-}
-
-.btn-whatsapp-direct {
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+
+.ty-step-item strong {
+    font-size: 0.84375rem;
+    color: #1C1C1E;
+    display: block;
+    margin-bottom: 2px;
+}
+
+.ty-step-item p {
+    font-size: 0.78125rem;
+    color: #636366;
+    margin: 0;
+    line-height: 1.4;
+}
+
+/* Action Buttons */
+.ty-action-btns {
+    display: flex;
+    flex-direction: column;
     gap: 10px;
+    margin-bottom: 16px;
+}
+
+.ty-btn-primary {
     width: 100%;
-    padding: 15px 24px;
-    background: #25D366;
+    padding: 13px 20px;
+    background: #0071E3;
     color: #FFFFFF;
-    font-size: 1rem;
+    font-size: 0.9375rem;
     font-weight: 700;
     border-radius: 14px;
     text-decoration: none;
-    box-shadow: 0 4px 16px rgba(37, 211, 102, 0.35);
-    transition: all 0.22s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 16px rgba(0, 113, 227, 0.35);
+    transition: all 0.2s ease;
     box-sizing: border-box;
 }
 
-.btn-whatsapp-direct:hover {
-    background: #1EBE5D;
-    transform: translateY(-1px);
-    box-shadow: 0 6px 20px rgba(37, 211, 102, 0.45);
+.ty-btn-primary:hover {
+    background: #005BB5;
     color: #FFFFFF;
+    transform: translateY(-1px);
+}
+
+.ty-btn-secondary {
+    width: 100%;
+    padding: 11px 18px;
+    background: #F2F2F7;
+    color: #1C1C1E;
+    font-size: 0.875rem;
+    font-weight: 700;
+    border-radius: 14px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border: 1px solid #E5E5EA;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+}
+
+.ty-btn-secondary:hover {
+    background: #E5E5EA;
+    color: #1C1C1E;
 }
 
 .thankyou-trust-strip {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 16px;
-    font-size: 0.75rem;
+    gap: 12px;
+    font-size: 0.71875rem;
     color: #8E8E93;
-    margin-top: 16px;
     flex-wrap: wrap;
 }
 
 @media (max-width: 600px) {
     .thankyou-page-wrapper {
-        padding: 24px 0 40px 0;
+        padding: 20px 0 36px 0;
     }
     .thankyou-card {
-        padding: 28px 20px;
+        padding: 24px 16px;
+        border-radius: 20px;
     }
     .thankyou-title {
-        font-size: 1.4rem;
+        font-size: 1.45rem;
     }
 }
 

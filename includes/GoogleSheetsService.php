@@ -102,14 +102,16 @@ class GoogleSheetsService
         $ansGPS         = $getAns('gps_location', 'YES');
         $ansLiquid      = $getAns('liquid_damage', 'NO');
 
-        // 2. Parts & History
+        // 2. Parts, Accessories & History
         $ansDispOrig    = $getAns('display_original', 'YES');
         $ansMajorRep    = $getAns('parts_replaced', 'NO');
         $ansReplacedComp= ($ansMajorRep === 'YES') ? ($answers['replaced_component_name'] ?? 'Display / Battery') : 'None';
         $ansWarranty    = $answers['warranty_status'] ?? 'YES (Under 11 Months)';
-        $ansBill        = $getAns('bill_invoice', 'YES');
-        $ansBox         = $getAns('has_box', 'YES');
-        $ansCable       = $getAns('has_cable', 'YES');
+        
+        $accText = $answers['accessories'] ?? '';
+        $ansBill = (stripos($accText, 'bill') !== false || stripos($accText, 'yes') !== false || $getAns('bill_invoice', 'YES') === 'YES') ? 'YES' : 'NO';
+        $ansBox  = (stripos($accText, 'box') !== false || stripos($accText, 'yes') !== false || $getAns('has_box', 'YES') === 'YES') ? 'YES' : 'NO';
+        $ansCable= (stripos($accText, 'yes') !== false || $getAns('has_cable', 'YES') === 'YES') ? 'YES' : 'NO';
 
         // 3. Failed Tests and Stats Calculation
         $testChecks = [
@@ -164,32 +166,56 @@ class GoogleSheetsService
         $passPercentage = round(($passedTests / $totalTests) * 100, 2) . '%';
         $failedTestString = empty($failedNames) ? 'None (All Passed)' : implode(', ', $failedNames);
 
-        // 4. Valuation Adjustments Breakdown
-        $adjStorage    = $adjustments['storage'] ?? '+₹0';
-        $adjBattery    = $adjustments['battery'] ?? ($battery === 'Below 80%' ? '-₹3,600' : ($battery === '80% – 84%' ? '-₹1,800' : ($battery === '85% – 89%' ? '-₹800' : '+₹0')));
-        $adjDisplay    = $adjustments['display'] ?? ($ansDispWork === 'NO' ? '-₹5,000' : ($ansScreenCrack === 'YES' ? '-₹3,500' : ($ansDispFlaws === 'YES' ? '-₹3,800' : '+₹0')));
-        $adjBody       = $adjustments['body'] ?? ($ansBodyBent === 'YES' ? '-₹2,800' : ($ansBodyDents === 'NO' ? '-₹1,500' : '+₹0'));
-        $adjFunctional = $adjustments['functional'] ?? ($ansBio === 'NO' ? '-₹3,000' : ($ansChargePort === 'NO' ? '-₹1,800' : ($ansPower === 'NO' ? '-₹9,000' : '+₹0')));
-        $adjLiquid     = $adjustments['liquid'] ?? ($ansLiquid === 'YES' ? '-₹4,500' : '+₹0');
-        $adjParts      = $adjustments['parts'] ?? ($ansDispOrig === 'NO' ? '-₹3,500' : '+₹0');
-        $adjWarranty   = $adjustments['warranty'] ?? (stripos($ansWarranty, 'YES') !== false ? '+₹1,500' : '+₹0');
-        $adjAccessory  = $adjustments['accessories'] ?? (($ansBox === 'YES' && $ansCable === 'YES') ? '+₹900' : ($ansBox === 'YES' ? '+₹600' : '+₹0'));
+        // 4. Valuation Adjustments Breakdown (Clean string format to prevent Excel/Sheets formula #ERROR!)
+        $adjStorage    = $adjustments['storage'] ?? '₹0';
+        $adjBattery    = $adjustments['battery'] ?? ($battery === 'Below 80%' ? '-₹3,600' : ($battery === '80% – 84%' ? '-₹1,800' : ($battery === '85% – 89%' ? '-₹800' : '₹0')));
+        $adjDisplay    = $adjustments['display'] ?? ($ansDispWork === 'NO' ? '-₹5,000' : ($ansScreenCrack === 'YES' ? '-₹3,500' : ($ansDispFlaws === 'YES' ? '-₹3,800' : '₹0')));
+        $adjBody       = $adjustments['body'] ?? ($ansBodyBent === 'YES' ? '-₹2,800' : ($ansBodyDents === 'NO' ? '-₹1,500' : '₹0'));
+        $adjFunctional = $adjustments['functional'] ?? ($ansBio === 'NO' ? '-₹3,000' : ($ansChargePort === 'NO' ? '-₹1,800' : ($ansPower === 'NO' ? '-₹9,000' : '₹0')));
+        $adjLiquid     = $adjustments['liquid'] ?? ($ansLiquid === 'YES' ? '-₹4,500' : '₹0');
+        $adjParts      = $adjustments['parts'] ?? ($ansDispOrig === 'NO' ? '-₹3,500' : '₹0');
+        $adjWarranty   = $adjustments['warranty'] ?? (stripos($ansWarranty, 'YES') !== false ? '₹1,500' : '₹0');
+        $adjAccessory  = $adjustments['accessories'] ?? (($ansBox === 'YES' && $ansCable === 'YES') ? '₹900' : ($ansBox === 'YES' ? '₹600' : '₹0'));
 
         $totalAdj = $adjustments['total_adjustment'] ?? '₹0';
 
-        // Full 72-column row mapping matching the Google Sheet definition
+        // Clean out any leading '+' sign from all adjustment strings
+        $cleanFormulaPrefix = function ($val) {
+            $s = trim((string)$val);
+            if (isset($s[0]) && $s[0] === '+') {
+                return ltrim($s, '+ ');
+            }
+            return $s;
+        };
+
+        $adjStorage    = $cleanFormulaPrefix($adjStorage);
+        $adjBattery    = $cleanFormulaPrefix($adjBattery);
+        $adjDisplay    = $cleanFormulaPrefix($adjDisplay);
+        $adjBody       = $cleanFormulaPrefix($adjBody);
+        $adjFunctional = $cleanFormulaPrefix($adjFunctional);
+        $adjLiquid     = $cleanFormulaPrefix($adjLiquid);
+        $adjParts      = $cleanFormulaPrefix($adjParts);
+        $adjWarranty   = $cleanFormulaPrefix($adjWarranty);
+        $adjAccessory  = $cleanFormulaPrefix($adjAccessory);
+        $totalAdj      = $cleanFormulaPrefix($totalAdj);
+
+        // Full row mapping matching the Google Sheet definition
         return [
-            // Lead Information (1-8)
+            // Lead Information (1-12)
             'submission_date'         => $date,
             'submission_time'         => $time,
             'lead_id'                 => $leadId,
             'full_name'               => $customer['name'] ?? '',
             'whatsapp_number'         => $customer['phone'] ?? '',
             'email'                   => $customer['email'] ?? '',
-            'pickup_address'          => $customer['address'] ?? '',
-            'pincode'                 => $customer['pincode'] ?? '',
+            'pickup_address'          => $customer['address'] ?? 'Mumbai (Doorstep Pickup)',
+            'pincode'                 => $customer['pincode'] ?? '400021',
+            'pickup_date'             => $customer['pickup_date'] ?? ($leadData['pickup_date'] ?? 'Today'),
+            'pickup_slot'             => $customer['pickup_slot'] ?? ($leadData['pickup_slot'] ?? 'Express (Within 6 Hours)'),
+            'feedback_rating'         => $customer['feedback_rating'] ?? ($leadData['feedback_rating'] ?? ''),
+            'feedback_comment'        => $customer['feedback_comment'] ?? ($leadData['feedback_comment'] ?? ''),
 
-            // Device Information (9-15)
+            // Device Information (13-19)
             'brand'                   => 'Apple',
             'model'                   => $modelName,
             'ram'                     => $ram,
@@ -309,30 +335,52 @@ class GoogleSheetsService
             'token'     => $config['secret_token'] ?? '',
             'sheetName' => $config['sheets']['main'] ?? 'Phone Valuations',
             'row'       => $rowData
-        ]);
+        ], JSON_UNESCAPED_UNICODE);
 
-        $ch = curl_init($webhookUrl);
+        $ch = curl_init();
         curl_setopt_array($ch, [
+            CURLOPT_URL            => $webhookUrl,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_POST           => true,
             CURLOPT_POSTFIELDS     => $postPayload,
-            CURLOPT_HTTPHEADER     => ['Content-Type: application/json'],
+            CURLOPT_HTTPHEADER     => [
+                'Content-Type: application/json',
+                'Content-Length: ' . strlen($postPayload)
+            ],
             CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_TIMEOUT        => $config['timeout'] ?? 8,
-            CURLOPT_SSL_VERIFYPEER => true
+            CURLOPT_TIMEOUT        => 20,
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_SSL_VERIFYHOST => false
         ]);
 
         $response = curl_exec($ch);
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         $curlError= curl_error($ch);
+        $effectiveUrl = curl_getinfo($ch, CURLINFO_EFFECTIVE_URL);
         curl_close($ch);
 
-        if ($httpCode >= 200 && $httpCode < 300) {
+        $debugEntry = [
+            'timestamp'     => date('Y-m-d H:i:s'),
+            'lead_id'       => $rowData['lead_id'],
+            'webhook_url'   => $webhookUrl,
+            'effective_url' => $effectiveUrl,
+            'http_code'     => $httpCode,
+            'response'      => $response,
+            'curl_err'      => $curlError
+        ];
+
+        if (!is_dir($logsDir)) {
+            @mkdir($logsDir, 0755, true);
+        }
+        @file_put_contents($logsDir . '/sheets_sync_debug.jsonl', json_encode($debugEntry, JSON_UNESCAPED_UNICODE) . "\n", FILE_APPEND | LOCK_EX);
+
+        if ($httpCode >= 200 && $httpCode < 400) {
             return [
-                'success' => true,
-                'lead_id' => $rowData['lead_id'],
-                'mode'    => 'sheets_live',
-                'response'=> $response
+                'success'       => true,
+                'lead_id'       => $rowData['lead_id'],
+                'http_code'     => $httpCode,
+                'mode'          => 'sheets_live',
+                'google_reply'  => $response
             ];
         }
 
@@ -341,10 +389,12 @@ class GoogleSheetsService
         @file_put_contents($queueFile, $logEntry, FILE_APPEND | LOCK_EX);
 
         return [
-            'success' => true, // Still true for customer since backup is securely preserved
-            'lead_id' => $rowData['lead_id'],
-            'mode'    => 'queued_fallback',
-            'error'   => $curlError ?: "HTTP $httpCode"
+            'success'   => false,
+            'lead_id'   => $rowData['lead_id'],
+            'mode'      => 'queued_fallback',
+            'http_code' => $httpCode,
+            'error'     => $curlError ?: "HTTP $httpCode",
+            'response'  => $response
         ];
     }
 }

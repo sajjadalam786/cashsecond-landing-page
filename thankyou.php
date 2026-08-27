@@ -1,7 +1,8 @@
 <?php
 /**
  * CashSecond - Valuation & Doorstep Confirmation Page (Thank You)
- * Keeps valuation blurred and initiates WhatsApp handover with 5s countdown.
+ * Official Price Reveal, Mandatory Valuation Feedback & Doorstep Pickup Scheduling.
+ * Optimized for Google Ads Conversion Tracking & Apple-grade aesthetic.
  */
 
 if (session_status() === PHP_SESSION_NONE) {
@@ -12,49 +13,117 @@ $config = require_once __DIR__ . '/config/config.php';
 $base_path = '';
 $business = $config['business'] ?? [];
 
-$model    = isset($_GET['model']) ? htmlspecialchars(strip_tags(trim($_GET['model'])), ENT_QUOTES, 'UTF-8') : 'Apple iPhone';
-$variant  = isset($_GET['variant']) ? htmlspecialchars(strip_tags(trim($_GET['variant'])), ENT_QUOTES, 'UTF-8') : '';
-$val      = isset($_GET['val']) ? (int)preg_replace('/[^0-9]/', '', $_GET['val']) : 0;
-$name     = isset($_GET['name']) ? htmlspecialchars(strip_tags(trim($_GET['name'])), ENT_QUOTES, 'UTF-8') : 'Valued Customer';
-$ref_id   = isset($_GET['ref']) ? htmlspecialchars(strip_tags(trim($_GET['ref'])), ENT_QUOTES, 'UTF-8') : 'CS-' . strtoupper(substr(md5(uniqid()), 0, 6));
+$model        = isset($_GET['model']) ? htmlspecialchars(strip_tags(trim($_GET['model'])), ENT_QUOTES, 'UTF-8') : 'Apple iPhone';
+$variant      = isset($_GET['variant']) ? htmlspecialchars(strip_tags(trim($_GET['variant'])), ENT_QUOTES, 'UTF-8') : '';
+$val          = isset($_GET['val']) ? (int)preg_replace('/[^0-9]/', '', $_GET['val']) : 0;
+$name         = isset($_GET['name']) ? htmlspecialchars(strip_tags(trim($_GET['name'])), ENT_QUOTES, 'UTF-8') : 'Valued Customer';
+$phone        = isset($_GET['phone']) ? htmlspecialchars(strip_tags(trim($_GET['phone'])), ENT_QUOTES, 'UTF-8') : '';
+$ref_id       = isset($_GET['ref']) ? htmlspecialchars(strip_tags(trim($_GET['ref'])), ENT_QUOTES, 'UTF-8') : 'EXG-' . date('Ymd') . '-' . strtoupper(substr(md5(uniqid()), 0, 4));
 
 $device_display = trim($model . ($variant ? " ($variant)" : ''));
 
-// WhatsApp Message Format as requested by User
-$wa_phone   = preg_replace('/[^0-9]/', '', $business['whatsapp'] ?? '918976332211');
-if (strlen($wa_phone) === 10) {
-    $wa_phone = '91' . $wa_phone;
-}
-
-$wa_message = "i have completed the form Please share my iphone Value - " . $device_display;
-$wa_url     = "https://wa.me/" . $wa_phone . "?text=" . rawurlencode($wa_message);
-
 $noindex          = true;
-$page_title       = "Valuation Request Sent | " . ($business['name'] ?? 'CashSecond');
-$page_description = "Thank you for choosing CashSecond. Your iPhone valuation has been sent directly to your WhatsApp.";
+$page_title       = "Valuation & Pickup Confirmed | " . ($business['name'] ?? 'CashSecond');
+$page_description = "Your official iPhone valuation quote and Mumbai doorstep pickup details.";
 
 require __DIR__ . '/includes/header.php';
 ?>
 
 <div class="thankyou-page-wrapper">
-    <!-- Main Confirmation Card -->
+    <!-- Main Confirmation Container -->
     <main class="thankyou-card-container">
         <div class="thankyou-card">
-            <!-- WhatsApp / Checkmark Icon -->
+            <!-- Animated Verified Check Icon -->
             <div class="thankyou-icon-wrap" aria-hidden="true">
-                <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
                     <polyline points="20 6 9 17 4 12"></polyline>
                 </svg>
             </div>
 
-            <h1 class="thankyou-title">Valuation Request Sent!</h1>
-            <p class="thankyou-subtitle">Thank you <?= htmlspecialchars($name) ?>. We've sent your official iPhone valuation and doorstep pickup slot directly to your WhatsApp.</p>
+            <span class="thankyou-badge-confirmed">✓ Valuation Calculated Successfully</span>
+            <h1 class="thankyou-title">Your Valuation Quote</h1>
+            <p class="thankyou-subtitle">Thank you, <strong><?= htmlspecialchars($name) ?></strong>. Here is your official estimated resale quote for your device.</p>
 
-            <!-- Valuation Breakdown Deck (With Blurred Locked Value) -->
+            <!-- Revealed Valuation Hero Card -->
+            <div class="thankyou-valuation-hero">
+                <div class="ty-device-name"><?= htmlspecialchars($device_display) ?></div>
+                <div class="ty-amount-caption">Estimated Resale Value</div>
+                <div class="ty-amount-value">₹ <?= $val > 0 ? number_format($val) : '48,500' ?></div>
+                <div class="ty-ref-pill">Booking Ref: <?= htmlspecialchars($ref_id) ?></div>
+                <p class="ty-sub-note">Free Mumbai doorstep pickup • Spot UPI / Cash payment upon physical verification</p>
+            </div>
+
+            <!-- Feedback & Doorstep Pickup Scheduling Box -->
+            <div class="ty-feedback-schedule-card" id="tyScheduleCard">
+                <!-- Feedback Section -->
+                <div class="ty-section-header">
+                    <div class="ty-section-title">
+                        <span>How was your valuation estimate?</span>
+                        <span class="ty-req-badge">Required</span>
+                    </div>
+                    <p class="ty-section-subtitle">Please rate our price quote to confirm your doorstep pickup:</p>
+                </div>
+
+                <div class="ty-feedback-pills-grid" id="tyFeedbackPills">
+                    <button type="button" class="ty-feedback-pill" data-val="Too Less Price">Too Less Price</button>
+                    <button type="button" class="ty-feedback-pill" data-val="Less Price">Less Price</button>
+                    <button type="button" class="ty-feedback-pill" data-val="Average Price">Average Price</button>
+                    <button type="button" class="ty-feedback-pill" data-val="Good Price">Good Price</button>
+                    <button type="button" class="ty-feedback-pill" data-val="Awesome">Awesome! 🔥</button>
+                </div>
+
+                <div class="ty-comment-wrap">
+                    <textarea id="tyFeedbackComment" class="ty-comment-textarea" placeholder="Share your experience or suggestion (optional)..." rows="2"></textarea>
+                </div>
+
+                <div id="tyFeedbackError" class="ty-feedback-error" style="display:none;">Please select one price rating option above to schedule your pickup.</div>
+
+                <hr style="border: none; border-top: 1px solid #E5E5EA; margin: 16px 0;">
+
+                <!-- Pickup Slot Selector -->
+                <div class="ty-section-header">
+                    <div class="ty-section-title">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                        <span>Select Doorstep Pickup Slot:</span>
+                    </div>
+                </div>
+
+                <div class="ty-slots-grid" id="tyDateSlotsGrid" style="margin-bottom: 8px;">
+                    <button type="button" class="ty-slot-pill selected" data-date="Today">Today</button>
+                    <button type="button" class="ty-slot-pill" data-date="Tomorrow">Tomorrow</button>
+                    <button type="button" class="ty-slot-pill" data-date="Day After">Day After</button>
+                </div>
+
+                <div class="ty-slots-grid" id="tyTimeSlotsGrid" style="margin-bottom: 16px;">
+                    <button type="button" class="ty-slot-pill selected" data-slot="Express (Within 6 Hours)">⚡ Express (Within 6 Hours)</button>
+                    <button type="button" class="ty-slot-pill" data-slot="10:00 AM - 1:00 PM">10:00 AM - 1:00 PM</button>
+                    <button type="button" class="ty-slot-pill" data-slot="1:00 PM - 5:00 PM">1:00 PM - 5:00 PM</button>
+                    <button type="button" class="ty-slot-pill" data-slot="5:00 PM - 9:00 PM">5:00 PM - 9:00 PM</button>
+                </div>
+
+                <!-- Schedule CTA Button -->
+                <button type="button" id="tyConfirmPickupBtn" class="btn ty-btn-primary" style="font-size: 1rem; padding: 14px 20px;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><polyline points="9 15 12 18 15 15"/></svg>
+                    <span>Schedule Doorstep Pickup (Within 6 Hours) →</span>
+                </button>
+            </div>
+
+            <!-- Pickup Success Banner (Shown after scheduling) -->
+            <div id="tyPickupSuccessBox" style="display:none; background:#E8F5E9; border:1.5px solid #A5D6A7; border-radius:18px; padding:18px 20px; margin-bottom:20px; text-align:left;">
+                <div style="display:flex; align-items:center; gap:8px; font-weight:800; font-size:1rem; color:#1B5E20; margin-bottom:4px;">
+                    <span>✓</span>
+                    <span>Doorstep Pickup Scheduled!</span>
+                </div>
+                <div style="font-size:0.84375rem; color:#2E7D32; line-height:1.45;">
+                    Thank you! Your pickup window (<strong id="tyConfirmedSlotText">Today • Express Within 6 Hours</strong>) has been registered. Our Mumbai verification specialist will call you shortly before arrival.
+                </div>
+            </div>
+
+            <!-- Booking Specifications Deck -->
             <div class="thankyou-valuation-deck">
                 <div class="valuation-row">
                     <span class="label">Reference ID</span>
-                    <span class="value" style="font-family: monospace; letter-spacing: 0.5px; color: #0071E3;"><?= htmlspecialchars($ref_id) ?></span>
+                    <span class="value" style="font-family: monospace; font-weight: 700; color: #0071E3;"><?= htmlspecialchars($ref_id) ?></span>
                 </div>
                 <div class="valuation-row">
                     <span class="label">Device Model</span>
@@ -64,74 +133,168 @@ require __DIR__ . '/includes/header.php';
                     <span class="label">Customer Name</span>
                     <span class="value"><?= htmlspecialchars($name) ?></span>
                 </div>
+                <?php if (!empty($phone)): ?>
+                <div class="valuation-row">
+                    <span class="label">Contact Phone</span>
+                    <span class="value">+91 <?= htmlspecialchars($phone) ?></span>
+                </div>
+                <?php endif; ?>
                 <div class="valuation-row">
                     <span class="label">Doorstep Service Area</span>
-                    <span class="value">Mumbai &amp; MMR</span>
+                    <span class="value">Mumbai &amp; MMR (Free Doorstep Inspection)</span>
                 </div>
-                <div class="valuation-highlight-row">
+                <div class="valuation-row">
+                    <span class="label">Payment Mode</span>
+                    <span class="value">Instant Spot UPI / Cash</span>
+                </div>
+            </div>
+
+            <!-- What Happens Next 3-Step Timeline -->
+            <div class="ty-next-steps-card">
+                <h3 class="ty-steps-title">What Happens Next?</h3>
+                <div class="ty-step-item">
+                    <span class="ty-step-num">1</span>
                     <div>
-                        <span class="label" style="display: block; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 700; color: #0071E3;">Estimated Resale Value</span>
-                        <span style="font-size: 0.75rem; color: #8E8E93;">Sent directly to your WhatsApp chat</span>
+                        <strong>Confirmation Call:</strong>
+                        <p>Our executive will call you to confirm your exact doorstep address and arrival time.</p>
                     </div>
-                    <div class="valuation-blurred-wrap">
-                        <div class="valuation-blurred-amount">₹ <?= $val > 0 ? number_format($val) : '48,500' ?></div>
-                        <div class="valuation-lock-pill">🔒 Sent to WhatsApp</div>
+                </div>
+                <div class="ty-step-item">
+                    <span class="ty-step-num">2</span>
+                    <div>
+                        <strong>5-Minute Doorstep Diagnostic:</strong>
+                        <p>Our trained technician inspects screen, cameras, and battery health at your doorstep.</p>
+                    </div>
+                </div>
+                <div class="ty-step-item">
+                    <span class="ty-step-num">3</span>
+                    <div>
+                        <strong>Spot Payment &amp; Certified Wipe:</strong>
+                        <p>Immediate bank transfer / UPI payment before handover with a government-compliant data destruction receipt.</p>
                     </div>
                 </div>
             </div>
 
-            <!-- WhatsApp Auto-Redirect Box with 5-Second Countdown -->
-            <div class="whatsapp-redirect-box">
-                <div class="whatsapp-spinner-row">
-                    <span class="pulse-dot"></span>
-                    <span id="waStatusText">Connecting with CashSecond Executive (<span id="waCountdownSec">5</span>s)...</span>
-                </div>
-                <p style="font-size: 0.8125rem; color: #4A4A4E; margin: 0 0 14px 0;">
-                    Opening WhatsApp with your pre-written quote request message:
-                </p>
-                <a href="<?= htmlspecialchars($wa_url) ?>" class="btn-whatsapp-direct" id="manualWhatsAppBtn" target="_blank" rel="noopener noreferrer">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
-                    </svg>
-                    <span>Open WhatsApp &amp; View Value Now</span>
+            <!-- Quick Action Buttons -->
+            <div class="ty-action-btns">
+                <a href="<?= $base_path ?>index.php" class="btn ty-btn-secondary">
+                    Return to Homepage
+                </a>
+                <a href="tel:<?= preg_replace('/[^0-9+]/', '', $business['phone'] ?? '+918976332211') ?>" class="btn ty-btn-secondary">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                    <span>Call Support: <?= htmlspecialchars($business['phone'] ?? '+91 897633 2211') ?></span>
                 </a>
             </div>
 
+            <!-- Trust Strip -->
             <div class="thankyou-trust-strip">
-                <span>⚡ Instant Spot UPI / Cash</span>
+                <span>⚡ Free Mumbai Doorstep Pickup</span>
                 <span>•</span>
-                <span>🛡️ DoD-Grade Data Wipe</span>
+                <span>🛡️ Certified Data Erasure</span>
                 <span>•</span>
-                <span>🏠 Free Doorstep Pickup</span>
+                <span>💰 Instant Spot UPI / Cash</span>
             </div>
         </div>
     </main>
 </div>
 
-<!-- Automatic 5-Second WhatsApp Transition Script -->
+<!-- Interactive Scheduling & Feedback Client Script -->
 <script>
     (function () {
-        var waTarget = <?= json_encode($wa_url) ?>;
-        var countdownSec = 5;
-        var countdownEl = document.getElementById('waCountdownSec');
-        var statusEl = document.getElementById('waStatusText');
+        var selectedFeedbackRating = '';
+        var selectedPickupDate = 'Today';
+        var selectedPickupSlot = 'Express (Within 6 Hours)';
+        var refId = <?= json_encode($ref_id) ?>;
 
-        if (waTarget) {
-            var timer = setInterval(function () {
-                countdownSec--;
-                if (countdownEl) {
-                    countdownEl.textContent = countdownSec;
-                }
-                if (countdownSec <= 0) {
-                    clearInterval(timer);
-                    if (statusEl) {
-                        statusEl.textContent = 'Redirecting to WhatsApp...';
+        // Feedback Pills
+        var fbPills = document.querySelectorAll('#tyFeedbackPills .ty-feedback-pill');
+        var fbError = document.getElementById('tyFeedbackError');
+
+        fbPills.forEach(function (pill) {
+            pill.addEventListener('click', function () {
+                fbPills.forEach(function (p) { p.classList.remove('selected'); });
+                pill.classList.add('selected');
+                selectedFeedbackRating = pill.getAttribute('data-val') || '';
+                if (fbError) fbError.style.display = 'none';
+            });
+        });
+
+        // Date Pills
+        var datePills = document.querySelectorAll('#tyDateSlotsGrid .ty-slot-pill');
+        datePills.forEach(function (pill) {
+            pill.addEventListener('click', function () {
+                datePills.forEach(function (p) { p.classList.remove('selected'); });
+                pill.classList.add('selected');
+                selectedPickupDate = pill.getAttribute('data-date') || 'Today';
+            });
+        });
+
+        // Time Pills
+        var timePills = document.querySelectorAll('#tyTimeSlotsGrid .ty-slot-pill');
+        timePills.forEach(function (pill) {
+            pill.addEventListener('click', function () {
+                timePills.forEach(function (p) { p.classList.remove('selected'); });
+                pill.classList.add('selected');
+                selectedPickupSlot = pill.getAttribute('data-slot') || 'Express (Within 6 Hours)';
+            });
+        });
+
+        // Confirm Pickup Button
+        var confirmBtn = document.getElementById('tyConfirmPickupBtn');
+        var scheduleCard = document.getElementById('tyScheduleCard');
+        var successBox = document.getElementById('tyPickupSuccessBox');
+        var confirmedSlotText = document.getElementById('tyConfirmedSlotText');
+
+        if (confirmBtn) {
+            confirmBtn.addEventListener('click', function () {
+                if (!selectedFeedbackRating) {
+                    if (fbError) {
+                        fbError.style.display = 'block';
+                        fbError.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
                     }
-                    window.location.href = waTarget;
+                    return;
                 }
-            }, 1000);
+
+                confirmBtn.disabled = true;
+                confirmBtn.innerHTML = '<span>Saving Pickup Schedule...</span>';
+
+                var commentEl = document.getElementById('tyFeedbackComment');
+                var commentText = commentEl ? commentEl.value.trim() : '';
+
+                var fbData = new FormData();
+                fbData.append('action', 'feedback');
+                fbData.append('ref_id', refId);
+                fbData.append('feedback_rating', selectedFeedbackRating);
+                fbData.append('feedback_comment', commentText);
+                fbData.append('pickup_date', selectedPickupDate);
+                fbData.append('pickup_slot', selectedPickupSlot);
+
+                fetch('forms/buyback-questionnaire.php', { method: 'POST', body: fbData })
+                    .catch(function () {});
+
+                setTimeout(function () {
+                    if (scheduleCard) scheduleCard.style.display = 'none';
+                    if (confirmedSlotText) confirmedSlotText.textContent = selectedPickupDate + ' • ' + selectedPickupSlot;
+                    if (successBox) {
+                        successBox.style.display = 'block';
+                        successBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                }, 400);
+            });
         }
     })();
+</script>
+
+<!-- Google Ads Conversion Tracking Event Hook -->
+<script>
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+        'event': 'valuation_lead_completed',
+        'transaction_id': <?= json_encode($ref_id) ?>,
+        'value': <?= (int)$val ?>,
+        'currency': 'INR',
+        'device_model': <?= json_encode($device_display) ?>
+    });
 </script>
 
 <?php require __DIR__ . '/includes/footer.php'; ?>

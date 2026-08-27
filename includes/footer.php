@@ -149,7 +149,7 @@ $current_year = date('Y');
 
     <!-- Main JavaScript Engine (Deferred for high speed & non-blocking execution) -->
     <script src="<?= $base_path ?>assets/js/script.js?v=16.0" defer></script>
-    <script src="<?= $base_path ?>assets/js/questionnaire.js?v=3.1" defer></script>
+    <script src="<?= $base_path ?>assets/js/questionnaire.js?v=9.0" defer></script>
 </body>
 </html>
 

@@ -214,34 +214,6 @@ require __DIR__ . '/includes/header.php';
                 </div>
             </div>
 
-            <!-- 7. Used iPhone Trade-In -->
-            <div class="bento-pillar-card">
-                <div class="bento-pillar-icon-box icon-teal">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <polyline points="23 4 23 10 17 10"/>
-                        <polyline points="1 20 1 14 7 14"/>
-                        <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
-                    </svg>
-                </div>
-                <div class="bento-pillar-content">
-                    <h3 class="bento-pillar-title">Used iPhone Trade-In</h3>
-                    <p class="bento-pillar-desc">Maximize your resale value toward your next iPhone upgrade.</p>
-                </div>
-            </div>
-
-            <!-- 8. Hassle-Free iPhone Buyback -->
-            <div class="bento-pillar-card">
-                <div class="bento-pillar-icon-box icon-emerald">
-                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
-                        <polyline points="22 4 12 14.01 9 11.01"/>
-                    </svg>
-                </div>
-                <div class="bento-pillar-content">
-                    <h3 class="bento-pillar-title">Hassle-Free Buyback</h3>
-                    <p class="bento-pillar-desc">Zero haggling, zero paperwork delays, and certified peace of mind.</p>
-                </div>
-            </div>
         </div>
     </div>
 </section>

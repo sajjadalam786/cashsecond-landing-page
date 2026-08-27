@@ -608,43 +608,18 @@
                                 <path d="M16.3 13.5a1.4 1.4 0 0 1 2.8 0v2"/>
                                 <path d="M19.1 15a1.4 1.4 0 0 1 2.8 0v3.5a6.5 6.5 0 0 1-6.5 6.5h-3a5.5 5.5 0 0 1-4.2-2L5.8 19.2a1.5 1.5 0 0 1 2.2-2.1l2.5 1.9V13"/>
                             </svg>
-                            <span>Send Valuation to WhatsApp</span>
+                            <span>Get My Valuation Quote</span>
                             <img src="assets/images/iphone-value-check-button.png" alt="iPhone" class="btn-iphone-thumb" width="22" height="38">
                         </button>
                     </form>
 
-                    <div class="qn-form-trust-notes">
+                    <div class="qn-form-trust-notes" id="qnFormTrustNotes">
                         <span>⚡ Free Mumbai Doorstep Pickup</span>
                         <span>•</span>
                         <span>🔒 100% Privacy Protected</span>
                     </div>
                 </div>
 
-                <!-- Value Unlocked Reveal Container (Keeps value blurred & shows WhatsApp Sent) -->
-                <div id="qnValueRevealedView" class="qn-revealed-view" style="display:none;">
-                    <div class="qn-reveal-celebration-badge">
-                        <span class="qn-check-icon">✓</span>
-                        <span>Valuation Request Sent to WhatsApp!</span>
-                    </div>
-                    
-                    <div class="qn-revealed-price-card">
-                        <span class="qn-revealed-device-label">${state.model} (${state.variant})</span>
-                        <div class="qn-revealed-amount-title">Estimated Resale Value (Private)</div>
-                        
-                        <div class="qn-blurred-price-wrap">
-                            <div class="qn-blurred-price-number">₹ 48,500</div>
-                            <div class="qn-blur-lock-pill">
-                                <span>🔒 Sent to Your WhatsApp</span>
-                            </div>
-                        </div>
-
-                        <p class="qn-revealed-note">Free doorstep pickup in Mumbai • Instant spot cash / UPI payment</p>
-                    </div>
-
-                    <div class="qn-redirect-status-box">
-                        <span class="qn-spinner-pulse"></span>
-                        <span id="qnRedirectCountdownText">Opening your WhatsApp chat in a moment...</span>
-                    </div>
                 </div>
             </div>
         `;
@@ -653,7 +628,6 @@
         const form = container.querySelector('#qnBuybackLeadForm');
         const submitBtn = container.querySelector('#qnSubmitRevealBtn');
         const errorAlert = container.querySelector('#qnFormErrorAlert');
-        const revealedView = container.querySelector('#qnValueRevealedView');
 
         if (form) {
             form.addEventListener('submit', async (e) => {
@@ -715,38 +689,28 @@
                     const res = await resp.json();
 
                     if (resp.ok && res.status === 'success') {
-                        // 1. Hide form
-                        form.style.display = 'none';
-                        const lockedBox = container.querySelector('.qn-locked-valuation-box');
-                        if (lockedBox) lockedBox.style.display = 'none';
+                        const refId = res.lead_id || res.ref_id || 'EXG-' + (new Date().toISOString().slice(0,10).replace(/-/g,'')) + '-' + Math.floor(1000 + Math.random() * 9000);
 
-                        // 2. Display Blurred Value & WhatsApp Sent Confirmation
-                        if (revealedView) {
-                            revealedView.style.display = 'block';
-                        }
+                        // Close modal popup immediately
+                        closeQuestionnaire();
 
-                        const refId = res.lead_id || res.ref_id || 'CS-VAL-' + Math.floor(100000 + Math.random() * 900000);
-
-                        // 3. Build Redirect URL to thankyou.php
+                        // Redirect to thank you page where price is revealed and feedback/pickup is scheduled
                         const thankYouUrl = `thankyou.php?model=${encodeURIComponent(state.model)}&variant=${encodeURIComponent(state.variant)}&val=${finalVal}&name=${encodeURIComponent(name)}&phone=${encodeURIComponent(cleanPhone)}&ref=${encodeURIComponent(refId)}`;
 
-                        // 4. Redirect after short countdown
-                        setTimeout(() => {
-                            window.location.href = thankYouUrl;
-                        }, 1400);
+                        window.location.href = thankYouUrl;
 
                     } else {
                         showError(res.message || 'We could not save your valuation. Please check details and try again.');
                         if (submitBtn) {
                             submitBtn.disabled = false;
-                            submitBtn.innerHTML = '<svg class="btn-click-icon" width="20" height="23" viewBox="0 0 24 28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="1.5" x2="12" y2="4.5"/><line x1="6.5" y1="3.5" x2="8.6" y2="5.6"/><line x1="17.5" y1="3.5" x2="15.4" y2="5.6"/><line x1="4" y1="9" x2="7" y2="9"/><line x1="20" y1="9" x2="17" y2="9"/><path d="M10.5 13V8a1.5 1.5 0 0 1 3 0v5"/><path d="M13.5 12a1.4 1.4 0 0 1 2.8 0v2.5"/><path d="M16.3 13.5a1.4 1.4 0 0 1 2.8 0v2"/><path d="M19.1 15a1.4 1.4 0 0 1 2.8 0v3.5a6.5 6.5 0 0 1-6.5 6.5h-3a5.5 5.5 0 0 1-4.2-2L5.8 19.2a1.5 1.5 0 0 1 2.2-2.1l2.5 1.9V13"/></svg><span>Send Valuation to WhatsApp</span><img src="assets/images/iphone-value-check-button.png" alt="iPhone" class="btn-iphone-thumb" width="22" height="38">';
+                            submitBtn.innerHTML = '<svg class="btn-click-icon" width="20" height="23" viewBox="0 0 24 28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="1.5" x2="12" y2="4.5"/><line x1="6.5" y1="3.5" x2="8.6" y2="5.6"/><line x1="17.5" y1="3.5" x2="15.4" y2="5.6"/><line x1="4" y1="9" x2="7" y2="9"/><line x1="20" y1="9" x2="17" y2="9"/><path d="M10.5 13V8a1.5 1.5 0 0 1 3 0v5"/><path d="M13.5 12a1.4 1.4 0 0 1 2.8 0v2.5"/><path d="M16.3 13.5a1.4 1.4 0 0 1 2.8 0v2"/><path d="M19.1 15a1.4 1.4 0 0 1 2.8 0v3.5a6.5 6.5 0 0 1-6.5 6.5h-3a5.5 5.5 0 0 1-4.2-2L5.8 19.2a1.5 1.5 0 0 1 2.2-2.1l2.5 1.9V13"/></svg><span>Get My Valuation Quote</span><img src="assets/images/iphone-value-check-button.png" alt="iPhone" class="btn-iphone-thumb" width="22" height="38">';
                         }
                     }
                 } catch (err) {
                     showError('Network error. Please check your internet connection and retry.');
                     if (submitBtn) {
                         submitBtn.disabled = false;
-                        submitBtn.innerHTML = '<svg class="btn-click-icon" width="20" height="23" viewBox="0 0 24 28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="1.5" x2="12" y2="4.5"/><line x1="6.5" y1="3.5" x2="8.6" y2="5.6"/><line x1="17.5" y1="3.5" x2="15.4" y2="5.6"/><line x1="4" y1="9" x2="7" y2="9"/><line x1="20" y1="9" x2="17" y2="9"/><path d="M10.5 13V8a1.5 1.5 0 0 1 3 0v5"/><path d="M13.5 12a1.4 1.4 0 0 1 2.8 0v2.5"/><path d="M16.3 13.5a1.4 1.4 0 0 1 2.8 0v2"/><path d="M19.1 15a1.4 1.4 0 0 1 2.8 0v3.5a6.5 6.5 0 0 1-6.5 6.5h-3a5.5 5.5 0 0 1-4.2-2L5.8 19.2a1.5 1.5 0 0 1 2.2-2.1l2.5 1.9V13"/></svg><span>Retry Submission</span><img src="assets/images/iphone-value-check-button.png" alt="iPhone" class="btn-iphone-thumb" width="22" height="38">';
+                        submitBtn.innerHTML = '<svg class="btn-click-icon" width="20" height="23" viewBox="0 0 24 28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="1.5" x2="12" y2="4.5"/><line x1="6.5" y1="3.5" x2="8.6" y2="5.6"/><line x1="17.5" y1="3.5" x2="15.4" y2="5.6"/><line x1="4" y1="9" x2="7" y2="9"/><line x1="20" y1="9" x2="17" y2="9"/><path d="M10.5 13V8a1.5 1.5 0 0 1 3 0v5"/><path d="M13.5 12a1.4 1.4 0 0 1 2.8 0v2.5"/><path d="M16.3 13.5a1.4 1.4 0 0 1 2.8 0v2"/><path d="M19.1 15a1.4 1.4 0 0 1 2.8 0v3.5a6.5 6.5 0 0 1-6.5 6.5h-3a5.5 5.5 0 0 1-4.2-2L5.8 19.2a1.5 1.5 0 0 1 2.2-2.1l2.5 1.9V13"/></svg><span>Get My Valuation Quote</span><img src="assets/images/iphone-value-check-button.png" alt="iPhone" class="btn-iphone-thumb" width="22" height="38">';
                     }
                 }
             });

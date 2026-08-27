@@ -53,6 +53,39 @@ if (!empty($_POST['website_hp'])) {
     exit;
 }
 
+// 4. Handle Feedback Submission Action
+if (isset($_POST['action']) && $_POST['action'] === 'feedback') {
+    $ref_id       = isset($_POST['ref_id']) ? htmlspecialchars(strip_tags(trim($_POST['ref_id'])), ENT_QUOTES, 'UTF-8') : '';
+    $rating       = isset($_POST['feedback_rating']) ? htmlspecialchars(strip_tags(trim($_POST['feedback_rating'])), ENT_QUOTES, 'UTF-8') : '';
+    $comment      = isset($_POST['feedback_comment']) ? htmlspecialchars(strip_tags(trim($_POST['feedback_comment'])), ENT_QUOTES, 'UTF-8') : '';
+    $pickup_date  = isset($_POST['pickup_date']) ? htmlspecialchars(strip_tags(trim($_POST['pickup_date'])), ENT_QUOTES, 'UTF-8') : 'Today';
+    $pickup_slot  = isset($_POST['pickup_slot']) ? htmlspecialchars(strip_tags(trim($_POST['pickup_slot'])), ENT_QUOTES, 'UTF-8') : 'Express (Within 6 Hours)';
+
+    $feedback_entry = [
+        'type'           => 'valuation_feedback',
+        'ref_id'         => $ref_id,
+        'timestamp'      => date('Y-m-d H:i:s'),
+        'rating'         => $rating,
+        'comment'        => $comment,
+        'pickup_date'    => $pickup_date,
+        'pickup_slot'    => $pickup_slot,
+        'ip'             => $_SERVER['REMOTE_ADDR'] ?? 'UNKNOWN'
+    ];
+
+    $logs_dir = __DIR__ . '/../logs';
+    if (!is_dir($logs_dir)) {
+        @mkdir($logs_dir, 0755, true);
+    }
+    @file_put_contents($logs_dir . '/questionnaire_feedback.jsonl', json_encode($feedback_entry, JSON_UNESCAPED_UNICODE) . "\n", FILE_APPEND | LOCK_EX);
+
+    echo json_encode([
+        'status'  => 'success',
+        'message' => 'Thank you for your feedback! Doorstep pickup scheduled.',
+        'ref_id'  => $ref_id
+    ]);
+    exit;
+}
+
 date_default_timezone_set('Asia/Kolkata');
 
 // Extract & Sanitize Contact Fields
