@@ -17,47 +17,7 @@ $current_year = date('Y');
     <!-- Futuristic Apple-Grade Footer -->
     <footer class="site-footer" id="site-footer">
         <div class="container footer-container">
-            <!-- 1. Top Phone Series Quick-Access Strip with Phone Icons -->
-            <div class="footer-models-strip" aria-label="iPhone Model Series Quick Links">
-                <span class="footer-models-label">Popular Series:</span>
-                <div class="footer-models-pills">
-                    <a href="<?= $base_path ?>index.php#iphone-models" class="footer-model-pill start-exact-valuation-btn" data-model="Apple iPhone 16 Pro Max" aria-label="Sell iPhone 16 Series">
-                        <svg class="footer-phone-icon" width="14" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                            <rect x="5" y="2" width="14" height="20" rx="3" ry="3"/>
-                            <line x1="12" y1="18" x2="12.01" y2="18"/>
-                        </svg>
-                        <span>iPhone 16 Series</span>
-                    </a>
-                    <a href="<?= $base_path ?>index.php#iphone-models" class="footer-model-pill start-exact-valuation-btn" data-model="Apple iPhone 15 Pro Max" aria-label="Sell iPhone 15 Series">
-                        <svg class="footer-phone-icon" width="14" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                            <rect x="5" y="2" width="14" height="20" rx="3" ry="3"/>
-                            <line x1="12" y1="18" x2="12.01" y2="18"/>
-                        </svg>
-                        <span>iPhone 15 Series</span>
-                    </a>
-                    <a href="<?= $base_path ?>index.php#iphone-models" class="footer-model-pill start-exact-valuation-btn" data-model="Apple iPhone 14 Pro Max" aria-label="Sell iPhone 14 Series">
-                        <svg class="footer-phone-icon" width="14" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                            <rect x="5" y="2" width="14" height="20" rx="3" ry="3"/>
-                            <line x1="12" y1="18" x2="12.01" y2="18"/>
-                        </svg>
-                        <span>iPhone 14 Series</span>
-                    </a>
-                    <a href="<?= $base_path ?>index.php#iphone-models" class="footer-model-pill start-exact-valuation-btn" data-model="Apple iPhone 13" aria-label="Sell iPhone 13 Series">
-                        <svg class="footer-phone-icon" width="14" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                            <rect x="5" y="2" width="14" height="20" rx="3" ry="3"/>
-                            <line x1="12" y1="18" x2="12.01" y2="18"/>
-                        </svg>
-                        <span>iPhone 13 Series</span>
-                    </a>
-                    <a href="<?= $base_path ?>index.php#iphone-models" class="footer-model-pill start-exact-valuation-btn" data-model="Apple iPhone 12" aria-label="Sell iPhone 12 & Older">
-                        <svg class="footer-phone-icon" width="14" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                            <rect x="5" y="2" width="14" height="20" rx="3" ry="3"/>
-                            <line x1="12" y1="18" x2="12.01" y2="18"/>
-                        </svg>
-                        <span>iPhone 12 &amp; Older</span>
-                    </a>
-                </div>
-            </div>
+            
 
             <!-- 2. Main 4-Column Architectural Grid -->
             <div class="footer-main-grid">
@@ -73,10 +33,7 @@ $current_year = date('Y');
                             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
                             <span>Office Address: Arcadia Bldg, NCPA Marg, Nariman Point, Mumbai 400021</span>
                         </div>
-                        <div class="footer-contact-row">
-                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                            <span>Mon - Sun: 10:00 AM – 9:00 PM</span>
-                        </div>
+                       
                         <div class="footer-contact-row">
                             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
                             <a href="mailto:cashsecondofficial@gmail.com">cashsecondofficial@gmail.com</a>
@@ -84,8 +41,23 @@ $current_year = date('Y');
                     </div>
                 </div>
 
+                <!-- Mobile-Only Footer Category Filter Tabs -->
+                <div class="footer-mobile-tabs-wrap" aria-label="Footer Categories">
+                    <div class="footer-mobile-tabs" role="tablist">
+                        <button type="button" class="footer-tab-btn active" data-target="footer-tab-models" role="tab" aria-selected="true">
+                            <span>Sell by Model</span>
+                        </button>
+                        <button type="button" class="footer-tab-btn" data-target="footer-tab-why" role="tab" aria-selected="false">
+                            <span>Why CashSecond</span>
+                        </button>
+                        <button type="button" class="footer-tab-btn" data-target="footer-tab-legal" role="tab" aria-selected="false">
+                            <span>Trust &amp; Legal</span>
+                        </button>
+                    </div>
+                </div>
+
                 <!-- Col 2: Sell by iPhone Model -->
-                <div class="footer-grid-col">
+                <div class="footer-grid-col footer-tab-panel active" id="footer-tab-models" role="tabpanel">
                     <h4 class="footer-col-title">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="2" width="14" height="20" rx="3" ry="3"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
                         <span>Sell by Model</span>
@@ -102,7 +74,7 @@ $current_year = date('Y');
                 </div>
 
                 <!-- Col 3: Process & Guarantees -->
-                <div class="footer-grid-col">
+                <div class="footer-grid-col footer-tab-panel" id="footer-tab-why" role="tabpanel">
                     <h4 class="footer-col-title">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
                         <span>Why CashSecond</span>
@@ -117,7 +89,7 @@ $current_year = date('Y');
                 </div>
 
                 <!-- Col 4: Legal Policies & Compliance -->
-                <div class="footer-grid-col">
+                <div class="footer-grid-col footer-tab-panel" id="footer-tab-legal" role="tabpanel">
                     <h4 class="footer-col-title">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                         <span>Trust &amp; Legal</span>
@@ -176,7 +148,7 @@ $current_year = date('Y');
     <?php require __DIR__ . '/schema.php'; ?>
 
     <!-- Main JavaScript Engine (Deferred for high speed & non-blocking execution) -->
-    <script src="<?= $base_path ?>assets/js/script.js?v=14.0" defer></script>
+    <script src="<?= $base_path ?>assets/js/script.js?v=16.0" defer></script>
     <script src="<?= $base_path ?>assets/js/questionnaire.js?v=3.1" defer></script>
 </body>
 </html>

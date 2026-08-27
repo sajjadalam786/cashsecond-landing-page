@@ -1822,4 +1822,35 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+    // ============================================================
+    // FOOTER MOBILE CATEGORY PILL TABS SWITCHER
+    // ============================================================
+    const footerTabBtns = document.querySelectorAll('.footer-tab-btn');
+    const footerTabPanels = document.querySelectorAll('.footer-tab-panel');
+
+    footerTabBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const targetId = btn.getAttribute('data-target');
+            if (!targetId) return;
+
+            // Switch active button state
+            footerTabBtns.forEach(b => {
+                b.classList.remove('active');
+                b.setAttribute('aria-selected', 'false');
+            });
+            btn.classList.add('active');
+            btn.setAttribute('aria-selected', 'true');
+
+            // Switch active panel
+            footerTabPanels.forEach(panel => {
+                if (panel.id === targetId) {
+                    panel.classList.add('active');
+                } else {
+                    panel.classList.remove('active');
+                }
+            });
+        });
+    });
 });

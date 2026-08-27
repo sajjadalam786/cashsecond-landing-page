@@ -3195,12 +3195,14 @@ a:hover .btn-iphone-thumb {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    max-width: 1040px;
-    margin: 0 auto;
-    border-radius: var(--radius-xl);
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    border-radius: 28px;
     overflow: hidden;
-    padding: 28px 36px;
-    min-height: 190px;
+    padding: 40px 52px;
+    min-height: 220px;
+    box-sizing: border-box;
     transition: transform 350ms cubic-bezier(0.25, 0.1, 0.25, 1),
                 box-shadow 350ms cubic-bezier(0.25, 0.1, 0.25, 1),
                 border-color 350ms cubic-bezier(0.25, 0.1, 0.25, 1);
@@ -3214,12 +3216,12 @@ a:hover .btn-iphone-thumb {
 .promo-banner-dark {
     background: linear-gradient(135deg, #0d1522 0%, #152238 55%, #1b2f4d 100%);
     border: 1px solid rgba(255, 255, 255, 0.12);
-    box-shadow: 0 16px 36px rgba(11, 13, 16, 0.16);
+    box-shadow: 0 16px 40px rgba(11, 13, 16, 0.18);
     color: #FFFFFF;
 }
 
 .promo-banner-dark:hover {
-    box-shadow: 0 22px 48px rgba(11, 13, 16, 0.26);
+    box-shadow: 0 24px 52px rgba(11, 13, 16, 0.28);
     border-color: rgba(100, 210, 255, 0.35);
 }
 
@@ -3232,19 +3234,19 @@ a:hover .btn-iphone-thumb {
 }
 
 .promo-banner-dark .promo-banner-desc {
-    color: rgba(255, 255, 255, 0.78);
+    color: rgba(255, 255, 255, 0.82);
 }
 
 .btn-promo-dark {
     background: linear-gradient(135deg, #0071E3 0%, #0056B3 100%);
     color: #FFFFFF;
-    box-shadow: 0 4px 14px rgba(0, 113, 227, 0.35);
+    box-shadow: 0 4px 16px rgba(0, 113, 227, 0.38);
 }
 
 .btn-promo-dark:hover {
     background: linear-gradient(135deg, #0077ED 0%, #005bb8 100%);
     color: #FFFFFF;
-    box-shadow: 0 8px 22px rgba(0, 113, 227, 0.48);
+    box-shadow: 0 8px 24px rgba(0, 113, 227, 0.5);
 }
 
 /* Banner 2: Light Apple Theme */
@@ -3286,8 +3288,8 @@ a:hover .btn-iphone-thumb {
 
 /* Banner Content Column */
 .promo-banner-content {
-    flex: 1 1 58%;
-    max-width: 580px;
+    flex: 1 1 60%;
+    max-width: 640px;
     z-index: 2;
     display: flex;
     flex-direction: column;
@@ -3295,35 +3297,35 @@ a:hover .btn-iphone-thumb {
 }
 
 .promo-banner-eyebrow {
-    font-size: 0.75rem;
-    font-weight: 700;
+    font-size: 0.8125rem;
+    font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: 0.08em;
-    margin-bottom: 6px;
+    letter-spacing: 0.1em;
+    margin-bottom: 8px;
 }
 
 .promo-banner-title {
     font-family: var(--font-heading);
-    font-size: clamp(1.25rem, 2.2vw, 1.625rem);
+    font-size: clamp(1.5rem, 2.5vw, 2.25rem);
     font-weight: 800;
-    line-height: 1.22;
-    letter-spacing: -0.025em;
-    margin-bottom: 6px;
+    line-height: 1.18;
+    letter-spacing: -0.03em;
+    margin-bottom: 8px;
 }
 
 .promo-banner-desc {
-    font-size: clamp(0.8125rem, 1.4vw, 0.9375rem);
-    line-height: 1.45;
-    margin-bottom: 16px;
-    max-width: 500px;
+    font-size: clamp(0.9375rem, 1.25vw, 1.0625rem);
+    line-height: 1.5;
+    margin-bottom: 22px;
+    max-width: 560px;
 }
 
 .promo-banner-cta {
     display: inline-flex;
     align-items: center;
     gap: 8px;
-    padding: 10px 22px;
-    font-size: 0.875rem;
+    padding: 12px 26px;
+    font-size: 0.9375rem;
     font-weight: 700;
     border-radius: var(--radius-pill);
     text-decoration: none;
@@ -3341,53 +3343,60 @@ a:hover .btn-iphone-thumb {
 
 /* Banner Visual Column */
 .promo-banner-visual {
-    flex: 1 1 42%;
+    flex: 1 1 40%;
     display: flex;
     align-items: center;
     justify-content: flex-end;
     position: relative;
-    max-width: 380px;
+    max-width: 440px;
     z-index: 1;
 }
 
 .promo-banner-img {
     width: 100%;
-    max-width: 340px;
+    max-width: 380px;
     height: auto;
-    max-height: 190px;
+    max-height: 220px;
     object-fit: contain;
     display: block;
     transition: transform 350ms cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
 .promo-banner:hover .promo-banner-img {
-    transform: scale(1.02);
+    transform: scale(1.03);
 }
 
 /* Responsive adjustments */
-@media (max-width: 860px) {
+@media (max-width: 991px) {
     .promo-banner {
-        padding: 24px 22px;
-        min-height: auto;
+        padding: 32px 36px;
     }
     .promo-banner-visual {
-        max-width: 240px;
+        max-width: 320px;
     }
     .promo-banner-img {
-        max-height: 160px;
+        max-height: 190px;
     }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 767px) {
     .promo-banner {
         flex-direction: column;
         align-items: flex-start;
-        gap: 16px;
-        padding: 22px 18px;
+        gap: 18px;
+        padding: 26px 20px;
+        border-radius: 20px;
     }
     .promo-banner-content {
         max-width: 100%;
         width: 100%;
+    }
+    .promo-banner-title {
+        font-size: 1.35rem;
+    }
+    .promo-banner-desc {
+        font-size: 0.875rem;
+        margin-bottom: 18px;
     }
     .promo-banner-cta {
         width: 100%;
@@ -3395,12 +3404,12 @@ a:hover .btn-iphone-thumb {
     }
     .promo-banner-visual {
         width: 100%;
-        max-width: 280px;
-        margin: 0 auto;
+        max-width: 300px;
+        margin: 4px auto 0;
         justify-content: center;
     }
     .promo-banner-img {
-        max-height: 150px;
+        max-height: 160px;
     }
 }
 
@@ -3990,127 +3999,243 @@ a:hover .btn-iphone-thumb {
 }
 
 /* ============================================================
-   16. CONTACT & LOCATION SECTION
+   16. SINGLE HORIZONTAL CONTACT & GST VERIFIED STRIP
    ============================================================ */
-.contact-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 20px;
+.contact-strip-section {
+    padding: 36px 0 48px 0;
+    background: #FAFAFC;
+    border-top: 1px solid rgba(0, 0, 0, 0.04);
 }
 
-@media (min-width: 768px) {
-    .contact-grid {
-        grid-template-columns: 1fr 1fr;
-    }
+.contact-single-strip {
+    background: linear-gradient(135deg, #0d1522 0%, #152238 55%, #1b2f4d 100%);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 28px;
+    padding: 34px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 32px;
+    box-shadow: 0 16px 40px rgba(11, 13, 16, 0.18);
+    transition: all 0.35s cubic-bezier(0.25, 0.1, 0.25, 1);
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+    color: #FFFFFF;
 }
 
-.contact-card {
-    background-color: #FFFFFF;
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
-    padding: 26px;
+.contact-single-strip:hover {
+    border-color: rgba(100, 210, 255, 0.35);
+    box-shadow: 0 24px 52px rgba(11, 13, 16, 0.28);
+    transform: translateY(-3px);
 }
 
-.contact-item {
+.contact-strip-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-width: 0;
+}
+
+.contact-strip-header-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.contact-gst-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(100, 210, 255, 0.12);
+    color: #64D2FF;
+    border: 1px solid rgba(100, 210, 255, 0.28);
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    font-family: var(--font-sans, -apple-system, sans-serif);
+}
+
+.contact-hours-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255, 255, 255, 0.08);
+    color: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    font-family: var(--font-sans, -apple-system, sans-serif);
+}
+
+.contact-strip-title {
+    font-family: var(--font-heading, "Plus Jakarta Sans", -apple-system, sans-serif);
+    font-size: clamp(1.35rem, 2vw, 1.625rem);
+    font-weight: 800;
+    color: #FFFFFF;
+    margin: 0;
+    letter-spacing: -0.025em;
+    line-height: 1.22;
+}
+
+.contact-strip-address {
     display: flex;
     align-items: flex-start;
-    gap: 10px;
-    margin-bottom: 14px;
-    font-size: 0.8125rem;
-    color: var(--color-text-secondary);
+    gap: 8px;
+    font-size: clamp(0.875rem, 1.1vw, 0.9375rem);
+    color: rgba(255, 255, 255, 0.82);
+    margin: 0;
+    line-height: 1.55;
+    font-weight: 450;
+    font-family: var(--font-sans, -apple-system, sans-serif);
 }
 
-.contact-icon {
-    color: var(--color-cta);
+.contact-strip-address strong {
+    color: #FFFFFF;
+    font-weight: 700;
+}
+
+.contact-strip-address svg {
+    color: #64D2FF;
     flex-shrink: 0;
     margin-top: 2px;
 }
 
-/* Interactive Map Preview Card */
-.contact-map-card {
-    padding: 0 !important;
-    overflow: hidden;
-    cursor: pointer;
-    position: relative;
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
-    background-color: var(--color-bg-page);
-    transition: all 0.28s cubic-bezier(0.25, 0.1, 0.25, 1);
-    user-select: none;
-    -webkit-tap-highlight-color: transparent;
-}
-
-.contact-map-card:hover {
-    border-color: var(--color-cta);
-    box-shadow: 0 10px 30px rgba(0, 113, 227, 0.16);
-    transform: translateY(-2px);
-}
-
-.map-preview-wrap {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    min-height: 280px;
+.contact-strip-footer-links {
     display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 2px;
 }
 
-.contact-map-preview-img {
-    width: 100%;
-    height: 100%;
-    min-height: 280px;
-    max-height: 380px;
-    object-fit: cover;
-    display: block;
-    transition: transform 0.35s ease;
-}
-
-.contact-map-card:hover .contact-map-preview-img {
-    transform: scale(1.03);
-}
-
-.map-click-overlay {
-    position: absolute;
-    bottom: 16px;
-    left: 16px;
-    right: 16px;
-    display: flex;
-    justify-content: center;
-    pointer-events: none;
-    z-index: 2;
-}
-
-.map-click-badge {
+.contact-strip-action-link {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    padding: 10px 18px;
-    background-color: rgba(11, 13, 16, 0.88);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+    gap: 7px;
     color: #FFFFFF;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: var(--radius-pill);
+    background: linear-gradient(135deg, #0071E3 0%, #0056B3 100%);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    padding: 7px 16px;
+    border-radius: 12px;
+    font-weight: 600;
     font-size: 0.8125rem;
-    font-weight: 700;
-    letter-spacing: 0.02em;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.28);
-    transition: all 0.24s ease;
+    text-decoration: none;
+    transition: all 0.22s ease;
+    font-family: var(--font-sans, -apple-system, sans-serif);
+    box-shadow: 0 4px 14px rgba(0, 113, 227, 0.35);
 }
 
-.map-click-badge svg {
-    color: #64D2FF;
-    flex-shrink: 0;
-}
-
-.contact-map-card:hover .map-click-badge {
-    background-color: var(--color-cta);
-    border-color: var(--color-cta);
-    box-shadow: 0 8px 24px rgba(0, 113, 227, 0.45);
-    transform: scale(1.03);
-}
-
-.contact-map-card:hover .map-click-badge svg {
+.contact-strip-action-link:hover {
+    background: linear-gradient(135deg, #0077ED 0%, #005bb8 100%);
     color: #FFFFFF;
+    box-shadow: 0 6px 20px rgba(0, 113, 227, 0.48);
+    transform: translateY(-1px);
+}
+
+.contact-strip-action-link svg {
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+}
+
+.contact-strip-action-link:hover svg {
+    transform: translateX(1px);
+}
+
+.contact-strip-map-wrap {
+    position: relative;
+    width: 250px;
+    height: 135px;
+    border-radius: 18px;
+    overflow: hidden;
+    flex-shrink: 0;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.contact-strip-map-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.contact-single-strip:hover .contact-strip-map-img {
+    transform: scale(1.06);
+}
+
+.contact-map-pin-pill {
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    background: rgba(11, 13, 16, 0.88);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    color: #FFFFFF;
+    padding: 4px 10px;
+    border-radius: 14px;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+    letter-spacing: 0.01em;
+}
+
+.contact-map-pin-pill svg {
+    color: #64D2FF;
+}
+
+@media (max-width: 860px) {
+    .contact-strip-section {
+        padding: 24px 0 32px 0;
+    }
+
+    .contact-single-strip {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 24px 20px;
+        gap: 18px;
+        border-radius: 20px;
+    }
+
+    .contact-strip-header-row {
+        gap: 6px;
+    }
+
+    .contact-gst-badge,
+    .contact-hours-badge {
+        font-size: 0.6875rem;
+        padding: 4px 10px;
+    }
+
+    .contact-strip-title {
+        font-size: 1.25rem;
+    }
+
+    .contact-strip-address {
+        font-size: 0.84375rem;
+        line-height: 1.5;
+    }
+
+    .contact-strip-action-link {
+        font-size: 0.78125rem;
+        padding: 6px 13px;
+    }
+
+    .contact-strip-map-wrap {
+        width: 100%;
+        height: 140px;
+        border-radius: 14px;
+    }
 }
 
 /* ============================================================
@@ -4395,11 +4520,26 @@ a:hover .btn-iphone-thumb {
     display: flex;
     align-items: center;
     gap: 7px;
+    background: transparent;
+    border: none;
+    padding: 0;
+    text-align: left;
+    font-family: inherit;
+}
+
+.footer-title-left {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
 }
 
 .footer-col-title svg {
     color: var(--color-cta);
     flex-shrink: 0;
+}
+
+.footer-chevron-icon {
+    display: none;
 }
 
 .footer-links-list {
@@ -4409,6 +4549,96 @@ a:hover .btn-iphone-thumb {
     display: flex;
     flex-direction: column;
     gap: 10px;
+}
+
+.footer-mobile-tabs-wrap {
+    display: none;
+}
+
+/* Mobile Pill Filter Tabs (< 768px) */
+@media (max-width: 767px) {
+    .footer-main-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+    }
+
+    .footer-mobile-tabs-wrap {
+        display: flex;
+        justify-content: center;
+        margin: 6px 0 4px 0;
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+    }
+
+    .footer-mobile-tabs-wrap::-webkit-scrollbar {
+        display: none;
+    }
+
+    .footer-mobile-tabs {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        background: #FFFFFF;
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        padding: 5px;
+        border-radius: var(--radius-pill);
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.03);
+        max-width: 100%;
+    }
+
+    .footer-tab-btn {
+        background: transparent;
+        border: none;
+        border-radius: var(--radius-pill);
+        padding: 8px 14px;
+        font-size: 0.78125rem;
+        font-weight: 600;
+        color: var(--color-text-secondary);
+        cursor: pointer;
+        transition: all 0.22s cubic-bezier(0.25, 0.1, 0.25, 1);
+        white-space: nowrap;
+        -webkit-tap-highlight-color: transparent;
+        font-family: inherit;
+    }
+
+    .footer-tab-btn:hover {
+        color: var(--color-dark);
+        background-color: rgba(0, 113, 227, 0.06);
+    }
+
+    .footer-tab-btn.active {
+        background-color: var(--color-cta);
+        color: #FFFFFF;
+        box-shadow: 0 4px 12px rgba(0, 113, 227, 0.28);
+        font-weight: 700;
+    }
+
+    .footer-tab-panel {
+        display: none !important;
+        background: #FFFFFF;
+        border: 1px solid rgba(0, 0, 0, 0.07);
+        border-radius: 18px;
+        padding: 18px 20px;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.02);
+    }
+
+    .footer-tab-panel.active {
+        display: flex !important;
+        flex-direction: column;
+        animation: footerTabFadeIn 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .footer-tab-panel .footer-col-title {
+        display: none;
+    }
+
+    @keyframes footerTabFadeIn {
+        from { opacity: 0; transform: translateY(-4px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
 }
 
 .footer-links-list li a {

@@ -84,7 +84,7 @@ require __DIR__ . '/includes/header.php';
                 <source media="(max-width: 767px)" srcset="assets/images/banners/mobile/sell-your-iphone-with-cashsecond-for-mobile-view.webp">
                 <img 
                     src="assets/images/banners/desktop/sell-your-iphone-with-cashsecond.webp" 
-                    alt="Sell Old iPhone From Your Doorstep with CashSecond" 
+                    alt="Sell Your Old iPhone From Your Doorstep with CashSecond" 
                     class="hero-panoramic-bg" 
                     width="1280" 
                     height="560" 
@@ -94,7 +94,7 @@ require __DIR__ . '/includes/header.php';
                 >
             </picture>
             <div class="hero-banner-overlay">
-                <h1 class="hero-main-title">Sell Old iPhone From Your Doorstep</h1>
+                <h1 class="hero-main-title">Sell Your Old iPhone From Your Doorstep</h1>
                 <p class="hero-main-subtitle">Get an instant valuation, free doorstep pickup in Mumbai, secure data wipe, and spot payment.</p>
                 <div class="hero-banner-cta-wrap" style="margin-top: 18px;">
                     <a href="#valuation" class="btn btn-primary btn-lg start-exact-valuation-btn" id="startExactValuationBtn" aria-haspopup="dialog" aria-controls="buybackQuestionnaireModal">
@@ -450,7 +450,7 @@ require __DIR__ . '/includes/header.php';
     <div class="container">
         <aside class="promo-banner promo-banner-dark" aria-label="Ready to sell your iPhone">
             <div class="promo-banner-content">
-                <span class="promo-banner-eyebrow">READY TO SELL?</span>
+                <span class="promo-banner-eyebrow">READY TO SELL YOUR USED OR OLD IPHONE ?</span>
                 <h3 class="promo-banner-title">Your iPhone Deserves a Better Value.</h3>
                 <p class="promo-banner-desc">Check your iPhone's value in seconds and get a hassle-free pickup.</p>
                 <a href="#valuation" class="btn promo-banner-cta btn-promo-dark" id="heroCheckValueBtn" aria-haspopup="dialog" aria-controls="buybackQuestionnaireModal">
@@ -484,45 +484,7 @@ require __DIR__ . '/includes/header.php';
 </div>
 
 
-<!-- ============================================================
-     7. PROMOTIONAL BANNER 2 (Light Apple Theme: Instant Payment)
-     ============================================================ -->
-<div class="promo-banner-wrapper">
-    <div class="container">
-        <aside class="promo-banner promo-banner-light" aria-label="Sell your iPhone with confidence">
-            <div class="promo-banner-content">
-                <span class="promo-banner-eyebrow">SELL WITH CONFIDENCE</span>
-                <h3 class="promo-banner-title">From Your iPhone to Instant Payment.</h3>
-                <p class="promo-banner-desc">Transparent valuation, doorstep pickup and secure data handling — all in one simple experience.</p>
-                <a href="#valuation" class="btn promo-banner-cta btn-promo-light" id="transparentValuationBtn" aria-haspopup="dialog" aria-controls="buybackQuestionnaireModal">
-                    <svg class="btn-click-icon" width="20" height="23" viewBox="0 0 24 28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                        <line x1="12" y1="1.5" x2="12" y2="4.5"/>
-                        <line x1="6.5" y1="3.5" x2="8.6" y2="5.6"/>
-                        <line x1="17.5" y1="3.5" x2="15.4" y2="5.6"/>
-                        <line x1="4" y1="9" x2="7" y2="9"/>
-                        <line x1="20" y1="9" x2="17" y2="9"/>
-                        <path d="M10.5 13V8a1.5 1.5 0 0 1 3 0v5"/>
-                        <path d="M13.5 12a1.4 1.4 0 0 1 2.8 0v2.5"/>
-                        <path d="M16.3 13.5a1.4 1.4 0 0 1 2.8 0v2"/>
-                        <path d="M19.1 15a1.4 1.4 0 0 1 2.8 0v3.5a6.5 6.5 0 0 1-6.5 6.5h-3a5.5 5.5 0 0 1-4.2-2L5.8 19.2a1.5 1.5 0 0 1 2.2-2.1l2.5 1.9V13"/>
-                    </svg>
-                    <span>Check Your iPhone Value</span>
-                    <img src="assets/images/iphone-value-check-button.png" alt="iPhone" class="btn-iphone-thumb" width="22" height="38" loading="lazy">
-                </a>
-            </div>
-            <div class="promo-banner-visual">
-                <img 
-                    src="assets/images/phones/banner-iphone-payment.svg" 
-                    alt="Instant payment transfer for your sold iPhone" 
-                    class="promo-banner-img" 
-                    width="420" 
-                    height="280" 
-                    loading="lazy"
-                >
-            </div>
-        </aside>
-    </div>
-</div>
+
 
 <!-- ============================================================
      8. FAQ ACCORDION SECTION (20 Categorized AEO & SEO Questions)
@@ -576,58 +538,54 @@ require __DIR__ . '/includes/header.php';
      ============================================================ -->
                         
 <!-- ============================================================
-     12. STORE CONTACT & LOCATION SECTION
+     12. STORE CONTACT & CORPORATE LOCATION STRIP (Compact & Simple)
      ============================================================ -->
-<section class="section-container" id="contact" style="background-color: var(--color-bg-page);">
+<section class="section-container contact-strip-section" id="contact">
     <div class="container">
-        <div class="section-header text-center">
-            <span class="section-eyebrow">Contact & Store</span>
-            <h2 class="section-title">Contact CashSecond</h2>
-            <p class="section-subtitle">Visit our corporate office or schedule executive doorstep pickup across Mumbai.</p>
-        </div>
+        <div class="contact-single-strip">
+            <!-- Left: Office Details & GST Badge -->
+            <div class="contact-strip-info">
+                <div class="contact-strip-header-row">
+                    <span class="contact-gst-badge">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                        </svg>
+                        <span>GST Registered &amp; Verified</span>
+                    </span>
+                    
+                </div>
 
-        <div class="contact-grid">
-            <div class="contact-card">
-                <h3 style="font-size: 1.125rem; font-weight: 700; color: var(--color-dark); margin-bottom: 16px;">Corporate Office</h3>
-                <div class="contact-item">
-                    <svg class="contact-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                    <div>
-                        <strong>CashSecond</strong><br>
-                        Arcadia Bldg, NCPA Marg, Nariman Point, Mumbai 400021
-                    </div>
-                </div>
-                <div class="contact-item">
-                    <svg class="contact-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                    <div>
-                        Hours: Monday – Sunday, 10:00 AM – 9:00 PM
-                    </div>
-                </div>
-                <div class="contact-item">
-                    <svg class="contact-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-                    <div>
-                        Email: <a href="mailto:cashsecondofficial@gmail.com" style="color: var(--color-cta);">cashsecondofficial@gmail.com</a>
-                    </div>
+                <h3 class="contact-strip-title">Corporate Office &amp; Verification Hub</h3>
+                <p class="contact-strip-address">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>
+                    </svg>
+                    <span><strong>CashSecond</strong> &bull; Arcadia Bldg, NCPA Marg, Nariman Point, Mumbai, Maharashtra 400021</span>
+                </p>
+
+                <div class="contact-strip-footer-links">
+                    <a href="mailto:cashsecondofficial@gmail.com" class="contact-strip-action-link">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                        <span>cashsecondofficial@gmail.com</span>
+                    </a>
+                    
                 </div>
             </div>
 
-            <!-- Interactive Map Preview Card -->
-            <div class="contact-card contact-map-card" id="contact-map-trigger" role="button" tabindex="0" aria-label="Open Free Consultation Form">
-                <div class="map-preview-wrap">
-                    <img 
-                        src="assets/images/location.jpg" 
-                        alt="CashSecond Office Location Map Preview - Nariman Point Mumbai" 
-                        class="contact-map-preview-img" 
-                        width="600" 
-                        height="380" 
-                        loading="lazy"
-                    >
-                    <div class="map-click-overlay">
-                        <span class="map-click-badge">
-                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                            <span>Click to Request Free Consultation</span>
-                        </span>
-                    </div>
-                </div>
+            <!-- Right: Cute Compact Map Visual -->
+            <div class="contact-strip-map-wrap">
+                <img 
+                    src="assets/images/location.jpg" 
+                    alt="CashSecond Location - Nariman Point Mumbai" 
+                    class="contact-strip-map-img" 
+                    width="260" 
+                    height="160" 
+                    loading="lazy"
+                >
+                <span class="contact-map-pin-pill">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                    <span>Nariman Point</span>
+                </span>
             </div>
         </div>
     </div>
