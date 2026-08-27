@@ -42,10 +42,10 @@ class GoogleSheetsService
         date_default_timezone_set('Asia/Kolkata');
 
         $now = time();
-        $date = date('Y-m-d', $now);
-        $time = date('H:i:s', $now);
+        $date = date('d/m/Y', $now);
+        $time = date('h:i:s A', $now);
 
-        // Generate Structured Lead ID: EXG-YYYYMMDD-XXX
+        // Generate Structured Lead ID: EXG-YYYYMMDD-XXXX
         $leadId = $leadData['lead_id'] ?? ('EXG-' . date('Ymd', $now) . '-' . strtoupper(substr(md5(uniqid(rand(), true)), 0, 4)));
 
         $customer = $leadData['customer'] ?? [];
@@ -208,10 +208,10 @@ class GoogleSheetsService
             'full_name'               => $customer['name'] ?? '',
             'whatsapp_number'         => $customer['phone'] ?? '',
             'email'                   => $customer['email'] ?? '',
-            'pickup_address'          => $customer['address'] ?? 'Mumbai (Doorstep Pickup)',
-            'pincode'                 => $customer['pincode'] ?? '400021',
-            'pickup_date'             => $customer['pickup_date'] ?? ($leadData['pickup_date'] ?? 'Today'),
-            'pickup_slot'             => $customer['pickup_slot'] ?? ($leadData['pickup_slot'] ?? 'Express (Within 6 Hours)'),
+            'pickup_address'          => $customer['address'] ?? '',
+            'pincode'                 => $customer['pincode'] ?? '',
+            'pickup_date'             => $customer['pickup_date'] ?? ($leadData['pickup_date'] ?? ''),
+            'pickup_slot'             => $customer['pickup_slot'] ?? ($leadData['pickup_slot'] ?? ''),
             'feedback_rating'         => $customer['feedback_rating'] ?? ($leadData['feedback_rating'] ?? ''),
             'feedback_comment'        => $customer['feedback_comment'] ?? ($leadData['feedback_comment'] ?? ''),
 
@@ -394,6 +394,62 @@ class GoogleSheetsService
             'mode'      => 'queued_fallback',
             'http_code' => $httpCode,
             'error'     => $curlError ?: "HTTP $httpCode",
+            'response'  => $response
+        ];
+    }
+
+    /**
+     * Update Feedback & Pickup Scheduling in Google Sheets
+     */
+    public static function updateFeedbackRow(string $refId, string $rating, string $comment, string $pickupDate, string $pickupSlot, string $pickupAddress = '', string $pincode = ''): array
+    {
+        date_default_timezone_set('Asia/Kolkata');
+        $config = require __DIR__ . '/../config/google_sheets.php';
+        $webhookUrl = $config['webhook_url'] ?? '';
+
+        if (empty($webhookUrl) || strpos($webhookUrl, 'AKfycbz_CashSecond_Valuations_Webhook') !== false) {
+            return ['success' => true, 'mode' => 'queued_local'];
+        }
+
+        $postPayload = json_encode([
+            'action'          => 'update_feedback',
+            'token'           => $config['secret_token'] ?? '',
+            'sheetName'       => $config['sheets']['main'] ?? 'Phone Valuations',
+            'lead_id'         => $refId,
+            'feedback_rating' => $rating,
+            'feedback_comment'=> $comment,
+            'pickup_date'     => $pickupDate,
+            'pickup_slot'     => $pickupSlot,
+            'pickup_address'  => $pickupAddress,
+            'pincode'         => $pincode,
+            'update_timestamp'=> date('d/m/Y h:i:s A')
+        ], JSON_UNESCAPED_UNICODE);
+
+        $ch = curl_init();
+        curl_setopt_array($ch, [
+            CURLOPT_URL            => $webhookUrl,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_POST           => true,
+            CURLOPT_POSTFIELDS     => $postPayload,
+            CURLOPT_HTTPHEADER     => [
+                'Content-Type: application/json',
+                'Content-Length: ' . strlen($postPayload)
+            ],
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_TIMEOUT        => 15,
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_SSL_VERIFYHOST => false
+        ]);
+
+        $response = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $curlError= curl_error($ch);
+        curl_close($ch);
+
+        return [
+            'success'   => ($httpCode >= 200 && $httpCode < 400),
+            'lead_id'   => $refId,
+            'http_code' => $httpCode,
             'response'  => $response
         ];
     }

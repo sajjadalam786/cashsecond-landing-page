@@ -664,55 +664,42 @@
 
                 if (submitBtn) {
                     submitBtn.disabled = true;
-                    submitBtn.innerHTML = '<span>Processing Request...</span>';
+                    submitBtn.innerHTML = '<span>Opening Valuation...</span>';
                 }
 
                 const finalVal = computeValuation();
+                const refId = 'EXG-' + (new Date().toISOString().slice(0,10).replace(/-/g,'')) + '-' + Math.floor(1000 + Math.random() * 9000);
+
                 const formData = new FormData();
+                formData.append('lead_id', refId);
+                formData.append('ref_id', refId);
                 formData.append('full_name', name);
                 formData.append('phone_number', cleanPhone);
                 formData.append('email', email);
-                formData.append('address', 'Mumbai (Doorstep Pickup)');
-                formData.append('pincode', '400021');
+                formData.append('address', '');
+                formData.append('pincode', '');
                 formData.append('device_model', state.model);
                 formData.append('device_variant', state.variant);
                 formData.append('estimated_value', '₹' + finalVal.toLocaleString('en-IN'));
                 formData.append('questionnaire_answers', JSON.stringify(state.answers));
                 formData.append('csrf_token', window.csrfToken || '');
 
+                // Fire background request with keepalive (zero blocking, runs seamlessly in background)
                 try {
-                    const resp = await fetch('forms/buyback-questionnaire.php', {
+                    fetch('forms/buyback-questionnaire.php', {
                         method: 'POST',
-                        body: formData
-                    });
+                        body: formData,
+                        keepalive: true
+                    }).catch(() => {});
+                } catch (err) {}
 
-                    const res = await resp.json();
+                // Instantly close modal popup
+                closeQuestionnaire();
 
-                    if (resp.ok && res.status === 'success') {
-                        const refId = res.lead_id || res.ref_id || 'EXG-' + (new Date().toISOString().slice(0,10).replace(/-/g,'')) + '-' + Math.floor(1000 + Math.random() * 9000);
+                // Instantly redirect to Thank You page where price is revealed & feedback/scheduling is handled
+                const thankYouUrl = `thankyou.php?model=${encodeURIComponent(state.model)}&variant=${encodeURIComponent(state.variant)}&val=${finalVal}&name=${encodeURIComponent(name)}&phone=${encodeURIComponent(cleanPhone)}&ref=${encodeURIComponent(refId)}`;
 
-                        // Close modal popup immediately
-                        closeQuestionnaire();
-
-                        // Redirect to thank you page where price is revealed and feedback/pickup is scheduled
-                        const thankYouUrl = `thankyou.php?model=${encodeURIComponent(state.model)}&variant=${encodeURIComponent(state.variant)}&val=${finalVal}&name=${encodeURIComponent(name)}&phone=${encodeURIComponent(cleanPhone)}&ref=${encodeURIComponent(refId)}`;
-
-                        window.location.href = thankYouUrl;
-
-                    } else {
-                        showError(res.message || 'We could not save your valuation. Please check details and try again.');
-                        if (submitBtn) {
-                            submitBtn.disabled = false;
-                            submitBtn.innerHTML = '<svg class="btn-click-icon" width="20" height="23" viewBox="0 0 24 28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="1.5" x2="12" y2="4.5"/><line x1="6.5" y1="3.5" x2="8.6" y2="5.6"/><line x1="17.5" y1="3.5" x2="15.4" y2="5.6"/><line x1="4" y1="9" x2="7" y2="9"/><line x1="20" y1="9" x2="17" y2="9"/><path d="M10.5 13V8a1.5 1.5 0 0 1 3 0v5"/><path d="M13.5 12a1.4 1.4 0 0 1 2.8 0v2.5"/><path d="M16.3 13.5a1.4 1.4 0 0 1 2.8 0v2"/><path d="M19.1 15a1.4 1.4 0 0 1 2.8 0v3.5a6.5 6.5 0 0 1-6.5 6.5h-3a5.5 5.5 0 0 1-4.2-2L5.8 19.2a1.5 1.5 0 0 1 2.2-2.1l2.5 1.9V13"/></svg><span>Get My Valuation Quote</span><img src="assets/images/iphone-value-check-button.png" alt="iPhone" class="btn-iphone-thumb" width="22" height="38">';
-                        }
-                    }
-                } catch (err) {
-                    showError('Network error. Please check your internet connection and retry.');
-                    if (submitBtn) {
-                        submitBtn.disabled = false;
-                        submitBtn.innerHTML = '<svg class="btn-click-icon" width="20" height="23" viewBox="0 0 24 28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="1.5" x2="12" y2="4.5"/><line x1="6.5" y1="3.5" x2="8.6" y2="5.6"/><line x1="17.5" y1="3.5" x2="15.4" y2="5.6"/><line x1="4" y1="9" x2="7" y2="9"/><line x1="20" y1="9" x2="17" y2="9"/><path d="M10.5 13V8a1.5 1.5 0 0 1 3 0v5"/><path d="M13.5 12a1.4 1.4 0 0 1 2.8 0v2.5"/><path d="M16.3 13.5a1.4 1.4 0 0 1 2.8 0v2"/><path d="M19.1 15a1.4 1.4 0 0 1 2.8 0v3.5a6.5 6.5 0 0 1-6.5 6.5h-3a5.5 5.5 0 0 1-4.2-2L5.8 19.2a1.5 1.5 0 0 1 2.2-2.1l2.5 1.9V13"/></svg><span>Get My Valuation Quote</span><img src="assets/images/iphone-value-check-button.png" alt="iPhone" class="btn-iphone-thumb" width="22" height="38">';
-                    }
-                }
+                window.location.href = thankYouUrl;
             });
         }
 

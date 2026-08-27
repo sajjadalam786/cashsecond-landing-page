@@ -6,20 +6,20 @@
  */
 
 var COLUMN_HEADERS = [
-  "Submission Date", "Submission Time", "Lead ID", "Full Name", "WhatsApp Number", "Email", 
+  "Submission Date", "Submission Time", "Lead ID", "Full Name", "WhatsApp Number", "Email",
   "Pickup Address", "Pincode", "Pickup Date", "Pickup Slot", "Feedback Rating", "Feedback Comment",
   "Brand", "Model", "RAM", "Storage", "Battery Health", "Base / Max Value", "Final Estimated Value",
-  "Phone Powers On", "Display Working", "Touchscreen Working", "Display Lines / Spots / Flickering", 
-  "Screen Cracked", "Screen Major Scratches", "Body Condition", "Phone Bent", "Body Damage", 
-  "Camera Glass Condition", "Missing Parts", "Rear Camera", "Front Camera", "Camera Flash", 
-  "Speaker", "Ear Receiver", "Microphone", "Power Button", "Volume Buttons", "Silent Switch", 
-  "Charging Port", "Charging Working", "Face ID / Touch ID", "WiFi", "Bluetooth", 
+  "Phone Powers On", "Display Working", "Touchscreen Working", "Display Lines / Spots / Flickering",
+  "Screen Cracked", "Screen Major Scratches", "Body Condition", "Phone Bent", "Body Damage",
+  "Camera Glass Condition", "Missing Parts", "Rear Camera", "Front Camera", "Camera Flash",
+  "Speaker", "Ear Receiver", "Microphone", "Power Button", "Volume Buttons", "Silent Switch",
+  "Charging Port", "Charging Working", "Face ID / Touch ID", "WiFi", "Bluetooth",
   "Mobile Network / SIM", "GPS", "Liquid Damage",
-  "Original Display", "Major Component Replaced", "Replaced Component", "Warranty Status", 
+  "Original Display", "Major Component Replaced", "Replaced Component", "Warranty Status",
   "Original Bill", "Original Box", "Original Cable / Adapter",
   "Total Tests", "Passed Tests", "Failed Tests", "Pass Percentage", "Failed Test Names",
-  "Model Base Price", "Storage Adjustment", "Battery Adjustment", "Display Adjustment", 
-  "Body Adjustment", "Functional Test Adjustment", "Liquid Damage Adjustment", "Parts Adjustment", 
+  "Model Base Price", "Storage Adjustment", "Battery Adjustment", "Display Adjustment",
+  "Body Adjustment", "Functional Test Adjustment", "Liquid Damage Adjustment", "Parts Adjustment",
   "Warranty Adjustment", "Accessories Adjustment", "Total Adjustment", "Final Estimated Exchange Value",
   "Valuation Status", "Submission Source", "Page URL", "User Agent", "Lead Timestamp"
 ];
@@ -29,7 +29,6 @@ function getOrCreateSheet() {
   if (!ss) {
     ss = SpreadsheetApp.openById("1LpQdgV5PtA2-nVpzjVZPGAmVdaVBzVM8g1hCWBaApCo");
   }
-
   var sheet = ss.getSheetByName("Phone Valuations");
   if (!sheet) {
     var allSheets = ss.getSheets();
@@ -40,42 +39,113 @@ function getOrCreateSheet() {
       sheet = ss.insertSheet("Phone Valuations", 0);
     }
   }
-
-  // If sheet is empty, add header row
   if (sheet.getLastRow() === 0) {
     sheet.getRange(1, 1, 1, COLUMN_HEADERS.length).setValues([COLUMN_HEADERS]);
-    var headerRange = sheet.getRange(1, 1, 1, COLUMN_HEADERS.length);
-    headerRange.setBackground("#0071E3").setFontColor("#FFFFFF").setFontWeight("bold").setFontFamily("Roboto");
+    sheet.getRange(1, 1, 1, COLUMN_HEADERS.length)
+      .setBackground("#0071E3").setFontColor("#FFFFFF").setFontWeight("bold").setFontFamily("Roboto");
     sheet.setFrozenRows(1);
   }
-
   return sheet;
+}
+
+/**
+ * Build a map of { "Column Header Name": columnIndex_1based } from the sheet's first row.
+ * This makes updates immune to column reordering.
+ */
+function buildColumnMap(sheet) {
+  var headerRow = sheet.getRange(1, 1, 1, sheet.getLastColumn()).getValues()[0];
+  var map = {};
+  for (var i = 0; i < headerRow.length; i++) {
+    var h = String(headerRow[i]).trim();
+    if (h) map[h] = i + 1; // 1-based column index
+  }
+  return map;
 }
 
 function doPost(e) {
   try {
     var rawPayload = (e && e.postData && e.postData.contents) ? e.postData.contents : "{}";
     var data = {};
-    try {
-      data = JSON.parse(rawPayload);
-    } catch (parseErr) {
-      data = (e && e.parameter) ? e.parameter : {};
-    }
+    try { data = JSON.parse(rawPayload); } catch (err) { data = (e && e.parameter) ? e.parameter : {}; }
 
-    var row = data.row || data;
     var sheet = getOrCreateSheet();
 
+    // ── FEEDBACK / PICKUP UPDATE (from Thank You page) ──────────────────────
+    if (data.action === "update_feedback" || data.action === "feedback") {
+      var leadId  = String(data.lead_id || data.ref_id || "").trim();
+      if (!leadId) {
+        return ContentService.createTextOutput(JSON.stringify({ status: "error", message: "No lead_id provided." }))
+          .setMimeType(ContentService.MimeType.JSON);
+      }
+
+      // Determine which values are actually non-empty (only update those)
+      var updates = {};
+      if (String(data.pickup_address || "").trim()) updates["Pickup Address"]   = String(data.pickup_address).trim();
+      if (String(data.pincode        || "").trim()) updates["Pincode"]           = String(data.pincode).trim();
+      if (String(data.pickup_date    || "").trim()) updates["Pickup Date"]       = String(data.pickup_date).trim();
+      if (String(data.pickup_slot    || "").trim()) updates["Pickup Slot"]       = String(data.pickup_slot).trim();
+      if (String(data.feedback_rating|| "").trim()) updates["Feedback Rating"]   = String(data.feedback_rating).trim();
+      if (String(data.feedback_comment || "").trim()) updates["Feedback Comment"] = String(data.feedback_comment).trim();
+      // Always stamp status when this action fires
+      updates["Valuation Status"] = "Pickup Scheduled & Verified";
+
+      // Build dynamic column map from actual sheet headers
+      var colMap = buildColumnMap(sheet);
+
+      // Search for the matching lead row
+      var lastRow   = sheet.getLastRow();
+      var leadColIdx = colMap["Lead ID"]; // column index (1-based)
+      if (!leadColIdx) {
+        return ContentService.createTextOutput(JSON.stringify({ status: "error", message: "Lead ID column not found in sheet." }))
+          .setMimeType(ContentService.MimeType.JSON);
+      }
+
+      var leadColValues = sheet.getRange(2, leadColIdx, lastRow - 1, 1).getValues();
+      var targetRow = -1;
+      for (var r = 0; r < leadColValues.length; r++) {
+        if (String(leadColValues[r][0]).trim() === leadId) {
+          targetRow = r + 2; // 1-based, +1 for header, +1 for offset
+          break;
+        }
+      }
+
+      if (targetRow === -1) {
+        return ContentService.createTextOutput(JSON.stringify({ status: "success", updated: false, message: "Lead ID not yet in sheet." }))
+          .setMimeType(ContentService.MimeType.JSON);
+      }
+
+      // Write ONLY the provided fields using dynamic column positions
+      var updatedFields = [];
+      for (var header in updates) {
+        if (colMap[header]) {
+          sheet.getRange(targetRow, colMap[header]).setValue(updates[header]);
+          updatedFields.push(header);
+        }
+      }
+
+      return ContentService.createTextOutput(JSON.stringify({
+        status: "success",
+        lead_id: leadId,
+        updated: true,
+        fields_updated: updatedFields,
+        message: "Fields updated without touching other columns."
+      })).setMimeType(ContentService.MimeType.JSON);
+    }
+
+    // ── NEW VALUATION ROW INSERTION ──────────────────────────────────────────
+    var row = data.row || data;
+
     var rowValues = [
-      row.submission_date || new Date().toISOString().split("T")[0],
-      row.submission_time || new Date().toLocaleTimeString("en-IN"),
-      row.lead_id || "EXG-" + new Date().getTime(),
+      row.submission_date || Utilities.formatDate(new Date(), "Asia/Kolkata", "dd/MM/yyyy"),
+      row.submission_time || Utilities.formatDate(new Date(), "Asia/Kolkata", "hh:mm:ss a"),
+      row.lead_id || ("EXG-" + new Date().getTime()),
       row.full_name || "",
       row.whatsapp_number || "",
       row.email || "",
-      row.pickup_address || "Mumbai (Doorstep Pickup)",
-      row.pincode || "400021",
-      row.pickup_date || "Today",
-      row.pickup_slot || "Express (Within 6 Hours)",
+      row.pickup_address || "",
+      row.pincode || "",
+      row.pickup_date || "",
+      row.pickup_slot || "",
       row.feedback_rating || "",
       row.feedback_comment || "",
 
@@ -147,28 +217,24 @@ function doPost(e) {
       row.submission_source || "In-Popup Buyback Questionnaire",
       row.page_url || "",
       row.user_agent || "",
-      row.lead_timestamp || new Date().toISOString()
+      row.lead_timestamp || Utilities.formatDate(new Date(), "Asia/Kolkata", "dd/MM/yyyy hh:mm:ss a")
     ];
 
-    // Sanitize all values so Google Sheets doesn't treat '+₹...' or '=...' as a broken formula
+    // Sanitize formula triggers
     for (var i = 0; i < rowValues.length; i++) {
-      var val = rowValues[i];
-      if (typeof val === "string") {
-        var trimmed = val.trim();
-        if (trimmed.charAt(0) === "+" || trimmed.charAt(0) === "=") {
-          rowValues[i] = "'" + trimmed;
-        }
+      if (typeof rowValues[i] === "string") {
+        var t = rowValues[i].trim();
+        if (t.charAt(0) === "+" || t.charAt(0) === "=") rowValues[i] = "'" + t;
       }
     }
 
     sheet.appendRow(rowValues);
-    var lastRow = sheet.getLastRow();
 
     return ContentService.createTextOutput(JSON.stringify({
       status: "success",
       lead_id: rowValues[2],
-      row_index: lastRow,
-      message: "Lead inserted successfully."
+      row_index: sheet.getLastRow(),
+      message: "Lead row inserted successfully."
     })).setMimeType(ContentService.MimeType.JSON);
 
   } catch (err) {
@@ -181,16 +247,9 @@ function doPost(e) {
 }
 
 function doGet(e) {
-  if (e && e.parameter && (e.parameter.lead_id || e.parameter.full_name)) {
-    return doPost(e);
-  }
-  return ContentService.createTextOutput(JSON.stringify({
-    status: "ok",
-    service: "CashSecond Webhook Live",
-    timestamp: new Date().toISOString()
-  })).setMimeType(ContentService.MimeType.JSON);
+  if (e && e.parameter && e.parameter.lead_id) return doPost(e);
+  return ContentService.createTextOutput(JSON.stringify({ status: "ok", service: "CashSecond Webhook Live" }))
+    .setMimeType(ContentService.MimeType.JSON);
 }
 
-function setupSheets() {
-  getOrCreateSheet();
-}
+function setupSheets() { getOrCreateSheet(); }

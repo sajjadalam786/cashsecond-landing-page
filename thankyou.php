@@ -76,15 +76,15 @@ require __DIR__ . '/includes/header.php';
                     <textarea id="tyFeedbackComment" class="ty-comment-textarea" placeholder="Share your experience or suggestion (optional)..." rows="2"></textarea>
                 </div>
 
-                <div id="tyFeedbackError" class="ty-feedback-error" style="display:none;">Please select one price rating option above to schedule your pickup.</div>
-
                 <hr style="border: none; border-top: 1px solid #E5E5EA; margin: 16px 0;">
 
                 <!-- Pickup Slot Selector -->
                 <div class="ty-section-header">
                     <div class="ty-section-title">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-                        <span>Select Doorstep Pickup Slot:</span>
+                        <div style="display: flex; align-items: center; gap: 6px;">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                            <span>Select Doorstep Pickup Slot:</span>
+                        </div>
                     </div>
                 </div>
 
@@ -101,6 +101,25 @@ require __DIR__ . '/includes/header.php';
                     <button type="button" class="ty-slot-pill" data-slot="5:00 PM - 9:00 PM">5:00 PM - 9:00 PM</button>
                 </div>
 
+                <!-- Doorstep Address & Mumbai Pincode Fields -->
+                <div class="ty-address-pincode-wrap" style="margin-bottom: 16px; background: #F9F9FB; border: 1px solid #E5E5EA; border-radius: 14px; padding: 14px 16px;">
+                    <div style="margin-bottom: 10px;">
+                        <label for="tyPickupAddress" style="display: block; font-size: 0.8125rem; font-weight: 700; color: #1C1C1E; margin-bottom: 5px;">
+                            Doorstep Pickup Address <span style="color: #FF3B30;">*</span>
+                        </label>
+                        <textarea id="tyPickupAddress" class="ty-comment-textarea" placeholder="Flat/House No., Building Name, Street & Area in Mumbai..." rows="2" style="background: #FFFFFF; font-size: 0.8125rem;"></textarea>
+                    </div>
+                    
+                    <div>
+                        <label for="tyPickupPincode" style="display: block; font-size: 0.8125rem; font-weight: 700; color: #1C1C1E; margin-bottom: 5px;">
+                            Mumbai Pincode <span style="color: #FF3B30;">*</span>
+                        </label>
+                        <input type="tel" id="tyPickupPincode" class="ty-comment-textarea" placeholder="e.g. 400050" maxlength="6" style="background: #FFFFFF; height: 38px; padding: 6px 12px; font-weight: 600;">
+                    </div>
+                </div>
+
+                <div id="tyFeedbackError" class="ty-feedback-error" style="display:none; margin-bottom: 14px;">Please select your price feedback to schedule pickup.</div>
+
                 <!-- Schedule CTA Button -->
                 <button type="button" id="tyConfirmPickupBtn" class="btn ty-btn-primary" style="font-size: 1rem; padding: 14px 20px;">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><polyline points="9 15 12 18 15 15"/></svg>
@@ -115,7 +134,7 @@ require __DIR__ . '/includes/header.php';
                     <span>Doorstep Pickup Scheduled!</span>
                 </div>
                 <div style="font-size:0.84375rem; color:#2E7D32; line-height:1.45;">
-                    Thank you! Your pickup window (<strong id="tyConfirmedSlotText">Today • Express Within 6 Hours</strong>) has been registered. Our Mumbai verification specialist will call you shortly before arrival.
+                    Thank you! Your pickup window (<strong id="tyConfirmedSlotText">Today • Express Within 6 Hours</strong>) and address (<strong id="tyConfirmedAddressText">Mumbai</strong>) have been registered. Our Mumbai verification specialist will call you shortly before arrival.
                 </div>
             </div>
 
@@ -244,30 +263,60 @@ require __DIR__ . '/includes/header.php';
         var scheduleCard = document.getElementById('tyScheduleCard');
         var successBox = document.getElementById('tyPickupSuccessBox');
         var confirmedSlotText = document.getElementById('tyConfirmedSlotText');
+        var confirmedAddressText = document.getElementById('tyConfirmedAddressText');
 
         if (confirmBtn) {
             confirmBtn.addEventListener('click', function () {
+                var addressEl = document.getElementById('tyPickupAddress');
+                var pincodeEl = document.getElementById('tyPickupPincode');
+                var addressText = addressEl ? addressEl.value.trim() : '';
+                var pincodeText = pincodeEl ? pincodeEl.value.trim().replace(/[^0-9]/g, '') : '';
+
                 if (!selectedFeedbackRating) {
                     if (fbError) {
                         fbError.style.display = 'block';
+                        fbError.textContent = 'Please select one price rating option above to continue.';
                         fbError.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
                     }
                     return;
                 }
 
+                if (!addressText || addressText.length < 5) {
+                    if (fbError) {
+                        fbError.style.display = 'block';
+                        fbError.textContent = 'Please enter your complete doorstep pickup address in Mumbai.';
+                        if (addressEl) addressEl.focus();
+                    }
+                    return;
+                }
+
+                if (!pincodeText || pincodeText.length !== 6) {
+                    if (fbError) {
+                        fbError.style.display = 'block';
+                        fbError.textContent = 'Please enter a valid 6-digit Mumbai pincode (e.g. 400050).';
+                        if (pincodeEl) pincodeEl.focus();
+                    }
+                    return;
+                }
+
+                if (fbError) fbError.style.display = 'none';
+
                 confirmBtn.disabled = true;
-                confirmBtn.innerHTML = '<span>Saving Pickup Schedule...</span>';
+                confirmBtn.innerHTML = '<span>Scheduling Doorstep Pickup...</span>';
 
                 var commentEl = document.getElementById('tyFeedbackComment');
                 var commentText = commentEl ? commentEl.value.trim() : '';
 
                 var fbData = new FormData();
-                fbData.append('action', 'feedback');
+                fbData.append('action', 'update_feedback');
                 fbData.append('ref_id', refId);
+                fbData.append('lead_id', refId);
                 fbData.append('feedback_rating', selectedFeedbackRating);
                 fbData.append('feedback_comment', commentText);
                 fbData.append('pickup_date', selectedPickupDate);
                 fbData.append('pickup_slot', selectedPickupSlot);
+                fbData.append('pickup_address', addressText);
+                fbData.append('pincode', pincodeText);
 
                 fetch('forms/buyback-questionnaire.php', { method: 'POST', body: fbData })
                     .catch(function () {});
@@ -275,6 +324,7 @@ require __DIR__ . '/includes/header.php';
                 setTimeout(function () {
                     if (scheduleCard) scheduleCard.style.display = 'none';
                     if (confirmedSlotText) confirmedSlotText.textContent = selectedPickupDate + ' • ' + selectedPickupSlot;
+                    if (confirmedAddressText) confirmedAddressText.textContent = addressText + ' (Pincode: ' + pincodeText + ')';
                     if (successBox) {
                         successBox.style.display = 'block';
                         successBox.scrollIntoView({ behavior: 'smooth', block: 'center' });

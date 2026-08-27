@@ -19,32 +19,39 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
-// 1. Session Rate Limiting (3 seconds)
-$now = time();
-if (isset($_SESSION['last_questionnaire_time']) && ($now - $_SESSION['last_questionnaire_time']) < 3) {
-    http_response_code(429);
-    echo json_encode([
-        'status'  => 'error',
-        'message' => 'Please wait a few seconds before submitting again.'
-    ]);
-    exit;
-}
+// 1. Session Rate Limiting (3 seconds) — skip for feedback/update actions
+$incoming_action = isset($_POST['action']) ? trim($_POST['action']) : '';
+$is_feedback_action = ($incoming_action === 'feedback' || $incoming_action === 'update_feedback');
 
-// 2. CSRF Token Verification
-$csrf_token = isset($_POST['csrf_token']) ? trim($_POST['csrf_token']) : '';
-if (!empty($_SESSION['csrf_token']) && !empty($csrf_token)) {
-    if (!hash_equals($_SESSION['csrf_token'], $csrf_token)) {
-        http_response_code(403);
+if (!$is_feedback_action) {
+    $now = time();
+    if (isset($_SESSION['last_questionnaire_time']) && ($now - $_SESSION['last_questionnaire_time']) < 3) {
+        http_response_code(429);
         echo json_encode([
             'status'  => 'error',
-            'message' => 'Security token expired. Please refresh the page and try again.'
+            'message' => 'Please wait a few seconds before submitting again.'
         ]);
         exit;
     }
 }
 
-// 3. Honeypot Spam Protection
-if (!empty($_POST['website_hp'])) {
+// 2. CSRF Token Verification — skip for feedback/update actions
+if (!$is_feedback_action) {
+    $csrf_token = isset($_POST['csrf_token']) ? trim($_POST['csrf_token']) : '';
+    if (!empty($_SESSION['csrf_token']) && !empty($csrf_token)) {
+        if (!hash_equals($_SESSION['csrf_token'], $csrf_token)) {
+            http_response_code(403);
+            echo json_encode([
+                'status'  => 'error',
+                'message' => 'Security token expired. Please refresh the page and try again.'
+            ]);
+            exit;
+        }
+    }
+}
+
+// 3. Honeypot Spam Protection — skip for feedback/update actions
+if (!$is_feedback_action && !empty($_POST['website_hp'])) {
     echo json_encode([
         'status'  => 'success',
         'message' => 'Thank you! Your doorstep pickup request has been scheduled.',
@@ -53,13 +60,15 @@ if (!empty($_POST['website_hp'])) {
     exit;
 }
 
-// 4. Handle Feedback Submission Action
-if (isset($_POST['action']) && $_POST['action'] === 'feedback') {
-    $ref_id       = isset($_POST['ref_id']) ? htmlspecialchars(strip_tags(trim($_POST['ref_id'])), ENT_QUOTES, 'UTF-8') : '';
+// 4. Handle Feedback & Pickup Scheduling Submission Action
+if ($is_feedback_action) {
+    $ref_id       = !empty($_POST['lead_id']) ? htmlspecialchars(strip_tags(trim($_POST['lead_id'])), ENT_QUOTES, 'UTF-8') : (!empty($_POST['ref_id']) ? htmlspecialchars(strip_tags(trim($_POST['ref_id'])), ENT_QUOTES, 'UTF-8') : '');
     $rating       = isset($_POST['feedback_rating']) ? htmlspecialchars(strip_tags(trim($_POST['feedback_rating'])), ENT_QUOTES, 'UTF-8') : '';
     $comment      = isset($_POST['feedback_comment']) ? htmlspecialchars(strip_tags(trim($_POST['feedback_comment'])), ENT_QUOTES, 'UTF-8') : '';
-    $pickup_date  = isset($_POST['pickup_date']) ? htmlspecialchars(strip_tags(trim($_POST['pickup_date'])), ENT_QUOTES, 'UTF-8') : 'Today';
-    $pickup_slot  = isset($_POST['pickup_slot']) ? htmlspecialchars(strip_tags(trim($_POST['pickup_slot'])), ENT_QUOTES, 'UTF-8') : 'Express (Within 6 Hours)';
+    $pickup_date  = isset($_POST['pickup_date']) ? htmlspecialchars(strip_tags(trim($_POST['pickup_date'])), ENT_QUOTES, 'UTF-8') : '';
+    $pickup_slot  = isset($_POST['pickup_slot']) ? htmlspecialchars(strip_tags(trim($_POST['pickup_slot'])), ENT_QUOTES, 'UTF-8') : '';
+    $pickup_addr  = isset($_POST['pickup_address']) ? htmlspecialchars(strip_tags(trim($_POST['pickup_address'])), ENT_QUOTES, 'UTF-8') : '';
+    $pincode      = isset($_POST['pincode']) ? htmlspecialchars(strip_tags(trim($_POST['pincode'])), ENT_QUOTES, 'UTF-8') : '';
 
     $feedback_entry = [
         'type'           => 'valuation_feedback',
@@ -69,6 +78,8 @@ if (isset($_POST['action']) && $_POST['action'] === 'feedback') {
         'comment'        => $comment,
         'pickup_date'    => $pickup_date,
         'pickup_slot'    => $pickup_slot,
+        'pickup_address' => $pickup_addr,
+        'pincode'        => $pincode,
         'ip'             => $_SERVER['REMOTE_ADDR'] ?? 'UNKNOWN'
     ];
 
@@ -78,10 +89,15 @@ if (isset($_POST['action']) && $_POST['action'] === 'feedback') {
     }
     @file_put_contents($logs_dir . '/questionnaire_feedback.jsonl', json_encode($feedback_entry, JSON_UNESCAPED_UNICODE) . "\n", FILE_APPEND | LOCK_EX);
 
+    // Sync feedback and pickup scheduling directly to Google Sheets
+    require_once __DIR__ . '/../includes/GoogleSheetsService.php';
+    $sheetsResult = GoogleSheetsService::updateFeedbackRow($ref_id, $rating, $comment, $pickup_date, $pickup_slot, $pickup_addr, $pincode);
+
     echo json_encode([
         'status'  => 'success',
         'message' => 'Thank you for your feedback! Doorstep pickup scheduled.',
-        'ref_id'  => $ref_id
+        'ref_id'  => $ref_id,
+        'sheets'  => $sheetsResult
     ]);
     exit;
 }
@@ -92,10 +108,10 @@ date_default_timezone_set('Asia/Kolkata');
 $name        = isset($_POST['full_name']) ? htmlspecialchars(strip_tags(trim($_POST['full_name'])), ENT_QUOTES, 'UTF-8') : '';
 $phone       = isset($_POST['phone_number']) ? preg_replace('/[^0-9+]/', '', trim($_POST['phone_number'])) : '';
 $email       = isset($_POST['email']) ? filter_var(trim($_POST['email']), FILTER_SANITIZE_EMAIL) : '';
-$address     = isset($_POST['address']) && !empty(trim($_POST['address'])) ? htmlspecialchars(strip_tags(trim($_POST['address'])), ENT_QUOTES, 'UTF-8') : 'Mumbai (Doorstep Pickup)';
-$pincode     = isset($_POST['pincode']) && !empty(trim($_POST['pincode'])) ? preg_replace('/[^0-9]/', '', trim($_POST['pincode'])) : '400021';
-$pickup_date = isset($_POST['pickup_date']) ? htmlspecialchars(strip_tags(trim($_POST['pickup_date'])), ENT_QUOTES, 'UTF-8') : 'Today';
-$pickup_slot = isset($_POST['pickup_slot']) ? htmlspecialchars(strip_tags(trim($_POST['pickup_slot'])), ENT_QUOTES, 'UTF-8') : 'Express (Within 2 Hours)';
+$address     = isset($_POST['address']) && !empty(trim($_POST['address'])) ? htmlspecialchars(strip_tags(trim($_POST['address'])), ENT_QUOTES, 'UTF-8') : '';
+$pincode     = isset($_POST['pincode']) && !empty(trim($_POST['pincode'])) ? preg_replace('/[^0-9]/', '', trim($_POST['pincode'])) : '';
+$pickup_date = isset($_POST['pickup_date']) ? htmlspecialchars(strip_tags(trim($_POST['pickup_date'])), ENT_QUOTES, 'UTF-8') : '';
+$pickup_slot = isset($_POST['pickup_slot']) ? htmlspecialchars(strip_tags(trim($_POST['pickup_slot'])), ENT_QUOTES, 'UTF-8') : '';
 
 // Extract Device & Questionnaire Payload
 $model        = isset($_POST['device_model']) ? htmlspecialchars(strip_tags(trim($_POST['device_model'])), ENT_QUOTES, 'UTF-8') : 'Apple iPhone 13';
@@ -129,8 +145,8 @@ if (!empty($errors)) {
     exit;
 }
 
-// Generate Structured Unique Lead ID: EXG-YYYYMMDD-XXX
-$lead_id = 'EXG-' . date('Ymd') . '-' . strtoupper(substr(md5(uniqid(rand(), true)), 0, 4));
+// Generate or Accept Structured Unique Lead ID: EXG-YYYYMMDD-XXXX
+$lead_id = !empty($_POST['lead_id']) ? htmlspecialchars(strip_tags(trim($_POST['lead_id'])), ENT_QUOTES, 'UTF-8') : ('EXG-' . date('Ymd') . '-' . strtoupper(substr(md5(uniqid(rand(), true)), 0, 4)));
 
 // Parse Questionnaire Answers & Valuation Adjustments
 $parsed_answers = [];

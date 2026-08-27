@@ -7,7 +7,7 @@
 return [
     // Google Apps Script Web App Endpoint URL
     // Can be set via environment variable GOOGLE_SHEETS_WEBHOOK_URL or defined here
-    'webhook_url' => getenv('GOOGLE_SHEETS_WEBHOOK_URL') ?: 'https://script.google.com/macros/s/AKfycbxejTwVjiDohuUhcIMexfFaQ5iffIwbpq6XFpu2hGZXJlSu8bEPdXJK55pvXeUbI9Yd/exec',
+    'webhook_url' => getenv('GOOGLE_SHEETS_WEBHOOK_URL') ?: 'https://script.google.com/macros/s/AKfycbz92Odybh76PaC2kgCGS39SrebD-f4lALmvltCl6oygSHRmq5eMB0jml8vX10CGWUFT/exec',
 
     // Secret API Token for webhook authentication (optional extra layer of security)
     'secret_token' => getenv('GOOGLE_SHEETS_SECRET_TOKEN') ?: 'CS_GSHEETS_SECURE_TOKEN_2026',
