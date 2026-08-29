@@ -55,13 +55,22 @@ class GoogleSheetsService
 
         $modelName = $device['model'] ?? 'Apple iPhone 13';
         $variant   = $device['variant'] ?? '128 GB';
-        $battery   = $device['battery'] ?? ($answers['battery_health'] ?? '89%');
-        $baseVal   = $device['base_val'] ?? '₹23,220';
-        $finalVal  = $device['estimated_val'] ?? '₹23,220';
+        $battery   = $device['battery'] ?? ($answers['battery_health'] ?? 'Above 80% (Healthy)');
+        
+        $formatInr = function($val) {
+            $cleaned = preg_replace('/[^0-9]/', '', (string)$val);
+            if (!empty($cleaned) && is_numeric($cleaned)) {
+                return '₹' . number_format((float)$cleaned);
+            }
+            return (string)$val;
+        };
 
-        $ram = self::$ramMap[$modelName] ?? '4 GB';
+        $baseVal   = $formatInr($device['base_val'] ?? '23220');
+        $finalVal  = $formatInr($device['estimated_val'] ?? '23220');
 
-        // Helper to normalize Yes / No
+        $ram = self::$ramMap[$modelName] ?? '6 GB';
+
+        // Helper to normalize Yes / No from bool, string or CSV keys
         $getAns = function ($key, $default = 'YES') use ($answers) {
             if (!isset($answers[$key])) return $default;
             $val = $answers[$key];
@@ -72,46 +81,79 @@ class GoogleSheetsService
             return strtoupper($val);
         };
 
-        // 1. Functional & Physical Answers
-        $ansPower       = $getAns('power_on', 'YES');
-        $ansDispWork    = $getAns('display_working', 'YES');
-        $ansTouch       = $getAns('touch_screen', 'YES');
-        $ansDispFlaws   = $getAns('display_flaws', 'NO');
-        $ansScreenCrack = $getAns('screen_cracked', 'NO');
-        $ansScreenScr   = $getAns('screen_scratches', 'NO');
-        $ansBodyDents   = $getAns('body_dents', 'YES');
-        $ansBodyBent    = $getAns('body_bent', 'NO');
-        $ansBodyDmg     = $getAns('body_visible_damage', 'NO');
-        $ansCamGlass    = $getAns('camera_glass_crack', 'NO');
+        // 1. Functional & Physical Answers (Supports both legacy and new CSV keys)
+        $ansPower       = (!empty($answers['power_on']) && $answers['power_on'] === 'No') ? 'NO' : 'YES';
+        $ansDispWork    = (!empty($answers['no_display']) || (isset($answers['display_working']) && $answers['display_working'] === 'No')) ? 'NO' : 'YES';
+        $ansTouch       = (!empty($answers['touch_not_working']) || (isset($answers['touch_screen']) && $answers['touch_screen'] === 'No')) ? 'NO' : 'YES';
+        $ansDispFlaws   = (!empty($answers['lines_on_display']) || !empty($answers['dots_on_display']) || !empty($answers['flickering']) || !empty($answers['color_fade']) || !empty($answers['loose_screen']) || (isset($answers['display_flaws']) && $answers['display_flaws'] === 'Yes')) ? 'YES' : 'NO';
+        $ansScreenCrack = (!empty($answers['glass_cracked']) || (isset($answers['screen_cracked']) && $answers['screen_cracked'] === 'Yes')) ? 'YES' : 'NO';
+        
+        // Screen Scratches
+        if (!empty($answers['multiple_scratches_screen']) || !empty($answers['scratch_screen_3_4'])) {
+            $ansScreenScr = 'YES (Heavy Scratches)';
+        } elseif (!empty($answers['scratch_screen_1_2'])) {
+            $ansScreenScr = 'YES (1-2 Minor Scratches)';
+        } else {
+            $ansScreenScr = $getAns('screen_scratches', 'NO');
+        }
+
+        // Body Dents / Scratches / Bent
+        $hasDents       = (!empty($answers['dents_1_or_2']) || !empty($answers['multiple_dents']) || !empty($answers['multiple_scratches_body']) || (isset($answers['body_dents']) && $answers['body_dents'] === 'No'));
+        $ansBodyDents   = $hasDents ? 'NO (Has Dents/Scratches)' : 'YES (Clean Frame)';
+        $ansBodyBent    = (!empty($answers['body_curved']) || (isset($answers['body_bent']) && $answers['body_bent'] === 'Yes')) ? 'YES' : 'NO';
+        $ansBodyDmg     = (!empty($answers['back_glass_broken']) || (isset($answers['body_visible_damage']) && $answers['body_visible_damage'] === 'Yes')) ? 'YES' : 'NO';
+        $ansCamGlass    = (!empty($answers['camera_glass_broken']) || (isset($answers['camera_glass_crack']) && $answers['camera_glass_crack'] === 'Yes')) ? 'YES' : 'NO';
         $ansMissing     = $getAns('missing_parts', 'NO');
-        $ansRearCam     = $getAns('rear_camera', 'YES');
-        $ansFrontCam    = $getAns('front_camera', 'YES');
+
+        // Functional hardware
+        $ansRearCam     = (!empty($answers['back_camera_not_working']) || (isset($answers['rear_camera']) && $answers['rear_camera'] === 'No')) ? 'NO' : 'YES';
+        $ansFrontCam    = (!empty($answers['front_camera_not_working']) || (isset($answers['front_camera']) && $answers['front_camera'] === 'No')) ? 'NO' : 'YES';
         $ansFlash       = $getAns('camera_flash', 'YES');
-        $ansSpeaker     = $getAns('loudspeaker', 'YES');
-        $ansEarRec      = $getAns('earpiece_receiver', 'YES');
+        $ansSpeaker     = (!empty($answers['speaker_not_working']) || (isset($answers['loudspeaker']) && $answers['loudspeaker'] === 'No')) ? 'NO' : 'YES';
+        $ansEarRec      = (!empty($answers['audio_ic_problem']) || (isset($answers['earpiece_receiver']) && $answers['earpiece_receiver'] === 'No')) ? 'NO' : 'YES';
         $ansMic         = $getAns('microphone', 'YES');
-        $ansPowerBtn    = $getAns('power_button', 'YES');
-        $ansVolBtn      = $getAns('volume_buttons', 'YES');
+        $ansPowerBtn    = (!empty($answers['power_button_issue']) || (isset($answers['power_button']) && $answers['power_button'] === 'No')) ? 'NO' : 'YES';
+        $ansVolBtn      = (!empty($answers['volume']) || (isset($answers['volume_buttons']) && $answers['volume_buttons'] === 'No')) ? 'NO' : 'YES';
         $ansSilentSw    = $getAns('silent_switch', 'YES');
-        $ansChargePort  = $getAns('charging_port', 'YES');
+        $ansChargePort  = (!empty($answers['charging_port_issue']) || (isset($answers['charging_port']) && $answers['charging_port'] === 'No')) ? 'NO' : 'YES';
         $ansChargeWork  = $getAns('charges_normally', 'YES');
-        $ansBio         = $getAns('biometrics', 'YES');
-        $ansWifi        = $getAns('wifi_working', 'YES');
-        $ansBT          = $getAns('bluetooth_working', 'YES');
-        $ansCellular    = $getAns('cellular_sim', 'YES');
+        $ansBio         = (!empty($answers['face_id_not_working']) || !empty($answers['finger_print_not_working']) || (isset($answers['biometrics']) && $answers['biometrics'] === 'No')) ? 'NO' : 'YES';
+        $ansWifi        = (!empty($answers['wifi_issues']) || (isset($answers['wifi_working']) && $answers['wifi_working'] === 'No')) ? 'NO' : 'YES';
+        $ansBT          = (!empty($answers['bluetooth_issue']) || (isset($answers['bluetooth_working']) && $answers['bluetooth_working'] === 'No')) ? 'NO' : 'YES';
+        $ansCellular    = (!empty($answers['headphone_jackissue']) || (isset($answers['cellular_sim']) && $answers['cellular_sim'] === 'No')) ? 'YES' : 'YES';
         $ansGPS         = $getAns('gps_location', 'YES');
         $ansLiquid      = $getAns('liquid_damage', 'NO');
 
-        // 2. Parts, Accessories & History
+        // Battery Health calculation
+        if (!empty($answers['battery_less_80'])) {
+            $battery = 'Below 80% (Degraded)';
+        } elseif (!empty($answers['battery_faulty'])) {
+            $battery = 'Faulty / Swollen';
+        } elseif (!empty($answers['battery_greater_80'])) {
+            $battery = 'Above 80% (Healthy)';
+        }
+
+        // 2. Parts, Accessories & Age History
         $ansDispOrig    = $getAns('display_original', 'YES');
         $ansMajorRep    = $getAns('parts_replaced', 'NO');
         $ansReplacedComp= ($ansMajorRep === 'YES') ? ($answers['replaced_component_name'] ?? 'Display / Battery') : 'None';
-        $ansWarranty    = $answers['warranty_status'] ?? 'YES (Under 11 Months)';
         
-        $accText = $answers['accessories'] ?? '';
-        $ansBill = (stripos($accText, 'bill') !== false || stripos($accText, 'yes') !== false || $getAns('bill_invoice', 'YES') === 'YES') ? 'YES' : 'NO';
-        $ansBox  = (stripos($accText, 'box') !== false || stripos($accText, 'yes') !== false || $getAns('has_box', 'YES') === 'YES') ? 'YES' : 'NO';
-        $ansCable= (stripos($accText, 'yes') !== false || $getAns('has_cable', 'YES') === 'YES') ? 'YES' : 'NO';
+        // Age warranty estimation
+        if (!empty($answers['months_0_3'])) {
+            $ansWarranty = 'Under 3 Months (Brand New)';
+        } elseif (!empty($answers['months_3_6'])) {
+            $ansWarranty = '3 to 6 Months';
+        } elseif (!empty($answers['months_6_11'])) {
+            $ansWarranty = '6 to 11 Months (Under Warranty)';
+        } elseif (!empty($answers['months_11_more'])) {
+            $ansWarranty = 'Out of Warranty (Over 1 Year)';
+        } else {
+            $ansWarranty = $answers['warranty_status'] ?? 'Under 11 Months';
+        }
+        
+        $ansBill  = (!empty($answers['invoice']) || (isset($answers['bill_invoice']) && $answers['bill_invoice'] === 'Yes')) ? 'YES' : 'NO';
+        $ansBox   = (!empty($answers['box']) || (isset($answers['has_box']) && $answers['has_box'] === 'Yes')) ? 'YES' : 'NO';
+        $ansCable = (!empty($answers['charger']) || (isset($answers['has_cable']) && $answers['has_cable'] === 'Yes')) ? 'YES' : 'NO';
 
         // 3. Failed Tests and Stats Calculation
         $testChecks = [
@@ -120,33 +162,22 @@ class GoogleSheetsService
             'Touchscreen'                         => ($ansTouch === 'YES'),
             'Display Lines / Spots / Flickering'  => ($ansDispFlaws === 'NO'),
             'Screen Cracked'                      => ($ansScreenCrack === 'NO'),
-            'Screen Major Scratches'              => ($ansScreenScr === 'NO'),
-            'Body Dents'                          => ($ansBodyDents === 'YES'),
+            'Screen Scratches'                    => (strpos($ansScreenScr, 'Heavy') === false),
+            'Body Condition'                      => (strpos($ansBodyDents, 'Clean') !== false),
             'Phone Bent'                          => ($ansBodyBent === 'NO'),
             'Body Visible Damage'                 => ($ansBodyDmg === 'NO'),
             'Camera Glass Condition'              => ($ansCamGlass === 'NO'),
-            'Missing Parts'                       => ($ansMissing === 'NO'),
             'Rear Camera'                         => ($ansRearCam === 'YES'),
             'Front Camera'                        => ($ansFrontCam === 'YES'),
-            'Camera Flash'                        => ($ansFlash === 'YES'),
-            'Loudspeaker'                         => ($ansSpeaker === 'YES'),
-            'Ear Receiver'                        => ($ansEarRec === 'YES'),
-            'Microphone'                          => ($ansMic === 'YES'),
+            'Speaker'                             => ($ansSpeaker === 'YES'),
+            'Ear Receiver / Audio IC'             => ($ansEarRec === 'YES'),
             'Power Button'                        => ($ansPowerBtn === 'YES'),
             'Volume Buttons'                      => ($ansVolBtn === 'YES'),
-            'Silent Switch'                       => ($ansSilentSw === 'YES'),
             'Charging Port'                       => ($ansChargePort === 'YES'),
-            'Charging Function'                   => ($ansChargeWork === 'YES'),
             'Biometrics (Face ID / Touch ID)'     => ($ansBio === 'YES'),
             'Wi-Fi'                               => ($ansWifi === 'YES'),
             'Bluetooth'                           => ($ansBT === 'YES'),
-            'Mobile Network / SIM'                => ($ansCellular === 'YES'),
-            'GPS Location'                        => ($ansGPS === 'YES'),
-            'Liquid Damage'                       => ($ansLiquid === 'NO'),
-            'Original Display'                    => ($ansDispOrig === 'YES'),
-            'Component Replacement'               => ($ansMajorRep === 'NO'),
-            'Original Bill'                       => ($ansBill === 'YES'),
-            'Original Box'                        => ($ansBox === 'YES')
+            'Battery Health'                      => (strpos($battery, 'Below') === false && strpos($battery, 'Faulty') === false)
         ];
 
         $totalTests = count($testChecks);
@@ -330,6 +361,11 @@ class GoogleSheetsService
         }
 
         // Post to active Google Apps Script Webhook
+        // NOTE: Google Apps Script /exec URLs respond with a 302 redirect.
+        // The POST body is consumed by the /exec handler. The 302 points to
+        // script.googleusercontent.com which serves the JSON response via GET.
+        // We do NOT follow the redirect in the POST call — a 302 means success.
+        // Then we separately GET the redirect URL for the JSON response.
         $postPayload = json_encode([
             'action'    => 'add_valuation_row',
             'token'     => $config['secret_token'] ?? '',
@@ -344,20 +380,48 @@ class GoogleSheetsService
             CURLOPT_POST           => true,
             CURLOPT_POSTFIELDS     => $postPayload,
             CURLOPT_HTTPHEADER     => [
-                'Content-Type: application/json',
-                'Content-Length: ' . strlen($postPayload)
+                'Content-Type: application/json'
             ],
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_TIMEOUT        => 20,
+            CURLOPT_FOLLOWLOCATION => false,   // Don't follow 302
+            CURLOPT_TIMEOUT        => 25,
             CURLOPT_SSL_VERIFYPEER => false,
-            CURLOPT_SSL_VERIFYHOST => false
+            CURLOPT_SSL_VERIFYHOST => false,
+            CURLOPT_HEADER         => true      // Capture headers for Location
         ]);
 
-        $response = curl_exec($ch);
-        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        $curlError= curl_error($ch);
-        $effectiveUrl = curl_getinfo($ch, CURLINFO_EFFECTIVE_URL);
+        $rawResponse = curl_exec($ch);
+        $httpCode    = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $curlError   = curl_error($ch);
+        $effectiveUrl= curl_getinfo($ch, CURLINFO_EFFECTIVE_URL);
+        $headerSize  = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
         curl_close($ch);
+
+        $responseBody = substr($rawResponse, $headerSize);
+        $responseHeaders = substr($rawResponse, 0, $headerSize);
+
+        // If 302, the POST was accepted by GAS. Follow the Location to get JSON response.
+        $response = $responseBody;
+        if ($httpCode === 302) {
+            if (preg_match('/Location:\s*(.*)/i', $responseHeaders, $m)) {
+                $redirectUrl = trim($m[1]);
+                $ch2 = curl_init();
+                curl_setopt_array($ch2, [
+                    CURLOPT_URL            => $redirectUrl,
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_FOLLOWLOCATION => true,
+                    CURLOPT_TIMEOUT        => 15,
+                    CURLOPT_SSL_VERIFYPEER => false,
+                    CURLOPT_SSL_VERIFYHOST => false
+                ]);
+                $response = curl_exec($ch2);
+                $httpCode = curl_getinfo($ch2, CURLINFO_HTTP_CODE);
+                curl_close($ch2);
+            } else {
+                // 302 without Location — treat as success (POST was consumed)
+                $httpCode = 200;
+                $response = '{"status":"success","note":"302 accepted, no Location header"}';
+            }
+        }
 
         $debugEntry = [
             'timestamp'     => date('Y-m-d H:i:s'),
@@ -373,6 +437,9 @@ class GoogleSheetsService
             @mkdir($logsDir, 0755, true);
         }
         @file_put_contents($logsDir . '/sheets_sync_debug.jsonl', json_encode($debugEntry, JSON_UNESCAPED_UNICODE) . "\n", FILE_APPEND | LOCK_EX);
+
+        // Send readable notification email with text & emojis to store admin
+        self::sendLeadNotificationEmail($leadData, $rowData);
 
         if ($httpCode >= 200 && $httpCode < 400) {
             return [
@@ -396,6 +463,198 @@ class GoogleSheetsService
             'error'     => $curlError ?: "HTTP $httpCode",
             'response'  => $response
         ];
+    }
+
+    /**
+     * Send structured, high-priority email notification with emojis and quick-read condition matrix
+     */
+    public static function sendLeadNotificationEmail(array $leadData, array $rowData): bool
+    {
+        $to          = function_exists('get_env_var') ? get_env_var('RECIPIENT_EMAIL', 'wholesalehouse2016@gmail.com') : 'wholesalehouse2016@gmail.com';
+        $senderEmail = function_exists('get_env_var') ? get_env_var('SENDER_EMAIL', 'no-reply@cashsecond.in') : 'no-reply@cashsecond.in';
+        $senderName  = function_exists('get_env_var') ? get_env_var('SENDER_NAME', 'CashSecond Valuation Desk') : 'CashSecond Valuation Desk';
+
+        if (empty($to)) {
+            return false;
+        }
+
+        $customer = $leadData['customer'] ?? [];
+        $device   = $leadData['device'] ?? [];
+        $answers  = $leadData['answers'] ?? [];
+
+        // Spam & Header Injection Protection
+        $cleanStr = function ($val, $default = '') {
+            if ($val === null || $val === '') return $default;
+            return trim(strip_tags((string)$val));
+        };
+
+        $name     = $cleanStr($customer['name'] ?? ($rowData['full_name'] ?? 'Customer'), 'Customer');
+        $phone    = $cleanStr($customer['phone'] ?? ($rowData['whatsapp_number'] ?? ''));
+        $email    = $cleanStr($customer['email'] ?? ($rowData['email'] ?? 'Not provided'), 'Not provided');
+        $model    = $cleanStr($device['model'] ?? ($rowData['model'] ?? 'Apple iPhone'), 'Apple iPhone');
+        $variant  = $cleanStr($device['variant'] ?? ($rowData['storage'] ?? ''), '');
+        $baseVal  = $cleanStr($device['base_val'] ?? ($rowData['base_max_value'] ?? ''), '');
+        $finalVal = $cleanStr($device['estimated_val'] ?? ($rowData['final_estimated_value'] ?? ''), '');
+        $leadId   = $cleanStr($rowData['lead_id'] ?? ('CS-' . date('Ymd-His')));
+        $timeStr  = date('d M Y, h:i A');
+
+        $cleanPhone = preg_replace('/[^0-9]/', '', $phone);
+        $waUrl      = "https://wa.me/91{$cleanPhone}?text=" . rawurlencode("Hi {$name}, this is CashSecond regarding your iPhone valuation of {$finalVal} for {$model} ({$variant}). Ref: {$leadId}");
+
+        // Build Visual Emoji Condition Matrix
+        $screenCond = ($rowData['display_working'] === 'YES' && $rowData['display_lines_spots'] === 'NO') ? '✅ Display Working (Clear)' : '❌ Display Issues / Lines / Dots';
+        $glassCond  = ($rowData['screen_cracked'] === 'NO') ? '✅ Front Glass Intact' : '❌ Front Glass Cracked';
+        $scrCond    = $rowData['screen_major_scratches'] ?? 'NO';
+        $scratchTxt = (stripos($scrCond, 'Heavy') !== false) ? '❌ Heavy Scratches' : ((stripos($scrCond, '1-2') !== false) ? '⚠️ Minor Scratches' : '✅ Scratch-Free Screen');
+        
+        $bodyCond   = (strpos($rowData['body_condition'] ?? '', 'Clean') !== false) ? '✅ Clean Metal Frame' : '⚠️ Has Dents / Body Scratches';
+        $bentCond   = ($rowData['phone_bent'] === 'NO') ? '✅ Frame Flat & Straight' : '❌ Body Curved / Bent';
+        $backGlass  = ($rowData['body_damage'] === 'NO') ? '✅ Back Glass Intact' : '❌ Back Glass Broken';
+        
+        $batteryTxt = $rowData['battery_health'] ?? 'Above 80%';
+        $batteryEmo = (strpos($batteryTxt, 'Above') !== false) ? "🟢 {$batteryTxt}" : ((strpos($batteryTxt, 'Below') !== false) ? "🔴 {$batteryTxt}" : "⚠️ {$batteryTxt}");
+        
+        $camTxt     = ($rowData['front_camera'] === 'YES' && $rowData['rear_camera'] === 'YES') ? '✅ Front & Rear Cameras Working' : '❌ Camera Faulty';
+        $bioTxt     = ($rowData['face_id_touch_id'] === 'YES') ? '✅ Face ID / Biometrics OK' : '❌ Face ID / Sensor Broken';
+        $chargeTxt  = ($rowData['charging_port'] === 'YES' && $rowData['charging_working'] === 'YES') ? '✅ Charging Port & Fast Charge OK' : '❌ Charging Port Issue';
+        $soundTxt   = ($rowData['speaker'] === 'YES' && $rowData['ear_receiver'] === 'YES') ? '✅ Loudspeaker & Earpiece Clear' : '❌ Speaker / Audio Issue';
+        $wifiTxt    = ($rowData['wifi'] === 'YES' && $rowData['bluetooth'] === 'YES') ? '✅ Wi-Fi & Bluetooth OK' : '❌ Wireless Issues';
+
+        $boxTxt     = ($rowData['original_box'] === 'YES') ? '📦 Box: YES' : '📦 Box: NO';
+        $chargerTxt = ($rowData['original_cable_adapter'] === 'YES') ? '⚡ Charger: YES' : '⚡ Charger: NO';
+        $billTxt    = ($rowData['original_bill'] === 'YES') ? '🧾 Bill: YES' : '🧾 Bill: NO';
+
+        $warrantyTxt= $rowData['warranty_status'] ?? 'Out of Warranty';
+
+        $subject = "New CashSecond iPhone Valuation Lead from {$name} [{$model}]";
+
+        // Plain Text Version with Clean Emoji Formatting
+        $plainBody = "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+                   . "📱 NEW iPHONE VALUATION LEAD | CashSecond\n"
+                   . "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+                   . "👤 CUSTOMER DETAILS:\n"
+                   . "• Name:     {$name}\n"
+                   . "• Phone:    {$phone} (Click to Call: tel:{$cleanPhone})\n"
+                   . "• WhatsApp: {$waUrl}\n"
+                   . "• Email:    {$email}\n"
+                   . "• Lead ID:  {$leadId}\n"
+                   . "• Time:     {$timeStr}\n"
+                   . "💰 VALUATION SUMMARY:\n"
+                   . "• Device:          {$model} ({$variant})\n"
+                   . "• Final Valuation: {$finalVal}\n"
+                   . "• Base Price:      {$baseVal}\n"
+                   . "• Status:          Verified Online Quote\n"
+                   . "📋 PHONE CONDITION & HEALTH:\n"
+                   . "• 🖥️ Screen:       {$screenCond}\n"
+                   . "• 🔍 Glass:        {$glassCond}\n"
+                   . "• ✨ Scratches:    {$scratchTxt}\n"
+                   . "• 📱 Body/Frame:   {$bodyCond}\n"
+                   . "• 🔄 Chassis Bent: {$bentCond}\n"
+                   . "• 🔨 Back Glass:   {$backGlass}\n"
+                   . "• 🔋 Battery:      {$batteryEmo}\n"
+                   . "• 📸 Cameras:      {$camTxt}\n"
+                   . "• 👤 Face ID:      {$bioTxt}\n"
+                   . "• 🔌 Charging:     {$chargeTxt}\n"
+                   . "• 🔊 Audio:        {$soundTxt}\n"
+                   . "• 📶 Wireless:     {$wifiTxt}\n"
+                   . "• 📅 Warranty:     {$warrantyTxt}\n"
+                   . "• 📦 Accessories:  {$boxTxt} | {$chargerTxt} | {$billTxt}\n\n"
+                   . "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+                   . "👉 Google Sheet: https://docs.google.com/spreadsheets/d/1LpQdgV5PtA2-nVpzjVZPGAmVdaVBzVM8g1hCWBaApCo/edit\n"
+                   . "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n";
+
+        // HTML Version
+        $htmlBody = "
+        <div style='font-family:-apple-system,BlinkMacSystemFont,\"Segoe UI\",Roboto,sans-serif;max-width:620px;margin:0 auto;background:#F5F5F7;padding:20px;color:#1D1D1F;'>
+            <div style='background:#FFFFFF;border-radius:16px;padding:24px;border:1px solid #E5E5EA;box-shadow:0 4px 16px rgba(0,0,0,0.06);'>
+                
+                <div style='border-bottom:2px solid #0071E3;padding-bottom:12px;margin-bottom:18px;'>
+                    <span style='background:#0071E3;color:#FFFFFF;font-size:11px;font-weight:bold;padding:3px 10px;border-radius:20px;text-transform:uppercase;'>New Valuation Lead</span>
+                    <h2 style='margin:8px 0 2px 0;font-size:22px;color:#111111;'>{$model} <span style='color:#6E6E73;font-size:16px;'>({$variant})</span></h2>
+                    <div style='font-size:26px;font-weight:800;color:#1E8E3E;margin-top:4px;'>{$finalVal}</div>
+                </div>
+
+                <!-- Customer Details -->
+                <div style='background:#F5F5F7;border-radius:12px;padding:14px 16px;margin-bottom:18px;'>
+                    <h4 style='margin:0 0 10px 0;font-size:14px;color:#0071E3;text-transform:uppercase;letter-spacing:0.04em;'>👤 Customer Information</h4>
+                    <p style='margin:4px 0;font-size:14px;'><strong>Name:</strong> {$name}</p>
+                    <p style='margin:4px 0;font-size:14px;'><strong>Phone / WhatsApp:</strong> <a href='tel:{$cleanPhone}' style='color:#0071E3;font-weight:bold;text-decoration:none;'>+91 {$cleanPhone}</a></p>
+                    <p style='margin:4px 0;font-size:14px;'><strong>Email:</strong> {$email}</p>
+                    <p style='margin:4px 0;font-size:12px;color:#86868B;'><strong>Lead Ref:</strong> {$leadId} &bull; {$timeStr}</p>
+                </div>
+
+                <!-- Action Buttons -->
+                <div style='display:flex;gap:10px;margin-bottom:20px;'>
+                    <a href='{$waUrl}' target='_blank' style='flex:1;background:#25D366;color:#FFFFFF;text-align:center;padding:12px;border-radius:10px;font-weight:bold;text-decoration:none;font-size:14px;display:block;'>💬 Open WhatsApp Chat</a>
+                    <a href='tel:{$cleanPhone}' style='flex:1;background:#0071E3;color:#FFFFFF;text-align:center;padding:12px;border-radius:10px;font-weight:bold;text-decoration:none;font-size:14px;display:block;'>📞 Call Customer</a>
+                </div>
+
+                <!-- Condition Breakdown -->
+                <div style='border:1px solid #E5E5EA;border-radius:12px;padding:16px;'>
+                    <h4 style='margin:0 0 12px 0;font-size:14px;color:#111111;text-transform:uppercase;letter-spacing:0.04em;'>📋 Device Condition &amp; Health</h4>
+                    <table style='width:100%;font-size:13.5px;line-height:1.8;border-collapse:collapse;'>
+                        <tr><td style='color:#6E6E73;width:40%;'>🖥️ Screen Display</td><td><strong>{$screenCond}</strong></td></tr>
+                        <tr><td style='color:#6E6E73;'>🔍 Screen Glass</td><td><strong>{$glassCond}</strong></td></tr>
+                        <tr><td style='color:#6E6E73;'>✨ Scratches</td><td><strong>{$scratchTxt}</strong></td></tr>
+                        <tr><td style='color:#6E6E73;'>📱 Frame &amp; Body</td><td><strong>{$bodyCond}</strong></td></tr>
+                        <tr><td style='color:#6E6E73;'>🔄 Chassis Bent</td><td><strong>{$bentCond}</strong></td></tr>
+                        <tr><td style='color:#6E6E73;'>🔨 Back Glass</td><td><strong>{$backGlass}</strong></td></tr>
+                        <tr><td style='color:#6E6E73;'>🔋 Battery Health</td><td><strong>{$batteryEmo}</strong></td></tr>
+                        <tr><td style='color:#6E6E73;'>📸 Cameras</td><td><strong>{$camTxt}</strong></td></tr>
+                        <tr><td style='color:#6E6E73;'>👤 Biometrics</td><td><strong>{$bioTxt}</strong></td></tr>
+                        <tr><td style='color:#6E6E73;'>🔌 Charging Port</td><td><strong>{$chargeTxt}</strong></td></tr>
+                        <tr><td style='color:#6E6E73;'>🔊 Sound / Audio</td><td><strong>{$soundTxt}</strong></td></tr>
+                        <tr><td style='color:#6E6E73;'>📶 Connectivity</td><td><strong>{$wifiTxt}</strong></td></tr>
+                        <tr><td style='color:#6E6E73;'>📅 Warranty</td><td><strong>{$warrantyTxt}</strong></td></tr>
+                        <tr><td style='color:#6E6E73;'>📦 Inclusions</td><td><strong>{$boxTxt} &bull; {$chargerTxt} &bull; {$billTxt}</strong></td></tr>
+                    </table>
+                </div>
+
+                <div style='text-align:center;margin-top:20px;padding-top:14px;border-top:1px solid #E5E5EA;'>
+                    <a href='https://docs.google.com/spreadsheets/d/1LpQdgV5PtA2-nVpzjVZPGAmVdaVBzVM8g1hCWBaApCo/edit' target='_blank' style='color:#0071E3;font-size:13px;font-weight:600;text-decoration:none;'>📊 View Lead in Google Sheets &rarr;</a>
+                </div>
+
+            </div>
+        </div>";
+
+        // Standard Email Headers (Spam & Header Injection Protected)
+        $replyTo = (!empty($email) && filter_var($email, FILTER_VALIDATE_EMAIL)) ? $email : $senderEmail;
+        $headers  = "MIME-Version: 1.0\r\n";
+        $headers .= "Content-Type: text/html; charset=UTF-8\r\n";
+        $headers .= "From: {$senderName} <{$senderEmail}>\r\n";
+        $headers .= "Reply-To: {$replyTo}\r\n";
+        $headers .= "X-Mailer: PHP/" . phpversion() . "\r\n";
+
+        // Dispatch email
+        $mailSent = @mail($to, $subject, $htmlBody, $headers);
+
+        // Also attempt SMTP if configured in config/smtp.php
+        $smtpClassFile = __DIR__ . '/SmtpMailer.php';
+        if (file_exists($smtpClassFile)) {
+            require_once $smtpClassFile;
+            $smtpConfig = file_exists(__DIR__ . '/../config/smtp.php') ? require __DIR__ . '/../config/smtp.php' : [];
+            if (!empty($smtpConfig['enabled']) && !empty($smtpConfig['password'])) {
+                $smtpRes = SmtpMailer::send($to, $subject, $htmlBody, $plainBody);
+                if (!empty($smtpRes['success'])) {
+                    $mailSent = true;
+                }
+            }
+        }
+
+        // Save to email log for audit & verification
+        $logsDir = __DIR__ . '/../logs';
+        if (!is_dir($logsDir)) {
+            @mkdir($logsDir, 0755, true);
+        }
+        @file_put_contents($logsDir . '/email_notifications.jsonl', json_encode([
+            'timestamp' => date('Y-m-d H:i:s'),
+            'to'        => $to,
+            'subject'   => $subject,
+            'lead_id'   => $leadId,
+            'sent'      => $mailSent
+        ], JSON_UNESCAPED_UNICODE) . "\n", FILE_APPEND | LOCK_EX);
+
+        return $mailSent;
     }
 
     /**
@@ -432,11 +691,12 @@ class GoogleSheetsService
             CURLOPT_POST           => true,
             CURLOPT_POSTFIELDS     => $postPayload,
             CURLOPT_HTTPHEADER     => [
-                'Content-Type: application/json',
-                'Content-Length: ' . strlen($postPayload)
+                'Content-Type: application/json'
             ],
             CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_TIMEOUT        => 15,
+            CURLOPT_MAXREDIRS      => 5,
+            CURLOPT_POSTREDIR      => CURL_REDIR_POST_ALL,
+            CURLOPT_TIMEOUT        => 20,
             CURLOPT_SSL_VERIFYPEER => false,
             CURLOPT_SSL_VERIFYHOST => false
         ]);

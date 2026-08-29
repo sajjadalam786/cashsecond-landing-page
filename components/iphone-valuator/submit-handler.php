@@ -79,8 +79,9 @@ if ($is_feedback_action) {
         'ip'             => $_SERVER['REMOTE_ADDR'] ?? 'UNKNOWN'
     ];
 
-    // Resolve logs dir relative to project root (3 levels up from this file)
-    $logs_dir = __DIR__ . '/../../../logs';
+    // Resolve project root (2 levels up from components/iphone-valuator/)
+    $project_root = dirname(__DIR__, 2);
+    $logs_dir     = $project_root . '/logs';
     if (!is_dir($logs_dir)) {
         @mkdir($logs_dir, 0755, true);
     }
@@ -91,7 +92,7 @@ if ($is_feedback_action) {
 
     // Sync to Google Sheets via shared service
     $sheets_result = false;
-    $sheets_service = __DIR__ . '/../../../includes/GoogleSheetsService.php';
+    $sheets_service = $project_root . '/includes/GoogleSheetsService.php';
     if (file_exists($sheets_service)) {
         require_once $sheets_service;
         $sheets_result = GoogleSheetsService::updateFeedbackRow(
@@ -188,16 +189,18 @@ $lead_entry = [
     'adjustments'  => $parsed_adjustments,
 ];
 
-// --- Save to Google Sheets ---
+// --- Save to Google Sheets & Send Email ---
+$project_root  = dirname(__DIR__, 2);
 $sheets_result = false;
-$sheets_service = __DIR__ . '/../../../includes/GoogleSheetsService.php';
+$sheets_service= $project_root . '/includes/GoogleSheetsService.php';
+
 if (file_exists($sheets_service)) {
     require_once $sheets_service;
     $sheets_result = GoogleSheetsService::appendValuationRow($lead_entry);
 }
 
 // --- Save to Local JSONL Log ---
-$logs_dir = __DIR__ . '/../../../logs';
+$logs_dir = $project_root . '/logs';
 if (!is_dir($logs_dir)) {
     @mkdir($logs_dir, 0755, true);
 }

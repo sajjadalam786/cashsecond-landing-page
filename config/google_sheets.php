@@ -4,13 +4,19 @@
  * Keeps all Google Sheets endpoints and credentials securely on the server.
  */
 
+if (!function_exists('get_env_var')) {
+    require_once __DIR__ . '/config.php';
+}
+
 return [
     // Google Apps Script Web App Endpoint URL
-    // Can be set via environment variable GOOGLE_SHEETS_WEBHOOK_URL or defined here
-    'webhook_url' => getenv('GOOGLE_SHEETS_WEBHOOK_URL') ?: 'https://script.google.com/macros/s/AKfycbz92Odybh76PaC2kgCGS39SrebD-f4lALmvltCl6oygSHRmq5eMB0jml8vX10CGWUFT/exec',
+    'webhook_url' => get_env_var('GOOGLE_SHEETS_WEBHOOK_URL', 'https://script.google.com/macros/s/AKfycbyhidBvhBKMzUt99uKIIaq9yUY0okO4fXlh0yGvSs92Filx9INinTGSxVyOsXsQYqgj/exec'),
 
     // Secret API Token for webhook authentication (optional extra layer of security)
-    'secret_token' => getenv('GOOGLE_SHEETS_SECRET_TOKEN') ?: 'CS_GSHEETS_SECURE_TOKEN_2026',
+    'secret_token' => get_env_var('GOOGLE_SHEETS_SECRET_TOKEN', 'CS_GSHEETS_SECURE_TOKEN_2026'),
+
+    // Store Owner Email for Lead Notifications
+    'notification_email' => get_env_var('RECIPIENT_EMAIL', 'wholesalehouse2016@gmail.com'),
 
     // Sheet tab names
     'sheets' => [

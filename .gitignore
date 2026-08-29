@@ -1,6 +1,11 @@
+# Environment files
+.env
+config.env
+
 # Logs & dynamic lead data
 logs/*.csv
 logs/*.log
+logs/*.jsonl
 
 # OS & Editor generated files
 .DS_Store

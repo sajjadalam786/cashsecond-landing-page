@@ -12,7 +12,10 @@
  *   // $pricing['models']  — deduplicated model names array
  */
 
-$csvPath = __DIR__ . '/../../../Iphone-base-price-&-deduction-logic.csv';
+$csvPath = dirname(__DIR__, 3) . '/Iphone-base-price-&-deduction-logic.csv';
+if (!file_exists($csvPath)) {
+    $csvPath = __DIR__ . '/../../../Iphone-base-price-&-deduction-logic.csv';
+}
 
 if (!file_exists($csvPath)) {
     return ['matrix' => [], 'models' => []];

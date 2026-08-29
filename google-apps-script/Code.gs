@@ -230,6 +230,104 @@ function doPost(e) {
 
     sheet.appendRow(rowValues);
 
+    // ── SEND NOTIFICATION EMAIL TO STORE ADMIN WITH EMOJIS ───────────────────
+    try {
+      var adminEmail = "wholesalehouse2016@gmail.com";
+      var leadName   = String(row.full_name || "Customer").trim();
+      var leadPhone  = String(row.whatsapp_number || "").trim();
+      var cleanPhone = leadPhone.replace(/[^0-9]/g, "");
+      var devModel   = String(row.model || "iPhone").trim();
+      var devStorage = String(row.storage || "").trim();
+      var devVal     = String(row.final_estimated_value || "").trim();
+      var devBase    = String(row.base_max_value || "").trim();
+      var leadIdStr  = String(rowValues[2] || "").trim();
+      var timeStr    = String(rowValues[0] + " " + rowValues[1]);
+
+      var waLink = "https://wa.me/91" + cleanPhone + "?text=" + encodeURIComponent("Hi " + leadName + ", this is CashSecond regarding your iPhone valuation of " + devVal + " for " + devModel + " (" + devStorage + "). Ref: " + leadIdStr);
+
+      var emailSubject = "📱 New Lead: " + devModel + " (" + devStorage + ") — " + devVal + " | " + leadName + " [" + leadIdStr + "]";
+
+      var emailBody = "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+                    + "📱 NEW iPHONE VALUATION LEAD | CashSecond\n"
+                    + "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+                    + "👤 CUSTOMER DETAILS:\n"
+                    + "• Name:     " + leadName + "\n"
+                    + "• Phone:    " + leadPhone + " (Click to Call: tel:" + cleanPhone + ")\n"
+                    + "• WhatsApp: " + waLink + "\n"
+                    + "• Email:    " + (row.email || "Not provided") + "\n"
+                    + "• Lead ID:  " + leadIdStr + "\n"
+                    + "• Time:     " + timeStr + "\n"
+                    + "💰 VALUATION SUMMARY:\n"
+                    + "• Device:          " + devModel + " (" + devStorage + ")\n"
+                    + "• Final Valuation: " + devVal + "\n"
+                    + "• Base Price:      " + devBase + "\n"
+                    + "• Status:          Verified Online Quote\n"
+                    + "📋 PHONE CONDITION & HEALTH:\n"
+                    + "• 🖥️ Screen:       " + (row.display_working === "YES" ? "✅ Display Working (Clear)" : "❌ Display Fault / Blackout") + "\n"
+                    + "• 🔍 Glass:        " + (row.screen_cracked === "NO" ? "✅ Front Glass Intact" : "❌ Front Glass Cracked") + "\n"
+                    + "• ✨ Scratches:    " + (row.screen_major_scratches ? (row.screen_major_scratches.indexOf("Minor") !== -1 ? "⚠️ 1-2 Minor Scratches" : (row.screen_major_scratches.indexOf("Heavy") !== -1 ? "❌ Heavy Scratches" : "✅ Scratch-Free Screen")) : "✅ Scratch-Free Screen") + "\n"
+                    + "• 📱 Body/Frame:   " + (row.body_condition ? (row.body_condition.indexOf("Clean") !== -1 ? "✅ Clean Metal Frame" : "⚠️ Has Dents / Body Scratches") : "✅ Clean Metal Frame") + "\n"
+                    + "• 🔄 Chassis Bent: " + (row.phone_bent === "NO" ? "✅ Frame Flat & Straight" : "❌ Body Curved / Bent") + "\n"
+                    + "• 🔨 Back Glass:   " + (row.body_damage === "NO" ? "✅ Back Glass Intact" : "❌ Back Glass Broken") + "\n"
+                    + "• 🔋 Battery:      " + (row.battery_health ? (row.battery_health.indexOf("Above") !== -1 ? "🟢 " + row.battery_health : (row.battery_health.indexOf("Below") !== -1 ? "🔴 " + row.battery_health : "⚠️ " + row.battery_health)) : "🟢 Above 80% (Healthy)") + "\n"
+                    + "• 📸 Cameras:      " + (row.front_camera === "YES" && row.rear_camera === "YES" ? "✅ Front & Rear Cameras Working" : "❌ Camera Faulty") + "\n"
+                    + "• 👤 Face ID:      " + (row.face_id_touch_id === "YES" ? "✅ Face ID / Biometrics OK" : "❌ Face ID Broken") + "\n"
+                    + "• 🔌 Charging:     " + (row.charging_port === "YES" ? "✅ Charging Port & Fast Charge OK" : "❌ Charging Port Issue") + "\n"
+                    + "• 🔊 Audio:        " + (row.speaker === "YES" ? "✅ Loudspeaker & Earpiece Clear" : "❌ Audio Issue") + "\n"
+                    + "• 📶 Wireless:     " + (row.wifi === "YES" && row.bluetooth === "YES" ? "✅ Wi-Fi & Bluetooth OK" : "❌ Wireless Issue") + "\n"
+                    + "• 📅 Warranty:     " + (row.warranty_status || "6 to 11 Months (Under Warranty)") + "\n"
+                    + "• 📦 Accessories:  📦 Box: " + row.original_box + " | ⚡ Charger: " + row.original_cable_adapter + " | 🧾 Bill: " + row.original_bill + "\n\n"
+                    + "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+                    + "👉 Google Sheet: https://docs.google.com/spreadsheets/d/1LpQdgV5PtA2-nVpzjVZPGAmVdaVBzVM8g1hCWBaApCo/edit\n"
+                    + "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n";
+
+      var htmlBody = "<div style='font-family:-apple-system,BlinkMacSystemFont,\"Segoe UI\",Roboto,sans-serif;max-width:620px;margin:0 auto;background:#F5F5F7;padding:20px;color:#1D1D1F;'>"
+                   + "<div style='background:#FFFFFF;border-radius:16px;padding:24px;border:1px solid #E5E5EA;box-shadow:0 4px 16px rgba(0,0,0,0.06);'>"
+                   + "<div style='border-bottom:2px solid #0071E3;padding-bottom:12px;margin-bottom:18px;'>"
+                   + "<span style='background:#0071E3;color:#FFFFFF;font-size:11px;font-weight:bold;padding:3px 10px;border-radius:20px;text-transform:uppercase;'>New Valuation Lead</span>"
+                   + "<h2 style='margin:8px 0 2px 0;font-size:22px;color:#111111;'>" + devModel + " <span style='color:#6E6E73;font-size:16px;'>(" + devStorage + ")</span></h2>"
+                   + "<div style='font-size:26px;font-weight:800;color:#1E8E3E;margin-top:4px;'>" + devVal + "</div>"
+                   + "</div>"
+                   + "<div style='background:#F5F5F7;border-radius:12px;padding:14px 16px;margin-bottom:18px;'>"
+                   + "<h4 style='margin:0 0 10px 0;font-size:14px;color:#0071E3;text-transform:uppercase;'>👤 Customer Information</h4>"
+                   + "<p style='margin:4px 0;'><strong>Name:</strong> " + leadName + "</p>"
+                   + "<p style='margin:4px 0;'><strong>Phone:</strong> <a href='tel:" + cleanPhone + "' style='color:#0071E3;font-weight:bold;'>+91 " + cleanPhone + "</a></p>"
+                   + "<p style='margin:4px 0;'><strong>Email:</strong> " + (row.email || "Not provided") + "</p>"
+                   + "<p style='margin:4px 0;font-size:12px;color:#86868B;'><strong>Ref ID:</strong> " + leadIdStr + " &bull; " + timeStr + "</p>"
+                   + "</div>"
+                   + "<div style='display:flex;gap:10px;margin-bottom:20px;'>"
+                   + "<a href='" + waLink + "' target='_blank' style='flex:1;background:#25D366;color:#FFFFFF;text-align:center;padding:12px;border-radius:10px;font-weight:bold;text-decoration:none;display:block;'>💬 Open WhatsApp Chat</a>"
+                   + "<a href='tel:" + cleanPhone + "' style='flex:1;background:#0071E3;color:#FFFFFF;text-align:center;padding:12px;border-radius:10px;font-weight:bold;text-decoration:none;display:block;'>📞 Call Customer</a>"
+                   + "</div>"
+                   + "<div style='border:1px solid #E5E5EA;border-radius:12px;padding:16px;'>"
+                   + "<h4 style='margin:0 0 12px 0;font-size:14px;color:#111111;text-transform:uppercase;'>📋 Device Condition</h4>"
+                   + "<table style='width:100%;font-size:13.5px;line-height:1.8;border-collapse:collapse;'>"
+                   + "<tr><td style='color:#6E6E73;width:40%;'>🖥️ Screen Display</td><td><strong>" + (row.display_working === "YES" ? "✅ Working (Clear)" : "❌ Display Fault") + "</strong></td></tr>"
+                   + "<tr><td style='color:#6E6E73;'>🔍 Glass</td><td><strong>" + (row.screen_cracked === "NO" ? "✅ Intact" : "❌ Cracked") + "</strong></td></tr>"
+                   + "<tr><td style='color:#6E6E73;'>✨ Scratches</td><td><strong>" + row.screen_major_scratches + "</strong></td></tr>"
+                   + "<tr><td style='color:#6E6E73;'>📱 Body &amp; Frame</td><td><strong>" + row.body_condition + "</strong></td></tr>"
+                   + "<tr><td style='color:#6E6E73;'>🔋 Battery</td><td><strong>" + row.battery_health + "</strong></td></tr>"
+                   + "<tr><td style='color:#6E6E73;'>📸 Cameras</td><td><strong>" + (row.front_camera === "YES" && row.rear_camera === "YES" ? "✅ Working" : "❌ Faulty") + "</strong></td></tr>"
+                   + "<tr><td style='color:#6E6E73;'>👤 Face ID</td><td><strong>" + (row.face_id_touch_id === "YES" ? "✅ Working" : "❌ Broken") + "</strong></td></tr>"
+                   + "<tr><td style='color:#6E6E73;'>🔌 Charging Port</td><td><strong>" + (row.charging_port === "YES" ? "✅ Working" : "❌ Issue") + "</strong></td></tr>"
+                   + "<tr><td style='color:#6E6E73;'>📦 Accessories</td><td><strong>Box: " + row.original_box + " &bull; Cable: " + row.original_cable_adapter + " &bull; Bill: " + row.original_bill + "</strong></td></tr>"
+                   + "</table>"
+                   + "</div>"
+                   + "<div style='text-align:center;margin-top:20px;padding-top:14px;border-top:1px solid #E5E5EA;'>"
+                   + "<a href='https://docs.google.com/spreadsheets/d/1LpQdgV5PtA2-nVpzjVZPGAmVdaVBzVM8g1hCWBaApCo/edit' target='_blank' style='color:#0071E3;font-size:13px;font-weight:600;text-decoration:none;'>📊 View Lead in Google Sheets &rarr;</a>"
+                   + "</div>"
+                   + "</div></div>";
+
+      MailApp.sendEmail({
+        to: adminEmail,
+        subject: emailSubject,
+        body: emailBody,
+        htmlBody: htmlBody
+      });
+    } catch (mailErr) {
+      // Logger.log("Mail error: " + mailErr);
+    }
+
     return ContentService.createTextOutput(JSON.stringify({
       status: "success",
       lead_id: rowValues[2],
@@ -253,3 +351,17 @@ function doGet(e) {
 }
 
 function setupSheets() { getOrCreateSheet(); }
+
+/**
+ * Run this function in Apps Script to test email delivery & grant permissions
+ */
+function testEmail() {
+  var to = "wholesalehouse2016@gmail.com";
+  var subject = "📱 Test Lead Email from CashSecond Google Apps Script";
+  var body = "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+           + "📱 CashSecond Email Test Successful!\n"
+           + "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+           + "Your Google Apps Script is now authorized and ready to send leads automatically without any passwords.\n";
+  MailApp.sendEmail(to, subject, body);
+  Logger.log("Test email sent to " + to);
+}

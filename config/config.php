@@ -5,6 +5,35 @@
  * Zero invented data. 100% exact CashSecond contact information, catalog and pricing.
  */
 
+// Load Environment Variables (.env / config.env) helper
+if (!function_exists('get_env_var')) {
+    function get_env_var(string $key, $default = null) {
+        static $envCache = null;
+        if ($envCache === null) {
+            $envCache = [];
+            $envFiles = [__DIR__ . '/../.env', __DIR__ . '/../config.env'];
+            foreach ($envFiles as $file) {
+                if (file_exists($file) && is_readable($file)) {
+                    $lines = file($file, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+                    foreach ($lines as $line) {
+                        $line = trim($line);
+                        if (empty($line) || $line[0] === '#') continue;
+                        if (strpos($line, '=') !== false) {
+                            list($k, $v) = explode('=', $line, 2);
+                            $envCache[trim($k)] = trim($v, " \t\n\r\0\x0B\"'");
+                        }
+                    }
+                }
+            }
+        }
+        $val = getenv($key);
+        if ($val !== false && $val !== '') return $val;
+        if (isset($_ENV[$key]) && $_ENV[$key] !== '') return $_ENV[$key];
+        if (isset($envCache[$key])) return $envCache[$key];
+        return $default;
+    }
+}
+
 // Start session if not already started (needed for CSRF tokens & anti-spam rate limiting)
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
@@ -78,9 +107,11 @@ return [
     // Leads will automatically sync to your Google Sheet with all 12 columns.
     // ============================================================
     'integrations' => [
-        'google_sheets_web_app_url' => '', // Paste Google Apps Script Web App URL here (e.g. https://script.google.com/macros/s/XXXXX/exec)
-        'google_sheets_webhook_url' => '', // Backward-compatibility alias
-        'notification_email'        => 'cashsecondofficial@gmail.com',
+        'google_sheets_web_app_url' => get_env_var('GOOGLE_SHEETS_WEBHOOK_URL', 'https://script.google.com/macros/s/AKfycbyhidBvhBKMzUt99uKIIaq9yUY0okO4fXlh0yGvSs92Filx9INinTGSxVyOsXsQYqgj/exec'),
+        'google_sheets_webhook_url' => get_env_var('GOOGLE_SHEETS_WEBHOOK_URL', 'https://script.google.com/macros/s/AKfycbyhidBvhBKMzUt99uKIIaq9yUY0okO4fXlh0yGvSs92Filx9INinTGSxVyOsXsQYqgj/exec'),
+        'notification_email'        => get_env_var('RECIPIENT_EMAIL', 'wholesalehouse2016@gmail.com'),
+        'sender_email'              => get_env_var('SENDER_EMAIL', 'no-reply@cashsecond.in'),
+        'sender_name'               => get_env_var('SENDER_NAME', 'CashSecond Valuation Desk'),
         'enable_local_lead_log'     => true,
     ],
 
