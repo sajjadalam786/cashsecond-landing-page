@@ -318,20 +318,32 @@ function doPost(e) {
                    + "</div>"
                    + "</div></div>";
 
-      MailApp.sendEmail({
-        to: adminEmail,
-        subject: emailSubject,
-        body: emailBody,
-        htmlBody: htmlBody
-      });
+      var mailResult = "pending";
+      try {
+        MailApp.sendEmail({
+          to: adminEmail,
+          subject: emailSubject,
+          body: emailBody,
+          htmlBody: htmlBody
+        });
+        mailResult = "sent_via_MailApp";
+      } catch (mErr1) {
+        try {
+          GmailApp.sendEmail(adminEmail, emailSubject, emailBody, { htmlBody: htmlBody });
+          mailResult = "sent_via_GmailApp";
+        } catch (mErr2) {
+          mailResult = "error: " + mErr1.toString() + " | " + mErr2.toString();
+        }
+      }
     } catch (mailErr) {
-      // Logger.log("Mail error: " + mailErr);
+      mailResult = "outer_error: " + mailErr.toString();
     }
 
     return ContentService.createTextOutput(JSON.stringify({
       status: "success",
       lead_id: rowValues[2],
       row_index: sheet.getLastRow(),
+      mail_status: mailResult,
       message: "Lead row inserted successfully."
     })).setMimeType(ContentService.MimeType.JSON);
 
