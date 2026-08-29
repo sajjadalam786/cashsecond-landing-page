@@ -51,7 +51,7 @@ $canonical_url = $canonical_url ?? ($seo['site_url'] ?? 'http://localhost/cashse
 
     <!-- Main Stylesheet -->
     <link rel="stylesheet" href="<?= $base_path ?>assets/css/style.css?v=51.0">
-    <link rel="stylesheet" href="<?= $base_path ?>assets/css/questionnaire.css?v=6.0">
+    <!-- valuator.css is loaded directly by components/iphone-valuator/valuator.php -->
 </head>
 <body id="top">
     <!-- Main Brand Header -->
@@ -73,7 +73,7 @@ $canonical_url = $canonical_url ?? ($seo['site_url'] ?? 'http://localhost/cashse
 
             <!-- Desktop Header Quick Actions -->
             <div class="header-cta-group">
-                <a href="#valuation" class="btn-header-quote start-exact-valuation-btn" data-model="Apple iPhone 16 Pro" data-variant="128 GB" aria-haspopup="dialog" aria-controls="buybackQuestionnaireModal">
+                <a href="#valuation" class="btn-header-quote start-exact-valuation-btn" aria-haspopup="dialog" aria-controls="ivOverlay">
                     <svg class="btn-click-icon" width="16" height="19" viewBox="0 0 24 28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                         <line x1="12" y1="1.5" x2="12" y2="4.5"/>
                         <line x1="6.5" y1="3.5" x2="8.6" y2="5.6"/>

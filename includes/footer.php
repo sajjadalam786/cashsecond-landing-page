@@ -126,7 +126,7 @@ $current_year = date('Y');
     <!-- Mobile Sticky Conversion Bar (Triggers Unified Valuation Modal) -->
     <div class="mobile-sticky-bar" aria-label="Quick Actions">
         <div class="mobile-sticky-inner">
-            <a href="<?= $base_path ?>index.php#valuation-entry" class="btn btn-primary btn-full" id="mobile-sticky-valuation-btn" aria-haspopup="dialog" aria-controls="buybackQuestionnaireModal">
+            <a href="<?= $base_path ?>index.php#valuation-entry" class="btn btn-primary btn-full start-exact-valuation-btn" id="mobile-sticky-valuation-btn" aria-haspopup="dialog" aria-controls="ivOverlay">
                 <svg class="btn-click-icon" width="18" height="21" viewBox="0 0 24 28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                     <line x1="12" y1="1.5" x2="12" y2="4.5"/>
                     <line x1="6.5" y1="3.5" x2="8.6" y2="5.6"/>
@@ -149,7 +149,8 @@ $current_year = date('Y');
 
     <!-- Main JavaScript Engine (Deferred for high speed & non-blocking execution) -->
     <script src="<?= $base_path ?>assets/js/script.js?v=16.0" defer></script>
-    <script src="<?= $base_path ?>assets/js/questionnaire.js?v=10.0" defer></script>
+    <!-- valuator.js is loaded directly by components/iphone-valuator/valuator.php -->
+    <!-- assets/js/questionnaire.js retained as backup (deprecated) -->
 </body>
 </html>
 

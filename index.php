@@ -97,7 +97,7 @@ require __DIR__ . '/includes/header.php';
                 <h1 class="hero-main-title">Sell Your Old iPhone From Your Doorstep</h1>
                 <p class="hero-main-subtitle">Get an instant valuation, free doorstep pickup in Mumbai, secure data wipe, and spot payment.</p>
                 <div class="hero-banner-cta-wrap" style="margin-top: 18px;">
-                    <a href="#valuation" class="btn btn-primary btn-lg start-exact-valuation-btn" id="startExactValuationBtn" aria-haspopup="dialog" aria-controls="buybackQuestionnaireModal">
+                    <a href="#valuation" class="btn btn-primary btn-lg start-exact-valuation-btn" id="startExactValuationBtn" aria-haspopup="dialog" aria-controls="ivOverlay">
                         <svg class="btn-click-icon" width="20" height="23" viewBox="0 0 24 28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                             <line x1="12" y1="1.5" x2="12" y2="4.5"/>
                             <line x1="6.5" y1="3.5" x2="8.6" y2="5.6"/>
@@ -445,7 +445,7 @@ require __DIR__ . '/includes/header.php';
                 <span class="promo-banner-eyebrow">READY TO SELL YOUR USED OR OLD IPHONE ?</span>
                 <h3 class="promo-banner-title">Your iPhone Deserves a Better Value.</h3>
                 <p class="promo-banner-desc">Check your iPhone's value in seconds and get a hassle-free pickup.</p>
-                <a href="#valuation" class="btn promo-banner-cta btn-promo-dark" id="heroCheckValueBtn" aria-haspopup="dialog" aria-controls="buybackQuestionnaireModal">
+                <a href="#valuation" class="btn promo-banner-cta btn-promo-dark start-exact-valuation-btn" id="heroCheckValueBtn" aria-haspopup="dialog" aria-controls="ivOverlay">
                     <svg class="btn-click-icon" width="20" height="23" viewBox="0 0 24 28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                         <line x1="12" y1="1.5" x2="12" y2="4.5"/>
                         <line x1="6.5" y1="3.5" x2="8.6" y2="5.6"/>
@@ -516,7 +516,7 @@ require __DIR__ . '/includes/header.php';
                 </div>
 
                 <div class="express-cta-wrap">
-                    <a href="#valuation" class="btn btn-primary start-exact-valuation-btn" aria-haspopup="dialog">
+                    <a href="#valuation" class="btn btn-primary start-exact-valuation-btn" aria-haspopup="dialog" aria-controls="ivOverlay">
                         <span>Check iPhone Value &amp; Book Pickup →</span>
                     </a>
                     <div class="express-trust-note">
@@ -674,49 +674,12 @@ require __DIR__ . '/includes/header.php';
 
 
 
-<!-- ============================================================
-     COMPLETE PHONE BUYBACK QUESTIONNAIRE APPLICATION
-     ============================================================ -->
-<div class="qn-app-overlay" id="buybackQuestionnaireModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="qnStepTrackerText">
-    <div class="qn-app-modal">
-        <!-- Questionnaire Header & Stepper -->
-        <div class="qn-app-header">
-            <div class="qn-header-top">
-                <div class="qn-device-badge">
-                    <span>📱</span>
-                    <span id="qnHeaderDeviceBadge">Apple iPhone 13 (128 GB)</span>
-                </div>
-                <button type="button" class="qn-app-close-btn" id="qnAppCloseBtn" aria-label="Close Questionnaire">&times;</button>
-            </div>
-            
-            <!-- Progress Bar -->
-            <div class="qn-progress-track">
-                <div class="qn-progress-fill" id="qnProgressFill"></div>
-            </div>
-            <div class="qn-step-tracker-text">
-                <span id="qnStepTrackerText">Step 1 of 17</span>
-                <span class="qn-step-path-trail" id="qnStepTrailText">Phone &rarr; Display &rarr; Body &rarr; Battery &rarr; Accessories</span>
-            </div>
-        </div>
-
-        <!-- Question Dynamic Content Viewport -->
-        <div class="qn-app-body" id="qnAppBody">
-            <!-- Populated one question at a time via questionnaire.js -->
-        </div>
-
-        <!-- Questionnaire Footer Navigation -->
-        <div class="qn-app-footer" id="qnAppFooter">
-            <button type="button" class="btn-qn-back" id="qnBackBtn">&larr; Back</button>
-            <button type="button" class="btn-qn-next" id="qnNextBtn">
-                <span>Next Question &rarr;</span>
-            </button>
-        </div>
-    </div>
-</div>
-
-<script>
-    window.allIphoneCatalog = <?= json_encode($iphoneModels, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT) ?>;
-    window.csrfToken = <?= json_encode($_SESSION['csrf_token'] ?? '') ?>;
-</script>
+<?php
+/**
+ * iPhone Valuation Component — CSV-driven pricing engine
+ * Outputs modal HTML, embeds pricing matrix JSON, loads CSS + JS
+ */
+require_once __DIR__ . '/components/iphone-valuator/valuator.php';
+?>
 
 <?php require __DIR__ . '/includes/footer.php'; ?>
