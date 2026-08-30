@@ -81,14 +81,18 @@
         {
             id: 'storage',
             title: 'What is the storage size?',
-            desc: 'Select the internal storage of your device.',
+            badge: 'Mandatory • Select 1',
+            badgeType: 'mand',
+            desc: 'Select your internal storage capacity (Mandatory).',
             type: 'variant_select',
         },
         // 2 — Age (mutually exclusive radio)
         {
             id: 'age',
             title: 'When did you buy this iPhone?',
-            desc: 'Newer phones fetch a better resale price.',
+            badge: 'Mandatory • Select 1',
+            badgeType: 'mand',
+            desc: 'Select any 1 option below (Mandatory).',
             type: 'radio',
             options: [
                 { label: 'Less than 3 months ago',  sub: 'Barely used — best value',     col: 'months_0_3',    icon: '🆕', style: 'none'   },
@@ -102,7 +106,9 @@
         {
             id: 'screen_scratch',
             title: 'How is the screen glass condition?',
-            desc: 'Inspect with your phone screen on and off.',
+            badge: 'Mandatory • Select 1',
+            badgeType: 'mand',
+            desc: 'Inspect with your phone screen on and off (Mandatory).',
             type: 'radio',
             options: [
                 { label: 'Scratch-free',            sub: 'No visible marks',             col: null,                  icon: '✨', style: 'none'   },
@@ -116,9 +122,10 @@
         {
             id: 'screen_defects',
             title: 'Any screen display issues?',
-            desc: 'Select all that apply — "None" means a perfect display.',
+            badge: 'Multiple Selection • Tap all that apply',
+            badgeType: 'multi',
+            desc: 'Select any screen issues. If display is perfect, press "Next →".',
             type: 'multi',
-            noneLabel: '✅ None — Display is perfect',
             options: [
                 { label: 'Glass cracked',        col: 'glass_cracked',       icon: '💥' },
                 { label: 'No display / Blackout',col: 'no_display',          icon: '🖤' },
@@ -135,7 +142,9 @@
         {
             id: 'body_scratch',
             title: 'How is the body / frame condition?',
-            desc: 'Check the metal sides and back panel.',
+            badge: 'Mandatory • Select 1',
+            badgeType: 'mand',
+            desc: 'Check the metal sides and back panel (Mandatory).',
             type: 'radio',
             options: [
                 { label: 'Like new body',           sub: 'No scratches at all',          col: null,                  icon: '✨', style: 'none'  },
@@ -149,9 +158,10 @@
         {
             id: 'body_damage',
             title: 'Any body damage?',
-            desc: 'Tap all that apply — tap "None" if no physical damage.',
+            badge: 'Multiple Selection • Tap all that apply',
+            badgeType: 'multi',
+            desc: 'Select any physical damage. If body is damage-free, press "Next →".',
             type: 'multi',
-            noneLabel: '✅ None — Body is damage-free',
             options: [
                 { label: '1–2 dents',           col: 'dents_1_or_2',      icon: '😬' },
                 { label: 'Multiple dents',      col: 'multiple_dents',    icon: '💢' },
@@ -162,9 +172,10 @@
         {
             id: 'functional',
             title: 'Any hardware or functional issues?',
-            desc: 'Select all that apply — tap "All good" if everything works.',
+            badge: 'Multiple Selection • Tap all that apply',
+            badgeType: 'multi',
+            desc: 'Select any faulty parts. If all features work, press "Next →".',
             type: 'multi',
-            noneLabel: '✅ All good — Everything works',
             options: [
                 { label: 'Front camera fault', col: 'front_camera_not_working', icon: '🤳' },
                 { label: 'Rear camera fault',  col: 'back_camera_not_working',  icon: '📸' },
@@ -188,7 +199,9 @@
         {
             id: 'battery',
             title: 'What is your battery health?',
-            desc: 'Check in Settings → Battery → Battery Health.',
+            badge: 'Mandatory • Select 1',
+            badgeType: 'mand',
+            desc: 'Check in Settings → Battery → Battery Health (Mandatory).',
             type: 'radio',
             options: [
                 { label: 'Above 80% (Healthy)',   sub: 'Go to Settings to check',     col: 'battery_greater_80', icon: '🔋', style: 'none'  },
@@ -201,7 +214,9 @@
         {
             id: 'accessories',
             title: 'What accessories do you have?',
-            desc: 'Original accessories add value to your payout.',
+            badge: 'Multiple Selection • Extra Value',
+            badgeType: 'bonus',
+            desc: 'Select all original accessories you have. If none, press "Next →".',
             type: 'accessories',
             options: [
                 { label: 'Original box',             col: 'box',     icon: '📦' },
@@ -213,6 +228,8 @@
         {
             id: 'contact',
             title: 'Unlock Your Official Valuation',
+            badge: 'Final Step • Lock in Price',
+            badgeType: 'mand',
             desc: 'Enter your details to receive your guaranteed price and book a free doorstep pickup.',
             type: 'lead_capture',
         },
@@ -401,6 +418,9 @@
     function buildModelSearch(step) {
         return `
         <div class="iv-step-card">
+            <div class="iv-step-badge-row">
+                <span class="iv-badge-mand">Mandatory • Select 1</span>
+            </div>
             <p class="iv-question-title">${step.title}</p>
             <p class="iv-question-desc">${step.desc}</p>
             <div class="iv-search-wrap">
@@ -431,8 +451,11 @@
 
         return `
         <div class="iv-step-card">
+            <div class="iv-step-badge-row">
+                <span class="iv-badge-mand">Mandatory • Select 1</span>
+            </div>
             <p class="iv-question-title">Which ${state.model ? state.model.replace('Apple ','') : 'iPhone'} storage?</p>
-            <p class="iv-question-desc">Select your device's internal storage capacity.</p>
+            <p class="iv-question-desc">Select your internal storage capacity (Mandatory).</p>
             <div class="iv-options-grid iv-cols-2">
                 ${storages.map(s => {
                     const selected = s === state.storage ? ' iv-selected' : '';
@@ -445,7 +468,7 @@
         </div>`;
     }
 
-    // Radio question (single select)
+    // Radio question (single select - mandatory)
     function buildRadio(step) {
         const cols = step.cols === 1 ? 'iv-cols-1' : 'iv-cols-2';
         const items = step.options.map(opt => {
@@ -463,6 +486,9 @@
 
         return `
         <div class="iv-step-card">
+            <div class="iv-step-badge-row">
+                <span class="iv-badge-mand">Mandatory • Select 1 Option</span>
+            </div>
             <p class="iv-question-title">${step.title}</p>
             <p class="iv-question-desc">${step.desc}</p>
             <div class="iv-options-grid ${cols}" id="ivRadioGroup">
@@ -471,7 +497,7 @@
         </div>`;
     }
 
-    // Multi-select chips
+    // Multi-select chips (without None button, with No Issues banner)
     function buildMultiSelect(step) {
         const chips = step.options.map(opt => {
             const selected = state.answers[opt.col] === true;
@@ -481,43 +507,48 @@
             </button>`;
         }).join('');
 
-        const noneKey = '_none_' + step.id;
-        const noneSelected = state.answers[noneKey] === true;
-
         return `
         <div class="iv-step-card">
+            <div class="iv-step-badge-row">
+                <span class="iv-badge-multi">Multiple Selection • Select All That Apply</span>
+            </div>
             <p class="iv-question-title">${step.title}</p>
             <p class="iv-question-desc">${step.desc}</p>
-            <p class="iv-multi-hint">Tap all that apply:</p>
             <div class="iv-chips-grid">
-                <button type="button" class="iv-chip iv-chip-none${noneSelected ? ' iv-chip-selected' : ''}" data-none-key="${escHtml(noneKey)}" style="grid-column: 1 / -1;">
-                    <span class="iv-chip-icon">✅</span>
-                    <span>${escHtml(step.noneLabel || 'None of the above')}</span>
-                </button>
                 ${chips}
+            </div>
+            <div class="iv-no-issues-bar">
+                <span style="font-size:16px;">✅</span>
+                <span><strong>No Issues?</strong> Leave unselected and press <strong>Next →</strong></span>
             </div>
         </div>`;
     }
 
-    // Accessories (bonus checkboxes)
+    // Accessories (bonus multi-select checkboxes)
     function buildAccessories(step) {
         const items = step.options.map(opt => {
             const checked = state.answers[opt.col] === true;
             return `
-            <label class="iv-acc-check${checked ? ' iv-acc-checked' : ''}" data-acc-col="${escHtml(opt.col)}">
-                <input type="checkbox" ${checked ? 'checked' : ''} style="display:none">
-                <span style="font-size:18px">${opt.icon}</span>
+            <button type="button" class="iv-acc-check${checked ? ' iv-acc-checked' : ''}" data-acc-col="${escHtml(opt.col)}">
+                <span class="iv-acc-checkbox">${checked ? '✓' : ''}</span>
+                <span style="font-size:20px">${opt.icon}</span>
                 <span class="iv-acc-label">${escHtml(opt.label)}</span>
                 <span class="iv-acc-bonus">+ Extra Value</span>
-            </label>`;
+            </button>`;
         }).join('');
 
         return `
         <div class="iv-step-card">
+            <div class="iv-step-badge-row">
+                <span class="iv-badge-bonus">Multiple Selection • Extra Value Booster</span>
+            </div>
             <p class="iv-question-title">${step.title}</p>
             <p class="iv-question-desc">${step.desc}</p>
             <div class="iv-accessories-row">${items}</div>
-            <p class="iv-multi-hint" style="margin-top:10px;">These add bonus resale value to your device payout.</p>
+            <div class="iv-no-issues-bar" style="margin-top:14px;">
+                <span style="font-size:16px;">💡</span>
+                <span><strong>No accessories?</strong> Leave unselected and press <strong>Next →</strong></span>
+            </div>
         </div>`;
     }
 
@@ -655,48 +686,35 @@
     }
 
     function wireMulti(step) {
-        const noneKey = '_none_' + step.id;
-
-        // None button
-        const noneBtn = document.querySelector(`[data-none-key="${noneKey}"]`);
-        if (noneBtn) {
-            noneBtn.addEventListener('click', function () {
-                // Clear all issue cols for this step
-                step.options.forEach(opt => delete state.answers[opt.col]);
-                const wasSelected = state.answers[noneKey] === true;
-                state.answers[noneKey] = !wasSelected;
-                computeValuation();
-                renderStep();
-            });
-        }
-
         // Individual chips
         document.querySelectorAll('.iv-chip[data-multi-col]').forEach(chip => {
-            chip.addEventListener('click', function () {
+            chip.addEventListener('click', function (e) {
+                e.preventDefault();
                 const col = this.dataset.multiCol;
                 if (!col) return;
-                // Untick "none" when selecting an issue
-                delete state.answers[noneKey];
                 state.answers[col] = !state.answers[col];
-                if (!state.answers[col]) delete state.answers[col];
+                if (!state.answers[col]) {
+                    delete state.answers[col];
+                }
                 computeValuation();
                 this.classList.toggle('iv-chip-selected', !!state.answers[col]);
-                // Re-render just the none button state
-                if (noneBtn) noneBtn.classList.remove('iv-chip-selected');
             });
         });
     }
 
     function wireAccessories(step) {
-        document.querySelectorAll('.iv-acc-check').forEach(label => {
-            label.addEventListener('click', function () {
+        document.querySelectorAll('.iv-acc-check[data-acc-col]').forEach(btn => {
+            btn.addEventListener('click', function (e) {
+                e.preventDefault();
                 const col = this.dataset.accCol;
                 if (!col) return;
                 state.answers[col] = !state.answers[col];
-                if (!state.answers[col]) delete state.answers[col];
+                if (!state.answers[col]) {
+                    delete state.answers[col];
+                }
                 this.classList.toggle('iv-acc-checked', !!state.answers[col]);
-                const cb = this.querySelector('input[type="checkbox"]');
-                if (cb) cb.checked = !!state.answers[col];
+                const box = this.querySelector('.iv-acc-checkbox');
+                if (box) box.textContent = state.answers[col] ? '✓' : '';
                 computeValuation();
             });
         });
@@ -718,6 +736,15 @@
         }
         if (step.type === 'variant_select' && !state.storage) {
             shakeElement(body); return;
+        }
+        if (step.type === 'radio') {
+            const hasSelection = step.options.some(opt => {
+                return (opt.col && state.answers[opt.col] === true) ||
+                       (opt.col === null && state.answers['_none_' + step.id] === true);
+            });
+            if (!hasSelection) {
+                shakeElement(body); return;
+            }
         }
         if (step.type === 'lead_capture') {
             submitLead(); return;

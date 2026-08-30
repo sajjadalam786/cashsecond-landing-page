@@ -10,7 +10,7 @@ if (!function_exists('get_env_var')) {
 
 return [
     // Google Apps Script Web App Endpoint URL
-    'webhook_url' => get_env_var('GOOGLE_SHEETS_WEBHOOK_URL', 'https://script.google.com/macros/s/AKfycbzHqkm8BesKTtw3_0v-s95Kbf7ykMlwJqJ4CZWqiu8MC8lNi71wKRGnS6lA1OeSoMbG/exec'),
+    'webhook_url' => get_env_var('GOOGLE_SHEETS_WEBHOOK_URL', 'https://script.google.com/macros/s/AKfycbxFepcCqHcpntf3lI85EWhRaaJSVl4QX8_xL00HXzc56HCmYAFsgormA2BtrH-o3eck/exec'),
 
     // Secret API Token for webhook authentication (optional extra layer of security)
     'secret_token' => get_env_var('GOOGLE_SHEETS_SECRET_TOKEN', 'CS_GSHEETS_SECURE_TOKEN_2026'),
