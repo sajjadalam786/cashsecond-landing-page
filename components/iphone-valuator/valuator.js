@@ -833,7 +833,15 @@
                 state.isSubmitting = false;
                 if (data.status === 'success') {
                     state.leadId = data.lead_id || data.ref_id || '';
-                    showSuccessScreen(data);
+                    const params = new URLSearchParams({
+                        model: state.model || '',
+                        variant: state.storage || '',
+                        val: Math.round(state.liveValue || 0).toString(),
+                        name: name,
+                        phone: phone,
+                        ref: state.leadId
+                    });
+                    window.location.href = 'thankyou.php?' + params.toString();
                 } else {
                     if (data.errors) {
                         Object.keys(data.errors).forEach(field => {
@@ -853,8 +861,15 @@
             })
             .catch(() => {
                 state.isSubmitting = false;
-                // On network error, still show success (lead saved locally)
-                showSuccessScreen({ lead_id: 'CS-' + Date.now() });
+                const params = new URLSearchParams({
+                    model: state.model || '',
+                    variant: state.storage || '',
+                    val: Math.round(state.liveValue || 0).toString(),
+                    name: name,
+                    phone: phone,
+                    ref: 'CS-' + Date.now()
+                });
+                window.location.href = 'thankyou.php?' + params.toString();
             });
     }
 

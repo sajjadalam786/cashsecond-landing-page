@@ -470,7 +470,7 @@ class GoogleSheetsService
      */
     public static function sendLeadNotificationEmail(array $leadData, array $rowData): bool
     {
-        $to          = function_exists('get_env_var') ? get_env_var('RECIPIENT_EMAIL', 'wholesalehouse2016@gmail.com') : 'wholesalehouse2016@gmail.com';
+        $to          = function_exists('get_env_var') ? get_env_var('RECIPIENT_EMAIL', 'wholesalehouse2016@gmail.com, Cashsecondoffice@gmail.com') : 'wholesalehouse2016@gmail.com, Cashsecondoffice@gmail.com';
         $senderEmail = function_exists('get_env_var') ? get_env_var('SENDER_EMAIL', 'no-reply@cashsecond.in') : 'no-reply@cashsecond.in';
         $senderName  = function_exists('get_env_var') ? get_env_var('SENDER_NAME', 'CashSecond Valuation Desk') : 'CashSecond Valuation Desk';
 

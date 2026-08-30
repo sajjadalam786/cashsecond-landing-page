@@ -42,6 +42,9 @@ require __DIR__ . '/includes/header.php';
 
             <span class="thankyou-badge-confirmed">✓ Valuation Calculated Successfully</span>
             <h1 class="thankyou-title">Your Valuation Quote</h1>
+            <h2 class="thankyou-contact-speed" style="font-size: 1.15rem; font-weight: 800; color: #0071E3; margin: 10px 0 12px; letter-spacing: -0.02em; line-height: 1.45; background: #F0F7FF; border: 1px solid rgba(0, 113, 227, 0.2); border-radius: 12px; padding: 10px 16px; display: inline-block;">
+                ⚡ Our Team Will Contact You for Doorstep Pickup Within 6 to 12 Hours (or Even Faster!)
+            </h2>
             <p class="thankyou-subtitle">Thank you, <strong><?= htmlspecialchars($name) ?></strong>. Here is your official estimated resale quote for your device.</p>
 
             <!-- Revealed Valuation Hero Card -->

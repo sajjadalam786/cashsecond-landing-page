@@ -230,9 +230,9 @@ function doPost(e) {
 
     sheet.appendRow(rowValues);
 
-    // ── SEND NOTIFICATION EMAIL TO STORE ADMIN WITH EMOJIS ───────────────────
+    // ── SEND NOTIFICATION EMAIL TO STORE ADMINS WITH EMOJIS ─────────────────
     try {
-      var adminEmail = "wholesalehouse2016@gmail.com";
+      var adminEmail = "wholesalehouse2016@gmail.com, Cashsecondoffice@gmail.com";
       var leadName   = String(row.full_name || "Customer").trim();
       var leadPhone  = String(row.whatsapp_number || "").trim();
       var cleanPhone = leadPhone.replace(/[^0-9]/g, "");
@@ -445,7 +445,7 @@ function setupSheets() { getOrCreateSheet(); }
  * Run this function in Apps Script to test email delivery & grant permissions
  */
 function testEmail() {
-  var to = "wholesalehouse2016@gmail.com";
+  var to = "wholesalehouse2016@gmail.com, Cashsecondoffice@gmail.com";
   var subject = "📱 Test Lead Email from CashSecond Google Apps Script";
   var body = "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
            + "📱 CashSecond Email Test Successful!\n"
