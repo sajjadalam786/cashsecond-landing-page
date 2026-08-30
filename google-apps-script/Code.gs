@@ -276,9 +276,7 @@ function doPost(e) {
                     + "• 🔊 Audio:        " + (row.speaker === "YES" ? "✅ Loudspeaker & Earpiece Clear" : "❌ Audio Issue") + "\n"
                     + "• 📶 Wireless:     " + (row.wifi === "YES" && row.bluetooth === "YES" ? "✅ Wi-Fi & Bluetooth OK" : "❌ Wireless Issue") + "\n"
                     + "• 📅 Warranty:     " + (row.warranty_status || "6 to 11 Months (Under Warranty)") + "\n"
-                    + "• 📦 Accessories:  📦 Box: " + row.original_box + " | ⚡ Charger: " + row.original_cable_adapter + " | 🧾 Bill: " + row.original_bill + "\n\n"
-                    + "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
-                    + "👉 Google Sheet: https://docs.google.com/spreadsheets/d/1LpQdgV5PtA2-nVpzjVZPGAmVdaVBzVM8g1hCWBaApCo/edit\n"
+                    + "• 📦 Accessories:  📦 Box: " + row.original_box + " | ⚡ Charger: " + row.original_cable_adapter + " | 🧾 Bill: " + row.original_bill + "\n"
                     + "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n";
 
       var htmlBody = "<div style='font-family:-apple-system,BlinkMacSystemFont,\"Segoe UI\",Roboto,sans-serif;max-width:620px;margin:0 auto;background:#F5F5F7;padding:20px;color:#1D1D1F;'>"
@@ -312,9 +310,6 @@ function doPost(e) {
                    + "<tr><td style='color:#6E6E73;'>🔌 Charging Port</td><td><strong>" + (row.charging_port === "YES" ? "✅ Working" : "❌ Issue") + "</strong></td></tr>"
                    + "<tr><td style='color:#6E6E73;'>📦 Accessories</td><td><strong>Box: " + row.original_box + " &bull; Cable: " + row.original_cable_adapter + " &bull; Bill: " + row.original_bill + "</strong></td></tr>"
                    + "</table>"
-                   + "</div>"
-                   + "<div style='text-align:center;margin-top:20px;padding-top:14px;border-top:1px solid #E5E5EA;'>"
-                   + "<a href='https://docs.google.com/spreadsheets/d/1LpQdgV5PtA2-nVpzjVZPGAmVdaVBzVM8g1hCWBaApCo/edit' target='_blank' style='color:#0071E3;font-size:13px;font-weight:600;text-decoration:none;'>📊 View Lead in Google Sheets &rarr;</a>"
                    + "</div>"
                    + "</div></div>";
 

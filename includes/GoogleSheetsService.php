@@ -558,9 +558,7 @@ class GoogleSheetsService
                    . "• 🔊 Audio:        {$soundTxt}\n"
                    . "• 📶 Wireless:     {$wifiTxt}\n"
                    . "• 📅 Warranty:     {$warrantyTxt}\n"
-                   . "• 📦 Accessories:  {$boxTxt} | {$chargerTxt} | {$billTxt}\n\n"
-                   . "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
-                   . "👉 Google Sheet: https://docs.google.com/spreadsheets/d/1LpQdgV5PtA2-nVpzjVZPGAmVdaVBzVM8g1hCWBaApCo/edit\n"
+                   . "• 📦 Accessories:  {$boxTxt} | {$chargerTxt} | {$billTxt}\n"
                    . "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n";
 
         // HTML Version
@@ -608,10 +606,6 @@ class GoogleSheetsService
                         <tr><td style='color:#6E6E73;'>📅 Warranty</td><td><strong>{$warrantyTxt}</strong></td></tr>
                         <tr><td style='color:#6E6E73;'>📦 Inclusions</td><td><strong>{$boxTxt} &bull; {$chargerTxt} &bull; {$billTxt}</strong></td></tr>
                     </table>
-                </div>
-
-                <div style='text-align:center;margin-top:20px;padding-top:14px;border-top:1px solid #E5E5EA;'>
-                    <a href='https://docs.google.com/spreadsheets/d/1LpQdgV5PtA2-nVpzjVZPGAmVdaVBzVM8g1hCWBaApCo/edit' target='_blank' style='color:#0071E3;font-size:13px;font-weight:600;text-decoration:none;'>📊 View Lead in Google Sheets &rarr;</a>
                 </div>
 
             </div>
