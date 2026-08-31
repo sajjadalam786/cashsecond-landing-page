@@ -4794,24 +4794,57 @@ a:hover .btn-iphone-thumb {
     align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;
-    gap: 12px;
+    gap: 8px 16px;
     font-size: 11.5px;
     color: #86868B;
+    line-height: 1.5;
 }
 
-.footer-back-to-top {
-    color: var(--color-cta);
+.footer-copyright-row p {
+    margin: 0;
+}
+
+/* ============================================================
+   SUBTLE INLINE DEVELOPER & MAINTAINER CREDIT
+   ============================================================ */
+.developer-credit-inline {
+    font-size: 11.5px;
+    color: #86868B;
+    line-height: 1.5;
+    font-weight: 400;
     display: inline-flex;
     align-items: center;
+    flex-wrap: wrap;
     gap: 5px;
-    text-decoration: none;
-    font-weight: 600;
-    transition: all 0.2s ease;
 }
 
-.footer-back-to-top:hover {
-    color: var(--color-cta-hover);
-    transform: translateY(-2px);
+.dev-muted-link {
+    color: #86868B;
+    text-decoration: none;
+    transition: color 0.15s ease;
+}
+
+.dev-muted-link:hover {
+    color: #C7C7CC;
+    text-decoration: underline;
+}
+
+.dev-muted-sep {
+    color: rgba(255, 255, 255, 0.2);
+    margin: 0 2px;
+}
+
+.dev-muted-insta {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.dev-insta-icon-mini {
+    opacity: 0.65;
+    stroke: currentColor;
+    flex-shrink: 0;
+    vertical-align: middle;
 }
 
 /* ============================================================

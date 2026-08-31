@@ -115,10 +115,8 @@ $current_year = date('Y');
 
                 <div class="footer-copyright-row">
                     <p>&copy; <?= $current_year; ?> CashSecond. All rights reserved. Registered Business in Mumbai, Maharashtra.</p>
-                    <a href="#top" class="footer-back-to-top" aria-label="Back to top">
-                        <span>Back to top</span>
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="18 15 12 9 6 15"/></svg>
-                    </a>
+                    <!-- Developer & Maintainer Credit Component -->
+                    <?php require __DIR__ . '/developer-credit.php'; ?>
                 </div>
             </div>
         </div>
