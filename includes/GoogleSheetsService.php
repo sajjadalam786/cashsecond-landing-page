@@ -609,144 +609,190 @@ class GoogleSheetsService
             return "<strong style='color:#E37400;background:#FFF6E6;padding:2px 8px;border-radius:6px;font-size:12.5px;display:inline-block;'>{$text}</strong>";
         };
 
-        // Screen & Display Statuses
-        $dispWorkTag   = ($rowData['display_working'] === 'YES') ? $tagPass('✅ Working (Clear)') : $tagFail('❌ Fault / Blackout');
-        $touchTag      = ($rowData['touchscreen_working'] === 'YES') ? $tagPass('✅ Responsive') : $tagFail('❌ Faulty');
-        $frontGlassTag = ($rowData['screen_cracked'] === 'NO') ? $tagPass('✅ Intact (No Cracks)') : $tagFail('❌ Glass Cracked');
-        $scratchTag    = (stripos($scrCond, 'Heavy') !== false || stripos($scrCond, 'Scratches') !== false) ? $tagFail($scratchTxt) : $tagPass('✅ Scratch-Free');
-        $linesTag      = ($rowData['display_lines_spots'] === 'NO') ? $tagPass('✅ Clean (No Defects)') : $tagFail('❌ Defect Present');
-        $dispOrigTag   = ($rowData['original_display'] === 'YES') ? $tagPass('✅ Original Screen') : $tagWarn('⚠️ Replaced Screen');
+        // Helper for Responsive Inspection Row
+        $makeRow = function($label, $tag) {
+            return "<tr>"
+                 . "<td style='padding:7px 8px 7px 0;color:#555558;font-size:13px;line-height:1.4;border-bottom:1px solid #F2F2F5;vertical-align:middle;'>{$label}</td>"
+                 . "<td align='right' style='padding:7px 0 7px 8px;border-bottom:1px solid #F2F2F5;vertical-align:middle;text-align:right;white-space:nowrap;'>{$tag}</td>"
+                 . "</tr>";
+        };
 
-        // Body & Frame Statuses
-        $bodyMarkTag   = (strpos($rowData['body_condition'] ?? '', 'Clean') !== false) ? $tagPass('✅ Clean Metal Frame') : $tagFail('❌ Has Dents / Body Scratches');
-        $bentTag       = ($rowData['phone_bent'] === 'NO') ? $tagPass('✅ Flat & Straight') : $tagFail('❌ Frame Bent / Curved');
-        $backGlassTag  = ($rowData['body_damage'] === 'NO') ? $tagPass('✅ Intact') : $tagFail('❌ Back Glass Broken');
-        $camGlassTag   = ($rowData['camera_glass_condition'] === 'NO') ? $tagPass('✅ Clear & Intact') : $tagFail('❌ Glass Broken');
-        $partsTag      = ($rowData['missing_parts'] === 'NO') ? $tagPass('✅ All Intact') : $tagFail('❌ Missing Parts');
-
-        // Functional Hardware Statuses
-        $fCamTag       = ($rowData['front_camera'] === 'YES') ? $tagPass('✅ Working') : $tagFail('❌ Faulty');
-        $rCamTag       = ($rowData['rear_camera'] === 'YES') ? $tagPass('✅ Working') : $tagFail('❌ Faulty');
-        $flashTag      = ($rowData['camera_flash'] === 'YES') ? $tagPass('✅ Working') : $tagFail('❌ Faulty');
-        $bioTag        = ($rowData['face_id_touch_id'] === 'YES') ? $tagPass('✅ Working') : $tagFail('❌ Broken');
-        $chargeTag     = ($rowData['charging_port'] === 'YES') ? $tagPass('✅ Port & Fast Charge OK') : $tagFail('❌ Port Issue');
-        $speakerTag    = ($rowData['speaker'] === 'YES') ? $tagPass('✅ Loudspeaker OK') : $tagFail('❌ Audio Issue');
-        $receiverTag   = ($rowData['ear_receiver'] === 'YES') ? $tagPass('✅ Clear Call Audio') : $tagFail('❌ Receiver Issue');
-        $micTag        = ($rowData['microphone'] === 'YES') ? $tagPass('✅ Working') : $tagFail('❌ Faulty');
-        $buttonsTag    = ($rowData['power_button'] === 'YES' && $rowData['volume_buttons'] === 'YES') ? $tagPass('✅ Power & Volume OK') : $tagFail('❌ Button Issue');
-        $silentTag     = ($rowData['silent_switch'] === 'YES') ? $tagPass('✅ Working') : $tagFail('❌ Faulty');
-        $wirelessTag   = ($rowData['wifi'] === 'YES' && $rowData['bluetooth'] === 'YES') ? $tagPass('✅ Connected OK') : $tagFail('❌ Wireless Issue');
-        $networkTag    = ($rowData['mobile_network_sim'] === 'YES') ? $tagPass('✅ Signal OK') : $tagFail('❌ Network Issue');
-        $gpsTag        = ($rowData['gps'] === 'YES') ? $tagPass('✅ Working') : $tagFail('❌ Faulty');
-
-        // Battery, History & Accessories Statuses
-        $batteryTag    = (strpos($batteryTxt, 'Above') !== false) ? $tagPass("🟢 {$batteryTxt}") : $tagFail("🔴 {$batteryTxt}");
-        $liquidTag     = ($rowData['liquid_damage'] === 'NO') ? $tagPass('✅ Safe (No Water Damage)') : $tagFail('❌ Liquid Damaged');
-        $repairsTag    = ($rowData['major_component_replaced'] === 'NO') ? $tagPass('✅ None (Original)') : $tagWarn('⚠️ Replaced: ' . $rowData['replaced_component']);
-        
-        // Box, Charger, Bill (Green if YES / selected, Red if NO / missing)
-        $boxTag        = ($rowData['original_box'] === 'YES') ? $tagPass('✅ Available (YES)') : $tagFail('❌ Missing (NO)');
-        $chargerTag    = ($rowData['original_cable_adapter'] === 'YES') ? $tagPass('✅ Available (YES)') : $tagFail('❌ Missing (NO)');
-        $billTag       = ($rowData['original_bill'] === 'YES') ? $tagPass('✅ Available (YES)') : $tagFail('❌ Missing (NO)');
-
-        // HTML Version
+        // Fully Responsive HTML Email Template
         $htmlBody = "
-        <div style='font-family:-apple-system,BlinkMacSystemFont,\"Segoe UI\",Roboto,sans-serif;max-width:650px;margin:0 auto;background:#F5F5F7;padding:20px;color:#1D1D1F;'>
-            <div style='background:#FFFFFF;border-radius:16px;padding:24px;border:1px solid #E5E5EA;box-shadow:0 4px 16px rgba(0,0,0,0.06);'>
-                
-                <div style='border-bottom:2px solid #0071E3;padding-bottom:14px;margin-bottom:18px;'>
-                    <div style='display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;'>
-                        <span style='background:#0071E3;color:#FFFFFF;font-size:11px;font-weight:bold;padding:4px 10px;border-radius:20px;text-transform:uppercase;'>Onsite Inspection Lead</span>
-                        <span style='font-size:12px;color:#86868B;font-weight:600;'>Ref: {$leadId}</span>
-                    </div>
-                    <h2 style='margin:0;font-size:22px;color:#111111;'>{$model} <span style='color:#6E6E73;font-size:16px;'>({$variant})</span></h2>
-                    <div style='font-size:26px;font-weight:800;color:#1E8E3E;margin-top:6px;'>{$finalVal} <span style='font-size:14px;font-weight:500;color:#86868B;'>Base: {$baseVal}</span></div>
-                </div>
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='UTF-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1.0'>
+<title>CashSecond Lead: {$model}</title>
+<style type='text/css'>
+  /* Email Client Resets */
+  body, table, td, a { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+  table, td { mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+  img { -ms-interpolation-mode: bicubic; border: 0; outline: none; text-decoration: none; }
+  body { margin: 0 !important; padding: 0 !important; width: 100% !important; background-color: #F2F2F7; }
 
-                <!-- Customer Details -->
-                <div style='background:#F5F5F7;border-radius:12px;padding:14px 16px;margin-bottom:16px;'>
-                    <h4 style='margin:0 0 10px 0;font-size:13px;color:#0071E3;text-transform:uppercase;letter-spacing:0.04em;'>👤 Customer Information</h4>
-                    <table style='width:100%;font-size:13.5px;line-height:1.7;'>
-                        <tr><td style='width:35%;color:#6E6E73;'>Customer Name:</td><td><strong>{$name}</strong></td></tr>
-                        <tr><td style='color:#6E6E73;'>Phone Number:</td><td><a href='tel:{$cleanPhone}' style='color:#0071E3;font-weight:bold;text-decoration:none;'>+91 {$cleanPhone}</a></td></tr>
-                        <tr><td style='color:#6E6E73;'>Email Address:</td><td>{$email}</td></tr>
-                        <tr><td style='color:#6E6E73;'>Submission Time:</td><td>{$timeStr}</td></tr>
-                    </table>
-                </div>
+  /* Mobile Responsive Breakpoints */
+  @media only screen and (max-width: 620px) {
+    .main-table { width: 100% !important; max-width: 100% !important; }
+    .content-box { padding: 16px 12px !important; border-radius: 8px !important; }
+    .btn-wrap { display: block !important; width: 100% !important; margin-bottom: 8px !important; }
+    .btn-spacer { display: none !important; }
+    .device-title { font-size: 19px !important; }
+    .price-title { font-size: 23px !important; }
+    .section-card { padding: 12px 10px !important; margin-bottom: 12px !important; }
+  }
+</style>
+</head>
+<body style='margin:0;padding:0;background-color:#F2F2F7;font-family:-apple-system,BlinkMacSystemFont,\"Segoe UI\",Roboto,Helvetica,Arial,sans-serif;'>
 
-                <!-- Action Buttons -->
-                <div style='display:flex;gap:10px;margin-bottom:18px;'>
-                    <a href='{$waUrl}' target='_blank' style='flex:1;background:#25D366;color:#FFFFFF;text-align:center;padding:12px;border-radius:10px;font-weight:bold;text-decoration:none;font-size:14px;display:block;'>💬 Open WhatsApp Chat</a>
-                    <a href='tel:{$cleanPhone}' style='flex:1;background:#0071E3;color:#FFFFFF;text-align:center;padding:12px;border-radius:10px;font-weight:bold;text-decoration:none;font-size:14px;display:block;'>📞 Call Customer</a>
-                </div>
+<table border='0' cellpadding='0' cellspacing='0' width='100%' style='background-color:#F2F2F7;padding:16px 8px;'>
+  <tr>
+    <td align='center'>
+      
+      <!-- Main Container Table -->
+      <table class='main-table' border='0' cellpadding='0' cellspacing='0' width='100%' style='max-width:600px;width:100%;background-color:#FFFFFF;border-radius:14px;border:1px solid #E5E5EA;box-shadow:0 3px 12px rgba(0,0,0,0.05);overflow:hidden;'>
+        <tr>
+          <td class='content-box' style='padding:22px 20px;'>
 
-                <!-- Display & Screen Section -->
-                <div style='border:1px solid #E5E5EA;border-radius:12px;padding:16px;margin-bottom:16px;'>
-                    <h4 style='margin:0 0 10px 0;font-size:13px;color:#111111;text-transform:uppercase;letter-spacing:0.04em;'>🖥️ Screen &amp; Display Check</h4>
-                    <table style='width:100%;font-size:13px;line-height:1.9;border-collapse:collapse;'>
-                        <tr><td style='width:45%;color:#6E6E73;'>Display Power / Working</td><td>{$dispWorkTag}</td></tr>
-                        <tr><td style='color:#6E6E73;'>Touchscreen Response</td><td>{$touchTag}</td></tr>
-                        <tr><td style='color:#6E6E73;'>Front Screen Glass</td><td>{$frontGlassTag}</td></tr>
-                        <tr><td style='color:#6E6E73;'>Screen Scratch Level</td><td>{$scratchTag}</td></tr>
-                        <tr><td style='color:#6E6E73;'>Lines / Dots / Spots</td><td>{$linesTag}</td></tr>
-                        <tr><td style='color:#6E6E73;'>Display Originality</td><td>{$dispOrigTag}</td></tr>
-                    </table>
-                </div>
-
-                <!-- Body & Chassis Section -->
-                <div style='border:1px solid #E5E5EA;border-radius:12px;padding:16px;margin-bottom:16px;'>
-                    <h4 style='margin:0 0 10px 0;font-size:13px;color:#111111;text-transform:uppercase;letter-spacing:0.04em;'>📱 Body &amp; Frame Condition</h4>
-                    <table style='width:100%;font-size:13px;line-height:1.9;border-collapse:collapse;'>
-                        <tr><td style='width:45%;color:#6E6E73;'>Metal Frame Marks</td><td>{$bodyMarkTag}</td></tr>
-                        <tr><td style='color:#6E6E73;'>Chassis / Bent Body</td><td>{$bentTag}</td></tr>
-                        <tr><td style='color:#6E6E73;'>Back Glass Condition</td><td>{$backGlassTag}</td></tr>
-                        <tr><td style='color:#6E6E73;'>Camera Lens Glass</td><td>{$camGlassTag}</td></tr>
-                        <tr><td style='color:#6E6E73;'>Parts / Screws</td><td>{$partsTag}</td></tr>
-                    </table>
-                </div>
-
-                <!-- Functional Hardware Section -->
-                <div style='border:1px solid #E5E5EA;border-radius:12px;padding:16px;margin-bottom:16px;'>
-                    <h4 style='margin:0 0 10px 0;font-size:13px;color:#111111;text-transform:uppercase;letter-spacing:0.04em;'>⚙️ Hardware &amp; Component Tests</h4>
-                    <table style='width:100%;font-size:13px;line-height:1.9;border-collapse:collapse;'>
-                        <tr><td style='width:45%;color:#6E6E73;'>Front Camera</td><td>{$fCamTag}</td></tr>
-                        <tr><td style='color:#6E6E73;'>Rear Main Camera</td><td>{$rCamTag}</td></tr>
-                        <tr><td style='color:#6E6E73;'>Camera Flash</td><td>{$flashTag}</td></tr>
-                        <tr><td style='color:#6E6E73;'>Face ID / Biometrics</td><td>{$bioTag}</td></tr>
-                        <tr><td style='color:#6E6E73;'>Charging Port</td><td>{$chargeTag}</td></tr>
-                        <tr><td style='color:#6E6E73;'>Speaker &amp; Audio</td><td>{$speakerTag}</td></tr>
-                        <tr><td style='color:#6E6E73;'>Earpiece / Receiver</td><td>{$receiverTag}</td></tr>
-                        <tr><td style='color:#6E6E73;'>Microphone</td><td>{$micTag}</td></tr>
-                        <tr><td style='color:#6E6E73;'>Physical Buttons</td><td>{$buttonsTag}</td></tr>
-                        <tr><td style='color:#6E6E73;'>Silent Switch</td><td>{$silentTag}</td></tr>
-                        <tr><td style='color:#6E6E73;'>Wi-Fi &amp; Bluetooth</td><td>{$wirelessTag}</td></tr>
-                        <tr><td style='color:#6E6E73;'>Mobile SIM / Network</td><td>{$networkTag}</td></tr>
-                        <tr><td style='color:#6E6E73;'>GPS Location</td><td>{$gpsTag}</td></tr>
-                    </table>
-                </div>
-
-                <!-- Battery, Warranty & Inclusions -->
-                <div style='border:1px solid #E5E5EA;border-radius:12px;padding:16px;margin-bottom:16px;'>
-                    <h4 style='margin:0 0 10px 0;font-size:13px;color:#111111;text-transform:uppercase;letter-spacing:0.04em;'>🔋 Battery, History &amp; Inclusions</h4>
-                    <table style='width:100%;font-size:13px;line-height:1.9;border-collapse:collapse;'>
-                        <tr><td style='width:45%;color:#6E6E73;'>Battery Health</td><td>{$batteryTag}</td></tr>
-                        <tr><td style='color:#6E6E73;'>Liquid / Water Damage</td><td>{$liquidTag}</td></tr>
-                        <tr><td style='color:#6E6E73;'>Component Repairs</td><td>{$repairsTag}</td></tr>
-                        <tr><td style='color:#6E6E73;'>Warranty Period</td><td><strong>{$warrantyTxt}</strong></td></tr>
-                        <tr><td style='color:#6E6E73;'>📦 Original Box</td><td>{$boxTag}</td></tr>
-                        <tr><td style='color:#6E6E73;'>⚡ Original Charger / Cable</td><td>{$chargerTag}</td></tr>
-                        <tr><td style='color:#6E6E73;'>🧾 Purchase Invoice / Bill</td><td>{$billTag}</td></tr>
-                    </table>
-                </div>
-
-                <!-- Reported Issues Summary -->
-                <div style='background:#FFF5F5;border:1px solid #FFD2D2;border-radius:10px;padding:14px 16px;font-size:13px;'>
-                    <strong style='color:#111111;'>📋 Reported Faults &amp; Deductions:</strong><br>
-                    " . ($rowData['failed_test_names'] !== 'None (All Passed)' ? "<span style='color:#D70015;font-weight:700;margin-top:4px;display:inline-block;'>⚠️ {$rowData['failed_test_names']}</span>" : "<span style='color:#1E8E3E;font-weight:700;margin-top:4px;display:inline-block;'>✅ Clean Device (No Faults Reported)</span>") . "
-                </div>
-
+            <!-- Header Badge & Model Header -->
+            <div style='border-bottom:2px solid #0071E3;padding-bottom:14px;margin-bottom:16px;'>
+              <table border='0' cellpadding='0' cellspacing='0' width='100%' style='margin-bottom:8px;'>
+                <tr>
+                  <td align='left'>
+                    <span style='background:#0071E3;color:#FFFFFF;font-size:11px;font-weight:bold;padding:4px 9px;border-radius:20px;text-transform:uppercase;letter-spacing:0.04em;'>Onsite Valuation Lead</span>
+                  </td>
+                  <td align='right'>
+                    <span style='font-size:11.5px;color:#86868B;font-weight:600;'>Ref: {$leadId}</span>
+                  </td>
+                </tr>
+              </table>
+              <h2 class='device-title' style='margin:0;font-size:21px;color:#111111;line-height:1.3;'>{$model} <span style='color:#6E6E73;font-size:15px;font-weight:normal;'>({$variant})</span></h2>
+              <div class='price-title' style='font-size:25px;font-weight:800;color:#1E8E3E;margin-top:6px;'>
+                {$finalVal} <span style='font-size:13.5px;font-weight:500;color:#86868B;margin-left:4px;'>Base: {$baseVal}</span>
+              </div>
             </div>
-        </div>";
+
+            <!-- Customer Contact Information Card -->
+            <div class='section-card' style='background:#F5F5F7;border-radius:10px;padding:12px 14px;margin-bottom:16px;'>
+              <div style='font-size:12px;font-weight:700;color:#0071E3;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:8px;'>👤 Customer Contact Details</div>
+              <table border='0' cellpadding='0' cellspacing='0' width='100%' style='font-size:13px;line-height:1.7;'>
+                <tr>
+                  <td style='color:#6E6E73;width:34%;padding:2px 0;'>Full Name:</td>
+                  <td style='color:#111111;font-weight:700;padding:2px 0;'>{$name}</td>
+                </tr>
+                <tr>
+                  <td style='color:#6E6E73;padding:2px 0;'>Phone:</td>
+                  <td style='padding:2px 0;'><a href='tel:{$cleanPhone}' style='color:#0071E3;font-weight:700;text-decoration:none;'>+91 {$cleanPhone}</a></td>
+                </tr>
+                <tr>
+                  <td style='color:#6E6E73;padding:2px 0;'>Email:</td>
+                  <td style='color:#111111;padding:2px 0;'>{$email}</td>
+                </tr>
+                <tr>
+                  <td style='color:#6E6E73;padding:2px 0;'>Date / Time:</td>
+                  <td style='color:#111111;padding:2px 0;'>{$timeStr}</td>
+                </tr>
+              </table>
+            </div>
+
+            <!-- Responsive Call & WhatsApp CTA Buttons -->
+            <table border='0' cellpadding='0' cellspacing='0' width='100%' style='margin-bottom:18px;'>
+              <tr>
+                <td class='btn-wrap' width='49%' align='center' style='vertical-align:top;'>
+                  <a href='{$waUrl}' target='_blank' style='display:block;width:100%;box-sizing:border-box;background:#25D366;color:#FFFFFF;text-align:center;padding:11px 8px;border-radius:8px;font-weight:bold;text-decoration:none;font-size:13.5px;'>💬 WhatsApp</a>
+                </td>
+                <td class='btn-spacer' width='2%'></td>
+                <td class='btn-wrap' width='49%' align='center' style='vertical-align:top;'>
+                  <a href='tel:{$cleanPhone}' style='display:block;width:100%;box-sizing:border-box;background:#0071E3;color:#FFFFFF;text-align:center;padding:11px 8px;border-radius:8px;font-weight:bold;text-decoration:none;font-size:13.5px;'>📞 Call Client</a>
+                </td>
+              </tr>
+            </table>
+
+            <!-- Section 1: Screen & Display Check -->
+            <div class='section-card' style='border:1px solid #E5E5EA;border-radius:10px;padding:14px;margin-bottom:14px;'>
+              <div style='font-size:12.5px;font-weight:700;color:#111111;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:8px;'>🖥️ Screen &amp; Display Check</div>
+              <table border='0' cellpadding='0' cellspacing='0' width='100%'>
+                " . $makeRow('Display Power / Blackout', $dispWorkTag) . "
+                " . $makeRow('Touchscreen Response', $touchTag) . "
+                " . $makeRow('Front Screen Glass', $frontGlassTag) . "
+                " . $makeRow('Screen Scratches', $scratchTag) . "
+                " . $makeRow('Lines / Dots / Ink Spots', $linesTag) . "
+                " . $makeRow('Screen Flickering', $flickerTag) . "
+                " . $makeRow('Color Fade / Burn-in', $colorFadeTag) . "
+                " . $makeRow('Screen Loose / Lifted', $looseScreenTag) . "
+                " . $makeRow('Display Originality', $dispOrigTag) . "
+              </table>
+            </div>
+
+            <!-- Section 2: Body & Frame Condition -->
+            <div class='section-card' style='border:1px solid #E5E5EA;border-radius:10px;padding:14px;margin-bottom:14px;'>
+              <div style='font-size:12.5px;font-weight:700;color:#111111;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:8px;'>📱 Body &amp; Frame Condition</div>
+              <table border='0' cellpadding='0' cellspacing='0' width='100%'>
+                " . $makeRow('Frame Scratches / Marks', $bodyScratchTag) . "
+                " . $makeRow('Dents on Body', $dentsTag) . "
+                " . $makeRow('Chassis / Bent Frame', $bentTag) . "
+                " . $makeRow('Back Glass Condition', $backGlassTag) . "
+                " . $makeRow('Camera Lens Glass', $camGlassTag) . "
+                " . $makeRow('Parts / Screws', $partsTag) . "
+              </table>
+            </div>
+
+            <!-- Section 3: Hardware & Component Tests -->
+            <div class='section-card' style='border:1px solid #E5E5EA;border-radius:10px;padding:14px;margin-bottom:14px;'>
+              <div style='font-size:12.5px;font-weight:700;color:#111111;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:8px;'>⚙️ Hardware &amp; Component Tests</div>
+              <table border='0' cellpadding='0' cellspacing='0' width='100%'>
+                " . $makeRow('Front Selfie Camera', $fCamTag) . "
+                " . $makeRow('Rear Main Camera', $rCamTag) . "
+                " . $makeRow('Camera Flash', $flashTag) . "
+                " . $makeRow('Face ID / Fingerprint', $bioTag) . "
+                " . $makeRow('Charging Port', $chargeTag) . "
+                " . $makeRow('Loudspeaker', $speakerTag) . "
+                " . $makeRow('Earpiece / Receiver', $receiverTag) . "
+                " . $makeRow('Microphone &amp; Audio IC', $micTag) . "
+                " . $makeRow('Power Button', $powerBtnTag) . "
+                " . $makeRow('Volume Buttons', $volBtnTag) . "
+                " . $makeRow('Silent / Mute Switch', $silentTag) . "
+                " . $makeRow('Vibrator Engine', $vibratorTag) . "
+                " . $makeRow('Proximity Sensors', $sensorTag) . "
+                " . $makeRow('Wi-Fi &amp; Bluetooth', $wirelessTag) . "
+                " . $makeRow('Cellular SIM / Network', $networkTag) . "
+                " . $makeRow('GPS Location', $gpsTag) . "
+                " . $makeRow('Headphone Jack', $headphoneTag) . "
+              </table>
+            </div>
+
+            <!-- Section 4: Battery, History & Inclusions -->
+            <div class='section-card' style='border:1px solid #E5E5EA;border-radius:10px;padding:14px;margin-bottom:14px;'>
+              <div style='font-size:12.5px;font-weight:700;color:#111111;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:8px;'>🔋 Battery, History &amp; Inclusions</div>
+              <table border='0' cellpadding='0' cellspacing='0' width='100%'>
+                " . $makeRow('Battery Health', $batteryTag) . "
+                " . $makeRow('Liquid / Water Damage', $liquidTag) . "
+                " . $makeRow('Component Repairs', $repairsTag) . "
+                " . $makeRow('Purchase Timeline', '<strong>' . htmlspecialchars($warrantyTxt, ENT_QUOTES, 'UTF-8') . '</strong>') . "
+                " . $makeRow('📦 Original Box', $boxTag) . "
+                " . $makeRow('⚡ Original Charger / Cable', $chargerTag) . "
+                " . $makeRow('🧾 Purchase Invoice / Bill', $billTag) . "
+              </table>
+            </div>
+
+            <!-- Reported Defects Summary Alert Banner -->
+            <div style='background:#FFF5F5;border:1px solid #FFD2D2;border-radius:10px;padding:12px 14px;'>
+              <div style='font-size:12.5px;font-weight:700;color:#111111;margin-bottom:4px;'>📋 Reported Faults &amp; Deductions:</div>
+              " . ($rowData['failed_test_names'] !== 'None (All Passed)' ? "<div style='color:#D70015;font-weight:700;font-size:13px;line-height:1.4;'>⚠️ {$rowData['failed_test_names']}</div>" : "<div style='color:#1E8E3E;font-weight:700;font-size:13px;line-height:1.4;'>✅ Clean Device (No Faults Reported)</div>") . "
+            </div>
+
+          </td>
+        </tr>
+      </table>
+      <!-- End Container Table -->
+
+    </td>
+  </tr>
+</table>
+
+</body>
+</html>";
 
         // Standard Email Headers (Spam & Header Injection Protected)
         $replyTo = (!empty($email) && filter_var($email, FILTER_VALIDATE_EMAIL)) ? $email : $senderEmail;
