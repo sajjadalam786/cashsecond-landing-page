@@ -116,10 +116,8 @@ while (($row = fgetcsv($handle)) !== false) {
 
 fclose($handle);
 
-// Sort modelsMap by name for consistent display
-ksort($modelsMap);
-
+// Models preserve the exact sequence from the CSV
 return [
     'matrix' => $matrix,       // All device rows keyed by product_id
-    'models' => $modelsMap,    // product_name => [storage => product_id]
+    'models' => $modelsMap,    // product_name => [storage => product_id] in CSV chronological sequence
 ];

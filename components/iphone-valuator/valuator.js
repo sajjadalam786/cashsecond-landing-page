@@ -43,8 +43,8 @@
     const MATRIX  = window.IV_PRICING_MATRIX  || {};   // { product_id: {...} }
     const MODELS_MAP = window.IV_MODELS_MAP   || {};   // { "Apple iPhone X": { "64 GB": 50, ... } }
 
-    // Build sorted model name list for search
-    const MODEL_NAMES = Object.keys(MODELS_MAP).sort();
+    // Model name list in exact CSV chronological sequence
+    const MODEL_NAMES = Object.keys(MODELS_MAP);
 
     /* --------------------------------------------------
        STATE
@@ -436,9 +436,10 @@
     function buildModelItems(names) {
         return names.map(n => {
             const selected = n === state.model ? ' iv-selected-model' : '';
+            const displayName = n.replace(/^Apple\s+/i, '');
             return `<button type="button" class="iv-model-item${selected}" data-model="${escHtml(n)}">
                 <span class="iv-model-emoji">📱</span>
-                <span class="iv-model-name">${escHtml(n.replace('Apple ', ''))}</span>
+                <span class="iv-model-name">${escHtml(displayName)}</span>
             </button>`;
         }).join('');
     }
