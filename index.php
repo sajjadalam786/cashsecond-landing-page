@@ -485,12 +485,10 @@ require __DIR__ . '/includes/header.php';
             <div class="express-hero-info">
                 <div class="express-live-pill">
                     <span class="live-pulse-dot"></span>
-                    
-                    <h5 class="metric-val">For Mumbai Kar's</h5>
-                    
+                    <span>Exclusive For Mumbaikars</span>
                 </div>
                 
-                <h2 class="express-hero-title">Need Instant Cash Against Your Iphone?<br><span class="gradient-text-amber">Fastest Pickup in 2 to 8 Hours.</span></h2>
+                <h2 class="express-hero-title">Need Instant Cash Against Your iPhone?<br><span class="gradient-text-amber">Fastest Pickup in 2 to 8 Hours.</span></h2>
                 <p class="express-hero-desc">Resell your iPhone safely with a genuine, GST-verified brand. We offer priority <strong>under 2-hour express dispatch</strong> in major hubs and guaranteed <strong>under 8-hour same-day pickup across all Mumbai &amp; MMR</strong> with instant spot UPI or cash payment.</p>
                 
                 <div class="express-metric-strip">
@@ -520,7 +518,7 @@ require __DIR__ . '/includes/header.php';
                         <span>Check iPhone Value &amp; Book Pickup →</span>
                     </a>
                     <div class="express-trust-note">
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#34C759" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#34C759" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>
                         <span>Genuine GST Verified Brand • Spot Payment • Certified Data Destruction</span>
                     </div>
                 </div>
