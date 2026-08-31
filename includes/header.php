@@ -78,7 +78,7 @@ $canonical_url = $canonical_url ?? ($seo['site_url'] ?? 'http://localhost/cashse
             <!-- Desktop Navigation Menu -->
             <nav class="nav-menu" aria-label="Main Navigation">
                 <a href="<?= $base_path ?>index.php#iphone-models" class="nav-link">Sell Old iPhone</a>
-                <a href="<?= $base_path ?>index.php#how-it-works" class="nav-link">3-Step Process</a>
+                <a href="<?= $base_path ?>index.php#how-it-works" class="nav-link">4-Step Process</a>
                 <a href="<?= $base_path ?>index.php#buyback-advantages" class="nav-link">Best Price Guarantee</a>
                 <a href="<?= $base_path ?>index.php#coverage" class="nav-link">Mumbai Service Areas</a>
                 <a href="<?= $base_path ?>index.php#faq" class="nav-link">Selling FAQs</a>

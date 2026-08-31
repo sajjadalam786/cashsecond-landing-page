@@ -81,7 +81,7 @@ $current_year = date('Y');
                     </h4>
                     <ul class="footer-links-list">
                         <li><a href="<?= $base_path ?>index.php#iphone-models">Sell Old iPhone Models</a></li>
-                        <li><a href="<?= $base_path ?>index.php#how-it-works">3-Step Selling Process</a></li>
+                        <li><a href="<?= $base_path ?>index.php#how-it-works">4-Step Selling Process</a></li>
                         <li><a href="<?= $base_path ?>index.php#buyback-advantages">Best Price Guarantee</a></li>
                         <li><a href="<?= $base_path ?>index.php#coverage">Mumbai Service Areas</a></li>
                         <li><a href="<?= $base_path ?>index.php#faq">Selling FAQs &amp; Help</a></li>
