@@ -102,21 +102,20 @@
             ],
             cols: 2,
         },
-        // 3 — Screen Scratches (mutually exclusive radio)
+        // 3 — Screen Scratches
         {
             id: 'screen_scratch',
             title: 'How is the screen glass condition?',
-            badge: 'Mandatory • Select 1',
-            badgeType: 'mand',
-            desc: 'Inspect with your phone screen on and off (Mandatory).',
+            badge: 'Select If Scratched • Press Next if Scratch-Free',
+            badgeType: 'multi',
+            desc: 'Select if your screen has any scratches (if scratch-free, press "Next →"):',
             type: 'radio',
             options: [
-                { label: 'Scratch-free',            sub: 'No visible marks',             col: null,                  icon: '✨', style: 'none'   },
-                { label: '1–2 light scratches',     sub: 'Barely noticeable',            col: 'scratch_screen_1_2',  icon: '🔍', style: 'minus'  },
-                { label: '3–4 scratches',           sub: 'Visible but minor',            col: 'scratch_screen_3_4',  icon: '😐', style: 'minus'  },
-                { label: 'Heavy scratches',         sub: 'Deep, felt by fingernail',     col: 'multiple_scratches_screen', icon: '⚠️', style: 'minus' },
+                { label: '1–2 light scratches',     sub: 'Barely noticeable minor marks',   col: 'scratch_screen_1_2',  icon: '🔍', style: 'minus'  },
+                { label: '3–4 scratches',           sub: 'Visible but minor marks',         col: 'scratch_screen_3_4',  icon: '😐', style: 'minus'  },
+                { label: 'Heavy scratches',         sub: 'Deep, felt by fingernail',        col: 'multiple_scratches_screen', icon: '⚠️', style: 'minus' },
             ],
-            cols: 2,
+            cols: 1,
         },
         // 4 — Screen Defects (multi-select chips)
         {
@@ -138,21 +137,20 @@
                 { label: 'Back glass broken',    col: 'back_glass_broken',   icon: '🔨' },
             ],
         },
-        // 5 — Body Scratches (mutually exclusive radio)
+        // 5 — Body Scratches
         {
             id: 'body_scratch',
             title: 'How is the body / frame condition?',
-            badge: 'Mandatory • Select 1',
-            badgeType: 'mand',
-            desc: 'Check the metal sides and back panel (Mandatory).',
+            badge: 'Select If Scratched • Press Next if Scratch-Free',
+            badgeType: 'multi',
+            desc: 'Select if your body has any scratches (if scratch-free, press "Next →"):',
             type: 'radio',
             options: [
-                { label: 'Like new body',           sub: 'No scratches at all',          col: null,                  icon: '✨', style: 'none'  },
-                { label: '1–2 minor scratches',     sub: 'Light usage marks',            col: 'scratch_body_1_2',    icon: '🔍', style: 'minus' },
-                { label: '3–4 scratches',           sub: 'Visible but usable',           col: 'scratch_body_3_4',    icon: '😐', style: 'minus' },
-                { label: 'Heavy scratches',         sub: 'Multiple deep marks',          col: 'multiple_scratches_body', icon: '⚠️', style: 'minus' },
+                { label: '1–2 minor scratches',     sub: 'Light usage marks',               col: 'scratch_body_1_2',    icon: '🔍', style: 'minus' },
+                { label: '3–4 scratches',           sub: 'Visible but usable',              col: 'scratch_body_3_4',    icon: '😐', style: 'minus' },
+                { label: 'Heavy scratches',         sub: 'Multiple deep marks',             col: 'multiple_scratches_body', icon: '⚠️', style: 'minus' },
             ],
-            cols: 2,
+            cols: 1,
         },
         // 6 — Body Damage (multi-select chips)
         {
@@ -195,33 +193,33 @@
                 { label: 'Headphone jack',     col: 'headphone_jackissue',      icon: '🎧' },
             ],
         },
-        // 8 — Battery Health (radio)
+        // 8 — Battery Health
         {
             id: 'battery',
             title: 'What is your battery health?',
-            badge: 'Mandatory • Select 1',
-            badgeType: 'mand',
-            desc: 'Check in Settings → Battery → Battery Health (Mandatory).',
+            badge: 'Select If Degraded • Press Next if Healthy',
+            badgeType: 'multi',
+            desc: 'Select if your battery is degraded or faulty (if healthy, press "Next →"):',
             type: 'radio',
             options: [
-                { label: 'Above 80% (Healthy)',   sub: 'Go to Settings to check',     col: 'battery_greater_80', icon: '🔋', style: 'none'  },
-                { label: 'Below 80% (Degraded)',  sub: 'Affects daily battery life',  col: 'battery_less_80',    icon: '🪫', style: 'minus' },
-                { label: 'Battery faulty/swollen',sub: 'Not charging or swollen',     col: 'battery_faulty',     icon: '⚠️', style: 'minus' },
+                { label: 'Above 80% (Healthy)',   sub: 'Normal battery health & peak capability', col: null,               icon: '🔋', style: 'none'  },
+                { label: 'Below 80% (Degraded)',  sub: 'Affects daily battery life',              col: 'battery_less_80', icon: '🪫', style: 'minus' },
+                { label: 'Battery faulty/swollen',sub: 'Not charging or swollen',                 col: 'battery_faulty',  icon: '⚠️', style: 'minus' },
             ],
             cols: 1,
         },
-        // 9 — Accessories (bonus multi-select)
+        // 9 — Box, Charger & Bill
         {
             id: 'accessories',
-            title: 'What accessories do you have?',
-            badge: 'Multiple Selection • Extra Value',
-            badgeType: 'bonus',
-            desc: 'Select all original accessories you have. If none, press "Next →".',
+            title: 'Do you have the original Box, Charger & Bill?',
+            badge: 'Multiple Selection • Select Missing Items',
+            badgeType: 'multi',
+            desc: 'Select any items that are MISSING (or leave unselected if you have everything):',
             type: 'accessories',
             options: [
-                { label: 'Original box',             col: 'box',     icon: '📦' },
-                { label: 'Original charger / cable', col: 'charger', icon: '⚡' },
-                { label: 'Purchase invoice / bill',  col: 'invoice', icon: '🧾' },
+                { label: 'Missing Original Box',             col: 'box',     icon: '📦', sub: 'Original retail box' },
+                { label: 'Missing Original Charger / Cable', col: 'charger', icon: '⚡', sub: 'Original charging cable / adapter' },
+                { label: 'Missing Purchase Bill / Invoice',  col: 'invoice', icon: '🧾', sub: 'Original valid purchase invoice' },
             ],
         },
         // 10 — Contact capture
@@ -257,32 +255,26 @@
         const deductions = pd.deductions;
 
         let totalDeductPct = 0;
-        let bonusPct       = 0;
         const usedDeductions = {};
 
-        // Accumulate deductions from triggered answers
+        // Calculate each selected fault's percentage deduction directly from base price
         for (const [col, triggered] of Object.entries(state.answers)) {
-            if (!triggered || col === null) continue;
+            if (!triggered || col === null || col.startsWith('_none_')) continue;
             const pct = deductions[col] || 0;
-            if (pct === 0) continue;
+            if (pct <= 0) continue;
 
-            // Bonus columns (box, charger, invoice)
-            if (['box', 'charger', 'invoice'].includes(col)) {
-                bonusPct += pct;
-                usedDeductions[col] = -(base * pct / 100); // negative = bonus
-            } else {
-                totalDeductPct += pct;
-                usedDeductions[col] = base * pct / 100;
-            }
+            totalDeductPct += pct;
+            const faultAmount = base * (pct / 100);
+            usedDeductions[col] = faultAmount;
         }
 
-        const deductAmount = base * totalDeductPct / 100;
-        const bonusAmount  = base * bonusPct / 100;
-        const finalValue   = Math.max(0, base - deductAmount + bonusAmount);
+        const totalDeductAmount = base * (totalDeductPct / 100);
+        // Base value - sum of all faulty percentage values. If negative, clamp to 0.
+        const finalValue = Math.max(0, Math.round(base - totalDeductAmount));
 
         state.basePrice   = base;
-        state.totalDeduct = deductAmount;
-        state.bonusTotal  = bonusAmount;
+        state.totalDeduct = totalDeductAmount;
+        state.bonusTotal  = 0;
         state.liveValue   = finalValue;
         state.deductions  = usedDeductions;
     }
@@ -485,16 +477,32 @@
             </button>`;
         }).join('');
 
+        const badgeClass = step.badgeType === 'multi' ? 'iv-badge-multi' : (step.badgeType === 'bonus' ? 'iv-badge-bonus' : 'iv-badge-mand');
+        const badgeLabel = step.badge || 'Select 1 Option';
+        const isOptionalRadio = (step.id === 'screen_scratch' || step.id === 'body_scratch' || step.id === 'battery');
+
+        let noIssuesMsg = 'No issues? Leave unselected and press Next → to continue.';
+        if (step.id === 'screen_scratch' || step.id === 'body_scratch') {
+            noIssuesMsg = 'No scratches? Leave unselected and press Next → to continue.';
+        } else if (step.id === 'battery') {
+            noIssuesMsg = 'Battery healthy? Leave unselected and press Next → to continue.';
+        }
+
         return `
         <div class="iv-step-card">
             <div class="iv-step-badge-row">
-                <span class="iv-badge-mand">Mandatory • Select 1 Option</span>
+                <span class="${badgeClass}">${escHtml(badgeLabel)}</span>
             </div>
             <p class="iv-question-title">${step.title}</p>
             <p class="iv-question-desc">${step.desc}</p>
             <div class="iv-options-grid ${cols}" id="ivRadioGroup">
                 ${items}
             </div>
+            ${isOptionalRadio ? `
+            <div class="iv-no-issues-bar" style="margin-top:14px;">
+                <span style="font-size:16px;">✨</span>
+                <span><strong>${escHtml(noIssuesMsg)}</strong></span>
+            </div>` : ''}
         </div>`;
     }
 
@@ -525,30 +533,30 @@
         </div>`;
     }
 
-    // Accessories (bonus multi-select checkboxes)
+    // Accessories & Bill
     function buildAccessories(step) {
         const items = step.options.map(opt => {
-            const checked = state.answers[opt.col] === true;
+            const isMissing = state.answers[opt.col] === true;
+
             return `
-            <button type="button" class="iv-acc-check${checked ? ' iv-acc-checked' : ''}" data-acc-col="${escHtml(opt.col)}">
-                <span class="iv-acc-checkbox">${checked ? '✓' : ''}</span>
+            <button type="button" class="iv-acc-check${isMissing ? ' iv-acc-checked' : ''}" data-acc-col="${escHtml(opt.col)}">
+                <span class="iv-acc-checkbox">${isMissing ? '✕' : ''}</span>
                 <span style="font-size:20px">${opt.icon}</span>
                 <span class="iv-acc-label">${escHtml(opt.label)}</span>
-                <span class="iv-acc-bonus">+ Extra Value</span>
             </button>`;
         }).join('');
 
         return `
         <div class="iv-step-card">
             <div class="iv-step-badge-row">
-                <span class="iv-badge-bonus">Multiple Selection • Extra Value Booster</span>
+                <span class="iv-badge-multi">Original Accessories & Bill</span>
             </div>
             <p class="iv-question-title">${step.title}</p>
             <p class="iv-question-desc">${step.desc}</p>
             <div class="iv-accessories-row">${items}</div>
             <div class="iv-no-issues-bar" style="margin-top:14px;">
-                <span style="font-size:16px;">💡</span>
-                <span><strong>No accessories?</strong> Leave unselected and press <strong>Next →</strong></span>
+                <span style="font-size:16px;">✨</span>
+                <span><strong>Have all original items?</strong> Leave unselected and press <strong>Next →</strong></span>
             </div>
         </div>`;
     }
@@ -715,7 +723,7 @@
                 }
                 this.classList.toggle('iv-acc-checked', !!state.answers[col]);
                 const box = this.querySelector('.iv-acc-checkbox');
-                if (box) box.textContent = state.answers[col] ? '✓' : '';
+                if (box) box.textContent = state.answers[col] ? '✕' : '';
                 computeValuation();
             });
         });
@@ -739,12 +747,15 @@
             shakeElement(body); return;
         }
         if (step.type === 'radio') {
-            const hasSelection = step.options.some(opt => {
-                return (opt.col && state.answers[opt.col] === true) ||
-                       (opt.col === null && state.answers['_none_' + step.id] === true);
-            });
-            if (!hasSelection) {
-                shakeElement(body); return;
+            const isOptional = (step.id === 'screen_scratch' || step.id === 'body_scratch' || step.id === 'battery');
+            if (!isOptional) {
+                const hasSelection = step.options.some(opt => {
+                    return (opt.col && state.answers[opt.col] === true) ||
+                           (opt.col === null && state.answers['_none_' + step.id] === true);
+                });
+                if (!hasSelection) {
+                    shakeElement(body); return;
+                }
             }
         }
         if (step.type === 'lead_capture') {

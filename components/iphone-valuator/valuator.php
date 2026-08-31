@@ -57,7 +57,7 @@ $_iv_csrf = $_SESSION['csrf_token'];
 <!-- =====================================================
      IPHONE VALUATOR COMPONENT
      ===================================================== -->
-<link rel="stylesheet" href="<?= $_iv_base_path ?>components/iphone-valuator/valuator.css?v=1.0">
+<link rel="stylesheet" href="<?= $_iv_base_path ?>components/iphone-valuator/valuator.css?v=<?= file_exists($_iv_component_dir . '/valuator.css') ? filemtime($_iv_component_dir . '/valuator.css') : time() ?>">
 
 <!-- Modal Overlay -->
 <div class="iv-overlay" id="ivOverlay" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="ivStepLabel">
@@ -111,5 +111,5 @@ $_iv_csrf = $_SESSION['csrf_token'];
         privacyUrl:       <?= json_encode($_iv_privacy_url) ?>
     };
 </script>
-<script src="<?= $_iv_base_path ?>components/iphone-valuator/valuator.js?v=1.0" defer></script>
+<script src="<?= $_iv_base_path ?>components/iphone-valuator/valuator.js?v=<?= file_exists($_iv_component_dir . '/valuator.js') ? filemtime($_iv_component_dir . '/valuator.js') : time() ?>" defer></script>
 <!-- END IPHONE VALUATOR COMPONENT -->

@@ -151,9 +151,24 @@ class GoogleSheetsService
             $ansWarranty = $answers['warranty_status'] ?? 'Under 11 Months';
         }
         
-        $ansBill  = (!empty($answers['invoice']) || (isset($answers['bill_invoice']) && $answers['bill_invoice'] === 'Yes')) ? 'YES' : 'NO';
-        $ansBox   = (!empty($answers['box']) || (isset($answers['has_box']) && $answers['has_box'] === 'Yes')) ? 'YES' : 'NO';
-        $ansCable = (!empty($answers['charger']) || (isset($answers['has_cable']) && $answers['has_cable'] === 'Yes')) ? 'YES' : 'NO';
+        // Inclusions & Documents (Handles both valuator missing deductions and questionnaire booleans)
+        if (isset($answers['invoice'])) {
+            $ansBill = empty($answers['invoice']) ? 'YES' : 'NO';
+        } else {
+            $ansBill = (isset($answers['bill_invoice']) && strcasecmp((string)$answers['bill_invoice'], 'No') === 0) ? 'NO' : 'YES';
+        }
+
+        if (isset($answers['box'])) {
+            $ansBox = empty($answers['box']) ? 'YES' : 'NO';
+        } else {
+            $ansBox = (isset($answers['has_box']) && strcasecmp((string)$answers['has_box'], 'No') === 0) ? 'NO' : 'YES';
+        }
+
+        if (isset($answers['charger'])) {
+            $ansCable = empty($answers['charger']) ? 'YES' : 'NO';
+        } else {
+            $ansCable = (isset($answers['has_cable']) && strcasecmp((string)$answers['has_cable'], 'No') === 0) ? 'NO' : 'YES';
+        }
 
         // 3. Failed Tests and Stats Calculation
         $testChecks = [
@@ -583,6 +598,57 @@ class GoogleSheetsService
                    . "• Reported Issues:      " . ($rowData['failed_test_names'] !== 'None (All Passed)' ? '⚠️ ' . $rowData['failed_test_names'] : '✅ Clean Device (All Tests Passed)') . "\n"
                    . "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n";
 
+        // Visual Styling Helpers for Email Matrix
+        $tagPass = function($text) {
+            return "<strong style='color:#1E8E3E;background:#E8F8EE;padding:2px 8px;border-radius:6px;font-size:12.5px;display:inline-block;'>{$text}</strong>";
+        };
+        $tagFail = function($text) {
+            return "<strong style='color:#D70015;background:#FFF0F0;padding:2px 8px;border-radius:6px;font-size:12.5px;display:inline-block;'>{$text}</strong>";
+        };
+        $tagWarn = function($text) {
+            return "<strong style='color:#E37400;background:#FFF6E6;padding:2px 8px;border-radius:6px;font-size:12.5px;display:inline-block;'>{$text}</strong>";
+        };
+
+        // Screen & Display Statuses
+        $dispWorkTag   = ($rowData['display_working'] === 'YES') ? $tagPass('✅ Working (Clear)') : $tagFail('❌ Fault / Blackout');
+        $touchTag      = ($rowData['touchscreen_working'] === 'YES') ? $tagPass('✅ Responsive') : $tagFail('❌ Faulty');
+        $frontGlassTag = ($rowData['screen_cracked'] === 'NO') ? $tagPass('✅ Intact (No Cracks)') : $tagFail('❌ Glass Cracked');
+        $scratchTag    = (stripos($scrCond, 'Heavy') !== false || stripos($scrCond, 'Scratches') !== false) ? $tagFail($scratchTxt) : $tagPass('✅ Scratch-Free');
+        $linesTag      = ($rowData['display_lines_spots'] === 'NO') ? $tagPass('✅ Clean (No Defects)') : $tagFail('❌ Defect Present');
+        $dispOrigTag   = ($rowData['original_display'] === 'YES') ? $tagPass('✅ Original Screen') : $tagWarn('⚠️ Replaced Screen');
+
+        // Body & Frame Statuses
+        $bodyMarkTag   = (strpos($rowData['body_condition'] ?? '', 'Clean') !== false) ? $tagPass('✅ Clean Metal Frame') : $tagFail('❌ Has Dents / Body Scratches');
+        $bentTag       = ($rowData['phone_bent'] === 'NO') ? $tagPass('✅ Flat & Straight') : $tagFail('❌ Frame Bent / Curved');
+        $backGlassTag  = ($rowData['body_damage'] === 'NO') ? $tagPass('✅ Intact') : $tagFail('❌ Back Glass Broken');
+        $camGlassTag   = ($rowData['camera_glass_condition'] === 'NO') ? $tagPass('✅ Clear & Intact') : $tagFail('❌ Glass Broken');
+        $partsTag      = ($rowData['missing_parts'] === 'NO') ? $tagPass('✅ All Intact') : $tagFail('❌ Missing Parts');
+
+        // Functional Hardware Statuses
+        $fCamTag       = ($rowData['front_camera'] === 'YES') ? $tagPass('✅ Working') : $tagFail('❌ Faulty');
+        $rCamTag       = ($rowData['rear_camera'] === 'YES') ? $tagPass('✅ Working') : $tagFail('❌ Faulty');
+        $flashTag      = ($rowData['camera_flash'] === 'YES') ? $tagPass('✅ Working') : $tagFail('❌ Faulty');
+        $bioTag        = ($rowData['face_id_touch_id'] === 'YES') ? $tagPass('✅ Working') : $tagFail('❌ Broken');
+        $chargeTag     = ($rowData['charging_port'] === 'YES') ? $tagPass('✅ Port & Fast Charge OK') : $tagFail('❌ Port Issue');
+        $speakerTag    = ($rowData['speaker'] === 'YES') ? $tagPass('✅ Loudspeaker OK') : $tagFail('❌ Audio Issue');
+        $receiverTag   = ($rowData['ear_receiver'] === 'YES') ? $tagPass('✅ Clear Call Audio') : $tagFail('❌ Receiver Issue');
+        $micTag        = ($rowData['microphone'] === 'YES') ? $tagPass('✅ Working') : $tagFail('❌ Faulty');
+        $buttonsTag    = ($rowData['power_button'] === 'YES' && $rowData['volume_buttons'] === 'YES') ? $tagPass('✅ Power & Volume OK') : $tagFail('❌ Button Issue');
+        $silentTag     = ($rowData['silent_switch'] === 'YES') ? $tagPass('✅ Working') : $tagFail('❌ Faulty');
+        $wirelessTag   = ($rowData['wifi'] === 'YES' && $rowData['bluetooth'] === 'YES') ? $tagPass('✅ Connected OK') : $tagFail('❌ Wireless Issue');
+        $networkTag    = ($rowData['mobile_network_sim'] === 'YES') ? $tagPass('✅ Signal OK') : $tagFail('❌ Network Issue');
+        $gpsTag        = ($rowData['gps'] === 'YES') ? $tagPass('✅ Working') : $tagFail('❌ Faulty');
+
+        // Battery, History & Accessories Statuses
+        $batteryTag    = (strpos($batteryTxt, 'Above') !== false) ? $tagPass("🟢 {$batteryTxt}") : $tagFail("🔴 {$batteryTxt}");
+        $liquidTag     = ($rowData['liquid_damage'] === 'NO') ? $tagPass('✅ Safe (No Water Damage)') : $tagFail('❌ Liquid Damaged');
+        $repairsTag    = ($rowData['major_component_replaced'] === 'NO') ? $tagPass('✅ None (Original)') : $tagWarn('⚠️ Replaced: ' . $rowData['replaced_component']);
+        
+        // Box, Charger, Bill (Green if YES / selected, Red if NO / missing)
+        $boxTag        = ($rowData['original_box'] === 'YES') ? $tagPass('✅ Available (YES)') : $tagFail('❌ Missing (NO)');
+        $chargerTag    = ($rowData['original_cable_adapter'] === 'YES') ? $tagPass('✅ Available (YES)') : $tagFail('❌ Missing (NO)');
+        $billTag       = ($rowData['original_bill'] === 'YES') ? $tagPass('✅ Available (YES)') : $tagFail('❌ Missing (NO)');
+
         // HTML Version
         $htmlBody = "
         <div style='font-family:-apple-system,BlinkMacSystemFont,\"Segoe UI\",Roboto,sans-serif;max-width:650px;margin:0 auto;background:#F5F5F7;padding:20px;color:#1D1D1F;'>
@@ -617,65 +683,66 @@ class GoogleSheetsService
                 <!-- Display & Screen Section -->
                 <div style='border:1px solid #E5E5EA;border-radius:12px;padding:16px;margin-bottom:16px;'>
                     <h4 style='margin:0 0 10px 0;font-size:13px;color:#111111;text-transform:uppercase;letter-spacing:0.04em;'>🖥️ Screen &amp; Display Check</h4>
-                    <table style='width:100%;font-size:13px;line-height:1.8;border-collapse:collapse;'>
-                        <tr><td style='width:45%;color:#6E6E73;'>Display Power / Working</td><td>" . ($rowData['display_working'] === 'YES' ? '✅ Working (Clear)' : '<strong style="color:#D70015;">❌ Fault / Blackout</strong>') . "</td></tr>
-                        <tr><td style='color:#6E6E73;'>Touchscreen Response</td><td>" . ($rowData['touchscreen_working'] === 'YES' ? '✅ Responsive' : '<strong style="color:#D70015;">❌ Faulty</strong>') . "</td></tr>
-                        <tr><td style='color:#6E6E73;'>Front Screen Glass</td><td>" . ($rowData['screen_cracked'] === 'NO' ? '✅ Intact (No Cracks)' : '<strong style="color:#D70015;">❌ Glass Cracked</strong>') . "</td></tr>
-                        <tr><td style='color:#6E6E73;'>Screen Scratch Level</td><td><strong>{$scratchTxt}</strong></td></tr>
-                        <tr><td style='color:#6E6E73;'>Lines / Dots / Spots</td><td>" . ($rowData['display_lines_spots'] === 'NO' ? '✅ Clean (No Defects)' : '<strong style="color:#D70015;">❌ Defect Present</strong>') . "</td></tr>
-                        <tr><td style='color:#6E6E73;'>Display Originality</td><td>" . ($rowData['original_display'] === 'YES' ? '✅ Original Apple Screen' : '<strong style="color:#E37400;">⚠️ Replaced Screen</strong>') . "</td></tr>
+                    <table style='width:100%;font-size:13px;line-height:1.9;border-collapse:collapse;'>
+                        <tr><td style='width:45%;color:#6E6E73;'>Display Power / Working</td><td>{$dispWorkTag}</td></tr>
+                        <tr><td style='color:#6E6E73;'>Touchscreen Response</td><td>{$touchTag}</td></tr>
+                        <tr><td style='color:#6E6E73;'>Front Screen Glass</td><td>{$frontGlassTag}</td></tr>
+                        <tr><td style='color:#6E6E73;'>Screen Scratch Level</td><td>{$scratchTag}</td></tr>
+                        <tr><td style='color:#6E6E73;'>Lines / Dots / Spots</td><td>{$linesTag}</td></tr>
+                        <tr><td style='color:#6E6E73;'>Display Originality</td><td>{$dispOrigTag}</td></tr>
                     </table>
                 </div>
 
                 <!-- Body & Chassis Section -->
                 <div style='border:1px solid #E5E5EA;border-radius:12px;padding:16px;margin-bottom:16px;'>
                     <h4 style='margin:0 0 10px 0;font-size:13px;color:#111111;text-transform:uppercase;letter-spacing:0.04em;'>📱 Body &amp; Frame Condition</h4>
-                    <table style='width:100%;font-size:13px;line-height:1.8;border-collapse:collapse;'>
-                        <tr><td style='width:45%;color:#6E6E73;'>Metal Frame Marks</td><td><strong>{$bodyCond}</strong></td></tr>
-                        <tr><td style='color:#6E6E73;'>Chassis / Bent Body</td><td>" . ($rowData['phone_bent'] === 'NO' ? '✅ Flat &amp; Straight' : '<strong style="color:#D70015;">❌ Frame Bent / Curved</strong>') . "</td></tr>
-                        <tr><td style='color:#6E6E73;'>Back Glass Condition</td><td>" . ($rowData['body_damage'] === 'NO' ? '✅ Intact' : '<strong style="color:#D70015;">❌ Back Glass Broken</strong>') . "</td></tr>
-                        <tr><td style='color:#6E6E73;'>Camera Lens Glass</td><td>" . ($rowData['camera_glass_condition'] === 'NO' ? '✅ Clear &amp; Intact' : '<strong style="color:#D70015;">❌ Glass Broken</strong>') . "</td></tr>
-                        <tr><td style='color:#6E6E73;'>Parts / Screws</td><td>" . ($rowData['missing_parts'] === 'NO' ? '✅ All Intact' : '<strong style="color:#D70015;">❌ Missing Parts</strong>') . "</td></tr>
+                    <table style='width:100%;font-size:13px;line-height:1.9;border-collapse:collapse;'>
+                        <tr><td style='width:45%;color:#6E6E73;'>Metal Frame Marks</td><td>{$bodyMarkTag}</td></tr>
+                        <tr><td style='color:#6E6E73;'>Chassis / Bent Body</td><td>{$bentTag}</td></tr>
+                        <tr><td style='color:#6E6E73;'>Back Glass Condition</td><td>{$backGlassTag}</td></tr>
+                        <tr><td style='color:#6E6E73;'>Camera Lens Glass</td><td>{$camGlassTag}</td></tr>
+                        <tr><td style='color:#6E6E73;'>Parts / Screws</td><td>{$partsTag}</td></tr>
                     </table>
                 </div>
 
                 <!-- Functional Hardware Section -->
                 <div style='border:1px solid #E5E5EA;border-radius:12px;padding:16px;margin-bottom:16px;'>
                     <h4 style='margin:0 0 10px 0;font-size:13px;color:#111111;text-transform:uppercase;letter-spacing:0.04em;'>⚙️ Hardware &amp; Component Tests</h4>
-                    <table style='width:100%;font-size:13px;line-height:1.8;border-collapse:collapse;'>
-                        <tr><td style='width:45%;color:#6E6E73;'>Front Camera</td><td>" . ($rowData['front_camera'] === 'YES' ? '✅ Working' : '<strong style="color:#D70015;">❌ Faulty</strong>') . "</td></tr>
-                        <tr><td style='color:#6E6E73;'>Rear Main Camera</td><td>" . ($rowData['rear_camera'] === 'YES' ? '✅ Working' : '<strong style="color:#D70015;">❌ Faulty</strong>') . "</td></tr>
-                        <tr><td style='color:#6E6E73;'>Camera Flash</td><td>" . ($rowData['camera_flash'] === 'YES' ? '✅ Working' : '<strong style="color:#D70015;">❌ Faulty</strong>') . "</td></tr>
-                        <tr><td style='color:#6E6E73;'>Face ID / Biometrics</td><td>" . ($rowData['face_id_touch_id'] === 'YES' ? '✅ Working' : '<strong style="color:#D70015;">❌ Broken</strong>') . "</td></tr>
-                        <tr><td style='color:#6E6E73;'>Charging Port</td><td>" . ($rowData['charging_port'] === 'YES' ? '✅ Port &amp; Fast Charge OK' : '<strong style="color:#D70015;">❌ Port Issue</strong>') . "</td></tr>
-                        <tr><td style='color:#6E6E73;'>Speaker &amp; Audio</td><td>" . ($rowData['speaker'] === 'YES' ? '✅ Loudspeaker OK' : '<strong style="color:#D70015;">❌ Audio Issue</strong>') . "</td></tr>
-                        <tr><td style='color:#6E6E73;'>Earpiece / Receiver</td><td>" . ($rowData['ear_receiver'] === 'YES' ? '✅ Clear Call Audio' : '<strong style="color:#D70015;">❌ Receiver Issue</strong>') . "</td></tr>
-                        <tr><td style='color:#6E6E73;'>Microphone</td><td>" . ($rowData['microphone'] === 'YES' ? '✅ Working' : '<strong style="color:#D70015;">❌ Faulty</strong>') . "</td></tr>
-                        <tr><td style='color:#6E6E73;'>Physical Buttons</td><td>" . ($rowData['power_button'] === 'YES' && $rowData['volume_buttons'] === 'YES' ? '✅ Power &amp; Volume OK' : '<strong style="color:#D70015;">❌ Button Issue</strong>') . "</td></tr>
-                        <tr><td style='color:#6E6E73;'>Silent Switch</td><td>" . ($rowData['silent_switch'] === 'YES' ? '✅ Working' : '<strong style="color:#D70015;">❌ Faulty</strong>') . "</td></tr>
-                        <tr><td style='color:#6E6E73;'>Wi-Fi &amp; Bluetooth</td><td>" . ($rowData['wifi'] === 'YES' && $rowData['bluetooth'] === 'YES' ? '✅ Connected OK' : '<strong style="color:#D70015;">❌ Wireless Issue</strong>') . "</td></tr>
-                        <tr><td style='color:#6E6E73;'>Mobile SIM / Network</td><td>" . ($rowData['mobile_network_sim'] === 'YES' ? '✅ Signal OK' : '<strong style="color:#D70015;">❌ Network Issue</strong>') . "</td></tr>
-                        <tr><td style='color:#6E6E73;'>GPS Location</td><td>" . ($rowData['gps'] === 'YES' ? '✅ Working' : '<strong style="color:#D70015;">❌ Faulty</strong>') . "</td></tr>
+                    <table style='width:100%;font-size:13px;line-height:1.9;border-collapse:collapse;'>
+                        <tr><td style='width:45%;color:#6E6E73;'>Front Camera</td><td>{$fCamTag}</td></tr>
+                        <tr><td style='color:#6E6E73;'>Rear Main Camera</td><td>{$rCamTag}</td></tr>
+                        <tr><td style='color:#6E6E73;'>Camera Flash</td><td>{$flashTag}</td></tr>
+                        <tr><td style='color:#6E6E73;'>Face ID / Biometrics</td><td>{$bioTag}</td></tr>
+                        <tr><td style='color:#6E6E73;'>Charging Port</td><td>{$chargeTag}</td></tr>
+                        <tr><td style='color:#6E6E73;'>Speaker &amp; Audio</td><td>{$speakerTag}</td></tr>
+                        <tr><td style='color:#6E6E73;'>Earpiece / Receiver</td><td>{$receiverTag}</td></tr>
+                        <tr><td style='color:#6E6E73;'>Microphone</td><td>{$micTag}</td></tr>
+                        <tr><td style='color:#6E6E73;'>Physical Buttons</td><td>{$buttonsTag}</td></tr>
+                        <tr><td style='color:#6E6E73;'>Silent Switch</td><td>{$silentTag}</td></tr>
+                        <tr><td style='color:#6E6E73;'>Wi-Fi &amp; Bluetooth</td><td>{$wirelessTag}</td></tr>
+                        <tr><td style='color:#6E6E73;'>Mobile SIM / Network</td><td>{$networkTag}</td></tr>
+                        <tr><td style='color:#6E6E73;'>GPS Location</td><td>{$gpsTag}</td></tr>
                     </table>
                 </div>
 
                 <!-- Battery, Warranty & Inclusions -->
                 <div style='border:1px solid #E5E5EA;border-radius:12px;padding:16px;margin-bottom:16px;'>
                     <h4 style='margin:0 0 10px 0;font-size:13px;color:#111111;text-transform:uppercase;letter-spacing:0.04em;'>🔋 Battery, History &amp; Inclusions</h4>
-                    <table style='width:100%;font-size:13px;line-height:1.8;border-collapse:collapse;'>
-                        <tr><td style='width:45%;color:#6E6E73;'>Battery Health</td><td><strong>{$batteryEmo}</strong></td></tr>
-                        <tr><td style='color:#6E6E73;'>Liquid / Water Damage</td><td>" . ($rowData['liquid_damage'] === 'NO' ? '✅ Safe (No Water Damage)' : '<strong style="color:#D70015;">❌ Liquid Damaged</strong>') . "</td></tr>
-                        <tr><td style='color:#6E6E73;'>Component Repairs</td><td>" . ($rowData['major_component_replaced'] === 'NO' ? '✅ None (Original)' : '<strong style="color:#E37400;">⚠️ Replaced: ' . $rowData['replaced_component'] . '</strong>') . "</td></tr>
+                    <table style='width:100%;font-size:13px;line-height:1.9;border-collapse:collapse;'>
+                        <tr><td style='width:45%;color:#6E6E73;'>Battery Health</td><td>{$batteryTag}</td></tr>
+                        <tr><td style='color:#6E6E73;'>Liquid / Water Damage</td><td>{$liquidTag}</td></tr>
+                        <tr><td style='color:#6E6E73;'>Component Repairs</td><td>{$repairsTag}</td></tr>
                         <tr><td style='color:#6E6E73;'>Warranty Period</td><td><strong>{$warrantyTxt}</strong></td></tr>
-                        <tr><td style='color:#6E6E73;'>Original Box</td><td>" . ($rowData['original_box'] === 'YES' ? '✅ YES (Verify Box)' : '❌ NO') . "</td></tr>
-                        <tr><td style='color:#6E6E73;'>Original Charger / Cable</td><td>" . ($rowData['original_cable_adapter'] === 'YES' ? '✅ YES (Verify Cable)' : '❌ NO') . "</td></tr>
-                        <tr><td style='color:#6E6E73;'>Purchase Invoice / Bill</td><td>" . ($rowData['original_bill'] === 'YES' ? '✅ YES (Verify Bill)' : '❌ NO') . "</td></tr>
+                        <tr><td style='color:#6E6E73;'>📦 Original Box</td><td>{$boxTag}</td></tr>
+                        <tr><td style='color:#6E6E73;'>⚡ Original Charger / Cable</td><td>{$chargerTag}</td></tr>
+                        <tr><td style='color:#6E6E73;'>🧾 Purchase Invoice / Bill</td><td>{$billTag}</td></tr>
                     </table>
                 </div>
 
                 <!-- Reported Issues Summary -->
-                <div style='background:#F9F9FB;border:1px dashed #D2D2D7;border-radius:10px;padding:12px 14px;font-size:12.5px;color:#48484A;'>
-                    <strong>📋 Reported Issues by Customer:</strong> " . ($rowData['failed_test_names'] !== 'None (All Passed)' ? "<span style='color:#D70015;font-weight:700;'>{$rowData['failed_test_names']}</span>" : "<span style='color:#1E8E3E;font-weight:700;'>None (All Checks Passed)</span>") . "
+                <div style='background:#FFF5F5;border:1px solid #FFD2D2;border-radius:10px;padding:14px 16px;font-size:13px;'>
+                    <strong style='color:#111111;'>📋 Reported Faults &amp; Deductions:</strong><br>
+                    " . ($rowData['failed_test_names'] !== 'None (All Passed)' ? "<span style='color:#D70015;font-weight:700;margin-top:4px;display:inline-block;'>⚠️ {$rowData['failed_test_names']}</span>" : "<span style='color:#1E8E3E;font-weight:700;margin-top:4px;display:inline-block;'>✅ Clean Device (No Faults Reported)</span>") . "
                 </div>
 
             </div>
