@@ -77,14 +77,15 @@ $current_year = date('Y');
                 <div class="footer-grid-col footer-tab-panel" id="footer-tab-why" role="tabpanel">
                     <h4 class="footer-col-title">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
-                        <span>Why CashSecond</span>
+                        <span>Process &amp; Service</span>
                     </h4>
                     <ul class="footer-links-list">
-                        <li><a href="<?= $base_path ?>index.php#buyback-advantages">Verified Advantages</a></li>
-                        <li><a href="<?= $base_path ?>index.php#how-it-works">How It Works</a></li>
-                        <li><a href="<?= $base_path ?>index.php#iphone-models">Supported iPhone Models</a></li>
-                        <li><a href="<?= $base_path ?>index.php#faq">Frequently Asked Questions</a></li>
-                        <li><a href="<?= $base_path ?>index.php#contact">Contact Store Team</a></li>
+                        <li><a href="<?= $base_path ?>index.php#iphone-models">Sell Old iPhone Models</a></li>
+                        <li><a href="<?= $base_path ?>index.php#how-it-works">3-Step Selling Process</a></li>
+                        <li><a href="<?= $base_path ?>index.php#buyback-advantages">Best Price Guarantee</a></li>
+                        <li><a href="<?= $base_path ?>index.php#coverage">Mumbai Service Areas</a></li>
+                        <li><a href="<?= $base_path ?>index.php#faq">Selling FAQs &amp; Help</a></li>
+                        <li><a href="<?= $base_path ?>index.php#contact">Support &amp; Store Location</a></li>
                     </ul>
                 </div>
 

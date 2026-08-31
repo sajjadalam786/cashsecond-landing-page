@@ -20,6 +20,14 @@ $canonical_url = $canonical_url ?? ($seo['site_url'] ?? 'http://localhost/cashse
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-MQP673B');</script>
+    <!-- End Google Tag Manager -->
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
     <title><?= htmlspecialchars($page_title); ?></title>
@@ -50,10 +58,15 @@ $canonical_url = $canonical_url ?? ($seo['site_url'] ?? 'http://localhost/cashse
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <!-- Main Stylesheet -->
-    <link rel="stylesheet" href="<?= $base_path ?>assets/css/style.css?v=51.0">
+    <link rel="stylesheet" href="<?= $base_path ?>assets/css/style.css?v=52.0">
     <!-- valuator.css is loaded directly by components/iphone-valuator/valuator.php -->
 </head>
 <body id="top">
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MQP673B"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+
     <!-- Main Brand Header -->
     <header class="site-header" id="site-header">
         <div class="container header-inner">
@@ -64,11 +77,12 @@ $canonical_url = $canonical_url ?? ($seo['site_url'] ?? 'http://localhost/cashse
 
             <!-- Desktop Navigation Menu -->
             <nav class="nav-menu" aria-label="Main Navigation">
-                <a href="<?= $base_path ?>index.php#buyback-advantages" class="nav-link">Why Us</a>
-                <a href="<?= $base_path ?>index.php#how-it-works" class="nav-link">How It Works</a>
-                <a href="<?= $base_path ?>index.php#iphone-models" class="nav-link">iPhone Models</a>
-                <a href="<?= $base_path ?>index.php#faq" class="nav-link">FAQs</a>
-                <a href="<?= $base_path ?>index.php#contact" class="nav-link">Contact</a>
+                <a href="<?= $base_path ?>index.php#iphone-models" class="nav-link">Sell Old iPhone</a>
+                <a href="<?= $base_path ?>index.php#how-it-works" class="nav-link">3-Step Process</a>
+                <a href="<?= $base_path ?>index.php#buyback-advantages" class="nav-link">Best Price Guarantee</a>
+                <a href="<?= $base_path ?>index.php#coverage" class="nav-link">Mumbai Service Areas</a>
+                <a href="<?= $base_path ?>index.php#faq" class="nav-link">Selling FAQs</a>
+                <a href="<?= $base_path ?>index.php#contact" class="nav-link">Support &amp; Location</a>
             </nav>
 
             <!-- Desktop Header Quick Actions -->

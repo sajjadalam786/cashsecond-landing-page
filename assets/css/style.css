@@ -432,7 +432,7 @@ a:hover .btn-iphone-thumb {
 .nav-menu {
     display: flex;
     align-items: center;
-    gap: 26px;
+    gap: clamp(12px, 1.3vw, 22px);
     list-style: none;
     margin: 0;
     padding: 0;
@@ -440,12 +440,13 @@ a:hover .btn-iphone-thumb {
 
 .nav-link {
     font-family: var(--font-sans);
-    font-size: 14px;
-    font-weight: 500;
+    font-size: 13.5px;
+    font-weight: 600;
     color: #1D1D1F;
     text-decoration: none;
     position: relative;
     padding: 6px 0;
+    white-space: nowrap;
     transition: color 0.2s ease;
     letter-spacing: -0.01em;
 }
