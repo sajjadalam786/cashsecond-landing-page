@@ -352,7 +352,7 @@
 
         // Update device badge
         const badgeText = state.model
-            ? state.model.replace('Apple ', '') + (state.storage ? ' · ' + state.storage : '')
+            ? state.model.replace(/^Apple\s+/i, '') + (state.storage ? ' · ' + state.storage : '')
             : 'Select iPhone';
         if (deviceBadge) deviceBadge.textContent = badgeText;
 
@@ -436,25 +436,52 @@
         }).join('');
     }
 
-    // STEP 1 — Storage variant
+    // STEP 1 — Storage variant (2nd step: Only step showing the CSV Base Value)
     function buildVariantSelect(step) {
         const storages = state.model && MODELS_MAP[state.model]
             ? Object.keys(MODELS_MAP[state.model])
             : [];
 
+        // Find max base price directly from CSV matrix for this selected model
+        let maxModelPrice = 0;
+        storages.forEach(s => {
+            const pId = MODELS_MAP[state.model][s];
+            if (pId && MATRIX[pId] && MATRIX[pId].base_price > maxModelPrice) {
+                maxModelPrice = MATRIX[pId].base_price;
+            }
+        });
+
         return `
         <div class="iv-step-card">
+            ${maxModelPrice > 0 ? `
+            <div class="iv-upto-hero">
+                <div class="iv-upto-hero-top">
+                    <span class="iv-upto-dot"></span>
+                    <span class="iv-upto-label">ESTIMATED MAXIMUM VALUE</span>
+                </div>
+                <div class="iv-upto-hero-price">
+                    <span class="iv-upto-prefix">Get Up To</span>
+                    <span class="iv-upto-val">${fmt(maxModelPrice)}</span>
+                </div>
+                <div class="iv-upto-hero-sub">Select your internal storage capacity to proceed</div>
+            </div>` : ''}
+
             <div class="iv-step-badge-row">
                 <span class="iv-badge-mand">Mandatory • Select 1</span>
             </div>
             <p class="iv-question-title">Which ${state.model ? state.model.replace('Apple ','') : 'iPhone'} storage?</p>
-            <p class="iv-question-desc">Select your internal storage capacity (Mandatory).</p>
+            <p class="iv-question-desc">Select your internal storage capacity.</p>
             <div class="iv-options-grid iv-cols-2">
                 ${storages.map(s => {
                     const selected = s === state.storage ? ' iv-selected' : '';
-                    return `<button type="button" class="iv-opt${selected}" data-storage="${escHtml(s)}">
+                    const pId = MODELS_MAP[state.model] ? MODELS_MAP[state.model][s] : null;
+                    const bPrice = (pId && MATRIX[pId]) ? MATRIX[pId].base_price : 0;
+                    return `<button type="button" class="iv-opt iv-opt-variant${selected}" data-storage="${escHtml(s)}">
                         <span class="iv-opt-icon">💾</span>
-                        <span class="iv-opt-content"><span class="iv-opt-title">${escHtml(s)}</span></span>
+                        <span class="iv-opt-content">
+                            <span class="iv-opt-title">${escHtml(s)}</span>
+                            ${bPrice > 0 ? `<span class="iv-opt-upto-tag">Get Up To ${fmt(bPrice)}</span>` : ''}
+                        </span>
                     </button>`;
                 }).join('')}
             </div>
