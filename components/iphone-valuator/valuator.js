@@ -86,7 +86,14 @@
             desc: 'Select your internal storage capacity (Mandatory).',
             type: 'variant_select',
         },
-        // 2 — Age (mutually exclusive radio)
+        // 2 — Base Valuation Estimate (Dedicated Step 3)
+        {
+            id: 'base_estimate',
+            title: 'Your Device Valuation Estimate',
+            desc: 'Instant calculation based on selected model & storage.',
+            type: 'base_estimate',
+        },
+        // 3 — Age (mutually exclusive radio)
         {
             id: 'age',
             title: 'When did you buy this iPhone?',
@@ -378,6 +385,7 @@
         switch (step.type) {
             case 'model_search':   return buildModelSearch(step);
             case 'variant_select': return buildVariantSelect(step);
+            case 'base_estimate':  return buildBaseEstimate(step);
             case 'radio':          return buildRadio(step);
             case 'multi':          return buildMultiSelect(step);
             case 'accessories':    return buildAccessories(step);
@@ -392,13 +400,19 @@
         btnBack.style.display = (state.step === 0) ? 'none' : '';
 
         const isContact = step.type === 'lead_capture';
-        btnNext.innerHTML = isContact
-            ? '<span>Submit & Reveal Value</span><span class="iv-spinner" style="display:none"></span>'
-            : '<span>Next →</span>';
-        btnNext.className = 'iv-btn-next' + (isContact ? ' iv-btn-submit' : '');
+        const isBaseEst = step.type === 'base_estimate';
 
-        // Auto-advance disabled for model / multi steps
-        const autoReady = step.type === 'radio' || step.type === 'accessories';
+        if (isContact) {
+            btnNext.innerHTML = '<span>Submit & Reveal Value</span><span class="iv-spinner" style="display:none"></span>';
+            btnNext.className = 'iv-btn-next iv-btn-submit';
+        } else if (isBaseEst) {
+            btnNext.innerHTML = '<span>Continue Inspection →</span>';
+            btnNext.className = 'iv-btn-next';
+        } else {
+            btnNext.innerHTML = '<span>Next →</span>';
+            btnNext.className = 'iv-btn-next';
+        }
+
         btnNext.disabled = false; // always allow manual next
     }
 
@@ -436,54 +450,72 @@
         }).join('');
     }
 
-    // STEP 1 — Storage variant (2nd step: Only step showing the CSV Base Value)
+    // STEP 1 — Storage variant (Step 2 of Form: Clean Selection)
     function buildVariantSelect(step) {
         const storages = state.model && MODELS_MAP[state.model]
             ? Object.keys(MODELS_MAP[state.model])
             : [];
 
-        // Find max base price directly from CSV matrix for this selected model
-        let maxModelPrice = 0;
-        storages.forEach(s => {
-            const pId = MODELS_MAP[state.model][s];
-            if (pId && MATRIX[pId] && MATRIX[pId].base_price > maxModelPrice) {
-                maxModelPrice = MATRIX[pId].base_price;
-            }
-        });
-
         return `
         <div class="iv-step-card">
-            ${maxModelPrice > 0 ? `
-            <div class="iv-upto-hero">
-                <div class="iv-upto-hero-top">
-                    <span class="iv-upto-dot"></span>
-                    <span class="iv-upto-label">ESTIMATED MAXIMUM VALUE</span>
-                </div>
-                <div class="iv-upto-hero-price">
-                    <span class="iv-upto-prefix">Get Up To</span>
-                    <span class="iv-upto-val">${fmt(maxModelPrice)}</span>
-                </div>
-                <div class="iv-upto-hero-sub">Select your internal storage capacity to proceed</div>
-            </div>` : ''}
-
             <div class="iv-step-badge-row">
                 <span class="iv-badge-mand">Mandatory • Select 1</span>
             </div>
-            <p class="iv-question-title">Which ${state.model ? state.model.replace('Apple ','') : 'iPhone'} storage?</p>
+            <p class="iv-question-title">Which ${state.model ? state.model.replace(/^Apple\s+/i,'') : 'iPhone'} storage?</p>
             <p class="iv-question-desc">Select your internal storage capacity.</p>
             <div class="iv-options-grid iv-cols-2">
                 ${storages.map(s => {
                     const selected = s === state.storage ? ' iv-selected' : '';
-                    const pId = MODELS_MAP[state.model] ? MODELS_MAP[state.model][s] : null;
-                    const bPrice = (pId && MATRIX[pId]) ? MATRIX[pId].base_price : 0;
-                    return `<button type="button" class="iv-opt iv-opt-variant${selected}" data-storage="${escHtml(s)}">
+                    return `<button type="button" class="iv-opt${selected}" data-storage="${escHtml(s)}">
                         <span class="iv-opt-icon">💾</span>
                         <span class="iv-opt-content">
                             <span class="iv-opt-title">${escHtml(s)}</span>
-                            ${bPrice > 0 ? `<span class="iv-opt-upto-tag">Get Up To ${fmt(bPrice)}</span>` : ''}
                         </span>
                     </button>`;
                 }).join('')}
+            </div>
+        </div>`;
+    }
+
+    // STEP 2 — Dedicated Base Valuation Estimate (Step 3 of Form: Shows Estimated Value)
+    function buildBaseEstimate(step) {
+        computeValuation();
+        const base = state.basePrice || (state.productId && MATRIX[state.productId] ? MATRIX[state.productId].base_price : 0);
+        const deviceName = (state.model ? state.model.replace(/^Apple\s+/i, '') : 'iPhone') + (state.storage ? ' (' + state.storage + ')' : '');
+
+        return `
+        <div class="iv-step-card">
+            <div class="iv-step-badge-row">
+                <span class="iv-badge-bonus">✨ Instant Valuation Estimate</span>
+            </div>
+            
+            <div class="iv-base-estimate-card">
+                <div class="iv-base-dev-badge">📱 ${escHtml(deviceName)}</div>
+                <p class="iv-base-qualify-text">Your iPhone qualifies for maximum buyback value:</p>
+                <div class="iv-base-hero-price">
+                    <span class="iv-base-prefix">Get Up To</span>
+                    <span class="iv-base-amount">${fmt(base)}</span>
+                </div>
+                <p class="iv-base-note">Subject to physical device verification at your doorstep.</p>
+
+                <div class="iv-base-features">
+                    <div class="iv-base-feat-item">
+                        <span class="iv-base-feat-icon">⚡</span>
+                        <span>Instant Spot Cash / UPI</span>
+                    </div>
+                    <div class="iv-base-feat-item">
+                        <span class="iv-base-feat-icon">🚚</span>
+                        <span>Free 2-Hour Mumbai Pickup</span>
+                    </div>
+                    <div class="iv-base-feat-item">
+                        <span class="iv-base-feat-icon">🔒</span>
+                        <span>Certified DoD Data Wipe</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="iv-base-prompt-box">
+                <p>Answer a few quick questions about your phone's physical condition to lock in your exact guaranteed price.</p>
             </div>
         </div>`;
     }
@@ -633,6 +665,7 @@
         switch (step.type) {
             case 'model_search':   wireModelSearch(); break;
             case 'variant_select': wireVariantSelect(); break;
+            case 'base_estimate':  break;
             case 'radio':          wireRadio(step); break;
             case 'multi':          wireMulti(step); break;
             case 'accessories':    wireAccessories(step); break;

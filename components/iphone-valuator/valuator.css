@@ -245,105 +245,144 @@
     animation: ivStepBack 0.2s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-/* Encouragement Hero Banner (Get Up To ₹XX,XXX) */
-.iv-upto-hero {
-    background: linear-gradient(135deg, #F2FAF5 0%, #E8F8EE 100%);
+/* =====================================================
+   STEP 3: DEDICATED ESTIMATED BASE VALUE REVEAL CARD
+   ===================================================== */
+.iv-base-estimate-card {
+    background: linear-gradient(145deg, #F4FAF6 0%, #E6F7ED 100%);
     border: 1.5px solid #A6E3B8;
-    border-radius: var(--iv-radius-md);
-    padding: 13px 16px;
-    margin-bottom: 16px;
-    box-shadow: 0 2px 8px rgba(30, 142, 62, 0.08);
+    border-radius: var(--iv-radius-lg);
+    padding: 22px 20px;
+    margin: 12px 0 16px;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(30, 142, 62, 0.08);
     position: relative;
     overflow: hidden;
 }
 
-.iv-upto-hero::after {
+.iv-base-estimate-card::before {
     content: '';
     position: absolute;
-    top: -20px;
-    right: -20px;
-    width: 70px;
-    height: 70px;
-    background: radial-gradient(circle, rgba(52, 199, 89, 0.2) 0%, transparent 70%);
+    top: -40px;
+    right: -40px;
+    width: 120px;
+    height: 120px;
+    background: radial-gradient(circle, rgba(52, 199, 89, 0.25) 0%, transparent 70%);
     border-radius: 50%;
     pointer-events: none;
 }
 
-.iv-upto-hero-top {
-    display: flex;
+.iv-base-dev-badge {
+    display: inline-flex;
     align-items: center;
     gap: 6px;
-    margin-bottom: 3px;
+    background: #FFFFFF;
+    border: 1px solid rgba(52, 199, 89, 0.35);
+    color: #111111;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 4px 14px;
+    border-radius: var(--iv-radius-pill);
+    margin-bottom: 10px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
 }
 
-.iv-upto-dot {
-    width: 7px;
-    height: 7px;
-    background: #1E8E3E;
-    border-radius: 50%;
-    display: inline-block;
-    box-shadow: 0 0 0 3px rgba(52, 199, 89, 0.3);
-    animation: ivPulseDot 2s infinite;
+.iv-base-qualify-text {
+    font-size: 13.5px;
+    color: #555558;
+    margin: 0 0 8px;
+    font-weight: 500;
 }
 
-@keyframes ivPulseDot {
-    0%, 100% { transform: scale(1); opacity: 1; }
-    50% { transform: scale(1.3); opacity: 0.7; }
-}
-
-.iv-upto-label {
-    font-size: 10.5px;
-    font-weight: 800;
-    color: #1E8E3E;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-}
-
-.iv-upto-hero-price {
+.iv-base-hero-price {
     display: flex;
     align-items: baseline;
-    gap: 6px;
+    justify-content: center;
+    gap: 8px;
+    margin: 4px 0 8px;
 }
 
-.iv-upto-prefix {
-    font-size: 14px;
+.iv-base-prefix {
+    font-size: 17px;
     font-weight: 700;
     color: #3C4043;
     letter-spacing: -0.01em;
 }
 
-.iv-upto-val {
-    font-size: 24px;
-    font-weight: 800;
+.iv-base-amount {
+    font-size: 34px;
+    font-weight: 850;
     color: #1E8E3E;
-    letter-spacing: -0.03em;
-    line-height: 1.1;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    text-shadow: 0 1px 2px rgba(30, 142, 62, 0.15);
 }
 
-.iv-upto-hero-sub {
-    font-size: 11.5px;
-    color: #5F6368;
-    margin-top: 3px;
-    line-height: 1.35;
+.iv-base-note {
+    font-size: 12px;
+    color: #6E6E73;
+    margin: 0 0 16px;
 }
 
-/* Storage Card Up To Price Pill */
-.iv-opt-variant {
-    flex-direction: row;
-    justify-content: space-between;
+.iv-base-features {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.75);
+    border: 1px solid rgba(52, 199, 89, 0.25);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-radius: var(--iv-radius-md);
+    padding: 12px 10px;
 }
 
-.iv-opt-upto-tag {
-    display: inline-block;
-    font-size: 11.5px;
-    font-weight: 700;
-    color: #1E8E3E;
-    background: #E8F8EE;
-    border: 1px solid rgba(52, 199, 89, 0.3);
-    padding: 2px 8px;
-    border-radius: var(--iv-radius-pill);
-    margin-top: 3px;
-    letter-spacing: -0.01em;
+.iv-base-feat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    color: #2D3139;
+    line-height: 1.25;
+}
+
+.iv-base-feat-icon {
+    font-size: 18px;
+}
+
+.iv-base-prompt-box {
+    background: #F5F5F7;
+    border: 1px solid #E5E5EA;
+    border-radius: var(--iv-radius-md);
+    padding: 12px 16px;
+    margin-bottom: 8px;
+}
+
+.iv-base-prompt-box p {
+    margin: 0;
+    font-size: 12.5px;
+    color: #555558;
+    line-height: 1.45;
+    text-align: center;
+}
+
+@media (max-width: 480px) {
+    .iv-base-features {
+        grid-template-columns: 1fr;
+        gap: 8px;
+        text-align: left;
+    }
+    .iv-base-feat-item {
+        flex-direction: row;
+        gap: 8px;
+        font-size: 11.5px;
+        text-align: left;
+    }
+    .iv-base-amount {
+        font-size: 28px;
+    }
 }
 
 /* Badges */
