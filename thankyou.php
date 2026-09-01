@@ -15,10 +15,32 @@ $business = $config['business'] ?? [];
 
 $model        = isset($_GET['model']) ? htmlspecialchars(strip_tags(trim($_GET['model'])), ENT_QUOTES, 'UTF-8') : 'Apple iPhone';
 $variant      = isset($_GET['variant']) ? htmlspecialchars(strip_tags(trim($_GET['variant'])), ENT_QUOTES, 'UTF-8') : '';
-$val          = isset($_GET['val']) ? (int)preg_replace('/[^0-9]/', '', $_GET['val']) : 0;
+$val_param    = isset($_GET['val']) ? trim($_GET['val']) : null;
+$val          = ($val_param !== null && $val_param !== '') ? (int)preg_replace('/[^0-9\-]/', '', $val_param) : null;
 $name         = isset($_GET['name']) ? htmlspecialchars(strip_tags(trim($_GET['name'])), ENT_QUOTES, 'UTF-8') : 'Valued Customer';
 $phone        = isset($_GET['phone']) ? htmlspecialchars(strip_tags(trim($_GET['phone'])), ENT_QUOTES, 'UTF-8') : '';
 $ref_id       = isset($_GET['ref']) ? htmlspecialchars(strip_tags(trim($_GET['ref'])), ENT_QUOTES, 'UTF-8') : 'EXG-' . date('Ymd') . '-' . strtoupper(substr(md5(uniqid()), 0, 4));
+
+// Only if val parameter was completely missing from URL, look up from CSV pricing catalog
+if ($val === null && !empty($model) && $model !== 'Apple iPhone') {
+    $pricing_file = __DIR__ . '/components/iphone-valuator/data/pricing.php';
+    if (file_exists($pricing_file)) {
+        $pData = require $pricing_file;
+        $mMap = $pData['models'] ?? [];
+        $mat  = $pData['matrix'] ?? [];
+        if (!empty($variant) && isset($mMap[$model][$variant]) && isset($mat[$mMap[$model][$variant]])) {
+            $val = (int)($mat[$mMap[$model][$variant]]['base_price'] ?? 0);
+        } elseif (isset($mMap[$model])) {
+            $firstVar = reset($mMap[$model]);
+            if ($firstVar && isset($mat[$firstVar])) {
+                $val = (int)($mat[$firstVar]['base_price'] ?? 0);
+            }
+        }
+    }
+}
+
+// If calculation result is positive show positive, if negative or zero show ₹ 0
+$val_display = ($val !== null && $val > 0) ? ('₹ ' . number_format($val)) : '₹ 0';
 
 $device_display = trim($model . ($variant ? " ($variant)" : ''));
 
@@ -51,7 +73,7 @@ require __DIR__ . '/includes/header.php';
             <div class="thankyou-valuation-hero">
                 <div class="ty-device-name"><?= htmlspecialchars($device_display) ?></div>
                 <div class="ty-amount-caption">Estimated Resale Value</div>
-                <div class="ty-amount-value">₹ <?= $val > 0 ? number_format($val) : '48,500' ?></div>
+                <div class="ty-amount-value"><?= htmlspecialchars($val_display) ?></div>
                 <div class="ty-ref-pill">Booking Ref: <?= htmlspecialchars($ref_id) ?></div>
                 <p class="ty-sub-note">Free Mumbai doorstep pickup • Spot UPI / Cash payment upon physical verification</p>
             </div>

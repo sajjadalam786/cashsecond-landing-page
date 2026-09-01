@@ -228,20 +228,29 @@ function doPost(e) {
       }
     }
 
-    sheet.appendRow(rowValues);
+    var leadIdStr  = String(rowValues[2] || "").trim();
+    var scriptCache = CacheService.getScriptCache();
+    var isDuplicate = leadIdStr ? scriptCache.get("lead_sent_" + leadIdStr) : null;
 
-    // ── SEND NOTIFICATION EMAIL TO STORE ADMINS WITH EMOJIS ─────────────────
-    try {
-      var adminEmail = "wholesalehouse2016@gmail.com, Cashsecondoffice@gmail.com";
-      var leadName   = String(row.full_name || "Customer").trim();
-      var leadPhone  = String(row.whatsapp_number || "").trim();
-      var cleanPhone = leadPhone.replace(/[^0-9]/g, "");
-      var devModel   = String(row.model || "iPhone").trim();
-      var devStorage = String(row.storage || "").trim();
-      var devVal     = String(row.final_estimated_value || "").trim();
-      var devBase    = String(row.base_max_value || "").trim();
-      var leadIdStr  = String(rowValues[2] || "").trim();
-      var timeStr    = String(rowValues[0] + " " + rowValues[1]);
+    if (!isDuplicate) {
+      if (leadIdStr) {
+        scriptCache.put("lead_sent_" + leadIdStr, "1", 300); // 5-minute deduplication window
+      }
+      sheet.appendRow(rowValues);
+
+      // ── SEND SINGLE NOTIFICATION EMAIL TO STORE ADMINS FROM CASHSECOND ────
+      try {
+        var adminEmail = "wholesalehouse2016@gmail.com, Cashsecondoffice@gmail.com";
+        var leadName   = String(row.full_name || "Customer").trim();
+        var leadPhone  = String(row.whatsapp_number || "").trim();
+        var cleanPhone = leadPhone.replace(/[^0-9]/g, "");
+        var devModel   = String(row.model || "iPhone").trim();
+        var devStorage = String(row.storage || "").trim();
+        var devValRaw  = String(row.final_estimated_value || "₹0").trim();
+        var devBaseRaw = String(row.base_max_value || "").trim();
+        var devVal     = devValRaw.indexOf("₹") === -1 ? ("₹" + devValRaw) : devValRaw;
+        var devBase    = devBaseRaw.indexOf("₹") === -1 ? ("₹" + devBaseRaw) : devBaseRaw;
+        var timeStr    = String(rowValues[0] + " " + rowValues[1]);
 
       var waLink = "https://wa.me/91" + cleanPhone + "?text=" + encodeURIComponent("Hi " + leadName + ", this is CashSecond regarding your iPhone valuation of " + devVal + " for " + devModel + " (" + devStorage + "). Ref: " + leadIdStr);
 
@@ -300,6 +309,14 @@ function doPost(e) {
                     + "📋 INSPECTOR SUMMARY:\n"
                     + "• Reported Issues:      " + (row.failed_test_names && row.failed_test_names !== "None" ? "⚠️ " + row.failed_test_names : "✅ Clean Device (All Tests Passed)") + "\n"
                     + "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n";
+
+      /* ============================================================
+         CALCULATION VERIFICATION AUDIT (CAN BE COMMENTED OUT LATER)
+         ============================================================ */
+      if (row.calculation_audit) {
+        emailBody += "\n" + String(row.calculation_audit).trim() + "\n";
+      }
+      /* ============================================================ */
 
       var tagPass = function(t) { return "<strong style='color:#1E8E3E;background:#E8F8EE;padding:2px 8px;border-radius:6px;font-size:12.5px;display:inline-block;white-space:nowrap;'>" + t + "</strong>"; };
       var tagFail = function(t) { return "<strong style='color:#D70015;background:#FFF0F0;padding:2px 8px;border-radius:6px;font-size:12.5px;display:inline-block;white-space:nowrap;'>" + t + "</strong>"; };
@@ -427,16 +444,39 @@ function doPost(e) {
                    + "<div style='background:#FFF5F5;border:1px solid #FFD2D2;border-radius:10px;padding:12px 14px;'>"
                    + "<div style='font-size:12.5px;font-weight:700;color:#111111;margin-bottom:4px;'>📋 Reported Faults &amp; Deductions:</div>"
                    + (row.failed_test_names && row.failed_test_names !== "None" ? "<div style='color:#D70015;font-weight:700;font-size:13px;line-height:1.4;'>⚠️ " + row.failed_test_names + "</div>" : "<div style='color:#1E8E3E;font-weight:700;font-size:13px;line-height:1.4;'>✅ Clean Device (No Faults Reported)</div>")
-                   + "</div>"
+                   + "</div>";
 
-                   + "</td></tr></table>"
-                   + "</td></tr></table>"
-                   + "</body></html>";
+      /* ============================================================
+         CALCULATION VERIFICATION AUDIT (CAN BE COMMENTED OUT LATER)
+         ============================================================ */
+      if (row.calculation_audit) {
+        var cleanAudit = String(row.calculation_audit)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;");
+
+        htmlBody += "<!-- Step-by-Step Calculation Audit Section -->"
+                 + "<div style='margin-top:20px;background:#F8F9FA;border:1.5px solid #0071E3;border-radius:12px;padding:16px 18px;text-align:left;'>"
+                 + "<div style='font-size:13.5px;font-weight:800;color:#0071E3;margin-bottom:8px;'>"
+                 + "📊 Step-by-Step Valuation Calculation Audit (Verification):"
+                 + "</div>"
+                 + "<pre style='background:#FFFFFF;border:1px solid #E5E5EA;border-radius:8px;padding:12px;font-size:12px;line-height:1.6;color:#1C1C1E;font-family:monospace,Consolas,Courier,monospace;white-space:pre-wrap;margin:0;'>"
+                 + cleanAudit
+                 + "</pre>"
+                 + "<div style='font-size:11px;color:#8E8E93;margin-top:6px;'>* This calculation audit block is active for verification. You can easily comment it out in Code.gs.</div>"
+                 + "</div>";
+      }
+      /* ============================================================ */
+
+      htmlBody += "</td></tr></table>"
+                + "</td></tr></table>"
+                + "</body></html>";
 
       var mailResult = "pending";
       try {
         MailApp.sendEmail({
           to: adminEmail,
+          name: "CashSecond",
           subject: emailSubject,
           body: emailBody,
           htmlBody: htmlBody
@@ -444,7 +484,10 @@ function doPost(e) {
         mailResult = "sent_via_MailApp";
       } catch (mErr1) {
         try {
-          GmailApp.sendEmail(adminEmail, emailSubject, emailBody, { htmlBody: htmlBody });
+          GmailApp.sendEmail(adminEmail, emailSubject, emailBody, { 
+            name: "CashSecond",
+            htmlBody: htmlBody 
+          });
           mailResult = "sent_via_GmailApp";
         } catch (mErr2) {
           mailResult = "error: " + mErr1.toString() + " | " + mErr2.toString();
@@ -453,6 +496,7 @@ function doPost(e) {
     } catch (mailErr) {
       mailResult = "outer_error: " + mailErr.toString();
     }
+  }
 
     return ContentService.createTextOutput(JSON.stringify({
       status: "success",
@@ -472,7 +516,6 @@ function doPost(e) {
 }
 
 function doGet(e) {
-  if (e && e.parameter && e.parameter.lead_id) return doPost(e);
   return ContentService.createTextOutput(JSON.stringify({ status: "ok", service: "CashSecond Webhook Live" }))
     .setMimeType(ContentService.MimeType.JSON);
 }

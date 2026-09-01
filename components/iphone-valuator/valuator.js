@@ -276,8 +276,9 @@
         }
 
         const totalDeductAmount = base * (totalDeductPct / 100);
-        // Base value - sum of all faulty percentage values. If negative, clamp to 0.
-        const finalValue = Math.max(0, Math.round(base - totalDeductAmount));
+        const rawCalculated = Math.round(base - totalDeductAmount);
+        // If price goes in minus then show 0, otherwise show exact positive calculated amount
+        const finalValue = Math.max(0, rawCalculated);
 
         state.basePrice   = base;
         state.totalDeduct = totalDeductAmount;

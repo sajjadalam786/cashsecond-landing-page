@@ -53,20 +53,33 @@ class GoogleSheetsService
         $answers  = $leadData['answers'] ?? [];
         $adjustments = $leadData['adjustments'] ?? [];
 
-        $modelName = $device['model'] ?? 'Apple iPhone 13';
-        $variant   = $device['variant'] ?? '128 GB';
+        $modelName = $device['model'] ?? 'Apple iPhone 8';
+        $variant   = $device['variant'] ?? '64 GB';
         $battery   = $device['battery'] ?? ($answers['battery_health'] ?? 'Above 80% (Healthy)');
-        
-        $formatInr = function($val) {
-            $cleaned = preg_replace('/[^0-9]/', '', (string)$val);
-            if (!empty($cleaned) && is_numeric($cleaned)) {
-                return '₹' . number_format((float)$cleaned);
-            }
-            return (string)$val;
-        };
 
-        $baseVal   = $formatInr($device['base_val'] ?? '23220');
-        $finalVal  = $formatInr($device['estimated_val'] ?? '23220');
+        // 1. Always look up exact base price directly from CSV pricing catalog
+        $pricingFile = dirname(__DIR__) . '/components/iphone-valuator/data/pricing.php';
+        $csvBasePrice = 0.0;
+        if (file_exists($pricingFile)) {
+            $pData = require $pricingFile;
+            $mMap = $pData['models'] ?? [];
+            $mat  = $pData['matrix'] ?? [];
+            if (!empty($modelName) && !empty($variant) && isset($mMap[$modelName][$variant]) && isset($mat[$mMap[$modelName][$variant]])) {
+                $productId    = $mMap[$modelName][$variant];
+                $csvBasePrice = (float)($mat[$productId]['base_price'] ?? 0);
+            } elseif (!empty($modelName) && isset($mMap[$modelName])) {
+                $firstVar     = reset($mMap[$modelName]);
+                if ($firstVar && isset($mat[$firstVar])) {
+                    $csvBasePrice = (float)($mat[$firstVar]['base_price'] ?? 0);
+                }
+            }
+        }
+
+        $baseValNum  = ($csvBasePrice > 0) ? $csvBasePrice : (float)preg_replace('/[^0-9.]/', '', (string)($device['base_val'] ?? 0));
+        $finalValNum = (float)preg_replace('/[^0-9.]/', '', (string)($device['estimated_val'] ?? 0));
+
+        $baseVal   = '₹' . number_format($baseValNum);
+        $finalVal  = ($finalValNum > 0) ? ('₹' . number_format($finalValNum)) : '₹0';
 
         $ram = self::$ramMap[$modelName] ?? '6 GB';
 
@@ -330,6 +343,9 @@ class GoogleSheetsService
             'total_adjustment'        => $totalAdj,
             'final_exchange_value'    => $finalVal,
 
+            // Calculation Audit for Verification (Can be commented out later)
+            'calculation_audit'       => self::buildCalculationAuditText($leadData, $modelName, $variant, (float)$baseValNum, (float)$finalValNum),
+
             // System Information (68-72)
             'valuation_status'        => 'Verified Online Quote',
             'submission_source'       => 'In-Popup Buyback Questionnaire',
@@ -337,6 +353,131 @@ class GoogleSheetsService
             'user_agent'              => $_SERVER['HTTP_USER_AGENT'] ?? 'Unknown',
             'lead_timestamp'          => date('Y-m-d H:i:s', $now)
         ];
+    }
+
+    /**
+     * ============================================================
+     * CALCULATION VERIFICATION AUDIT (CAN BE COMMENTED OUT LATER)
+     * ============================================================
+     * Generates a step-by-step audit string showing:
+     * 1. Each selected issue -> % -> Converted Rs.
+     * 2. Total of issue value & Total %
+     * 3. Base Value - Total of issue value = Final Answer
+     */
+    public static function buildCalculationAuditText(array $leadData, string $modelName, string $variant, float $basePrice, float $finalValue): string
+    {
+        $answers = $leadData['answers'] ?? [];
+        $pricingFile = dirname(__DIR__) . '/components/iphone-valuator/data/pricing.php';
+        $deductions = [];
+
+        // Always resolve exact device base price and per-defect percentages directly from CSV catalog
+        if (file_exists($pricingFile)) {
+            $pData = require $pricingFile;
+            $mMap = $pData['models'] ?? [];
+            $mat  = $pData['matrix'] ?? [];
+            if (!empty($modelName) && !empty($variant) && isset($mMap[$modelName][$variant]) && isset($mat[$mMap[$modelName][$variant]])) {
+                $prodId      = $mMap[$modelName][$variant];
+                $basePrice   = (float)($mat[$prodId]['base_price'] ?? $basePrice);
+                $deductions  = $mat[$prodId]['deductions'] ?? [];
+            } elseif (!empty($modelName) && isset($mMap[$modelName])) {
+                $firstVar    = reset($mMap[$modelName]);
+                if ($firstVar && isset($mat[$firstVar])) {
+                    $basePrice   = (float)($mat[$firstVar]['base_price'] ?? $basePrice);
+                    $deductions  = $mat[$firstVar]['deductions'] ?? [];
+                }
+            }
+        }
+
+        $deductionLabels = [
+            'months_0_3'                  => 'Age: Less than 3 months ago',
+            'months_3_6'                  => 'Age: 3 to 6 months ago',
+            'months_6_11'                 => 'Age: 6 to 11 months ago',
+            'months_11_more'              => 'Age: Over 1 year ago',
+            'scratch_screen_1_2'          => 'Screen: 1–2 light scratches',
+            'scratch_screen_3_4'          => 'Screen: 3–4 scratches',
+            'multiple_scratches_screen'   => 'Screen: Heavy scratches',
+            'glass_cracked'               => 'Screen: Front glass cracked',
+            'no_display'                  => 'Screen: No display / Blackout',
+            'touch_not_working'           => 'Screen: Touchscreen not working',
+            'lines_on_display'            => 'Screen: Lines on screen',
+            'dots_on_display'             => 'Screen: Dots / Ink spots on screen',
+            'flickering'                  => 'Screen: Flickering display',
+            'color_fade'                  => 'Screen: Color fade / Screen burn',
+            'loose_screen'                => 'Screen: Loose / Lifted screen',
+            'back_glass_broken'           => 'Body: Back glass broken / cracked',
+            'scratch_body_1_2'            => 'Body: 1–2 minor scratches',
+            'scratch_body_3_4'            => 'Body: 3–4 scratches',
+            'multiple_scratches_body'     => 'Body: Heavy scratches',
+            'dents_1_or_2'                => 'Body: 1–2 dents',
+            'multiple_dents'              => 'Body: Multiple dents',
+            'body_curved'                 => 'Body: Frame bent / curved',
+            'front_camera_not_working'    => 'Camera: Front selfie camera fault',
+            'back_camera_not_working'     => 'Camera: Rear main camera fault',
+            'camera_glass_broken'         => 'Camera: Camera lens glass cracked',
+            'speaker_not_working'         => 'Audio: Loudspeaker issue',
+            'charging_port_issue'         => 'Hardware: Charging port issue',
+            'battery_faulty'              => 'Battery: Battery faulty / swollen',
+            'battery_less_80'             => 'Battery: Health below 80% (Degraded)',
+            'wifi_issues'                 => 'Wireless: Wi-Fi not working',
+            'bluetooth_issue'             => 'Wireless: Bluetooth issue',
+            'face_id_not_working'         => 'Biometrics: Face ID broken',
+            'finger_print_not_working'    => 'Biometrics: Touch ID / Fingerprint broken',
+            'sensor_issues'               => 'Hardware: Proximity / light sensors',
+            'volume'                      => 'Hardware: Volume buttons issue',
+            'power_button_issue'          => 'Hardware: Power button issue',
+            'vibrator'                    => 'Hardware: Vibration motor issue',
+            'audio_ic_problem'            => 'Audio: Audio IC / Mic problem',
+            'headphone_jackissue'         => 'Hardware: Headphone jack issue',
+            'box'                         => 'Inclusions: Missing Original Box',
+            'charger'                     => 'Inclusions: Missing Original Charger / Cable',
+            'invoice'                     => 'Inclusions: Missing Purchase Bill / Invoice',
+        ];
+
+        $lines = [];
+        $totalDeductPct = 0.0;
+        $totalDeductRs = 0.0;
+        $itemNo = 1;
+
+        foreach ($answers as $col => $triggered) {
+            if (!$triggered || $col === null || strpos((string)$col, '_none_') === 0) continue;
+            $pct = isset($deductions[$col]) ? (float)$deductions[$col] : 0.0;
+            if ($pct <= 0) continue;
+
+            $convertedRs = round($basePrice * ($pct / 100));
+            $totalDeductPct += $pct;
+            $totalDeductRs += $convertedRs;
+
+            $label = $deductionLabels[$col] ?? $col;
+            $lines[] = sprintf("%d. %s -> %s%% -> Converted Rs. ₹%s", $itemNo, $label, rtrim(rtrim(number_format($pct, 2), '0'), '.'), number_format($convertedRs));
+            $itemNo++;
+        }
+
+        $audit  = "============================================================\n";
+        $audit .= "📊 STEP-BY-STEP VALUATION CALCULATION AUDIT (VERIFICATION)\n";
+        $audit .= "============================================================\n";
+        $audit .= sprintf("📱 Device: %s (%s)\n", $modelName, $variant);
+        $audit .= sprintf("🏷️ Base Value: ₹%s\n\n", number_format($basePrice));
+        $audit .= "ISSUES REPORTED & PERCENTAGE DEDUCTIONS:\n";
+
+        if (empty($lines)) {
+            $audit .= "• None (Clean Device — Zero Faults Reported)\n";
+        } else {
+            $audit .= implode("\n", $lines) . "\n";
+        }
+
+        $audit .= "------------------------------------------------------------\n";
+        $audit .= sprintf("Total of issue percentage: %s%%\n", rtrim(rtrim(number_format($totalDeductPct, 2), '0'), '.'));
+        $audit .= sprintf("Total of issue value: ₹%s\n\n", number_format($totalDeductRs));
+
+        $rawDiff = $basePrice - $totalDeductRs;
+        $finalAnswer = max(0, round($rawDiff));
+
+        $audit .= "CALCULATION FORMULA:\n";
+        $audit .= sprintf("Base Value (₹%s) - Total of Issue Value (₹%s) = ₹%s\n", number_format($basePrice), number_format($totalDeductRs), number_format($rawDiff));
+        $audit .= sprintf("-> Final Calculated Valuation: ₹%s\n", number_format($finalAnswer));
+        $audit .= "============================================================\n";
+
+        return $audit;
     }
 
     /**
@@ -451,10 +592,11 @@ class GoogleSheetsService
         if (!is_dir($logsDir)) {
             @mkdir($logsDir, 0755, true);
         }
-        @file_put_contents($logsDir . '/sheets_sync_debug.jsonl', json_encode($debugEntry, JSON_UNESCAPED_UNICODE) . "\n", FILE_APPEND | LOCK_EX);
-
-        // Send readable notification email with text & emojis to store admin
-        self::sendLeadNotificationEmail($leadData, $rowData);
+        // Google Apps Script Web App dispatches the single official notification email directly from CashSecond to both admin recipients.
+        // Fallback PHP email is only fired if the Google webhook is unavailable.
+        if ($httpCode < 200 || $httpCode >= 400) {
+            self::sendLeadNotificationEmail($leadData, $rowData);
+        }
 
         if ($httpCode >= 200 && $httpCode < 400) {
             return [

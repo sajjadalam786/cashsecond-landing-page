@@ -6672,6 +6672,178 @@ a:hover .btn-iphone-thumb {
 }
 
 /* ============================================================
+   THANK YOU PAGE FULL-WIDTH MOBILE RESPONSIVE STANDARDS
+   ============================================================ */
+@media (max-width: 640px) {
+    .thankyou-page-wrapper {
+        padding: 12px 0 32px 0;
+        background: #F2F2F7;
+    }
+
+    .thankyou-card-container {
+        padding: 0 8px;
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    .thankyou-card {
+        padding: 20px 12px;
+        border-radius: 18px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .thankyou-icon-wrap {
+        width: 56px;
+        height: 56px;
+        margin-bottom: 12px;
+    }
+
+    .thankyou-icon-wrap svg {
+        width: 30px;
+        height: 30px;
+    }
+
+    .thankyou-title {
+        font-size: 1.4rem;
+        margin-bottom: 6px;
+    }
+
+    .thankyou-subtitle {
+        font-size: 0.8125rem;
+        margin-bottom: 14px;
+        line-height: 1.4;
+    }
+
+    .thankyou-contact-speed {
+        font-size: 0.85rem !important;
+        padding: 9px 10px !important;
+        border-radius: 10px !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+        line-height: 1.35 !important;
+    }
+
+    .thankyou-valuation-hero {
+        padding: 16px 12px;
+        border-radius: 16px;
+        margin-bottom: 14px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .ty-device-name {
+        font-size: 0.875rem;
+    }
+
+    .ty-amount-value {
+        font-size: 2rem;
+        margin: 3px 0 6px 0;
+    }
+
+    .ty-sub-note {
+        font-size: 0.7rem;
+        line-height: 1.35;
+    }
+
+    .ty-feedback-schedule-card {
+        padding: 14px 10px;
+        border-radius: 14px;
+        margin-bottom: 14px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .ty-section-title {
+        font-size: 0.875rem;
+    }
+
+    .ty-feedback-pills-grid {
+        gap: 5px;
+    }
+
+    .ty-feedback-pill {
+        flex: 1 1 calc(50% - 5px);
+        min-width: 75px;
+        padding: 8px 4px;
+        font-size: 0.72rem;
+        border-radius: 10px;
+    }
+
+    .ty-slots-grid {
+        gap: 5px;
+    }
+
+    .ty-slot-pill {
+        flex: 1 1 100%;
+        min-width: 100%;
+        padding: 8px 10px;
+        font-size: 0.75rem;
+        border-radius: 10px;
+    }
+
+    #tyDateSlotsGrid .ty-slot-pill {
+        flex: 1 1 calc(33.33% - 5px);
+        min-width: 65px;
+    }
+
+    .ty-address-pincode-wrap {
+        padding: 10px 8px !important;
+        border-radius: 12px !important;
+    }
+
+    .thankyou-valuation-deck {
+        padding: 12px 10px;
+        border-radius: 14px;
+        margin-bottom: 14px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .valuation-row {
+        font-size: 0.75rem;
+        padding: 6px 0;
+    }
+
+    .ty-next-steps-card {
+        padding: 14px 10px;
+        border-radius: 14px;
+        margin-bottom: 14px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .ty-step-item {
+        gap: 10px;
+        margin-bottom: 10px;
+    }
+
+    .ty-step-item strong {
+        font-size: 0.8125rem;
+    }
+
+    .ty-step-item p {
+        font-size: 0.72rem;
+        line-height: 1.35;
+    }
+
+    .ty-btn-primary, .ty-btn-secondary {
+        padding: 12px 14px;
+        font-size: 0.875rem;
+        border-radius: 12px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .thankyou-trust-strip {
+        font-size: 0.65rem;
+        gap: 6px;
+    }
+}
+
+/* ============================================================
    PREMIUM 2-HOUR EXPRESS DOORSTEP COVERAGE BENTO
    ============================================================ */
 .express-coverage-section {
