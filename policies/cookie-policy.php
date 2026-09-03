@@ -9,7 +9,7 @@ $seo = $config['seo'] ?? [];
 
 $page_title       = "Cookie Policy | CashSecond iPhone Buyback";
 $page_description = "Learn how CashSecond uses cookies and session storage for security, CSRF protection, and anonymous website analytics.";
-$canonical_url    = rtrim($seo['site_url'] ?? 'http://localhost/cashsecond-landing-page', '/') . "/policies/cookie-policy.php";
+$canonical_url    = rtrim($seo['site_url'] ?? 'https://selliphone.cashsecond.com', '/') . "/policies/cookie-policy.php";
 
 require __DIR__ . '/../includes/header.php';
 ?>

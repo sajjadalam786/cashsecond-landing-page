@@ -9,7 +9,7 @@ $seo = $config['seo'] ?? [];
 
 $page_title       = "Privacy Policy | CashSecond iPhone Buyback";
 $page_description = "Learn how CashSecond handles your contact details, device information, and data privacy during iPhone valuation and buyback.";
-$canonical_url    = rtrim($seo['site_url'] ?? 'http://localhost/cashsecond-landing-page', '/') . "/policies/privacy-policy.php";
+$canonical_url    = rtrim($seo['site_url'] ?? 'https://selliphone.cashsecond.com', '/') . "/policies/privacy-policy.php";
 
 require __DIR__ . '/../includes/header.php';
 ?>

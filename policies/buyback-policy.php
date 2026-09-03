@@ -9,7 +9,7 @@ $seo = $config['seo'] ?? [];
 
 $page_title       = "iPhone Buyback Policy | CashSecond";
 $page_description = "Understand CashSecond's transparent iPhone buyback policy: 32-point inspection, device grading, doorstep pickup, and instant on-spot payment.";
-$canonical_url    = rtrim($seo['site_url'] ?? 'http://localhost/cashsecond-landing-page', '/') . "/policies/buyback-policy.php";
+$canonical_url    = rtrim($seo['site_url'] ?? 'https://selliphone.cashsecond.com', '/') . "/policies/buyback-policy.php";
 
 require __DIR__ . '/../includes/header.php';
 ?>

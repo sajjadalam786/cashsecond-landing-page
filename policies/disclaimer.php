@@ -8,7 +8,7 @@ $seo = $config['seo'] ?? [];
 
 $page_title       = "Legal Disclaimer | CashSecond iPhone Buyback";
 $page_description = "Legal disclaimer regarding trademark ownership, non-affiliation with Apple Inc., and independent pre-owned valuation operations at CashSecond.";
-$canonical_url    = rtrim($seo['site_url'] ?? 'http://localhost/cashsecond-landing-page', '/') . "/policies/disclaimer.php";
+$canonical_url    = rtrim($seo['site_url'] ?? 'https://selliphone.cashsecond.com', '/') . "/policies/disclaimer.php";
 
 require __DIR__ . '/../includes/header.php';
 ?>

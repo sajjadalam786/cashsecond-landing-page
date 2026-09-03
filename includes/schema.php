@@ -1,29 +1,42 @@
 <?php
 /**
  * CashSecond - JSON-LD Structured Data Generator
- * Outputs verified Schema.org markup for LocalBusiness, WebSite, WebPage, FAQPage, and Supported iPhone ItemList.
+ * Outputs verified Schema.org markup for LocalBusiness, WebSite, WebPage, FAQPage, HowTo, Service, ItemList, and Breadcrumbs.
+ * Fully optimized for SEO, AEO (Voice & Answer Engines), and GEO (Generative AI Search).
  */
 
 if (!isset($config)) {
     $config = require __DIR__ . '/../config/config.php';
 }
 
-$site_url = rtrim($config['seo']['site_url'], '/');
+$site_url = rtrim($config['seo']['site_url'] ?? 'https://selliphone.cashsecond.com', '/');
 $business = $config['business'] ?? [];
 $faqs = $config['faqs'] ?? [];
 $sellBrands = $config['sell_brands'] ?? [];
 $iphoneModels = $sellBrands['Apple'] ?? [];
 
-// 1. LocalBusiness / ElectronicsStore Schema
+$current_page_url = $canonical_url ?? ($site_url . '/');
+$is_home_page = ($current_page_url === $site_url || $current_page_url === $site_url . '/' || strpos($current_page_url, 'index.php') !== false);
+
+// 1. LocalBusiness / ElectronicsStore / Organization Schema (GEO Entity Graph)
 $localBusinessSchema = [
     '@context'   => 'https://schema.org',
-    '@type'      => 'ElectronicsStore',
+    '@type'      => ['ElectronicsStore', 'LocalBusiness', 'Organization'],
     '@id'        => $site_url . '/#business',
-    'name'       => $business['name'],
-    'image'      => $site_url . '/assets/images/cashsecond-logo.png',
+    'name'       => $business['name'] ?? 'CashSecond',
+    'alternateName' => 'CashSecond iPhone Buyback & Valuation Mumbai',
+    'legalName'  => 'CashSecond',
     'url'        => $site_url,
-    'telephone'  => $business['phone_raw'],
-    'priceRange' => $business['price_range'] ?? '₹₹',
+    'logo'       => $site_url . '/assets/images/cashsecond-logo.png',
+    'image'      => $site_url . '/assets/images/banners/desktop/sell-your-iphone-with-cashsecond.webp',
+    'telephone'  => $business['phone_raw'] ?? '+918976332211',
+    'email'      => $business['email'] ?? 'cashsecondofficial@gmail.com',
+    'priceRange' => '₹4,000 - ₹1,40,000',
+    'disambiguatingDescription' => 'CashSecond is an independent pre-owned Apple iPhone valuation, doorstep inspection, and buyback platform in Mumbai, Maharashtra. CashSecond is not affiliated with Apple Inc.',
+    'sameAs'     => [
+        'https://cashsecond.com/',
+        'https://maps.google.com/?q=Arcadia+Building+NCPA+Marg+Nariman+Point+Mumbai+400021'
+    ],
     'address'    => [
         '@type'           => 'PostalAddress',
         'streetAddress'   => $business['address'] ?? 'Arcadia Bldg, NCPA Marg, Nariman Point',
@@ -37,6 +50,28 @@ $localBusinessSchema = [
         'latitude'  => 18.928000,
         'longitude' => 72.825833,
     ],
+    'areaServed' => [
+        [
+            '@type' => 'City',
+            'name'  => 'Mumbai',
+        ],
+        [
+            '@type' => 'City',
+            'name'  => 'Navi Mumbai',
+        ],
+        [
+            '@type' => 'City',
+            'name'  => 'Thane',
+        ],
+        [
+            '@type' => 'AdministrativeArea',
+            'name'  => 'Mumbai Metropolitan Region',
+        ],
+        [
+            '@type' => 'AdministrativeArea',
+            'name'  => 'Maharashtra',
+        ],
+    ],
     'openingHoursSpecification' => [
         [
             '@type'     => 'OpeningHoursSpecification',
@@ -49,7 +84,7 @@ $localBusinessSchema = [
     'currenciesAccepted' => 'INR',
 ];
 
-// 2. FAQPage Schema (Strictly matches visible on-page FAQs for AEO & SGE)
+// 2. FAQPage Schema (Verbatim match to on-page FAQs for AEO & AI Overviews)
 $faqSchema = [
     '@context'   => 'https://schema.org',
     '@type'      => 'FAQPage',
@@ -72,7 +107,7 @@ $productCatalogSchema = [
     '@context'        => 'https://schema.org',
     '@type'           => 'ItemList',
     'name'            => 'Apple iPhone Models for Valuation and Resale',
-    'description'     => 'Apple iPhone models eligible for instant online valuation, doorstep inspection, and buyback in India.',
+    'description'     => 'Apple iPhone models eligible for instant online valuation, doorstep inspection, and buyback in Mumbai, India.',
     'itemListElement' => [],
 ];
 
@@ -95,7 +130,7 @@ foreach ($iphoneModels as $item) {
                 'availability'  => 'https://schema.org/InStock',
                 'seller'        => [
                     '@type' => 'Organization',
-                    'name'  => $business['name'],
+                    'name'  => $business['name'] ?? 'CashSecond',
                 ],
             ],
         ],
@@ -123,40 +158,62 @@ $serviceSchema = [
     'serviceType' => 'iPhone Valuation, Resale, Doorstep Inspection, and Buyback',
     'provider'    => [
         '@type' => 'Organization',
-        'name'  => $business['name'],
+        'name'  => $business['name'] ?? 'CashSecond',
         'url'   => $site_url,
     ],
     'areaServed'  => [
-        '@type' => 'City',
-        'name'  => $business['city'] ?? 'Mumbai',
+        [
+            '@type' => 'City',
+            'name'  => 'Mumbai',
+        ],
+        [
+            '@type' => 'City',
+            'name'  => 'Navi Mumbai',
+        ],
+        [
+            '@type' => 'City',
+            'name'  => 'Thane',
+        ],
     ],
-    'description' => 'Sell your iPhone online for the best price with instant iPhone valuation, free doorstep pickup, secure data wipe, and fast payment. Trusted iPhone buyers for used, second hand, and old Apple iPhones in Mumbai.',
+    'description' => 'Sell your used or old iPhone online for the best price with instant valuation, free doorstep pickup across Mumbai, secure data wipe, and spot payment.',
 ];
 
 // 6. BreadcrumbList Schema for Rich Search Snippets & GEO
+$breadcrumbItems = [
+    [
+        '@type'    => 'ListItem',
+        'position' => 1,
+        'name'     => 'Home',
+        'item'     => $site_url . '/',
+    ]
+];
+
+if (!$is_home_page && isset($page_title)) {
+    $breadcrumbItems[] = [
+        '@type'    => 'ListItem',
+        'position' => 2,
+        'name'     => trim(explode('|', $page_title)[0]),
+        'item'     => $current_page_url,
+    ];
+} else {
+    $breadcrumbItems[] = [
+        '@type'    => 'ListItem',
+        'position' => 2,
+        'name'     => 'Sell iPhone',
+        'item'     => $site_url . '/#valuation',
+    ];
+    $breadcrumbItems[] = [
+        '@type'    => 'ListItem',
+        'position' => 3,
+        'name'     => 'iPhone Resale Models',
+        'item'     => $site_url . '/#iphone-models',
+    ];
+}
+
 $breadcrumbSchema = [
     '@context'        => 'https://schema.org',
     '@type'           => 'BreadcrumbList',
-    'itemListElement' => [
-        [
-            '@type'    => 'ListItem',
-            'position' => 1,
-            'name'     => 'Home',
-            'item'     => $site_url,
-        ],
-        [
-            '@type'    => 'ListItem',
-            'position' => 2,
-            'name'     => 'Sell iPhone',
-            'item'     => $site_url . '/#valuation',
-        ],
-        [
-            '@type'    => 'ListItem',
-            'position' => 3,
-            'name'     => 'iPhone Resale Models',
-            'item'     => $site_url . '/#models',
-        ],
-    ],
+    'itemListElement' => $breadcrumbItems,
 ];
 
 // 7. HowTo Schema for AEO & AI Engine Step-by-Step Direct Answers
@@ -219,10 +276,10 @@ $howToSchema = [
 $webPageSchema = [
     '@context'    => 'https://schema.org',
     '@type'       => 'WebPage',
-    '@id'         => $site_url . '/#webpage',
-    'url'         => $site_url,
-    'name'        => $config['seo']['meta_title'] ?? 'Sell Old iPhone Online | Free Mumbai Doorstep Pickup | CashSecond',
-    'description' => $config['seo']['meta_desc'] ?? 'Sell your iPhone online for the best price. Get instant valuation, free doorstep pickup across Mumbai, certified data wipe, and spot UPI / cash payment.',
+    '@id'         => $current_page_url . '#webpage',
+    'url'         => $current_page_url,
+    'name'        => $page_title ?? ($config['seo']['meta_title'] ?? 'Sell iPhone Online & Check Resale Value | CashSecond Mumbai'),
+    'description' => $page_description ?? ($config['seo']['meta_description'] ?? 'Sell your used or old iPhone online for the best price in Mumbai. Get instant iPhone valuation, free doorstep pickup, certified data wipe, and spot payment.'),
     'speakable'   => [
         '@type'       => 'SpeakableSpecification',
         'cssSelector' => ['.hero-main-title', '.hero-main-subtitle', '.faq-question-text', '.faq-content p'],
@@ -234,43 +291,44 @@ $webPageSchema = [
 ];
 ?>
 
-<!-- JSON-LD Structured Data for LocalBusiness -->
+<!-- JSON-LD Structured Data: LocalBusiness / Organization (GEO) -->
 <script type="application/ld+json">
 <?= json_encode($localBusinessSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT); ?>
 </script>
 
-<!-- JSON-LD Structured Data for FAQPage (AEO / Answer Engine Optimization) -->
-<script type="application/ld+json">
-<?= json_encode($faqSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT); ?>
-</script>
-
-<!-- JSON-LD Structured Data for HowTo (AEO / Step-by-Step AI Guidance) -->
-<script type="application/ld+json">
-<?= json_encode($howToSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT); ?>
-</script>
-
-<!-- JSON-LD Structured Data for WebPage with Speakable (Voice Search / Siri / Google Assistant) -->
-<script type="application/ld+json">
-<?= json_encode($webPageSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT); ?>
-</script>
-
-<!-- JSON-LD Structured Data for Supported iPhone Models ItemList -->
-<script type="application/ld+json">
-<?= json_encode($productCatalogSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT); ?>
-</script>
-
-<!-- JSON-LD Structured Data for WebSite -->
+<!-- JSON-LD Structured Data: WebSite -->
 <script type="application/ld+json">
 <?= json_encode($websiteSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT); ?>
 </script>
 
-<!-- JSON-LD Structured Data for Service (SEO / AEO) -->
+<!-- JSON-LD Structured Data: WebPage with Speakable (Voice & AEO) -->
 <script type="application/ld+json">
-<?= json_encode($serviceSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT); ?>
+<?= json_encode($webPageSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT); ?>
 </script>
 
-<!-- JSON-LD Structured Data for Breadcrumbs -->
+<!-- JSON-LD Structured Data: Breadcrumbs -->
 <script type="application/ld+json">
 <?= json_encode($breadcrumbSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT); ?>
 </script>
 
+<!-- JSON-LD Structured Data: Service -->
+<script type="application/ld+json">
+<?= json_encode($serviceSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT); ?>
+</script>
+
+<?php if ($is_home_page): ?>
+<!-- JSON-LD Structured Data: FAQPage (AEO / Answer Engine Optimization) -->
+<script type="application/ld+json">
+<?= json_encode($faqSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT); ?>
+</script>
+
+<!-- JSON-LD Structured Data: HowTo (AEO / AI Step-by-Step Guidance) -->
+<script type="application/ld+json">
+<?= json_encode($howToSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT); ?>
+</script>
+
+<!-- JSON-LD Structured Data: Supported iPhone Models ItemList -->
+<script type="application/ld+json">
+<?= json_encode($productCatalogSchema, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT); ?>
+</script>
+<?php endif; ?>

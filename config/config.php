@@ -90,13 +90,13 @@ return [
     ],
 
     // ============================================================
-    // SEO & META CONFIGURATION (Google Ads & Organic Search Optimization)
+    // SEO & META CONFIGURATION (Google Ads, AEO & Organic Search)
     // ============================================================
     'seo' => [
-        'site_url'         => 'http://localhost/cashsecond-landing-page', // Production URL (e.g., https://cashsecond.com)
-        'meta_title'       => 'Sell iPhone Online & Check Resale Value | CashSecond',
-        'meta_description' => 'Sell your used or old iPhone online. Check your iPhone resale value with a simple and transparent valuation process and convenient selling options.',
-        'keywords'         => 'Sell iPhone, Sell Used iPhone, Sell Old iPhone, iPhone Resale Value, Sell iPhone Online, iPhone Valuation, iPhone Resale Price, Sell iPhone for Cash, Used iPhone Value, iPhone Selling Process, iPhone Exchange Value, Sell iPhone in India, sell my iPhone, sell old iPhone online, check iPhone resale value, best price for used iPhone, sell used iPhone online, iPhone resale value in India',
+        'site_url'         => get_env_var('SITE_URL', 'https://selliphone.cashsecond.com'),
+        'meta_title'       => 'Sell iPhone Online & Check Resale Value | CashSecond Mumbai',
+        'meta_description' => 'Sell your used or old iPhone online for the best price in Mumbai. Get instant iPhone valuation, free doorstep pickup, certified data wipe, and spot payment.',
+        'keywords'         => 'Sell iPhone, Sell Used iPhone, Sell Old iPhone, iPhone Resale Value, Sell iPhone Online, iPhone Valuation, iPhone Resale Price, Sell iPhone for Cash, Used iPhone Value, iPhone Selling Process, iPhone Exchange Value, Sell iPhone Mumbai, sell my iPhone, sell old iPhone online, check iPhone resale value, best price for used iPhone, sell used iPhone online, iPhone resale value Mumbai',
         'og_image'         => '/assets/images/cashsecond-logo.png',
         'theme_color'      => '#0B0D10',
     ],

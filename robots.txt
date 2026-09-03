@@ -3,5 +3,34 @@ Allow: /
 Disallow: /config/
 Disallow: /forms/
 Disallow: /logs/
+Disallow: /.agents/
+Disallow: /.env
+Disallow: /google-apps-script/
 
-Sitemap: http://localhost/cashsecond-landing-page/sitemap.xml
+# Search Engine Crawlers
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+# Generative AI & Search Crawlers (AEO / GEO Optimization)
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+Sitemap: https://selliphone.cashsecond.com/sitemap.xml

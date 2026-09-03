@@ -9,7 +9,7 @@ $seo = $config['seo'] ?? [];
 
 $page_title       = "Terms & Conditions | CashSecond iPhone Buyback";
 $page_description = "Read the terms of service and trade-in guidelines for iPhone buyback, valuation estimates, and doorstep pickup at CashSecond.";
-$canonical_url    = rtrim($seo['site_url'] ?? 'http://localhost/cashsecond-landing-page', '/') . "/policies/terms.php";
+$canonical_url    = rtrim($seo['site_url'] ?? 'https://selliphone.cashsecond.com', '/') . "/policies/terms.php";
 
 require __DIR__ . '/../includes/header.php';
 ?>

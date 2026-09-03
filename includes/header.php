@@ -13,9 +13,11 @@ if (!isset($base_path)) {
 
 $business = $config['business'] ?? [];
 $seo = $config['seo'] ?? [];
-$page_title = $page_title ?? ($seo['meta_title'] ?? 'Sell Your iPhone at a Fair Price in Mumbai | CashSecond');
-$page_description = $page_description ?? ($seo['meta_description'] ?? 'Get an instant estimate for your iPhone in seconds. Simple, secure and hassle-free buyback with free doorstep pickup in Mumbai.');
-$canonical_url = $canonical_url ?? ($seo['site_url'] ?? 'http://localhost/cashsecond-landing-page/');
+$site_url = rtrim($seo['site_url'] ?? 'https://selliphone.cashsecond.com', '/');
+$page_title = $page_title ?? ($seo['meta_title'] ?? 'Sell iPhone Online & Check Resale Value | CashSecond Mumbai');
+$page_description = $page_description ?? ($seo['meta_description'] ?? 'Sell your used or old iPhone online for the best price in Mumbai. Get instant iPhone valuation, free doorstep pickup, certified data wipe, and spot payment.');
+$canonical_url = $canonical_url ?? ($site_url . '/');
+$og_image = $site_url . '/assets/images/cashsecond-logo.png';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -32,25 +34,43 @@ $canonical_url = $canonical_url ?? ($seo['site_url'] ?? 'http://localhost/cashse
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
     <title><?= htmlspecialchars($page_title); ?></title>
     <meta name="description" content="<?= htmlspecialchars($page_description); ?>">
+    <meta name="keywords" content="<?= htmlspecialchars($seo['keywords'] ?? 'Sell iPhone, Sell Used iPhone, Sell Old iPhone, iPhone Resale Value, Sell iPhone Mumbai'); ?>">
+    <meta name="author" content="CashSecond">
     <meta name="robots" content="<?= isset($noindex) && $noindex ? 'noindex, nofollow' : 'index, follow' ?>">
     <link rel="canonical" href="<?= htmlspecialchars($canonical_url); ?>">
+
+    <!-- Local & Geographic Meta Tags for Mumbai (Local SEO & GEO) -->
+    <meta name="geo.region" content="IN-MH">
+    <meta name="geo.placename" content="Mumbai">
+    <meta name="geo.position" content="18.928000;72.825833">
+    <meta name="ICBM" content="18.928000, 72.825833">
+
+    <!-- Mobile Theme & Web App Meta -->
+    <meta name="theme-color" content="#0B0D10">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="format-detection" content="telephone=no">
 
     <!-- Favicon & Touch Icons -->
     <link rel="icon" type="image/webp" href="<?= $base_path ?>assets/images/CashSecond-Fevicon-icon.webp">
     <link rel="apple-touch-icon" href="<?= $base_path ?>assets/images/CashSecond-Fevicon-icon.webp">
 
     <!-- Open Graph Meta Tags -->
+    <meta property="og:site_name" content="CashSecond">
     <meta property="og:title" content="<?= htmlspecialchars($page_title); ?>">
     <meta property="og:description" content="<?= htmlspecialchars($page_description); ?>">
     <meta property="og:url" content="<?= htmlspecialchars($canonical_url); ?>">
     <meta property="og:type" content="website">
-    <meta property="og:image" content="<?= htmlspecialchars(rtrim($canonical_url, '/') . '/assets/images/cashsecond-logo.png'); ?>">
+    <meta property="og:locale" content="en_IN">
+    <meta property="og:image" content="<?= htmlspecialchars($og_image); ?>">
+    <meta property="og:image:alt" content="CashSecond - Sell Your iPhone at Best Price in Mumbai">
 
     <!-- Twitter Card Meta Tags -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="<?= htmlspecialchars($page_title); ?>">
     <meta name="twitter:description" content="<?= htmlspecialchars($page_description); ?>">
-    <meta name="twitter:image" content="<?= htmlspecialchars(rtrim($canonical_url, '/') . '/assets/images/cashsecond-logo.png'); ?>">
+    <meta name="twitter:image" content="<?= htmlspecialchars($og_image); ?>">
+    <meta name="twitter:image:alt" content="CashSecond - Sell Your iPhone at Best Price in Mumbai">
 
     <!-- Preconnect & Luxury Typography Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">

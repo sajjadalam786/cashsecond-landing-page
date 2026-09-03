@@ -190,11 +190,11 @@ Placeholders to update:
 
 ---
 
-## 7. SEO & AEO Setup
+## 7. SEO, AEO & GEO Setup
 
-1. In `config/config.php`, update `site_url`, `meta_title`, and `meta_description`.
-2. In `sitemap.xml`, replace `http://localhost/cashsecond-landing-page/` with your live domain.
-3. In `robots.txt`, verify the sitemap URL.
+1. In `config/config.php`, `site_url` is configured to `https://selliphone.cashsecond.com`.
+2. `sitemap.xml` contains all production canonical URLs.
+3. `robots.txt` contains crawler access rules for traditional search engines and AI answer engines with the verified sitemap URL.
 
 ---
 
