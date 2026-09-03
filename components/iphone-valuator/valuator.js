@@ -878,14 +878,33 @@
 
         if (!valid) return;
 
+        // Generate guaranteed unique Reference ID
+        const now = new Date();
+        const dateStr = now.getFullYear().toString() + String(now.getMonth() + 1).padStart(2, '0') + String(now.getDate()).padStart(2, '0');
+        const randHex = Math.random().toString(36).substring(2, 6).toUpperCase();
+        const refId = state.leadId || ('EXG-' + dateStr + '-' + randHex);
+        state.leadId = refId;
+
+        // 1. Anti-Double-Click: Disable button for 10 seconds
         state.isSubmitting = true;
         if (btnNext) {
             btnNext.disabled = true;
+            btnNext.style.pointerEvents = 'none';
+            btnNext.style.opacity = '0.7';
             const spinner = btnNext.querySelector('.iv-spinner');
             if (spinner) spinner.style.display = 'inline-block';
+            setTimeout(() => {
+                state.isSubmitting = false;
+                if (btnNext) {
+                    btnNext.disabled = false;
+                    btnNext.style.pointerEvents = '';
+                    btnNext.style.opacity = '';
+                    if (spinner) spinner.style.display = 'none';
+                }
+            }, 10000);
         }
 
-        // Build POST payload
+        // 2. Build POST payload
         const formData = new FormData();
         formData.append('full_name',             name);
         formData.append('phone_number',          phone);
@@ -898,52 +917,29 @@
         formData.append('website_hp',            ''); // honeypot blank
         formData.append('questionnaire_answers', JSON.stringify(state.answers));
         formData.append('valuation_adjustments', JSON.stringify(state.deductions));
-        if (state.leadId) formData.append('lead_id', state.leadId);
+        formData.append('lead_id',               refId);
+        formData.append('ref_id',                refId);
 
-        fetch(SUBMIT_URL, { method: 'POST', body: formData })
-            .then(r => r.json())
-            .then(data => {
-                state.isSubmitting = false;
-                if (data.status === 'success') {
-                    state.leadId = data.lead_id || data.ref_id || '';
-                    const params = new URLSearchParams({
-                        model: state.model || '',
-                        variant: state.storage || '',
-                        val: Math.round(state.liveValue || 0).toString(),
-                        name: name,
-                        phone: phone,
-                        ref: state.leadId
-                    });
-                    window.location.href = 'thankyou.php?' + params.toString();
-                } else {
-                    if (data.errors) {
-                        Object.keys(data.errors).forEach(field => {
-                            const el = document.getElementById(
-                                field === 'full_name' ? 'ivName' :
-                                field === 'phone_number' ? 'ivPhone' : 'iv' + field
-                            );
-                            if (el) el.classList.add('iv-error');
-                        });
-                    }
-                    if (btnNext) {
-                        btnNext.disabled = false;
-                        const spinner = btnNext.querySelector('.iv-spinner');
-                        if (spinner) spinner.style.display = 'none';
-                    }
-                }
-            })
-            .catch(() => {
-                state.isSubmitting = false;
-                const params = new URLSearchParams({
-                    model: state.model || '',
-                    variant: state.storage || '',
-                    val: Math.round(state.liveValue || 0).toString(),
-                    name: name,
-                    phone: phone,
-                    ref: 'CS-' + Date.now()
-                });
-                window.location.href = 'thankyou.php?' + params.toString();
-            });
+        // 3. Process data in background (keepalive guarantees delivery during redirect)
+        try {
+            fetch(SUBMIT_URL, {
+                method: 'POST',
+                body: formData,
+                keepalive: true,
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            }).catch(() => {});
+        } catch (err) {}
+
+        // 4. Directly show Thank You page
+        const params = new URLSearchParams({
+            model: state.model || '',
+            variant: state.storage || '',
+            val: Math.round(state.liveValue || 0).toString(),
+            name: name,
+            phone: phone,
+            ref: refId
+        });
+        window.location.href = 'thankyou.php?' + params.toString();
     }
 
     /* --------------------------------------------------

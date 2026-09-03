@@ -329,7 +329,14 @@ require __DIR__ . '/includes/header.php';
                 if (fbError) fbError.style.display = 'none';
 
                 confirmBtn.disabled = true;
+                confirmBtn.style.pointerEvents = 'none';
                 confirmBtn.innerHTML = '<span>Scheduling Doorstep Pickup...</span>';
+                setTimeout(function () {
+                    if (confirmBtn) {
+                        confirmBtn.disabled = false;
+                        confirmBtn.style.pointerEvents = '';
+                    }
+                }, 10000);
 
                 var commentEl = document.getElementById('tyFeedbackComment');
                 var commentText = commentEl ? commentEl.value.trim() : '';

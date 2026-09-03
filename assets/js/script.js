@@ -1853,4 +1853,25 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     });
+
+    // ============================================================
+    // UNIVERSAL ANTI-DOUBLE-CLICK: 10-SECOND LOCKOUT ON ALL SUBMIT BUTTONS
+    // ============================================================
+    document.addEventListener('submit', (e) => {
+        const form = e.target;
+        if (!form || !(form instanceof HTMLFormElement)) return;
+
+        const submitBtn = form.querySelector('button[type="submit"], input[type="submit"], .btn-submit, .btn-primary, [id*="submit"]');
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.style.pointerEvents = 'none';
+            submitBtn.style.opacity = '0.7';
+
+            setTimeout(() => {
+                submitBtn.disabled = false;
+                submitBtn.style.pointerEvents = '';
+                submitBtn.style.opacity = '';
+            }, 10000);
+        }
+    }, true);
 });
