@@ -12,6 +12,8 @@ if (session_status() === PHP_SESSION_NONE) {
 $config = require_once __DIR__ . '/config/config.php';
 $base_path = '';
 $business = $config['business'] ?? [];
+$tracking = $config['tracking'] ?? [];
+$google_ads_id = $tracking['google_ads_id'] ?? 'AW-777643310';
 
 $model        = isset($_GET['model']) ? htmlspecialchars(strip_tags(trim($_GET['model'])), ENT_QUOTES, 'UTF-8') : 'Apple iPhone';
 $variant      = isset($_GET['variant']) ? htmlspecialchars(strip_tags(trim($_GET['variant'])), ENT_QUOTES, 'UTF-8') : '';
@@ -354,17 +356,45 @@ require __DIR__ . '/includes/header.php';
                         successBox.style.display = 'block';
                         successBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
                     }
+
+                    // Secondary Google Ads conversion signal on doorstep confirmation
+                    if (typeof gtag === 'function') {
+                        gtag('event', 'doorstep_pickup_scheduled', {
+                            'transaction_id': <?= json_encode($ref_id) ?>,
+                            'value': <?= (int)$val ?>,
+                            'currency': 'INR'
+                        });
+                    }
                 }, 400);
             });
         }
     })();
 </script>
 
-<!-- Google Ads Conversion Tracking Event Hook -->
+<!-- Google Ads & Analytics Conversion Tracking Event Snippet -->
 <script>
+    // 1. Google Ads Conversion Event (gtag.js)
+    if (typeof gtag === 'function') {
+        gtag('event', 'conversion', {
+            'send_to': '<?= !empty($tracking['google_ads_conv_label']) ? htmlspecialchars($google_ads_id . '/' . $tracking['google_ads_conv_label']) : htmlspecialchars($google_ads_id) ?>',
+            'value': <?= (int)$val ?>,
+            'currency': 'INR',
+            'transaction_id': <?= json_encode($ref_id) ?>
+        });
+
+        gtag('event', 'generate_lead', {
+            'value': <?= (int)$val ?>,
+            'currency': 'INR',
+            'transaction_id': <?= json_encode($ref_id) ?>,
+            'device_model': <?= json_encode($device_display) ?>
+        });
+    }
+
+    // 2. Google Tag Manager DataLayer Hook
     window.dataLayer = window.dataLayer || [];
     window.dataLayer.push({
-        'event': 'valuation_lead_completed',
+        'event': 'conversion',
+        'event_name': 'valuation_lead_completed',
         'transaction_id': <?= json_encode($ref_id) ?>,
         'value': <?= (int)$val ?>,
         'currency': 'INR',

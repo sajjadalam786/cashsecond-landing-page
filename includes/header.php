@@ -17,11 +17,25 @@ $site_url = rtrim($seo['site_url'] ?? 'https://selliphone.cashsecond.com', '/');
 $page_title = $page_title ?? ($seo['meta_title'] ?? 'Sell iPhone Online & Check Resale Value | CashSecond Mumbai');
 $page_description = $page_description ?? ($seo['meta_description'] ?? 'Sell your used or old iPhone online for the best price in Mumbai. Get instant iPhone valuation, free doorstep pickup, certified data wipe, and spot payment.');
 $canonical_url = $canonical_url ?? ($site_url . '/');
-$og_image = $site_url . '/assets/images/cashsecond-logo.png';
+$tracking = $config['tracking'] ?? [];
+$google_ads_id = $tracking['google_ads_id'] ?? 'AW-777643310';
+$ga4_id = $tracking['ga4_measurement_id'] ?? '';
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Google Tag (gtag.js) for Google Ads & Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=<?= htmlspecialchars($google_ads_id) ?>"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', '<?= htmlspecialchars($google_ads_id) ?>');
+      <?php if (!empty($ga4_id)): ?>
+      gtag('config', '<?= htmlspecialchars($ga4_id) ?>');
+      <?php endif; ?>
+    </script>
+
     <!-- Google Tag Manager -->
     <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
     new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],

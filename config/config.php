@@ -116,13 +116,14 @@ return [
     ],
 
     // ============================================================
-    // TRACKING & CONVERSION PLACEHOLDERS
+    // TRACKING & CONVERSION SETTINGS (Google Ads, GA4, Meta Pixel)
     // ============================================================
     'tracking' => [
-        'ga4_measurement_id'     => '',
-        'google_ads_id'          => '',
-        'google_ads_conv_label'  => '',
-        'meta_pixel_id'          => '',
+        'account_id'             => '416-890-2799',
+        'ga4_measurement_id'     => get_env_var('GA4_MEASUREMENT_ID', ''),
+        'google_ads_id'          => get_env_var('GOOGLE_ADS_ID', 'AW-777643310'),
+        'google_ads_conv_label'  => get_env_var('GOOGLE_ADS_CONV_LABEL', ''),
+        'meta_pixel_id'          => get_env_var('META_PIXEL_ID', ''),
     ],
 
     // ============================================================
