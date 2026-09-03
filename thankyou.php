@@ -14,6 +14,7 @@ $base_path = '';
 $business = $config['business'] ?? [];
 $tracking = $config['tracking'] ?? [];
 $google_ads_id = $tracking['google_ads_id'] ?? 'AW-777643310';
+$google_conv_label = $tracking['google_ads_conv_label'] ?? 'pxrxCNrque0cEK7K5_IC';
 
 $model        = isset($_GET['model']) ? htmlspecialchars(strip_tags(trim($_GET['model'])), ENT_QUOTES, 'UTF-8') : 'Apple iPhone';
 $variant      = isset($_GET['variant']) ? htmlspecialchars(strip_tags(trim($_GET['variant'])), ENT_QUOTES, 'UTF-8') : '';
@@ -378,17 +379,18 @@ require __DIR__ . '/includes/header.php';
     })();
 </script>
 
-<!-- Google Ads & Analytics Conversion Tracking Event Snippet -->
+<!-- Google Ads Conversion Tracking (AW-777643310/pxrxCNrque0cEK7K5_IC) -->
 <script>
-    // 1. Google Ads Conversion Event (gtag.js)
+    // 1. Primary Google Ads Conversion Event (gtag.js)
     if (typeof gtag === 'function') {
         gtag('event', 'conversion', {
-            'send_to': '<?= !empty($tracking['google_ads_conv_label']) ? htmlspecialchars($google_ads_id . '/' . $tracking['google_ads_conv_label']) : htmlspecialchars($google_ads_id) ?>',
+            'send_to': '<?= htmlspecialchars($google_ads_id . '/' . $google_conv_label) ?>',
             'value': <?= (int)$val ?>,
             'currency': 'INR',
             'transaction_id': <?= json_encode($ref_id) ?>
         });
 
+        // 2. Standard Lead Event for GA4 / Ads
         gtag('event', 'generate_lead', {
             'value': <?= (int)$val ?>,
             'currency': 'INR',
@@ -397,11 +399,13 @@ require __DIR__ . '/includes/header.php';
         });
     }
 
-    // 2. Google Tag Manager DataLayer Hook
+    // 3. Google Tag Manager DataLayer Hook
     window.dataLayer = window.dataLayer || [];
     window.dataLayer.push({
         'event': 'conversion',
         'event_name': 'valuation_lead_completed',
+        'send_to': '<?= htmlspecialchars($google_ads_id . '/' . $google_conv_label) ?>',
+        'conversion_label': '<?= htmlspecialchars($google_conv_label) ?>',
         'transaction_id': <?= json_encode($ref_id) ?>,
         'value': <?= (int)$val ?>,
         'currency': 'INR',
