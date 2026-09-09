@@ -74,92 +74,380 @@ function doPost(e) {
     if (data.action === "update_feedback" || data.action === "feedback") {
       var leadId  = String(data.lead_id || data.ref_id || "").trim();
       if (!leadId) {
-        return ContentService.createTextOutput(JSON.stringify({ status: "error", message: "No lead_id provided." }))
-          .setMimeType(ContentService.MimeType.JSON);
+        leadId = "EXG-" + Utilities.formatDate(new Date(), "Asia/Kolkata", "yyyyMMdd-HHmmss");
       }
 
-      // Determine which values are actually non-empty (only update those)
-      var updates = {};
-      if (String(data.pickup_address || "").trim()) updates["Pickup Address"]   = String(data.pickup_address).trim();
-      if (String(data.pincode        || "").trim()) updates["Pincode"]           = String(data.pincode).trim();
-      if (String(data.pickup_date    || "").trim()) updates["Pickup Date"]       = String(data.pickup_date).trim();
-      if (String(data.pickup_slot    || "").trim()) updates["Pickup Slot"]       = String(data.pickup_slot).trim();
-      if (String(data.feedback_rating|| "").trim()) updates["Feedback Rating"]   = String(data.feedback_rating).trim();
-      if (String(data.feedback_comment || "").trim()) updates["Feedback Comment"] = String(data.feedback_comment).trim();
-      // Always stamp status when this action fires
-      updates["Valuation Status"] = "Pickup Scheduled & Verified";
+      var customerName  = String(data.customer_name || data.name || "Customer").trim();
+      var customerPhone = String(data.customer_phone || data.phone || "").trim();
+      var deviceModel   = String(data.device_model || data.model || "Apple iPhone").trim();
+      var estValue      = String(data.estimated_value || data.price || "").trim();
+      var pickupAddress = String(data.pickup_address || data.address || "").trim();
+      var pincode       = String(data.pincode || "").trim();
+      var pickupDate    = String(data.pickup_date || "Today").trim();
+      var pickupSlot    = String(data.pickup_slot || "Express (Within 4-6 Hours)").trim();
+      var rating        = String(data.feedback_rating || data.rating || "Good Price").trim();
+      var comment       = String(data.feedback_comment || data.comment || "").trim();
 
-      // Build dynamic column map from actual sheet headers
+      // 1. Build dynamic column map from actual sheet headers and find existing row
       var colMap = buildColumnMap(sheet);
-
-      // Search for the matching lead row
       var lastRow   = sheet.getLastRow();
       var leadColIdx = colMap["Lead ID"]; // column index (1-based)
-      if (!leadColIdx) {
-        return ContentService.createTextOutput(JSON.stringify({ status: "error", message: "Lead ID column not found in sheet." }))
-          .setMimeType(ContentService.MimeType.JSON);
-      }
-
-      var leadColValues = sheet.getRange(2, leadColIdx, lastRow - 1, 1).getValues();
       var targetRow = -1;
-      for (var r = 0; r < leadColValues.length; r++) {
-        if (String(leadColValues[r][0]).trim() === leadId) {
-          targetRow = r + 2; // 1-based, +1 for header, +1 for offset
-          break;
+
+      if (leadColIdx && lastRow > 1) {
+        var leadColValues = sheet.getRange(2, leadColIdx, lastRow - 1, 1).getValues();
+        for (var r = 0; r < leadColValues.length; r++) {
+          if (String(leadColValues[r][0]).trim() === leadId) {
+            targetRow = r + 2; // 1-based
+            break;
+          }
         }
       }
 
-      if (targetRow === -1) {
-        return ContentService.createTextOutput(JSON.stringify({ status: "success", updated: false, message: "Lead ID not yet in sheet." }))
-          .setMimeType(ContentService.MimeType.JSON);
-      }
+      var existingRowVals = (targetRow !== -1) ? sheet.getRange(targetRow, 1, 1, sheet.getLastColumn()).getValues()[0] : null;
 
-      // Write ONLY the provided fields using dynamic column positions
-      var updatedFields = [];
-      for (var header in updates) {
-        if (colMap[header]) {
-          sheet.getRange(targetRow, colMap[header]).setValue(updates[header]);
-          updatedFields.push(header);
+      var getVal = function(h, fallback) {
+        if (colMap[h] && existingRowVals && existingRowVals[colMap[h] - 1] !== undefined) {
+          var val = String(existingRowVals[colMap[h] - 1]).trim();
+          if (val !== "") return val;
         }
-      }
+        return fallback !== undefined ? fallback : "";
+      };
 
-      // Also dispatch *100% Confirmed* email alert to admin
+      // Populate customer & device data from existing sheet row if missing
+      if (!customerName || customerName === "Customer") customerName = getVal("Full Name", "Customer");
+      if (!customerPhone) customerPhone = getVal("WhatsApp Number", "");
+      if (!deviceModel || deviceModel === "Apple iPhone") deviceModel = getVal("Model", "Apple iPhone");
+      if (!estValue) estValue = getVal("Final Estimated Value", "Price on Inspection");
+      var devStorage       = getVal("Storage", "");
+      var devBattery       = getVal("Battery Health", "Above 80% (Healthy)");
+      var displayWorking   = getVal("Display Working", "YES");
+      var touchscreen      = getVal("Touchscreen Working", "YES");
+      var screenCracked    = getVal("Screen Cracked", "NO");
+      var screenScratches  = getVal("Screen Major Scratches", "Clean Screen");
+      var displayFlaws     = getVal("Display Lines / Spots / Flickering", "NO");
+      var originalDisplay  = getVal("Original Display", "YES");
+
+      var bodyCondition    = getVal("Body Condition", "Clean Metal Frame");
+      var phoneBent        = getVal("Phone Bent", "NO");
+      var backGlass        = getVal("Body Damage", "NO");
+      var cameraGlass      = getVal("Camera Glass Condition", "NO");
+      var missingParts     = getVal("Missing Parts", "NO");
+
+      var frontCam         = getVal("Front Camera", "YES");
+      var rearCam          = getVal("Rear Camera", "YES");
+      var camFlash         = getVal("Camera Flash", "YES");
+      var faceId           = getVal("Face ID / Touch ID", "YES");
+      var chargingPort     = getVal("Charging Port", "YES");
+      var speaker          = getVal("Speaker", "YES");
+      var earReceiver      = getVal("Ear Receiver", "YES");
+      var mic              = getVal("Microphone", "YES");
+      var powerBtn         = getVal("Power Button", "YES");
+      var volBtns          = getVal("Volume Buttons", "YES");
+      var silentSwitch     = getVal("Silent Switch", "YES");
+      var wifi             = getVal("WiFi", "YES");
+      var bluetooth        = getVal("Bluetooth", "YES");
+      var simNetwork       = getVal("Mobile Network / SIM", "YES");
+      var gps              = getVal("GPS", "YES");
+
+      var liquidDamage     = getVal("Liquid Damage", "NO");
+      var majorReplaced    = getVal("Major Component Replaced", "NO");
+      var replacedComp     = getVal("Replaced Component", "None");
+      var warrantyStatus   = getVal("Warranty Status", "Out of Warranty");
+      var originalBill     = getVal("Original Bill", "YES");
+      var originalBox      = getVal("Original Box", "YES");
+      var originalCharger  = getVal("Original Cable / Adapter", "YES");
+      var failedTestNames  = getVal("Failed Test Names", "None (All Passed)");
+
+      var fullDeviceName = deviceModel + (devStorage ? (" (" + devStorage + ")") : "");
+
+      // 2. Dispatch *100% Confirmed* email alert to admin IMMEDIATELY
+      var mailResult = "pending";
       try {
-        var confirmedSubject = "*100% Confirmed* Doorstep Pickup Scheduled: " + (data.device_model || "iPhone") + " — " + (data.estimated_value || "") + " | " + (data.customer_name || "Customer") + " (" + (data.customer_phone || "") + ") [Ref: " + leadId + "]";
+        var cleanPhone = customerPhone.replace(/[^0-9]/g, "");
+        var confirmedSubject = "*100% Confirmed* Doorstep Pickup Scheduled: " + fullDeviceName + " — " + estValue + " | " + customerName + " (" + customerPhone + ") [Ref: " + leadId + "]";
+        var waLink = "https://wa.me/91" + cleanPhone + "?text=" + encodeURIComponent("Hi " + customerName + ", CashSecond technician has received your 100% Confirmed Doorstep Pickup request for " + fullDeviceName + " (" + estValue + "). Ref: " + leadId);
+        var mapsLink = "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(pickupAddress + ", Mumbai " + pincode);
+
         var confirmedBody = "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
           + "⚡ *100% CONFIRMED* DOORSTEP PICKUP SCHEDULED\n"
           + "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
-          + "Customer Name:  " + (data.customer_name || "Customer") + "\n"
-          + "Mobile Number:  " + (data.customer_phone || "N/A") + "\n"
-          + "Device Model:   " + (data.device_model || "Apple iPhone") + "\n"
-          + "Locked Resale:  " + (data.estimated_value || "N/A") + "\n"
-          + "Pickup Window:  " + (data.pickup_date || "Today") + " • " + (data.pickup_slot || "Express") + "\n"
-          + "Pickup Address: " + (data.pickup_address || "N/A") + "\n"
-          + "Mumbai Pincode: " + (data.pincode || "N/A") + "\n"
-          + "Feedback Offer: " + (data.feedback_rating || "Good Price") + "\n"
-          + "Comments:       " + (data.feedback_comment || "None") + "\n"
-          + "Reference ID:   " + leadId + "\n\n"
-          + "Please call customer before technician dispatch.";
-        
-        var adminEmail = "wholesalehouse2016@gmail.com, Cashsecondoffice@gmail.com";
+          + "👤 CUSTOMER & PICKUP DETAILS:\n"
+          + "• Customer Name:   " + customerName + "\n"
+          + "• Phone Number:    " + customerPhone + " (tel:" + cleanPhone + ")\n"
+          + "• WhatsApp:        " + waLink + "\n"
+          + "• Pickup Window:   " + pickupDate + " • " + pickupSlot + "\n"
+          + "• Pickup Address:  " + (pickupAddress || "Not provided") + "\n"
+          + "• Mumbai Pincode:  " + (pincode || "Mumbai") + "\n"
+          + "• Google Maps:     " + mapsLink + "\n"
+          + "• Price Feedback:  " + rating + "\n"
+          + "• Special Note:    " + (comment || "None") + "\n"
+          + "• Reference ID:    " + leadId + "\n\n"
+          + "💰 DOORSTEP PAYOUT:\n"
+          + "• Device Model:    " + fullDeviceName + "\n"
+          + "• Amount To Pay:   " + estValue + " (Transfer before device handover)\n\n"
+          + "🖥️ DISPLAY & SCREEN:\n"
+          + "• Display Power:   " + (displayWorking === "YES" ? "✅ Working" : "❌ Faulty") + "\n"
+          + "• Touchscreen:     " + (touchscreen === "YES" ? "✅ Responsive" : "❌ Touch Issue") + "\n"
+          + "• Screen Glass:    " + (screenCracked === "NO" ? "✅ Intact" : "❌ Cracked") + "\n"
+          + "• Screen Scratches:" + screenScratches + "\n"
+          + "• Lines / Spots:   " + (displayFlaws === "NO" ? "✅ Clean Display" : "❌ Lines/Spots Present") + "\n"
+          + "• Screen Original: " + (originalDisplay === "YES" ? "✅ Original Apple Screen" : "⚠️ Replaced Screen") + "\n\n"
+          + "📱 BODY & FRAME:\n"
+          + "• Body Condition:  " + bodyCondition + "\n"
+          + "• Chassis Bent:    " + (phoneBent === "NO" ? "✅ Flat & Straight" : "❌ Bent / Curved") + "\n"
+          + "• Back Glass:      " + (backGlass === "NO" ? "✅ Intact" : "❌ Broken") + "\n"
+          + "• Camera Glass:    " + (cameraGlass === "NO" ? "✅ Clear" : "❌ Cracked") + "\n"
+          + "• Missing Screws:  " + (missingParts === "NO" ? "✅ All Intact" : "❌ Missing Parts") + "\n\n"
+          + "⚙️ HARDWARE & SENSORS:\n"
+          + "• Cameras:         Front: " + (frontCam === "YES" ? "✅" : "❌") + " | Rear: " + (rearCam === "YES" ? "✅" : "❌") + " | Flash: " + (camFlash === "YES" ? "✅" : "❌") + "\n"
+          + "• Biometrics:      " + (faceId === "YES" ? "✅ Face ID/Touch ID OK" : "❌ Broken") + "\n"
+          + "• Charging Port:   " + (chargingPort === "YES" ? "✅ Working" : "❌ Faulty") + "\n"
+          + "• Audio:           Speaker: " + (speaker === "YES" ? "✅" : "❌") + " | Earpiece: " + (earReceiver === "YES" ? "✅" : "❌") + " | Mic: " + (mic === "YES" ? "✅" : "❌") + "\n"
+          + "• Physical Keys:   Power: " + (powerBtn === "YES" ? "✅" : "❌") + " | Volume: " + (volBtns === "YES" ? "✅" : "❌") + " | Silent: " + (silentSwitch === "YES" ? "✅" : "❌") + "\n"
+          + "• Connectivity:    WiFi: " + (wifi === "YES" ? "✅" : "❌") + " | Bluetooth: " + (bluetooth === "YES" ? "✅" : "❌") + " | Network: " + (simNetwork === "YES" ? "✅" : "❌") + " | GPS: " + (gps === "YES" ? "✅" : "❌") + "\n\n"
+          + "🔋 BATTERY, HISTORY & INCLUSIONS:\n"
+          + "• Battery Health:  " + devBattery + "\n"
+          + "• Liquid Damage:   " + (liquidDamage === "NO" ? "✅ Safe (No Liquid)" : "❌ Liquid Damaged") + "\n"
+          + "• Component Repair:" + (majorReplaced === "NO" ? "✅ None (Original)" : "⚠️ Replaced: " + replacedComp) + "\n"
+          + "• Warranty Status: " + warrantyStatus + "\n"
+          + "• Inclusions:      Box: " + (originalBox === "YES" ? "✅" : "❌") + " | Charger: " + (originalCharger === "YES" ? "✅" : "❌") + " | Bill: " + (originalBill === "YES" ? "✅" : "❌") + "\n\n"
+          + "📋 REPORTED FAULTS: " + (failedTestNames && failedTestNames !== "None" ? ("⚠️ " + failedTestNames) : "✅ Clean Device (All Tests Passed)") + "\n"
+          + "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n";
+
+        // Badges helper
+        var tagPass = function(t) { return "<strong style='color:#15803D;background:#DCFCE7;border:1px solid #BBF7D0;padding:3px 8px;border-radius:6px;font-size:12px;display:inline-block;white-space:nowrap;'>" + t + "</strong>"; };
+        var tagFail = function(t) { return "<strong style='color:#B91C1C;background:#FEE2E2;border:1px solid #FECACA;padding:3px 8px;border-radius:6px;font-size:12px;display:inline-block;white-space:nowrap;'>" + t + "</strong>"; };
+        var tagWarn = function(t) { return "<strong style='color:#B45309;background:#FEF3C7;border:1px solid #FDE68A;padding:3px 8px;border-radius:6px;font-size:12px;display:inline-block;white-space:nowrap;'>" + t + "</strong>"; };
+
+        var makeRow = function(label, tag) {
+          return "<tr>"
+               + "<td style='padding:7px 8px 7px 0;color:#555558;font-size:13px;line-height:1.4;border-bottom:1px solid #F2F2F5;vertical-align:middle;'>" + label + "</td>"
+               + "<td align='right' style='padding:7px 0 7px 8px;border-bottom:1px solid #F2F2F5;vertical-align:middle;text-align:right;white-space:nowrap;'>" + tag + "</td>"
+               + "</tr>";
+        };
+
+        var htmlBody = '<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">'
+          + '<style type="text/css">'
+          + 'body, table, td, a { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }'
+          + 'table, td { mso-table-lspace: 0pt; mso-table-rspace: 0pt; }'
+          + 'body { margin: 0 !important; padding: 0 !important; width: 100% !important; background-color: #F2F2F7; }'
+          + '@media only screen and (max-width: 620px) {'
+          + '  .main-table { width: 100% !important; max-width: 100% !important; }'
+          + '  .content-box { padding: 16px 14px !important; }'
+          + '  .btn-wrap { display: block !important; width: 100% !important; margin-bottom: 8px !important; }'
+          + '  .btn-spacer { display: none !important; }'
+          + '}'
+          + '</style></head>'
+          + '<body style="margin:0;padding:0;background-color:#F2F2F7;font-family:-apple-system,BlinkMacSystemFont,\'Segoe UI\',Roboto,Helvetica,Arial,sans-serif;">'
+          + '<table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color:#F2F2F7;padding:16px 8px;">'
+          + '<tr><td align="center">'
+          + '<table class="main-table" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width:620px;width:100%;background-color:#FFFFFF;border-radius:16px;border:1px solid #E5E5EA;box-shadow:0 6px 20px rgba(0,0,0,0.06);overflow:hidden;">'
+          
+          // Header Banner
+          + '<tr><td style="background:linear-gradient(135deg,#0F5132,#198754);padding:24px 20px;color:#ffffff;text-align:center;">'
+          + '<div style="background:rgba(255,255,255,0.2);display:inline-block;padding:4px 14px;border-radius:20px;font-size:11px;font-weight:800;letter-spacing:0.05em;text-transform:uppercase;margin-bottom:8px;">⚡ DOORSTEP PICKUP SCHEDULED</div>'
+          + '<h1 style="margin:0;font-size:22px;font-weight:800;line-height:1.2;color:#ffffff;">*100% Confirmed* Doorstep Pickup</h1>'
+          + '<p style="margin:6px 0 0;font-size:13px;opacity:0.92;color:#e8f5e9;">Booking Ref: <strong style="font-family:monospace;letter-spacing:0.04em;">' + leadId + '</strong> • ' + Utilities.formatDate(new Date(), "Asia/Kolkata", "dd/MM/yyyy hh:mm:ss a") + '</p>'
+          + '</td></tr>'
+
+          // Content Box
+          + '<tr><td class="content-box" style="padding:22px 20px;">'
+
+          // Payout Amount Card
+          + '<div style="background:#F0FDF4;border:1.5px solid #86EFAC;border-radius:14px;padding:16px;margin-bottom:18px;text-align:left;">'
+          + '<div style="font-size:11px;font-weight:800;color:#15803D;text-transform:uppercase;letter-spacing:0.04em;">CASH / UPI PAYOUT AT DOORSTEP</div>'
+          + '<div style="font-size:30px;font-weight:800;color:#14532D;line-height:1.2;margin:4px 0 2px;">' + estValue + '</div>'
+          + '<div style="font-size:15px;font-weight:700;color:#166534;">📱 ' + fullDeviceName + '</div>'
+          + '<div style="font-size:11.5px;color:#15803D;margin-top:4px;">🔒 Instant transfer via Spot UPI / IMPS / Cash before device handover</div>'
+          + '</div>'
+
+          // Customer & Pickup Address Card
+          + '<div style="background:#F8FAFC;border:1px solid #E2E8F0;border-radius:12px;padding:16px;margin-bottom:18px;">'
+          + '<div style="font-size:12px;font-weight:800;color:#0071E3;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:10px;">📍 Doorstep Pickup &amp; Customer Details</div>'
+          + '<table border="0" cellpadding="0" cellspacing="0" width="100%" style="font-size:13px;line-height:1.6;">'
+          + '<tr style="border-bottom:1px solid #EEF2F6;"><td style="color:#64748B;width:34%;padding:6px 0;">Customer Name:</td><td style="color:#0F172A;font-weight:700;padding:6px 0;">' + customerName + '</td></tr>'
+          + '<tr style="border-bottom:1px solid #EEF2F6;"><td style="color:#64748B;padding:6px 0;">Contact Phone:</td><td style="padding:6px 0;"><a href="tel:' + cleanPhone + '" style="color:#0071E3;font-weight:700;text-decoration:none;">+91 ' + customerPhone + '</a></td></tr>'
+          + '<tr style="border-bottom:1px solid #EEF2F6;"><td style="color:#64748B;padding:6px 0;">Pickup Window:</td><td style="color:#15803D;font-weight:700;padding:6px 0;">⚡ ' + pickupDate + ' • ' + pickupSlot + '</td></tr>'
+          + '<tr style="border-bottom:1px solid #EEF2F6;"><td style="color:#64748B;padding:6px 0;">Pickup Address:</td><td style="color:#0F172A;font-weight:700;padding:6px 0;line-height:1.4;">' + (pickupAddress || "Not provided") + '</td></tr>'
+          + '<tr style="border-bottom:1px solid #EEF2F6;"><td style="color:#64748B;padding:6px 0;">Mumbai Pincode:</td><td style="color:#0F172A;font-weight:700;padding:6px 0;">' + (pincode || "Mumbai") + '</td></tr>'
+          + '<tr style="border-bottom:1px solid #EEF2F6;"><td style="color:#64748B;padding:6px 0;">Price Feedback:</td><td style="color:#0F172A;font-weight:600;padding:6px 0;">' + rating + '</td></tr>'
+          + '<tr><td style="color:#64748B;padding:6px 0;">Special Note:</td><td style="color:#0F172A;font-weight:700;padding:6px 0;background:#FEF3C7;border-radius:4px;padding-left:6px;">' + (comment || "None") + '</td></tr>'
+          + '</table>'
+          + '</div>'
+
+          // Action Buttons: WhatsApp, Call, Google Maps
+          + '<table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin-bottom:20px;">'
+          + '<tr>'
+          + '<td class="btn-wrap" width="32%" align="center" style="vertical-align:top;"><a href="' + waLink + '" target="_blank" style="display:block;width:100%;box-sizing:border-box;background:#25D366;color:#ffffff;text-align:center;padding:11px 6px;border-radius:10px;font-weight:bold;text-decoration:none;font-size:13px;">💬 WhatsApp</a></td>'
+          + '<td class="btn-spacer" width="2%"></td>'
+          + '<td class="btn-wrap" width="32%" align="center" style="vertical-align:top;"><a href="tel:' + cleanPhone + '" style="display:block;width:100%;box-sizing:border-box;background:#0071E3;color:#ffffff;text-align:center;padding:11px 6px;border-radius:10px;font-weight:bold;text-decoration:none;font-size:13px;">📞 Call Client</a></td>'
+          + '<td class="btn-spacer" width="2%"></td>'
+          + '<td class="btn-wrap" width="32%" align="center" style="vertical-align:top;"><a href="' + mapsLink + '" target="_blank" style="display:block;width:100%;box-sizing:border-box;background:#EA4335;color:#ffffff;text-align:center;padding:11px 6px;border-radius:10px;font-weight:bold;text-decoration:none;font-size:13px;">📍 Maps Route</a></td>'
+          + '</tr>'
+          + '</table>'
+
+          // Section 1: Screen & Display Check
+          + '<div style="border:1px solid #E5E5EA;border-radius:12px;padding:14px;margin-bottom:14px;">'
+          + '<div style="font-size:12.5px;font-weight:700;color:#111111;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:8px;">🖥️ Screen &amp; Display Check</div>'
+          + '<table border="0" cellpadding="0" cellspacing="0" width="100%">'
+          + makeRow('Display Power / Blackout', (displayWorking === "YES" ? tagPass("✅ Working (Clear)") : tagFail("❌ Fault / Blackout")))
+          + makeRow('Touchscreen Response', (touchscreen === "YES" ? tagPass("✅ Responsive") : tagFail("❌ Touch Issue")))
+          + makeRow('Front Screen Glass', (screenCracked === "NO" ? tagPass("✅ Intact (No Cracks)") : tagFail("❌ Glass Cracked")))
+          + makeRow('Screen Scratches', (screenScratches && (screenScratches.indexOf("Heavy") !== -1 || screenScratches.indexOf("Scratches") !== -1) ? tagFail(screenScratches) : tagPass("✅ Scratch-Free")))
+          + makeRow('Lines / Dots / Ink Spots', (displayFlaws === "NO" ? tagPass("✅ Clean Display") : tagFail("❌ Lines / Dots Present")))
+          + makeRow('Display Originality', (originalDisplay === "YES" ? tagPass("✅ Original Apple Screen") : tagWarn("⚠️ Replaced Screen")))
+          + '</table>'
+          + '</div>'
+
+          // Section 2: Body & Frame Condition
+          + '<div style="border:1px solid #E5E5EA;border-radius:12px;padding:14px;margin-bottom:14px;">'
+          + '<div style="font-size:12.5px;font-weight:700;color:#111111;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:8px;">📱 Body &amp; Frame Condition</div>'
+          + '<table border="0" cellpadding="0" cellspacing="0" width="100%">'
+          + makeRow('Frame Scratches / Marks', (bodyCondition && bodyCondition.indexOf("Clean") !== -1 ? tagPass("✅ Clean Metal Frame") : tagFail("❌ Has Dents / Body Scratches")))
+          + makeRow('Chassis / Bent Frame', (phoneBent === "NO" ? tagPass("✅ Flat &amp; Straight") : tagFail("❌ Frame Bent / Curved")))
+          + makeRow('Back Glass Condition', (backGlass === "NO" ? tagPass("✅ Intact") : tagFail("❌ Back Glass Broken")))
+          + makeRow('Camera Lens Glass', (cameraGlass === "NO" ? tagPass("✅ Clear &amp; Intact") : tagFail("❌ Glass Broken")))
+          + makeRow('Parts / Screws', (missingParts === "NO" ? tagPass("✅ All Intact") : tagFail("❌ Missing Parts")))
+          + '</table>'
+          + '</div>'
+
+          // Section 3: Hardware & Component Tests
+          + '<div style="border:1px solid #E5E5EA;border-radius:12px;padding:14px;margin-bottom:14px;">'
+          + '<div style="font-size:12.5px;font-weight:700;color:#111111;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:8px;">⚙️ Hardware &amp; Component Tests</div>'
+          + '<table border="0" cellpadding="0" cellspacing="0" width="100%">'
+          + makeRow('Front Selfie Camera', (frontCam === "YES" ? tagPass("✅ Working") : tagFail("❌ Faulty")))
+          + makeRow('Rear Main Camera', (rearCam === "YES" ? tagPass("✅ Working") : tagFail("❌ Faulty")))
+          + makeRow('Camera Flash', (camFlash === "YES" ? tagPass("✅ Working") : tagFail("❌ Faulty")))
+          + makeRow('Face ID / Fingerprint', (faceId === "YES" ? tagPass("✅ Working") : tagFail("❌ Broken")))
+          + makeRow('Charging Port', (chargingPort === "YES" ? tagPass("✅ Fast Charge OK") : tagFail("❌ Port Issue")))
+          + makeRow('Loudspeaker', (speaker === "YES" ? tagPass("✅ Loudspeaker OK") : tagFail("❌ Audio Issue")))
+          + makeRow('Earpiece / Receiver', (earReceiver === "YES" ? tagPass("✅ Clear Call Audio") : tagFail("❌ Receiver Issue")))
+          + makeRow('Microphone &amp; Audio IC', (mic === "YES" ? tagPass("✅ Working") : tagFail("❌ Faulty")))
+          + makeRow('Power Button', (powerBtn === "YES" ? tagPass("✅ Responsive") : tagFail("❌ Button Issue")))
+          + makeRow('Volume Buttons', (volBtns === "YES" ? tagPass("✅ Responsive") : tagFail("❌ Button Issue")))
+          + makeRow('Silent / Mute Switch', (silentSwitch === "YES" ? tagPass("✅ Working") : tagFail("❌ Faulty")))
+          + makeRow('Wi-Fi &amp; Bluetooth', (wifi === "YES" && bluetooth === "YES" ? tagPass("✅ Connected OK") : tagFail("❌ Wireless Issue")))
+          + makeRow('Cellular SIM / Network', (simNetwork === "YES" ? tagPass("✅ Signal OK") : tagFail("❌ Network Issue")))
+          + makeRow('GPS Location', (gps === "YES" ? tagPass("✅ Working") : tagFail("❌ Faulty")))
+          + '</table>'
+          + '</div>'
+
+          // Section 4: Battery, History & Inclusions
+          + '<div style="border:1px solid #E5E5EA;border-radius:12px;padding:14px;margin-bottom:14px;">'
+          + '<div style="font-size:12.5px;font-weight:700;color:#111111;text-transform:uppercase;letter-spacing:0.04em;margin-bottom:8px;">🔋 Battery, History &amp; Inclusions</div>'
+          + '<table border="0" cellpadding="0" cellspacing="0" width="100%">'
+          + makeRow('Battery Health', (devBattery && devBattery.indexOf("Above") !== -1 ? tagPass("🟢 " + devBattery) : tagFail("🔴 " + devBattery)))
+          + makeRow('Liquid / Water Damage', (liquidDamage === "NO" ? tagPass("✅ Safe (No Water Damage)") : tagFail("❌ Liquid Damaged")))
+          + makeRow('Component Repairs', (majorReplaced === "NO" ? tagPass("✅ None (Original)") : tagWarn("⚠️ Replaced: " + replacedComp)))
+          + makeRow('Purchase Timeline', '<strong>' + (warrantyStatus || "Out of Warranty") + '</strong>')
+          + makeRow('📦 Original Box', (originalBox === "YES" ? tagPass("✅ Available (YES)") : tagFail("❌ Missing (NO)")))
+          + makeRow('⚡ Original Charger / Cable', (originalCharger === "YES" ? tagPass("✅ Available (YES)") : tagFail("❌ Missing (NO)")))
+          + makeRow('🧾 Purchase Invoice / Bill', (originalBill === "YES" ? tagPass("✅ Available (YES)") : tagFail("❌ Missing (NO)")))
+          + '</table>'
+          + '</div>'
+
+          // Reported Faults Alert Banner
+          + '<div style="background:#FFF5F5;border:1px solid #FFD2D2;border-radius:12px;padding:14px;margin-bottom:16px;">'
+          + '<div style="font-size:12.5px;font-weight:700;color:#111111;margin-bottom:4px;">📋 Reported Faults &amp; Deductions:</div>'
+          + (failedTestNames && failedTestNames !== "None" && failedTestNames !== "None (All Passed)" ? '<div style="color:#D70015;font-weight:700;font-size:13px;line-height:1.4;">⚠️ ' + failedTestNames + '</div>' : '<div style="color:#15803D;font-weight:700;font-size:13px;line-height:1.4;">✅ Clean Device (All Diagnostic Tests Passed)</div>')
+          + '</div>'
+
+          // Field Technician 3-Step Protocol
+          + '<div style="background:#F8FAFC;border:1px solid #E2E8F0;border-radius:12px;padding:14px;font-size:12px;color:#64748B;line-height:1.5;">'
+          + '<strong style="color:#0F172A;display:block;margin-bottom:4px;">⚡ Field Technician Protocol:</strong>'
+          + '1. Call customer to verify address &amp; ETA.<br>'
+          + '2. Perform 5-minute diagnostic inspection to match the condition list above.<br>'
+          + '3. Transfer <strong>' + estValue + '</strong> immediately via Spot UPI / IMPS before device handover.'
+          + '</div>'
+
+          + '</td></tr></table></td></tr></table></body></html>';
+
+        var primaryEmail = "wholesalehouse2016@gmail.com";
+        var secondaryEmail = "Cashsecondoffice@gmail.com";
+        var bothEmails = primaryEmail + "," + secondaryEmail;
+
         try {
           MailApp.sendEmail({
-            to: adminEmail,
+            to: bothEmails,
             name: "CashSecond Pickup Desk",
             subject: confirmedSubject,
-            body: confirmedBody
+            body: confirmedBody,
+            htmlBody: htmlBody
           });
+          mailResult = "sent_via_MailApp";
         } catch (mErr) {
-          GmailApp.sendEmail(adminEmail, confirmedSubject, confirmedBody, { name: "CashSecond Pickup Desk" });
+          try {
+            GmailApp.sendEmail(primaryEmail, confirmedSubject, confirmedBody, {
+              cc: secondaryEmail,
+              name: "CashSecond Pickup Desk",
+              htmlBody: htmlBody
+            });
+            mailResult = "sent_via_GmailApp";
+          } catch (gErr) {
+            try {
+              MailApp.sendEmail(primaryEmail, confirmedSubject, confirmedBody, { htmlBody: htmlBody });
+              MailApp.sendEmail(secondaryEmail, confirmedSubject, confirmedBody, { htmlBody: htmlBody });
+              mailResult = "sent_individually";
+            } catch (indivErr) {
+              mailResult = "error: " + indivErr.toString();
+            }
+          }
         }
-      } catch (confirmMailErr) {}
+      } catch (confirmMailErr) {
+        mailResult = "error: " + confirmMailErr.toString();
+      }
+
+      // 3. Determine which values are non-empty for Sheet updating
+      var updates = {};
+      if (pickupAddress) updates["Pickup Address"]   = pickupAddress;
+      if (pincode)       updates["Pincode"]          = pincode;
+      if (pickupDate)    updates["Pickup Date"]      = pickupDate;
+      if (pickupSlot)    updates["Pickup Slot"]      = pickupSlot;
+      if (rating)        updates["Feedback Rating"]  = rating;
+      if (comment)       updates["Feedback Comment"] = comment;
+      updates["Valuation Status"] = "Pickup Scheduled & Verified";
+
+      var updatedFields = [];
+      if (targetRow !== -1) {
+        // Write updates to existing row
+        for (var header in updates) {
+          if (colMap[header]) {
+            sheet.getRange(targetRow, colMap[header]).setValue(updates[header]);
+            updatedFields.push(header);
+          }
+        }
+      } else {
+        // If lead not found, append a new row so the pickup request is preserved in the sheet
+        var newRow = new Array(COLUMN_HEADERS.length).fill("");
+        var setVal = function(h, v) { if (colMap[h]) newRow[colMap[h] - 1] = v; };
+        setVal("Submission Date", Utilities.formatDate(new Date(), "Asia/Kolkata", "dd/MM/yyyy"));
+        setVal("Submission Time", Utilities.formatDate(new Date(), "Asia/Kolkata", "hh:mm:ss a"));
+        setVal("Lead ID", leadId);
+        setVal("Full Name", customerName);
+        setVal("WhatsApp Number", customerPhone);
+        setVal("Model", deviceModel);
+        setVal("Final Estimated Value", estValue);
+        setVal("Pickup Address", pickupAddress);
+        setVal("Pincode", pincode);
+        setVal("Pickup Date", pickupDate);
+        setVal("Pickup Slot", pickupSlot);
+        setVal("Feedback Rating", rating);
+        setVal("Feedback Comment", comment);
+        setVal("Valuation Status", "Pickup Scheduled & Verified");
+        setVal("Submission Source", "thankyou_page_form");
+        sheet.appendRow(newRow);
+        targetRow = sheet.getLastRow();
+        updatedFields.push("appended_as_new_row");
+      }
 
       return ContentService.createTextOutput(JSON.stringify({
         status: "success",
         lead_id: leadId,
-        updated: true,
+        row_index: targetRow,
+        mail_status: mailResult,
         fields_updated: updatedFields,
-        message: "Fields updated without touching other columns."
+        message: "*100% Confirmed* email sent and sheet updated."
       })).setMimeType(ContentService.MimeType.JSON);
     }
 

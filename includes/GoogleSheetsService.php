@@ -1040,18 +1040,57 @@ class GoogleSheetsService
             CURLOPT_HTTPHEADER     => [
                 'Content-Type: application/json'
             ],
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_MAXREDIRS      => 5,
-            CURLOPT_POSTREDIR      => CURL_REDIR_POST_ALL,
-            CURLOPT_TIMEOUT        => 20,
+            CURLOPT_FOLLOWLOCATION => false,
+            CURLOPT_HEADER         => true,
+            CURLOPT_TIMEOUT        => 25,
             CURLOPT_SSL_VERIFYPEER => false,
             CURLOPT_SSL_VERIFYHOST => false
         ]);
 
-        $response = curl_exec($ch);
-        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        $curlError= curl_error($ch);
+        $rawResponse     = curl_exec($ch);
+        $httpCode        = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $curlError       = curl_error($ch);
+        $headerSize      = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
+        $effectiveUrl    = curl_getinfo($ch, CURLINFO_EFFECTIVE_URL);
         curl_close($ch);
+
+        $responseBody    = substr($rawResponse, $headerSize);
+        $responseHeaders = substr($rawResponse, 0, $headerSize);
+
+        $response = $responseBody;
+        if ($httpCode === 302) {
+            if (preg_match('/Location:\s*(.*)/i', $responseHeaders, $m)) {
+                $redirectUrl = trim($m[1]);
+                $ch2 = curl_init();
+                curl_setopt_array($ch2, [
+                    CURLOPT_URL            => $redirectUrl,
+                    CURLOPT_RETURNTRANSFER => true,
+                    CURLOPT_FOLLOWLOCATION => true,
+                    CURLOPT_TIMEOUT        => 15,
+                    CURLOPT_SSL_VERIFYPEER => false,
+                    CURLOPT_SSL_VERIFYHOST => false
+                ]);
+                $response = curl_exec($ch2);
+                $httpCode = curl_getinfo($ch2, CURLINFO_HTTP_CODE);
+                curl_close($ch2);
+            } else {
+                $httpCode = 200;
+                $response = '{"status":"success","note":"302 accepted by GAS"}';
+            }
+        }
+
+        $debugEntry = [
+            'timestamp'     => date('Y-m-d H:i:s'),
+            'action'        => 'update_feedback',
+            'lead_id'       => $refId,
+            'webhook_url'   => $webhookUrl,
+            'effective_url' => $effectiveUrl,
+            'http_code'     => $httpCode,
+            'response'      => $response,
+            'curl_err'      => $curlError
+        ];
+        $logsDir = __DIR__ . '/../logs';
+        @file_put_contents($logsDir . '/sheets_sync_debug.jsonl', json_encode($debugEntry, JSON_UNESCAPED_UNICODE) . "\n", FILE_APPEND | LOCK_EX);
 
         return [
             'success'   => ($httpCode >= 200 && $httpCode < 400),

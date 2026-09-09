@@ -367,9 +367,12 @@ require __DIR__ . '/includes/header.php';
                 fbData.append('pickup_address', addressText);
                 fbData.append('pincode', pincodeText);
 
-                // Dispatch POST to both endpoints for guaranteed capture
-                fetch('forms/buyback-questionnaire.php', { method: 'POST', body: fbData })
-                    .catch(function () {});
+                // Dispatch POST to backend handler (keepalive ensures delivery even if user closes/navigates)
+                fetch('forms/buyback-questionnaire.php', {
+                    method: 'POST',
+                    body: fbData,
+                    keepalive: true
+                }).catch(function () {});
 
                 setTimeout(function () {
                     if (scheduleCard) scheduleCard.style.display = 'none';

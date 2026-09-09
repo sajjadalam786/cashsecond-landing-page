@@ -107,8 +107,8 @@ return [
     // Leads will automatically sync to your Google Sheet with all 12 columns.
     // ============================================================
     'integrations' => [
-        'google_sheets_web_app_url' => get_env_var('GOOGLE_SHEETS_WEBHOOK_URL', 'https://script.google.com/macros/s/AKfycbwD6jtmW0fJX9FBcp4AL2js2IMAHpFyNOLvecN96RAgF2gY5KTnU6e06seBi7xAQSXA/exec'),
-        'google_sheets_webhook_url' => get_env_var('GOOGLE_SHEETS_WEBHOOK_URL', 'https://script.google.com/macros/s/AKfycbwD6jtmW0fJX9FBcp4AL2js2IMAHpFyNOLvecN96RAgF2gY5KTnU6e06seBi7xAQSXA/exec'),
+        'google_sheets_web_app_url' => get_env_var('GOOGLE_SHEETS_WEBHOOK_URL', 'https://script.google.com/macros/s/AKfycbwpu8fxMgUlDukZn6Ahn06r0yETy1CxleY6tpE5rbsn2bUOwTIwy7BA62-SLYl3G59b/exec'),
+        'google_sheets_webhook_url' => get_env_var('GOOGLE_SHEETS_WEBHOOK_URL', 'https://script.google.com/macros/s/AKfycbwpu8fxMgUlDukZn6Ahn06r0yETy1CxleY6tpE5rbsn2bUOwTIwy7BA62-SLYl3G59b/exec'),
         'notification_email'        => get_env_var('RECIPIENT_EMAIL', 'wholesalehouse2016@gmail.com, Cashsecondoffice@gmail.com'),
         'sender_email'              => get_env_var('SENDER_EMAIL', 'no-reply@cashsecond.in'),
         'sender_name'               => get_env_var('SENDER_NAME', 'CashSecond Valuation Desk'),
