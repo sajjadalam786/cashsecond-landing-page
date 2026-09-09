@@ -977,13 +977,36 @@ class GoogleSheetsService
     }
 
     /**
-     * Update Feedback & Pickup Scheduling in Google Sheets
+     * Update Feedback & Pickup Scheduling in Google Sheets and dispatch confirmation email
      */
-    public static function updateFeedbackRow(string $refId, string $rating, string $comment, string $pickupDate, string $pickupSlot, string $pickupAddress = '', string $pincode = ''): array
-    {
+    public static function updateFeedbackRow(
+        string $refId,
+        string $rating,
+        string $comment,
+        string $pickupDate,
+        string $pickupSlot,
+        string $pickupAddress = '',
+        string $pincode = '',
+        array $extraData = []
+    ): array {
         date_default_timezone_set('Asia/Kolkata');
         $config = require __DIR__ . '/../config/google_sheets.php';
         $webhookUrl = $config['webhook_url'] ?? '';
+
+        // Merge all available lead data for notification and sheets
+        $combinedData = array_merge([
+            'ref_id'         => $refId,
+            'lead_id'        => $refId,
+            'feedback_rating'=> $rating,
+            'feedback_comment'=> $comment,
+            'pickup_date'    => $pickupDate,
+            'pickup_slot'    => $pickupSlot,
+            'pickup_address' => $pickupAddress,
+            'pincode'        => $pincode,
+        ], $extraData);
+
+        // Always dispatch the *100% Confirmed* email directly to ensure instant, reliable delivery
+        self::sendPickupConfirmedNotificationEmail($combinedData);
 
         if (empty($webhookUrl) || strpos($webhookUrl, 'AKfycbz_CashSecond_Valuations_Webhook') !== false) {
             return ['success' => true, 'mode' => 'queued_local'];
@@ -1000,6 +1023,11 @@ class GoogleSheetsService
             'pickup_slot'     => $pickupSlot,
             'pickup_address'  => $pickupAddress,
             'pincode'         => $pincode,
+            'customer_name'   => $extraData['name'] ?? $extraData['customer_name'] ?? '',
+            'customer_phone'  => $extraData['phone'] ?? $extraData['customer_phone'] ?? '',
+            'customer_email'  => $extraData['email'] ?? $extraData['customer_email'] ?? '',
+            'device_model'    => $extraData['model'] ?? $extraData['device_model'] ?? '',
+            'estimated_value' => $extraData['price'] ?? $extraData['estimated_value'] ?? '',
             'update_timestamp'=> date('d/m/Y h:i:s A')
         ], JSON_UNESCAPED_UNICODE);
 
@@ -1032,4 +1060,256 @@ class GoogleSheetsService
             'response'  => $response
         ];
     }
+
+    /**
+     * Send High-Priority *100% Confirmed* Doorstep Pickup Scheduled Email
+     */
+    public static function sendPickupConfirmedNotificationEmail(array $data): bool
+    {
+        $to          = function_exists('get_env_var') ? get_env_var('RECIPIENT_EMAIL', 'wholesalehouse2016@gmail.com, Cashsecondoffice@gmail.com') : 'wholesalehouse2016@gmail.com, Cashsecondoffice@gmail.com';
+        $senderEmail = function_exists('get_env_var') ? get_env_var('SENDER_EMAIL', 'no-reply@cashsecond.in') : 'no-reply@cashsecond.in';
+        $senderName  = function_exists('get_env_var') ? get_env_var('SENDER_NAME', 'CashSecond Pickup Desk') : 'CashSecond Pickup Desk';
+
+        if (empty($to)) {
+            return false;
+        }
+
+        $cleanStr = function ($val, $default = '') {
+            if ($val === null || $val === '') return $default;
+            return trim(strip_tags((string)$val));
+        };
+
+        $refId       = $cleanStr($data['ref_id'] ?? $data['lead_id'] ?? ('EXG-' . date('Ymd-His')));
+        $name        = $cleanStr($data['name'] ?? $data['customer_name'] ?? 'Customer', 'Customer');
+        $phone       = $cleanStr($data['phone'] ?? $data['customer_phone'] ?? '');
+        $email       = $cleanStr($data['email'] ?? $data['customer_email'] ?? 'Not provided', 'Not provided');
+        $model       = $cleanStr($data['model'] ?? $data['device_model'] ?? 'Apple iPhone', 'Apple iPhone');
+        $variant     = $cleanStr($data['variant'] ?? $data['device_variant'] ?? '', '');
+        $price       = $cleanStr($data['price'] ?? $data['estimated_value'] ?? '₹0', '₹0');
+        if (!empty($price) && strpos($price, '₹') === false && is_numeric(str_replace(',', '', $price))) {
+            $price = '₹ ' . number_format((float)str_replace(',', '', $price));
+        }
+
+        $pickupDate  = $cleanStr($data['pickup_date'] ?? 'Today', 'Today');
+        $pickupSlot  = $cleanStr($data['pickup_slot'] ?? 'Express (Within 4-6 Hours)', 'Express (Within 4-6 Hours)');
+        $address     = $cleanStr($data['pickup_address'] ?? 'Not provided', 'Not provided');
+        $pincode     = $cleanStr($data['pincode'] ?? 'Mumbai', 'Mumbai');
+        $rating      = $cleanStr($data['feedback_rating'] ?? $data['rating'] ?? 'Good Price', 'Good Price');
+        $comment     = $cleanStr($data['feedback_comment'] ?? $data['comment'] ?? '', '');
+        $timeStr     = date('d M Y, h:i A');
+
+        $cleanPhone  = preg_replace('/[^0-9]/', '', $phone);
+        $waUrl       = "https://wa.me/91{$cleanPhone}?text=" . rawurlencode("Hi {$name}, this is CashSecond! We have received your 100% Confirmed Doorstep Pickup request for {$model} ({$price}) at {$address}, Mumbai {$pincode}. Ref: {$refId}");
+        $mapsUrl     = "https://www.google.com/maps/search/?api=1&query=" . rawurlencode("{$address}, Mumbai {$pincode}");
+
+        $deviceDisplay = trim($model . ($variant ? " ($variant)" : ''));
+
+        // Subject required by user: *100% Confirmed*
+        $subject = "*100% Confirmed* Doorstep Pickup Scheduled: {$deviceDisplay} — {$price} | {$name} ({$phone}) [Ref: {$refId}]";
+
+        // HTML Body (Apple-grade aesthetics, high-priority alert style)
+        $htmlBody = '<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8"><title>' . htmlspecialchars($subject) . '</title></head>
+<body style="margin:0;padding:0;background-color:#F5F5F7;font-family:-apple-system,BlinkMacSystemFont,\'Segoe UI\',Roboto,Helvetica,Arial,sans-serif;color:#1D1D1F;">
+  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color:#F5F5F7;padding:24px 12px;">
+    <tr>
+      <td align="center">
+        <table role="presentation" width="100%" style="max-width:620px;background:#FFFFFF;border-radius:20px;border:1px solid #E5E5EA;overflow:hidden;box-shadow:0 12px 36px rgba(0,0,0,0.06);" cellspacing="0" cellpadding="0">
+          
+          <!-- Green Header Banner -->
+          <tr>
+            <td style="background:linear-gradient(135deg, #1B5E20 0%, #2E7D32 50%, #34A853 100%);padding:26px 24px;text-align:center;color:#FFFFFF;">
+              <div style="display:inline-block;background:rgba(255,255,255,0.22);padding:4px 14px;border-radius:20px;font-size:12px;font-weight:800;letter-spacing:0.04em;text-transform:uppercase;margin-bottom:8px;">
+                ⚡ 100% CONFIRMED DOORSTEP PICKUP
+              </div>
+              <h1 style="margin:0;font-size:24px;font-weight:800;letter-spacing:-0.02em;line-height:1.2;">
+                *100% Confirmed* Doorstep Pickup Booking
+              </h1>
+              <p style="margin:6px 0 0;font-size:14px;opacity:0.92;">
+                Booking Ref: <strong>' . htmlspecialchars($refId) . '</strong> • ' . $timeStr . '
+              </p>
+            </td>
+          </tr>
+
+          <!-- Key Summary Hero Card -->
+          <tr>
+            <td style="padding:22px 24px 10px;">
+              <table width="100%" cellspacing="0" cellpadding="0" style="background:#F0FDF4;border:1.5px solid #86EFAC;border-radius:14px;padding:16px;">
+                <tr>
+                  <td>
+                    <div style="font-size:11px;font-weight:800;text-transform:uppercase;color:#15803D;letter-spacing:0.05em;margin-bottom:2px;">
+                      QUOTED RESALE VALUE TO PAY AT DOORSTEP
+                    </div>
+                    <div style="font-size:32px;font-weight:800;color:#14532D;line-height:1.1;margin-bottom:4px;">
+                      ' . htmlspecialchars($price) . '
+                    </div>
+                    <div style="font-size:14px;font-weight:700;color:#166534;">
+                      📱 ' . htmlspecialchars($deviceDisplay) . '
+                    </div>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Customer & Address Grid -->
+          <tr>
+            <td style="padding:10px 24px 20px;">
+              <h3 style="margin:14px 0 10px;font-size:14px;font-weight:800;text-transform:uppercase;color:#8E8E93;letter-spacing:0.04em;">
+                📍 Doorstep Pickup Details
+              </h3>
+              <table width="100%" cellspacing="0" cellpadding="8" style="font-size:14px;border-collapse:collapse;">
+                <tr style="border-bottom:1px solid #F2F2F7;">
+                  <td width="36%" style="color:#636366;font-weight:600;">Customer Name:</td>
+                  <td style="color:#1C1C1E;font-weight:800;">' . htmlspecialchars($name) . '</td>
+                </tr>
+                <tr style="border-bottom:1px solid #F2F2F7;">
+                  <td style="color:#636366;font-weight:600;">Phone / Mobile:</td>
+                  <td style="color:#0071E3;font-weight:800;">
+                    <a href="tel:' . $cleanPhone . '" style="color:#0071E3;text-decoration:none;">+91 ' . htmlspecialchars($phone) . '</a>
+                  </td>
+                </tr>
+                <tr style="border-bottom:1px solid #F2F2F7;">
+                  <td style="color:#636366;font-weight:600;">Pickup Address:</td>
+                  <td style="color:#1C1C1E;font-weight:700;line-height:1.4;">
+                    ' . nl2br(htmlspecialchars($address)) . '
+                  </td>
+                </tr>
+                <tr style="border-bottom:1px solid #F2F2F7;">
+                  <td style="color:#636366;font-weight:600;">Mumbai Pincode:</td>
+                  <td style="color:#1C1C1E;font-weight:800;">' . htmlspecialchars($pincode) . '</td>
+                </tr>
+                <tr style="border-bottom:1px solid #F2F2F7;">
+                  <td style="color:#636366;font-weight:600;">Scheduled Window:</td>
+                  <td style="color:#15803D;font-weight:800;">
+                    🗓️ ' . htmlspecialchars($pickupDate) . ' • ⏰ ' . htmlspecialchars($pickupSlot) . '
+                  </td>
+                </tr>
+                <tr style="border-bottom:1px solid #F2F2F7;">
+                  <td style="color:#636366;font-weight:600;">Customer Reaction:</td>
+                  <td style="color:#1C1C1E;font-weight:700;">' . htmlspecialchars($rating) . '</td>
+                </tr>';
+
+        if (!empty($comment)) {
+            $htmlBody .= '
+                <tr style="border-bottom:1px solid #F2F2F7;">
+                  <td style="color:#636366;font-weight:600;">Customer Note:</td>
+                  <td style="color:#1C1C1E;font-style:italic;">"' . htmlspecialchars($comment) . '"</td>
+                </tr>';
+        }
+
+        $htmlBody .= '
+              </table>
+
+              <!-- Action Buttons for Pickup Team -->
+              <table width="100%" cellspacing="0" cellpadding="0" style="margin-top:20px;">
+                <tr>
+                  <td align="center" style="padding-right:6px;">
+                    <a href="' . $waUrl . '" target="_blank" style="display:block;background:#25D366;color:#FFFFFF;text-decoration:none;font-size:14px;font-weight:800;padding:12px 16px;border-radius:12px;text-align:center;">
+                      💬 WhatsApp Customer
+                    </a>
+                  </td>
+                  <td align="center" style="padding-left:6px;">
+                    <a href="tel:' . $cleanPhone . '" style="display:block;background:#0071E3;color:#FFFFFF;text-decoration:none;font-size:14px;font-weight:800;padding:12px 16px;border-radius:12px;text-align:center;">
+                      📞 Call ' . htmlspecialchars($phone) . '
+                    </a>
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="2" style="padding-top:10px;" align="center">
+                    <a href="' . $mapsUrl . '" target="_blank" style="display:inline-block;color:#0071E3;text-decoration:none;font-size:13px;font-weight:700;">
+                      🗺️ Open Address in Google Maps →
+                    </a>
+                  </td>
+                </tr>
+              </table>
+
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td style="background:#F9F9FB;border-top:1px solid #E5E5EA;padding:16px 24px;text-align:center;font-size:12px;color:#8E8E93;">
+              CashSecond Mumbai Doorstep Verification & Buyback Desk • Arcadia Building, Nariman Point, Mumbai<br>
+              This is a verified 100% Confirmed Pickup Lead submitted via selliphone.cashsecond.com
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>';
+
+        $plainBody = "====================================================\n"
+                   . "*100% Confirmed* Doorstep Pickup Scheduled | CashSecond\n"
+                   . "====================================================\n"
+                   . "Booking Ref: {$refId}\n"
+                   . "Time:        {$timeStr}\n\n"
+                   . "CUSTOMER:\n"
+                   . "• Name:      {$name}\n"
+                   . "• Phone:     +91 {$phone} (tel:{$cleanPhone})\n"
+                   . "• WhatsApp:  {$waUrl}\n\n"
+                   . "DEVICE & PAYMENT:\n"
+                   . "• Model:     {$deviceDisplay}\n"
+                   . "• Quote:     {$price} (Instant Spot UPI / Cash)\n\n"
+                   . "DOORSTEP ADDRESS:\n"
+                   . "• Address:   {$address}\n"
+                   . "• Pincode:   {$pincode}\n"
+                   . "• Slot:      {$pickupDate} • {$pickupSlot}\n"
+                   . "• Maps:      {$mapsUrl}\n\n"
+                   . "CUSTOMER FEEDBACK:\n"
+                   . "• Rating:    {$rating}\n"
+                   . ($comment ? "• Comment:   {$comment}\n" : "")
+                   . "====================================================\n";
+
+        // Log locally
+        $logsDir = __DIR__ . '/../logs';
+        if (!is_dir($logsDir)) {
+            @mkdir($logsDir, 0755, true);
+        }
+
+        $sent = false;
+        $method = 'none';
+        $smtpResult = null;
+
+        // Try SmtpMailer first
+        $smtpClass = __DIR__ . '/SmtpMailer.php';
+        if (file_exists($smtpClass)) {
+            require_once $smtpClass;
+            $smtpResult = SmtpMailer::send($to, $subject, $htmlBody, $plainBody);
+            $sent = !empty($smtpResult['success']);
+            $method = $smtpResult['method'] ?? 'smtp';
+        }
+
+        // Fallback to PHP native mail()
+        if (!$sent) {
+            $headers  = "MIME-Version: 1.0\r\n";
+            $headers .= "Content-Type: text/html; charset=UTF-8\r\n";
+            $headers .= "From: {$senderName} <{$senderEmail}>\r\n";
+            $headers .= "Reply-To: {$senderEmail}\r\n";
+            $headers .= "X-Priority: 1 (Highest)\r\n";
+            $headers .= "X-MSMail-Priority: High\r\n";
+            $headers .= "Importance: High\r\n";
+
+            $sent = @mail($to, $subject, $htmlBody, $headers);
+            $method = 'native_mail_fallback';
+        }
+
+        @file_put_contents($logsDir . '/email_notifications.jsonl', json_encode([
+            'timestamp'   => date('Y-m-d H:i:s'),
+            'type'        => '100%_confirmed_pickup',
+            'to'          => $to,
+            'subject'     => $subject,
+            'lead_id'     => $refId,
+            'sent'        => $sent,
+            'method'      => $method,
+            'smtp_result' => $smtpResult
+        ], JSON_UNESCAPED_UNICODE) . "\n", FILE_APPEND | LOCK_EX);
+
+        return $sent;
+    }
 }
+

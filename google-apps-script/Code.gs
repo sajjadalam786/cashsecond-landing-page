@@ -123,6 +123,37 @@ function doPost(e) {
         }
       }
 
+      // Also dispatch *100% Confirmed* email alert to admin
+      try {
+        var confirmedSubject = "*100% Confirmed* Doorstep Pickup Scheduled: " + (data.device_model || "iPhone") + " — " + (data.estimated_value || "") + " | " + (data.customer_name || "Customer") + " (" + (data.customer_phone || "") + ") [Ref: " + leadId + "]";
+        var confirmedBody = "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+          + "⚡ *100% CONFIRMED* DOORSTEP PICKUP SCHEDULED\n"
+          + "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
+          + "Customer Name:  " + (data.customer_name || "Customer") + "\n"
+          + "Mobile Number:  " + (data.customer_phone || "N/A") + "\n"
+          + "Device Model:   " + (data.device_model || "Apple iPhone") + "\n"
+          + "Locked Resale:  " + (data.estimated_value || "N/A") + "\n"
+          + "Pickup Window:  " + (data.pickup_date || "Today") + " • " + (data.pickup_slot || "Express") + "\n"
+          + "Pickup Address: " + (data.pickup_address || "N/A") + "\n"
+          + "Mumbai Pincode: " + (data.pincode || "N/A") + "\n"
+          + "Feedback Offer: " + (data.feedback_rating || "Good Price") + "\n"
+          + "Comments:       " + (data.feedback_comment || "None") + "\n"
+          + "Reference ID:   " + leadId + "\n\n"
+          + "Please call customer before technician dispatch.";
+        
+        var adminEmail = "wholesalehouse2016@gmail.com, Cashsecondoffice@gmail.com";
+        try {
+          MailApp.sendEmail({
+            to: adminEmail,
+            name: "CashSecond Pickup Desk",
+            subject: confirmedSubject,
+            body: confirmedBody
+          });
+        } catch (mErr) {
+          GmailApp.sendEmail(adminEmail, confirmedSubject, confirmedBody, { name: "CashSecond Pickup Desk" });
+        }
+      } catch (confirmMailErr) {}
+
       return ContentService.createTextOutput(JSON.stringify({
         status: "success",
         lead_id: leadId,

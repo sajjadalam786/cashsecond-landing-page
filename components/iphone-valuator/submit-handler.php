@@ -58,15 +58,55 @@ if (!$is_feedback_action && !empty($_POST['website_hp'])) {
 
 // --- Feedback / Pickup Scheduling Action ---
 if ($is_feedback_action) {
-    $ref_id      = isset($_POST['ref_id'])           ? htmlspecialchars(strip_tags(trim($_POST['ref_id'])),           ENT_QUOTES, 'UTF-8') : '';
-    $rating      = isset($_POST['feedback_rating'])  ? htmlspecialchars(strip_tags(trim($_POST['feedback_rating'])),  ENT_QUOTES, 'UTF-8') : '';
+    $ref_id      = isset($_POST['ref_id'])           ? htmlspecialchars(strip_tags(trim($_POST['ref_id'])),           ENT_QUOTES, 'UTF-8') : (!empty($_POST['lead_id']) ? htmlspecialchars(strip_tags(trim($_POST['lead_id'])), ENT_QUOTES, 'UTF-8') : '');
+    $rating      = isset($_POST['feedback_rating'])  ? htmlspecialchars(strip_tags(trim($_POST['feedback_rating'])),  ENT_QUOTES, 'UTF-8') : 'Good Price';
     $comment     = isset($_POST['feedback_comment']) ? htmlspecialchars(strip_tags(trim($_POST['feedback_comment'])), ENT_QUOTES, 'UTF-8') : '';
-    $pickup_date = isset($_POST['pickup_date'])       ? htmlspecialchars(strip_tags(trim($_POST['pickup_date'])),      ENT_QUOTES, 'UTF-8') : '';
-    $pickup_slot = isset($_POST['pickup_slot'])       ? htmlspecialchars(strip_tags(trim($_POST['pickup_slot'])),      ENT_QUOTES, 'UTF-8') : '';
+    $pickup_date = isset($_POST['pickup_date'])       ? htmlspecialchars(strip_tags(trim($_POST['pickup_date'])),      ENT_QUOTES, 'UTF-8') : 'Today';
+    $pickup_slot = isset($_POST['pickup_slot'])       ? htmlspecialchars(strip_tags(trim($_POST['pickup_slot'])),      ENT_QUOTES, 'UTF-8') : 'Express (Within 6 Hours)';
     $pickup_addr = isset($_POST['pickup_address'])    ? htmlspecialchars(strip_tags(trim($_POST['pickup_address'])),   ENT_QUOTES, 'UTF-8') : '';
     $pincode     = isset($_POST['pincode'])           ? preg_replace('/[^0-9]/', '', trim($_POST['pincode']))          : '';
 
-    $feedback_entry = [
+    $extra_data = [
+        'customer_name'   => isset($_POST['customer_name']) ? htmlspecialchars(strip_tags(trim($_POST['customer_name'])), ENT_QUOTES, 'UTF-8') : (isset($_POST['name']) ? htmlspecialchars(strip_tags(trim($_POST['name'])), ENT_QUOTES, 'UTF-8') : ''),
+        'customer_phone'  => isset($_POST['customer_phone']) ? preg_replace('/[^0-9+]/', '', trim($_POST['customer_phone'])) : (isset($_POST['phone']) ? preg_replace('/[^0-9+]/', '', trim($_POST['phone'])) : ''),
+        'customer_email'  => isset($_POST['customer_email']) ? filter_var(trim($_POST['customer_email']), FILTER_SANITIZE_EMAIL) : '',
+        'device_model'    => isset($_POST['device_model']) ? htmlspecialchars(strip_tags(trim($_POST['device_model'])), ENT_QUOTES, 'UTF-8') : (isset($_POST['model']) ? htmlspecialchars(strip_tags(trim($_POST['model'])), ENT_QUOTES, 'UTF-8') : ''),
+        'estimated_value' => isset($_POST['estimated_value']) ? htmlspecialchars(strip_tags(trim($_POST['estimated_value'])), ENT_QUOTES, 'UTF-8') : (isset($_POST['price']) ? htmlspecialchars(strip_tags(trim($_POST['price'])), ENT_QUOTES, 'UTF-8') : '')
+    ];
+
+    // Resolve project root (2 levels up from components/iphone-valuator/)
+    $project_root = dirname(__DIR__, 2);
+    $logs_dir     = $project_root . '/logs';
+    if (!is_dir($logs_dir)) {
+        @mkdir($logs_dir, 0755, true);
+    }
+
+    // Fallback: search recent logs if name/phone/model/price missing
+    if (empty($extra_data['customer_phone']) || empty($extra_data['customer_name']) || empty($extra_data['estimated_value'])) {
+        foreach (['valuator_leads.jsonl', 'questionnaire_leads.jsonl'] as $logFile) {
+            $filePath = $logs_dir . '/' . $logFile;
+            if (file_exists($filePath)) {
+                $lines = @file($filePath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+                if ($lines) {
+                    for ($i = count($lines) - 1; $i >= 0; $i--) {
+                        $entry = json_decode($lines[$i], true);
+                        if ($entry && (
+                            (isset($entry['ref_id']) && $entry['ref_id'] === $ref_id) ||
+                            (isset($entry['lead_id']) && $entry['lead_id'] === $ref_id)
+                        )) {
+                            if (empty($extra_data['customer_name']))  $extra_data['customer_name'] = $entry['name'] ?? $entry['customer_name'] ?? $entry['full_name'] ?? '';
+                            if (empty($extra_data['customer_phone'])) $extra_data['customer_phone'] = $entry['phone'] ?? $entry['customer_phone'] ?? $entry['phone_number'] ?? '';
+                            if (empty($extra_data['device_model']))   $extra_data['device_model'] = $entry['model'] ?? $entry['device_model'] ?? '';
+                            if (empty($extra_data['estimated_value']))$extra_data['estimated_value'] = $entry['estimated_value'] ?? $entry['val'] ?? $entry['final_price'] ?? '';
+                            break 2;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    $feedback_entry = array_merge([
         'type'           => 'valuation_feedback',
         'ref_id'         => $ref_id,
         'timestamp'      => date('Y-m-d H:i:s'),
@@ -77,26 +117,20 @@ if ($is_feedback_action) {
         'pickup_address' => $pickup_addr,
         'pincode'        => $pincode,
         'ip'             => $_SERVER['REMOTE_ADDR'] ?? 'UNKNOWN'
-    ];
+    ], $extra_data);
 
-    // Resolve project root (2 levels up from components/iphone-valuator/)
-    $project_root = dirname(__DIR__, 2);
-    $logs_dir     = $project_root . '/logs';
-    if (!is_dir($logs_dir)) {
-        @mkdir($logs_dir, 0755, true);
-    }
     @file_put_contents($logs_dir . '/valuator_feedback.jsonl',
         json_encode($feedback_entry, JSON_UNESCAPED_UNICODE) . "\n",
         FILE_APPEND | LOCK_EX
     );
 
-    // Sync to Google Sheets via shared service
+    // Sync to Google Sheets and dispatch *100% Confirmed* email via shared service
     $sheets_result = false;
     $sheets_service = $project_root . '/includes/GoogleSheetsService.php';
     if (file_exists($sheets_service)) {
         require_once $sheets_service;
         $sheets_result = GoogleSheetsService::updateFeedbackRow(
-            $ref_id, $rating, $comment, $pickup_date, $pickup_slot, $pickup_addr, $pincode
+            $ref_id, $rating, $comment, $pickup_date, $pickup_slot, $pickup_addr, $pincode, $extra_data
         );
     }
 

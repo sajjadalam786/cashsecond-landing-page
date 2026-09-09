@@ -60,109 +60,123 @@ require __DIR__ . '/includes/header.php';
         <div class="thankyou-card">
             <!-- Animated Verified Check Icon -->
             <div class="thankyou-icon-wrap" aria-hidden="true">
-                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
                     <polyline points="20 6 9 17 4 12"></polyline>
                 </svg>
             </div>
 
-            <span class="thankyou-badge-confirmed">✓ Valuation Calculated Successfully</span>
-            <h1 class="thankyou-title">Your Valuation Quote</h1>
-            <h2 class="thankyou-contact-speed" style="font-size: 1.15rem; font-weight: 800; color: #0071E3; margin: 10px 0 12px; letter-spacing: -0.02em; line-height: 1.45; background: #F0F7FF; border: 1px solid rgba(0, 113, 227, 0.2); border-radius: 12px; padding: 10px 16px; display: inline-block;">
-                ⚡ Our Team Will Contact You for Doorstep Pickup Within 6 to 12 Hours (or Even Faster!)
-            </h2>
-            <p class="thankyou-subtitle">Thank you, <strong><?= htmlspecialchars($name) ?></strong>. Here is your official estimated resale quote for your device.</p>
+            <span class="thankyou-badge-confirmed">✓ Valuation Calculated &amp; Price Locked</span>
+            <h1 class="thankyou-title" style="font-size: clamp(1.4rem, 3.8vw, 1.9rem); margin: 8px 0 16px; color: #1C1C1E;">
+                Your Final Phone Value:
+            </h1>
 
             <!-- Revealed Valuation Hero Card -->
             <div class="thankyou-valuation-hero">
                 <div class="ty-device-name"><?= htmlspecialchars($device_display) ?></div>
-                <div class="ty-amount-caption">Estimated Resale Value</div>
                 <div class="ty-amount-value"><?= htmlspecialchars($val_display) ?></div>
                 <div class="ty-ref-pill">Booking Ref: <?= htmlspecialchars($ref_id) ?></div>
-                <p class="ty-sub-note">Free Mumbai doorstep pickup • Spot UPI / Cash payment upon physical verification</p>
+                <div class="ty-sub-note" style="display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; margin-top: 10px; font-weight: 600; color: rgba(255, 255, 255, 0.95); font-size: 0.78rem;">
+                    <span>⚡ Free Doorstep Pickup</span>
+                    <span>•</span>
+                    <span>⏱️ 5-Min Inspection</span>
+                    <span>•</span>
+                    <span>💵 Spot UPI / Cash</span>
+                </div>
             </div>
 
-            <!-- Feedback & Doorstep Pickup Scheduling Box -->
+            <!-- Doorstep Pickup Scheduling & Experience Box -->
             <div class="ty-feedback-schedule-card" id="tyScheduleCard">
-                <!-- Feedback Section -->
-                <div class="ty-section-header">
-                    <div class="ty-section-title">
-                        <span>How was your valuation estimate?</span>
-                        <span class="ty-req-badge">Required</span>
+                <div class="ty-section-header" style="margin-bottom: 12px; text-align: center;">
+                    <div style="display: inline-flex; align-items: center; gap: 6px; background: #EBF5FF; color: #0071E3; font-size: 0.8125rem; font-weight: 800; padding: 4px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 6px;">
+                        <span>⚡ Express Service</span>
                     </div>
-                    <p class="ty-section-subtitle">Please rate our price quote to confirm your doorstep pickup:</p>
-                </div>
-
-                <div class="ty-feedback-pills-grid" id="tyFeedbackPills">
-                    <button type="button" class="ty-feedback-pill" data-val="Too Less Price">Too Less Price</button>
-                    <button type="button" class="ty-feedback-pill" data-val="Less Price">Less Price</button>
-                    <button type="button" class="ty-feedback-pill" data-val="Average Price">Average Price</button>
-                    <button type="button" class="ty-feedback-pill" data-val="Good Price">Good Price</button>
-                    <button type="button" class="ty-feedback-pill" data-val="Awesome">Awesome! 🔥</button>
-                </div>
-
-                <div class="ty-comment-wrap">
-                    <textarea id="tyFeedbackComment" class="ty-comment-textarea" placeholder="Share your experience or suggestion (optional)..." rows="2"></textarea>
-                </div>
-
-                <hr style="border: none; border-top: 1px solid #E5E5EA; margin: 16px 0;">
-
-                <!-- Pickup Slot Selector -->
-                <div class="ty-section-header">
-                    <div class="ty-section-title">
-                        <div style="display: flex; align-items: center; gap: 6px;">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-                            <span>Select Doorstep Pickup Slot:</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="ty-slots-grid" id="tyDateSlotsGrid" style="margin-bottom: 8px;">
-                    <button type="button" class="ty-slot-pill selected" data-date="Today">Today</button>
-                    <button type="button" class="ty-slot-pill" data-date="Tomorrow">Tomorrow</button>
-                    <button type="button" class="ty-slot-pill" data-date="Day After">Day After</button>
-                </div>
-
-                <div class="ty-slots-grid" id="tyTimeSlotsGrid" style="margin-bottom: 16px;">
-                    <button type="button" class="ty-slot-pill selected" data-slot="Express (Within 6 Hours)">⚡ Express (Within 6 Hours)</button>
-                    <button type="button" class="ty-slot-pill" data-slot="10:00 AM - 1:00 PM">10:00 AM - 1:00 PM</button>
-                    <button type="button" class="ty-slot-pill" data-slot="1:00 PM - 5:00 PM">1:00 PM - 5:00 PM</button>
-                    <button type="button" class="ty-slot-pill" data-slot="5:00 PM - 9:00 PM">5:00 PM - 9:00 PM</button>
+                    <h2 style="font-size: 1.25rem; font-weight: 800; color: #1C1C1E; margin: 0 0 4px 0; letter-spacing: -0.02em;">
+                        Schedule Pickup in 6 Hours
+                    </h2>
                 </div>
 
                 <!-- Doorstep Address & Mumbai Pincode Fields -->
-                <div class="ty-address-pincode-wrap" style="margin-bottom: 16px; background: #F9F9FB; border: 1px solid #E5E5EA; border-radius: 14px; padding: 14px 16px;">
+                <div class="ty-address-pincode-wrap" style="margin-bottom: 14px; background: #F9F9FB; border: 1.5px solid #E5E5EA; border-radius: 14px; padding: 14px;">
                     <div style="margin-bottom: 10px;">
-                        <label for="tyPickupAddress" style="display: block; font-size: 0.8125rem; font-weight: 700; color: #1C1C1E; margin-bottom: 5px;">
-                            Doorstep Pickup Address <span style="color: #FF3B30;">*</span>
+                        <label for="tyPickupAddress" style="display: flex; justify-content: space-between; font-size: 0.8125rem; font-weight: 700; color: #1C1C1E; margin-bottom: 5px;">
+                            <span>Enter Address for Pickup <span style="color: #FF3B30;">*</span></span>
+                            <span style="font-size: 0.72rem; color: #0071E3; font-weight: 600;">Mumbai &amp; MMR</span>
                         </label>
-                        <textarea id="tyPickupAddress" class="ty-comment-textarea" placeholder="Flat/House No., Building Name, Street & Area in Mumbai..." rows="2" style="background: #FFFFFF; font-size: 0.8125rem;"></textarea>
+                        <textarea id="tyPickupAddress" class="ty-comment-textarea" placeholder="Flat/House No., Building Name, Street & Area in Mumbai..." rows="4" style="background: #FFFFFF; font-size: 0.875rem; border: 1px solid #D1D1D6; min-height: 90px; border-radius: 10px;"></textarea>
                     </div>
                     
                     <div>
                         <label for="tyPickupPincode" style="display: block; font-size: 0.8125rem; font-weight: 700; color: #1C1C1E; margin-bottom: 5px;">
                             Mumbai Pincode <span style="color: #FF3B30;">*</span>
                         </label>
-                        <input type="tel" id="tyPickupPincode" class="ty-comment-textarea" placeholder="e.g. 400050" maxlength="6" style="background: #FFFFFF; height: 38px; padding: 6px 12px; font-weight: 600;">
+                        <input type="tel" id="tyPickupPincode" class="ty-comment-textarea" placeholder="6-digit Pincode (e.g. 400050)" inputmode="numeric" pattern="[0-9]{6}" maxlength="6" style="background: #FFFFFF; height: 42px; padding: 8px 12px; font-size: 0.9375rem; font-weight: 700; border: 1px solid #D1D1D6; border-radius: 10px;">
                     </div>
                 </div>
 
-                <div id="tyFeedbackError" class="ty-feedback-error" style="display:none; margin-bottom: 14px;">Please select your price feedback to schedule pickup.</div>
+                <!-- Pickup Slot Selector -->
+                <div style="margin-bottom: 14px;">
+                    <label style="display: block; font-size: 0.8125rem; font-weight: 700; color: #1C1C1E; margin-bottom: 6px;">
+                        Select Preferred Pickup Time:
+                    </label>
 
-                <!-- Schedule CTA Button -->
-                <button type="button" id="tyConfirmPickupBtn" class="btn ty-btn-primary" style="font-size: 1rem; padding: 14px 20px;">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><polyline points="9 15 12 18 15 15"/></svg>
-                    <span>Schedule Pickup →</span>
+                    <div class="ty-slots-grid" id="tyDateSlotsGrid" style="margin-bottom: 8px;">
+                        <button type="button" class="ty-slot-pill selected" data-date="Today">Today</button>
+                        <button type="button" class="ty-slot-pill" data-date="Tomorrow">Tomorrow</button>
+                        <button type="button" class="ty-slot-pill" data-date="Day After">Day After</button>
+                    </div>
+
+                    <div class="ty-slots-grid" id="tyTimeSlotsGrid">
+                        <button type="button" class="ty-slot-pill selected" data-slot="Express (Within 4-6 Hours)">⚡ Express (Within 4-6 Hours)</button>
+                        <button type="button" class="ty-slot-pill" data-slot="10:00 AM - 1:00 PM">10:00 AM - 1:00 PM</button>
+                        <button type="button" class="ty-slot-pill" data-slot="1:00 PM - 5:00 PM">1:00 PM - 5:00 PM</button>
+                        <button type="button" class="ty-slot-pill" data-slot="5:00 PM - 9:00 PM">5:00 PM - 9:00 PM</button>
+                    </div>
+                </div>
+
+                <!-- Quick Price Rating (Pre-selected by default to prevent blocking) -->
+                <div style="margin-bottom: 14px; background: #FFFFFF; border: 1px solid #E5E5EA; border-radius: 12px; padding: 10px 12px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                        <span style="font-size: 0.78125rem; font-weight: 700; color: #1C1C1E;">How do you rate this offer?</span>
+                        <span style="font-size: 0.6875rem; color: #34C759; font-weight: 700; background: #E8F5E9; padding: 2px 6px; border-radius: 6px;">Instant Lock</span>
+                    </div>
+
+                    <div class="ty-feedback-pills-grid" id="tyFeedbackPills" style="margin-bottom: 8px;">
+                        <button type="button" class="ty-feedback-pill selected" data-val="Good Price">Good Price 👍</button>
+                        <button type="button" class="ty-feedback-pill" data-val="Awesome">Awesome! 🔥</button>
+                        <button type="button" class="ty-feedback-pill" data-val="Average Price">Fair Price</button>
+                        <button type="button" class="ty-feedback-pill" data-val="Less Price">A bit low</button>
+                    </div>
+
+                    <label for="tyFeedbackComment" style="display: block; font-size: 0.78125rem; font-weight: 700; color: #1C1C1E; margin-bottom: 4px;">
+                        Landmark / Special Instructions (Optional):
+                    </label>
+                    <textarea id="tyFeedbackComment" class="ty-comment-textarea" placeholder="CUSTOMER NOTE: Give Some Extra value for it Or Call Me etc etc" rows="4" style="min-height: 90px; padding: 8px 10px; font-size: 0.8125rem; background: #F9F9FB; border: 1px solid #D1D1D6; border-radius: 8px;"></textarea>
+                </div>
+
+                <div id="tyFeedbackError" class="ty-feedback-error" style="display:none; margin-bottom: 12px;"></div>
+
+                <!-- Schedule CTA Button with 10s double-click lockout -->
+                <button type="button" id="tyConfirmPickupBtn" class="btn ty-btn-primary" style="width: 100%; font-size: 1.05rem; font-weight: 800; padding: 16px 18px; border-radius: 14px; box-shadow: 0 4px 18px rgba(0, 113, 227, 0.35); display: flex; align-items: center; justify-content: center; gap: 8px;">
+                    
+                    <span>Confirm Pickup &amp; Lock <?= htmlspecialchars($val_display) ?> →</span>
                 </button>
+                
+                <div style="text-align: center; margin-top: 8px; font-size: 0.75rem; color: #8E8E93;">
+                    🔒 Zero pickup charges • No obligation • Payment transferred before handover
+                </div>
             </div>
 
-            <!-- Pickup Success Banner (Shown after scheduling) -->
-            <div id="tyPickupSuccessBox" style="display:none; background:#E8F5E9; border:1.5px solid #A5D6A7; border-radius:18px; padding:18px 20px; margin-bottom:20px; text-align:left;">
-                <div style="display:flex; align-items:center; gap:8px; font-weight:800; font-size:1rem; color:#1B5E20; margin-bottom:4px;">
-                    <span>✓</span>
-                    <span>Doorstep Pickup Scheduled!</span>
+            <!-- Pickup Success Banner (Shown immediately after scheduling) -->
+            <div id="tyPickupSuccessBox" style="display:none; background:#F0FDF4; border:2px solid #86EFAC; border-radius:18px; padding:20px; margin-bottom:20px; text-align:left; box-shadow:0 8px 24px rgba(34,197,94,0.12);">
+                <div style="display:flex; align-items:center; gap:8px; font-weight:800; font-size:1.15rem; color:#14532D; margin-bottom:6px;">
+                    <span style="font-size:1.4rem;">🎉</span>
+                    <span>*100% Confirmed* Doorstep Pickup Scheduled!</span>
                 </div>
-                <div style="font-size:0.84375rem; color:#2E7D32; line-height:1.45;">
-                    Thank you! Your pickup window (<strong id="tyConfirmedSlotText">Today • Express Within 6 Hours</strong>) and address (<strong id="tyConfirmedAddressText">Mumbai</strong>) have been registered. Our Mumbai verification specialist will call you shortly before arrival.
+                <div style="font-size:0.875rem; color:#166534; line-height:1.5; margin-bottom:12px;">
+                    Your booking reference is <strong style="font-family: monospace; color:#0071E3;"><?= htmlspecialchars($ref_id) ?></strong>. Our Mumbai technician has been assigned for <strong id="tyConfirmedSlotText">Today • Express</strong> at <strong id="tyConfirmedAddressText">Mumbai</strong>.
+                </div>
+                <div style="background:#FFFFFF; border:1px solid #BBF7D0; border-radius:12px; padding:12px; font-size:0.8125rem; color:#15803D;">
+                    💵 <strong>Instant Payment:</strong> Our executive will verify the phone and immediately transfer <strong><?= htmlspecialchars($val_display) ?></strong> via Bank Transfer, UPI, or Cash before phone handover.
                 </div>
             </div>
 
@@ -187,7 +201,7 @@ require __DIR__ . '/includes/header.php';
                 </div>
                 <?php endif; ?>
                 <div class="valuation-row">
-                    <span class="label">Doorstep Service Area</span>
+                    <span class="label">Doorstep Area</span>
                     <span class="value">Mumbai &amp; MMR (Free Doorstep Inspection)</span>
                 </div>
                 <div class="valuation-row">
@@ -248,10 +262,14 @@ require __DIR__ . '/includes/header.php';
 <!-- Interactive Scheduling & Feedback Client Script -->
 <script>
     (function () {
-        var selectedFeedbackRating = '';
+        var selectedFeedbackRating = 'Good Price';
         var selectedPickupDate = 'Today';
-        var selectedPickupSlot = 'Express (Within 6 Hours)';
+        var selectedPickupSlot = 'Express (Within 4-6 Hours)';
         var refId = <?= json_encode($ref_id) ?>;
+        var custName = <?= json_encode($name) ?>;
+        var custPhone = <?= json_encode($phone) ?>;
+        var devModel = <?= json_encode($device_display) ?>;
+        var estPrice = <?= json_encode($val_display) ?>;
 
         // Feedback Pills
         var fbPills = document.querySelectorAll('#tyFeedbackPills .ty-feedback-pill');
@@ -261,7 +279,7 @@ require __DIR__ . '/includes/header.php';
             pill.addEventListener('click', function () {
                 fbPills.forEach(function (p) { p.classList.remove('selected'); });
                 pill.classList.add('selected');
-                selectedFeedbackRating = pill.getAttribute('data-val') || '';
+                selectedFeedbackRating = pill.getAttribute('data-val') || 'Good Price';
                 if (fbError) fbError.style.display = 'none';
             });
         });
@@ -282,7 +300,7 @@ require __DIR__ . '/includes/header.php';
             pill.addEventListener('click', function () {
                 timePills.forEach(function (p) { p.classList.remove('selected'); });
                 pill.classList.add('selected');
-                selectedPickupSlot = pill.getAttribute('data-slot') || 'Express (Within 6 Hours)';
+                selectedPickupSlot = pill.getAttribute('data-slot') || 'Express (Within 4-6 Hours)';
             });
         });
 
@@ -299,15 +317,6 @@ require __DIR__ . '/includes/header.php';
                 var pincodeEl = document.getElementById('tyPickupPincode');
                 var addressText = addressEl ? addressEl.value.trim() : '';
                 var pincodeText = pincodeEl ? pincodeEl.value.trim().replace(/[^0-9]/g, '') : '';
-
-                if (!selectedFeedbackRating) {
-                    if (fbError) {
-                        fbError.style.display = 'block';
-                        fbError.textContent = 'Please select one price rating option above to continue.';
-                        fbError.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-                    }
-                    return;
-                }
 
                 if (!addressText || addressText.length < 5) {
                     if (fbError) {
@@ -329,9 +338,10 @@ require __DIR__ . '/includes/header.php';
 
                 if (fbError) fbError.style.display = 'none';
 
+                // Double-click lockout rule: 10 seconds disable
                 confirmBtn.disabled = true;
                 confirmBtn.style.pointerEvents = 'none';
-                confirmBtn.innerHTML = '<span>Scheduling Doorstep Pickup...</span>';
+                confirmBtn.innerHTML = '<span>Locking Your Pickup &amp; Price...</span>';
                 setTimeout(function () {
                     if (confirmBtn) {
                         confirmBtn.disabled = false;
@@ -346,6 +356,10 @@ require __DIR__ . '/includes/header.php';
                 fbData.append('action', 'update_feedback');
                 fbData.append('ref_id', refId);
                 fbData.append('lead_id', refId);
+                fbData.append('customer_name', custName);
+                fbData.append('customer_phone', custPhone);
+                fbData.append('device_model', devModel);
+                fbData.append('estimated_value', estPrice);
                 fbData.append('feedback_rating', selectedFeedbackRating);
                 fbData.append('feedback_comment', commentText);
                 fbData.append('pickup_date', selectedPickupDate);
@@ -353,6 +367,7 @@ require __DIR__ . '/includes/header.php';
                 fbData.append('pickup_address', addressText);
                 fbData.append('pincode', pincodeText);
 
+                // Dispatch POST to both endpoints for guaranteed capture
                 fetch('forms/buyback-questionnaire.php', { method: 'POST', body: fbData })
                     .catch(function () {});
 
@@ -373,7 +388,7 @@ require __DIR__ . '/includes/header.php';
                             'currency': 'INR'
                         });
                     }
-                }, 400);
+                }, 300);
             });
         }
     })();

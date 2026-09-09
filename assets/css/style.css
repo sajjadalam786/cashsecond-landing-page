@@ -6773,19 +6773,19 @@ a:hover .btn-iphone-thumb {
     }
 
     .ty-slots-grid {
-        gap: 5px;
+        gap: 6px;
     }
 
     .ty-slot-pill {
-        flex: 1 1 100%;
-        min-width: 100%;
-        padding: 8px 10px;
+        flex: 1 1 calc(50% - 6px);
+        min-width: 120px;
+        padding: 9px 8px;
         font-size: 0.75rem;
         border-radius: 10px;
     }
 
     #tyDateSlotsGrid .ty-slot-pill {
-        flex: 1 1 calc(33.33% - 5px);
+        flex: 1 1 calc(33.33% - 6px);
         min-width: 65px;
     }
 
