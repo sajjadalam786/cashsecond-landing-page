@@ -21,7 +21,13 @@ if (!is_dir($backupsDir)) {
     @mkdir($backupsDir, 0775, true);
 }
 
-$action = $_GET['action'] ?? ($_POST['action'] ?? '');
+$rawInput = file_get_contents('php://input');
+$jsonInput = json_decode($rawInput, true);
+if (!is_array($jsonInput)) {
+    $jsonInput = [];
+}
+
+$action = $_GET['action'] ?? ($_POST['action'] ?? ($jsonInput['action'] ?? ''));
 
 /**
  * Helper: Parse CSV with header preservation
@@ -197,11 +203,7 @@ switch ($action) {
         break;
 
     case 'update_row':
-        $rawInput = file_get_contents('php://input');
-        $input = json_decode($rawInput, true);
-        if (!$input) {
-            $input = $_POST;
-        }
+        $input = !empty($jsonInput) ? $jsonInput : $_POST;
 
         $productId = $input['product_id'] ?? '';
         if ($productId === '') {
@@ -270,8 +272,9 @@ switch ($action) {
         break;
 
     case 'quick_update_price':
-        $productId = $_POST['product_id'] ?? '';
-        $newPrice = trim($_POST['price'] ?? '');
+        $input = !empty($jsonInput) ? $jsonInput : $_POST;
+        $productId = $input['product_id'] ?? '';
+        $newPrice = trim((string)($input['price'] ?? ''));
 
         if ($productId === '' || !is_numeric(str_replace(',', '', $newPrice))) {
             echo json_encode(['status' => 'error', 'message' => 'Valid Product ID and numeric price are required.']);

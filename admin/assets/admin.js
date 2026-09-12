@@ -268,7 +268,7 @@
                 formData.append('product_id', id);
                 formData.append('price', newPrice);
 
-                fetch('api.php', {
+                fetch('api.php?action=quick_update_price', {
                     method: 'POST',
                     body: formData
                 })
@@ -402,7 +402,7 @@
             btnSaveSheet.innerHTML = '<span>⏳</span> Saving to CSV...';
         }
 
-        fetch('api.php', {
+        fetch('api.php?action=update_row', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
