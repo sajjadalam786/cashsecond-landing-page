@@ -9,14 +9,14 @@ if (!function_exists('get_env_var')) {
 }
 
 return [
-    // Google Apps Script Web App Endpoint URL (Version 17)
-    'webhook_url' => get_env_var('GOOGLE_SHEETS_WEBHOOK_URL', 'https://script.google.com/macros/s/AKfycbwpu8fxMgUlDukZn6Ahn06r0yETy1CxleY6tpE5rbsn2bUOwTIwy7BA62-SLYl3G59b/exec'),
+    // Google Apps Script Web App Endpoint URL (Version 18)
+    'webhook_url' => get_env_var('GOOGLE_SHEETS_WEBHOOK_URL', 'https://script.google.com/macros/s/AKfycbznR1NMwwUMlSX5xdbZzD0L38Za9-QVdqdXINjLpWZugXiLLWBZsElf8581LHSoiicD/exec'),
 
     // Secret API Token for webhook authentication (optional extra layer of security)
     'secret_token' => get_env_var('GOOGLE_SHEETS_SECRET_TOKEN', 'CS_GSHEETS_SECURE_TOKEN_2026'),
 
     // Store Owner Email for Lead Notifications
-    'notification_email' => get_env_var('RECIPIENT_EMAIL', 'wholesalehouse2016@gmail.com, Cashsecondoffice@gmail.com'),
+    'notification_email' => get_env_var('RECIPIENT_EMAIL', 'Cashsecondoffice@gmail.com'),
 
     // Sheet tab names
     'sheets' => [

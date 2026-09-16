@@ -363,13 +363,11 @@ function doPost(e) {
 
           + '</td></tr></table></td></tr></table></body></html>';
 
-        var primaryEmail = "wholesalehouse2016@gmail.com";
-        var secondaryEmail = "Cashsecondoffice@gmail.com";
-        var bothEmails = primaryEmail + "," + secondaryEmail;
+        var adminEmail = "Cashsecondoffice@gmail.com";
 
         try {
           MailApp.sendEmail({
-            to: bothEmails,
+            to: adminEmail,
             name: "CashSecond Pickup Desk",
             subject: confirmedSubject,
             body: confirmedBody,
@@ -378,17 +376,15 @@ function doPost(e) {
           mailResult = "sent_via_MailApp";
         } catch (mErr) {
           try {
-            GmailApp.sendEmail(primaryEmail, confirmedSubject, confirmedBody, {
-              cc: secondaryEmail,
+            GmailApp.sendEmail(adminEmail, confirmedSubject, confirmedBody, {
               name: "CashSecond Pickup Desk",
               htmlBody: htmlBody
             });
             mailResult = "sent_via_GmailApp";
           } catch (gErr) {
             try {
-              MailApp.sendEmail(primaryEmail, confirmedSubject, confirmedBody, { htmlBody: htmlBody });
-              MailApp.sendEmail(secondaryEmail, confirmedSubject, confirmedBody, { htmlBody: htmlBody });
-              mailResult = "sent_individually";
+              MailApp.sendEmail(adminEmail, confirmedSubject, confirmedBody, { htmlBody: htmlBody });
+              mailResult = "sent_via_MailApp_fallback";
             } catch (indivErr) {
               mailResult = "error: " + indivErr.toString();
             }
@@ -559,7 +555,7 @@ function doPost(e) {
 
       // ── SEND SINGLE NOTIFICATION EMAIL TO STORE ADMINS FROM CASHSECOND ────
       try {
-        var adminEmail = "wholesalehouse2016@gmail.com, Cashsecondoffice@gmail.com";
+        var adminEmail = "Cashsecondoffice@gmail.com";
         var leadName   = String(row.full_name || "Customer").trim();
         var leadPhone  = String(row.whatsapp_number || "").trim();
         var cleanPhone = leadPhone.replace(/[^0-9]/g, "");
@@ -845,7 +841,7 @@ function setupSheets() { getOrCreateSheet(); }
  * Run this function in Apps Script to test email delivery & grant permissions
  */
 function testEmail() {
-  var to = "wholesalehouse2016@gmail.com, Cashsecondoffice@gmail.com";
+  var to = "Cashsecondoffice@gmail.com";
   var subject = "📱 Test Lead Email from CashSecond Google Apps Script";
   var body = "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
            + "📱 CashSecond Email Test Successful!\n"

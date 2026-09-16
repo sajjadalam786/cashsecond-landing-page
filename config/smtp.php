@@ -7,7 +7,7 @@
  *   - host: 'smtp.gmail.com'
  *   - port: 587 (TLS) or 465 (SSL)
  *   - encryption: 'tls'
- *   - username: 'wholesalehouse2016@gmail.com'
+ *   - username: 'Cashsecondoffice@gmail.com'
  *   - password: 'YOUR_16_DIGIT_GMAIL_APP_PASSWORD' (generate at myaccount.google.com/apppasswords)
  *
  * For Hostinger / cPanel / Custom Domain:
@@ -27,15 +27,15 @@ return [
     'encryption'   => getenv('SMTP_ENCRYPTION') ?: 'tls', // 'tls', 'ssl', or 'none'
 
     // Credentials
-    'username'     => getenv('SMTP_USERNAME') ?: 'wholesalehouse2016@gmail.com',
+    'username'     => getenv('SMTP_USERNAME') ?: 'Cashsecondoffice@gmail.com',
     'password'     => getenv('SMTP_PASSWORD') ?: '', // Paste 16-character Gmail App Password or Webmail Password here
 
     // Sender details
-    'from_email'   => getenv('SMTP_FROM_EMAIL') ?: 'wholesalehouse2016@gmail.com',
+    'from_email'   => getenv('SMTP_FROM_EMAIL') ?: 'Cashsecondoffice@gmail.com',
     'from_name'    => getenv('SMTP_FROM_NAME') ?: 'CashSecond Lead Desk',
 
     // Destination email
-    'recipient'    => 'wholesalehouse2016@gmail.com',
+    'recipient'    => getenv('RECIPIENT_EMAIL') ?: 'Cashsecondoffice@gmail.com',
 
     // Socket timeout in seconds
     'timeout'      => 15,
