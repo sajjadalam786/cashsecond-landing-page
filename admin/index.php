@@ -45,6 +45,10 @@ requireAdminLogin();
                 <span class="nav-text">Pricing &amp; Deductions</span>
                 <span class="nav-badge blue" id="navBadgeTotal">108</span>
             </a>
+            <button type="button" class="nav-link" id="navOpenImportModal" style="background: none; border: none; width: 100%; text-align: left; cursor: pointer; font-size: inherit; font-family: inherit;">
+                <span class="nav-icon">📤</span>
+                <span class="nav-text">Bulk Import CSV</span>
+            </button>
             <a href="api.php?action=download_csv" class="nav-link" download>
                 <span class="nav-icon">📥</span>
                 <span class="nav-text">Export CSV</span>
@@ -94,6 +98,11 @@ requireAdminLogin();
                     <span class="sync-label">Real-Time CSV</span>
                     <span class="sync-time" id="syncTimeBadge">Sync Active</span>
                 </div>
+
+                <button type="button" class="btn-topbar-action btn-import" id="btnTopImport" title="Bulk Import CSV with Smart Mapping">
+                    <span>📤</span>
+                    <span class="btn-txt">Import CSV</span>
+                </button>
 
                 <a href="api.php?action=download_csv" class="btn-topbar-action btn-export" download title="Download live CSV file">
                     <span>📥</span>
@@ -158,6 +167,9 @@ requireAdminLogin();
                         </div>
 
                         <div class="panel-actions">
+                            <button type="button" id="btnPanelImport" class="btn-panel-secondary btn-import-trigger" title="Bulk Import CSV with Smart Mapping">
+                                <span>📤</span> Import CSV
+                            </button>
                             <button type="button" id="btnRefresh" class="btn-panel-primary">
                                 <span>🔄</span> Reload Data
                             </button>
@@ -670,9 +682,192 @@ requireAdminLogin();
         </div>
     </div>
 
+    <!-- ============================================================
+         BULK CSV IMPORT WITH SMART FIELD MAPPING MODAL
+         ============================================================ -->
+    <div class="modal-backdrop" id="importCsvModal">
+        <div class="modal-sheet modal-sheet-import">
+            <!-- HEADER -->
+            <div class="modal-sheet-header">
+                <div>
+                    <h2>Bulk Import CSV &amp; Excel (XLSX) Data</h2>
+                    <p style="font-size: 13px; color: #64748B; margin-top: 2px;">
+                        Import device base prices &amp; deduction percentages from CSV or Excel spreadsheets with smart column mapping.
+                    </p>
+                </div>
+                <button type="button" class="btn-close-sheet" id="btnCloseImportModal" aria-label="Close">&times;</button>
+            </div>
+
+            <!-- STEP WIZARD PROGRESS BAR -->
+            <div class="import-wizard-steps">
+                <div class="wizard-step active" id="wizardStep1Indicator">
+                    <span class="step-num">1</span>
+                    <span class="step-text">Upload File</span>
+                </div>
+                <div class="wizard-step-line" id="wizardStepLine1"></div>
+                <div class="wizard-step" id="wizardStep2Indicator">
+                    <span class="step-num">2</span>
+                    <span class="step-text">Map Columns</span>
+                </div>
+                <div class="wizard-step-line" id="wizardStepLine2"></div>
+                <div class="wizard-step" id="wizardStep3Indicator">
+                    <span class="step-num">3</span>
+                    <span class="step-text">Preview &amp; Confirm</span>
+                </div>
+            </div>
+
+            <!-- SCROLLABLE BODY -->
+            <div class="sheet-scroll-body" id="importScrollBody">
+                <!-- STEP 1: FILE UPLOAD -->
+                <div class="import-step-pane active" id="importStepUpload">
+                    <div class="upload-dropzone" id="uploadDropzone">
+                        <input type="file" id="csvFileInput" accept=".csv,.xlsx,.xls,text/csv,text/plain,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" style="display: none;">
+                        <div class="dropzone-icon">📊</div>
+                        <div class="dropzone-title">Click to browse or drag &amp; drop your CSV or Excel (.xlsx / .xls) file here</div>
+                        <div class="dropzone-sub">Supports <strong>.csv</strong>, <strong>.xlsx</strong>, and <strong>.xls</strong> files from Microsoft Excel, Apple Numbers, Google Sheets, or custom inventory</div>
+                        <button type="button" class="btn-browse-file" id="btnBrowseFile">Select CSV / Excel File</button>
+                    </div>
+
+                    <div class="upload-file-info" id="uploadFileInfo" style="display: none;">
+                        <div class="file-info-card">
+                            <div class="file-info-icon">📄</div>
+                            <div class="file-info-meta">
+                                <div class="file-info-name" id="fileNameDisplay">filename.csv</div>
+                                <div class="file-info-details" id="fileDetailsDisplay">0 KB &bull; 0 rows detected &bull; 0 columns</div>
+                            </div>
+                            <button type="button" class="btn-change-file" id="btnChangeFile">Choose Different File</button>
+                        </div>
+                    </div>
+
+                    <div class="import-tips-card">
+                        <div class="tips-title">💡 Smart Import Highlights:</div>
+                        <ul>
+                            <li><strong>Different Column Names Supported:</strong> Headers like <code>Model</code>, <code>Device</code>, <code>Price</code>, <code>ROM</code> are automatically detected and mapped to CashSecond schema.</li>
+                            <li><strong>Zero Data Loss:</strong> A full timestamped backup is automatically created in <code>data/backups/</code> before any changes are written.</li>
+                            <li><strong>Instant Review:</strong> You can review and adjust each column mapping and view live sample data before applying.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- STEP 2: FIELD MAPPING MATRIX -->
+                <div class="import-step-pane" id="importStepMapping">
+                    <!-- TOOLBAR & IMPORT MODE -->
+                    <div class="mapping-top-card">
+                        <div class="mapping-mode-wrap">
+                            <div class="mapping-mode-title">Import Merge Strategy:</div>
+                            <div class="mode-options-cluster">
+                                <label class="mode-option-radio">
+                                    <input type="radio" name="importMergeMode" value="merge_append" checked>
+                                    <span class="radio-custom"></span>
+                                    <div class="mode-opt-body">
+                                        <div class="mode-opt-name">Smart Update &amp; Append (Recommended)</div>
+                                        <div class="mode-opt-desc">Updates existing matching models (by ID or Model+Storage) and appends new models to the catalog.</div>
+                                    </div>
+                                </label>
+                                <label class="mode-option-radio">
+                                    <input type="radio" name="importMergeMode" value="update_only">
+                                    <span class="radio-custom"></span>
+                                    <div class="mode-opt-body">
+                                        <div class="mode-opt-name">Update Existing Only</div>
+                                        <div class="mode-opt-desc">Updates existing models only. Any rows not already present in the catalog are safely ignored.</div>
+                                    </div>
+                                </label>
+                                <label class="mode-option-radio">
+                                    <input type="radio" name="importMergeMode" value="replace">
+                                    <span class="radio-custom"></span>
+                                    <div class="mode-opt-body">
+                                        <div class="mode-opt-name">Full Overwrite / Replace</div>
+                                        <div class="mode-opt-desc">Overwrites entire pricing catalog with the imported file. (An automated backup is created first).</div>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- MAPPING SUMMARY & STATS BAR -->
+                    <div class="mapping-stats-banner" id="mappingStatsBanner">
+                        <div class="ms-item">
+                            <span class="ms-lbl">CSV Columns Detected:</span>
+                            <strong class="ms-val" id="mapSourceColCount">0</strong>
+                        </div>
+                        <div class="ms-item">
+                            <span class="ms-lbl">Fields Auto-Matched:</span>
+                            <strong class="ms-val text-green" id="mapMatchedCount">0</strong>
+                        </div>
+                        <div class="ms-item">
+                            <span class="ms-lbl">Rows Ready:</span>
+                            <strong class="ms-val" id="mapRowCount">0</strong>
+                        </div>
+                    </div>
+
+                    <!-- CATEGORY TABS -->
+                    <div class="mapping-categories-nav" id="mappingCatsNav">
+                        <button type="button" class="map-nav-btn active" data-cat="cat-core">🏷️ Core Details &amp; Price</button>
+                        <button type="button" class="map-nav-btn" data-cat="cat-age">📅 Age Deductions</button>
+                        <button type="button" class="map-nav-btn" data-cat="cat-screen">🖥️ Screen &amp; Display</button>
+                        <button type="button" class="map-nav-btn" data-cat="cat-body">📱 Body &amp; Frame</button>
+                        <button type="button" class="map-nav-btn" data-cat="cat-hardware">⚙️ Hardware Tests</button>
+                        <button type="button" class="map-nav-btn" data-cat="cat-battery">🔋 Battery &amp; Kit</button>
+                    </div>
+
+                    <!-- MAPPING FIELDS CONTAINER (Rendered by admin.js) -->
+                    <div id="mappingFieldsContainer" class="mapping-fields-container"></div>
+                </div>
+
+                <!-- STEP 3: PREVIEW & CONFIRM -->
+                <div class="import-step-pane" id="importStepPreview">
+                    <div class="preview-summary-card">
+                        <div class="preview-stat">
+                            <div class="pstat-val" id="previewTotalRows">0</div>
+                            <div class="pstat-lbl">Rows Ready to Import</div>
+                        </div>
+                        <div class="preview-stat">
+                            <div class="pstat-val" id="previewMappedCols">0</div>
+                            <div class="pstat-lbl">Fields Mapped</div>
+                        </div>
+                        <div class="preview-stat">
+                            <div class="pstat-val" id="previewSelectedMode">Smart Update</div>
+                            <div class="pstat-lbl">Merge Strategy</div>
+                        </div>
+                    </div>
+
+                    <div class="preview-table-wrap">
+                        <div class="preview-table-title">Sample Data Preview (First 5 Rows to be Imported):</div>
+                        <div class="table-scroll-container">
+                            <table class="clean-table preview-table" id="importPreviewTable">
+                                <thead id="previewTableHead"></thead>
+                                <tbody id="previewTableBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FOOTER WITH STEP ACTIONS -->
+            <div class="modal-sheet-footer import-sheet-footer">
+                <div class="footer-left">
+                    <button type="button" class="btn-sheet-cancel" id="btnCancelImportModal">Cancel</button>
+                </div>
+                <div class="footer-right">
+                    <button type="button" class="btn-sheet-secondary" id="btnPrevImportStep" style="display: none;">
+                        &larr; Back
+                    </button>
+                    <button type="button" class="btn-sheet-primary" id="btnNextImportStep" disabled>
+                        Proceed to Field Mapping &rarr;
+                    </button>
+                    <button type="button" class="btn-sheet-save" id="btnConfirmImport" style="display: none;">
+                        <span>🚀</span> Confirm &amp; Apply Import
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- TOAST STACK -->
     <div class="toast-stack" id="toastStack"></div>
 
+    <!-- SheetJS Library for seamless client-side Excel (.xlsx / .xls) parsing -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <script src="assets/admin.js"></script>
 </body>
 </html>
