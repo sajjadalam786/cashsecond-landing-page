@@ -1,6 +1,4 @@
-# Environment files
-.env
-config.env
+
 
 # Logs & dynamic lead data
 logs/*.csv
