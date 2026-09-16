@@ -20,10 +20,14 @@ $canonical_url = $canonical_url ?? ($site_url . '/');
 $tracking = $config['tracking'] ?? [];
 $google_ads_id = $tracking['google_ads_id'] ?? 'AW-777643310';
 $ga4_id = $tracking['ga4_measurement_id'] ?? '';
+$google_site_verification = $tracking['google_site_verification'] ?? 'Pyb9qaZ9pKB7mhFWY1acJGLuPkhqG6lwD8cpClZ9ybA';
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Google Search Console Verification -->
+    <meta name="google-site-verification" content="<?= htmlspecialchars($google_site_verification) ?>" />
+
     <!-- Google Tag (gtag.js) for Google Ads & Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=<?= htmlspecialchars($google_ads_id) ?>"></script>
     <script>

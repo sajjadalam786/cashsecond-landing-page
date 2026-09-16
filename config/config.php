@@ -124,6 +124,7 @@ return [
         'google_ads_id'          => get_env_var('GOOGLE_ADS_ID', 'AW-777643310'),
         'google_ads_conv_label'  => get_env_var('GOOGLE_ADS_CONV_LABEL', 'pxrxCNrque0cEK7K5_IC'),
         'meta_pixel_id'          => get_env_var('META_PIXEL_ID', ''),
+        'google_site_verification' => get_env_var('GOOGLE_SITE_VERIFICATION', 'Pyb9qaZ9pKB7mhFWY1acJGLuPkhqG6lwD8cpClZ9ybA'),
     ],
 
     // ============================================================
