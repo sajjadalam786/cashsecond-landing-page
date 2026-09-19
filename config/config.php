@@ -128,6 +128,14 @@ return [
     ],
 
     // ============================================================
+    // APPLICATION SECURITY & HMAC SIGNING
+    // ============================================================
+    'security' => [
+        'lead_signature_secret' => get_env_var('LEAD_SIGNATURE_SECRET', 'CS_SEC_SIG_786_e8d4a92c0b7e41fa89b2'),
+        'signature_expiry_secs' => 600, // 10 minutes validity
+    ],
+
+    // ============================================================
     // EXACT CASHSECOND BUY CATALOG
     // Sourced directly from https://cashsecond.com/product/list
     // ============================================================

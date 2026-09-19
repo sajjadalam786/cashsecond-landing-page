@@ -10,11 +10,39 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 $config = require_once __DIR__ . '/config/config.php';
+require_once __DIR__ . '/includes/security.php';
+
 $base_path = '';
 $business = $config['business'] ?? [];
 $tracking = $config['tracking'] ?? [];
 $google_ads_id = $tracking['google_ads_id'] ?? 'AW-777643310';
 $google_conv_label = $tracking['google_ads_conv_label'] ?? 'pxrxCNrque0cEK7K5_IC';
+
+$ref_id = isset($_GET['ref']) ? htmlspecialchars(strip_tags(trim($_GET['ref'])), ENT_QUOTES, 'UTF-8') : '';
+$ts_raw = isset($_GET['ts']) ? (int)$_GET['ts'] : 0;
+$sig    = isset($_GET['sig']) ? trim($_GET['sig']) : '';
+
+// ----------------------------------------------------
+// ANTI-DIRECT HIT GATEKEEPER (Strict Security Check)
+// ----------------------------------------------------
+$is_signature_valid = ($ts_raw > 0 && !empty($sig) && verify_lead_signature($ref_id, $ts_raw, $sig, 600));
+$is_session_valid   = !empty($ref_id) && is_lead_session_authorized($ref_id, 3600);
+
+if (empty($ref_id) || (!$is_signature_valid && !$is_session_valid)) {
+    // Direct URL hit without valid form submission or expired token -> Redirect to home page
+    header('Location: ' . ($base_path ?: '') . 'index.php', true, 302);
+    exit;
+}
+
+// Anti-Refresh Duplicate Conversion Guard
+$should_fire_conversion = false;
+if (!isset($_SESSION['conversions_fired']) || !is_array($_SESSION['conversions_fired'])) {
+    $_SESSION['conversions_fired'] = [];
+}
+if (!isset($_SESSION['conversions_fired'][$ref_id])) {
+    $_SESSION['conversions_fired'][$ref_id] = time();
+    $should_fire_conversion = true;
+}
 
 $model        = isset($_GET['model']) ? htmlspecialchars(strip_tags(trim($_GET['model'])), ENT_QUOTES, 'UTF-8') : 'Apple iPhone';
 $variant      = isset($_GET['variant']) ? htmlspecialchars(strip_tags(trim($_GET['variant'])), ENT_QUOTES, 'UTF-8') : '';
@@ -22,7 +50,6 @@ $val_param    = isset($_GET['val']) ? trim($_GET['val']) : null;
 $val          = ($val_param !== null && $val_param !== '') ? (int)preg_replace('/[^0-9\-]/', '', $val_param) : null;
 $name         = isset($_GET['name']) ? htmlspecialchars(strip_tags(trim($_GET['name'])), ENT_QUOTES, 'UTF-8') : 'Valued Customer';
 $phone        = isset($_GET['phone']) ? htmlspecialchars(strip_tags(trim($_GET['phone'])), ENT_QUOTES, 'UTF-8') : '';
-$ref_id       = isset($_GET['ref']) ? htmlspecialchars(strip_tags(trim($_GET['ref'])), ENT_QUOTES, 'UTF-8') : 'EXG-' . date('Ymd') . '-' . strtoupper(substr(md5(uniqid()), 0, 4));
 
 // Only if val parameter was completely missing from URL, look up from CSV pricing catalog
 if ($val === null && !empty($model) && $model !== 'Apple iPhone') {
@@ -356,6 +383,8 @@ require __DIR__ . '/includes/header.php';
                 fbData.append('action', 'update_feedback');
                 fbData.append('ref_id', refId);
                 fbData.append('lead_id', refId);
+                fbData.append('ts', <?= json_encode($ts_raw) ?>);
+                fbData.append('sig', <?= json_encode($sig) ?>);
                 fbData.append('customer_name', custName);
                 fbData.append('customer_phone', custPhone);
                 fbData.append('device_model', devModel);
@@ -398,6 +427,7 @@ require __DIR__ . '/includes/header.php';
 </script>
 
 <!-- Google Ads Conversion Tracking (AW-777643310/pxrxCNrque0cEK7K5_IC) -->
+<?php if ($should_fire_conversion): ?>
 <script>
     // 1. Primary Google Ads Conversion Event (gtag.js)
     if (typeof gtag === 'function') {
@@ -430,5 +460,8 @@ require __DIR__ . '/includes/header.php';
         'device_model': <?= json_encode($device_display) ?>
     });
 </script>
+<?php else: ?>
+<!-- Conversion already tracked for this session (ref: <?= htmlspecialchars($ref_id) ?>) -->
+<?php endif; ?>
 
 <?php require __DIR__ . '/includes/footer.php'; ?>

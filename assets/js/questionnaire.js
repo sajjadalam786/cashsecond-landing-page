@@ -664,7 +664,7 @@
 
                 if (submitBtn) {
                     submitBtn.disabled = true;
-                    submitBtn.innerHTML = '<span>Opening Valuation...</span>';
+                    submitBtn.innerHTML = '<span>Calculating Value &amp; Securing Quote...</span>';
                 }
 
                 const finalVal = computeValuation();
@@ -684,22 +684,38 @@
                 formData.append('questionnaire_answers', JSON.stringify(state.answers));
                 formData.append('csrf_token', window.csrfToken || '');
 
-                // Fire background request with keepalive (zero blocking, runs seamlessly in background)
-                try {
-                    fetch('forms/buyback-questionnaire.php', {
-                        method: 'POST',
-                        body: formData,
-                        keepalive: true
-                    }).catch(() => {});
-                } catch (err) {}
-
-                // Instantly close modal popup
-                closeQuestionnaire();
-
-                // Instantly redirect to Thank You page where price is revealed & feedback/scheduling is handled
-                const thankYouUrl = `thankyou.php?model=${encodeURIComponent(state.model)}&variant=${encodeURIComponent(state.variant)}&val=${finalVal}&name=${encodeURIComponent(name)}&phone=${encodeURIComponent(cleanPhone)}&ref=${encodeURIComponent(refId)}`;
-
-                window.location.href = thankYouUrl;
+                fetch('forms/buyback-questionnaire.php', {
+                    method: 'POST',
+                    body: formData,
+                    headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data && data.status === 'success' && data.thankyou_url) {
+                        closeQuestionnaire();
+                        window.location.href = data.thankyou_url;
+                    } else if (data && data.message) {
+                        showError(data.message);
+                        if (submitBtn) {
+                            submitBtn.disabled = false;
+                            submitBtn.innerHTML = '<span>Calculate My iPhone Resale Value &rarr;</span>';
+                        }
+                    } else {
+                        showError('Unexpected response from server. Please try again.');
+                        if (submitBtn) {
+                            submitBtn.disabled = false;
+                            submitBtn.innerHTML = '<span>Calculate My iPhone Resale Value &rarr;</span>';
+                        }
+                    }
+                })
+                .catch(err => {
+                    console.error('Submission error:', err);
+                    showError('Unable to connect to valuation server. Please check your connection and try again.');
+                    if (submitBtn) {
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = '<span>Calculate My iPhone Resale Value &rarr;</span>';
+                    }
+                });
             });
         }
 

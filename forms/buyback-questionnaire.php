@@ -8,6 +8,8 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
+require_once __DIR__ . '/../includes/security.php';
+
 header('Content-Type: application/json; charset=UTF-8');
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -63,6 +65,21 @@ if (!$is_feedback_action && !empty($_POST['website_hp'])) {
 // 4. Handle Feedback & Pickup Scheduling Submission Action
 if ($is_feedback_action) {
     $ref_id       = !empty($_POST['lead_id']) ? htmlspecialchars(strip_tags(trim($_POST['lead_id'])), ENT_QUOTES, 'UTF-8') : (!empty($_POST['ref_id']) ? htmlspecialchars(strip_tags(trim($_POST['ref_id'])), ENT_QUOTES, 'UTF-8') : '');
+
+    // Verify lead authorization (Session dual shield or HMAC cryptographic signature verification)
+    $ts_in  = isset($_POST['ts']) ? (int)$_POST['ts'] : 0;
+    $sig_in = isset($_POST['sig']) ? trim($_POST['sig']) : '';
+    $is_authorized = is_lead_session_authorized($ref_id, 3600) || ($ts_in > 0 && !empty($sig_in) && verify_lead_signature($ref_id, $ts_in, $sig_in, 3600));
+
+    if (!$is_authorized) {
+        http_response_code(403);
+        echo json_encode([
+            'status'  => 'error',
+            'message' => 'Unauthorized or expired booking session. Please complete the valuation form first.'
+        ]);
+        exit;
+    }
+
     $rating       = isset($_POST['feedback_rating']) ? htmlspecialchars(strip_tags(trim($_POST['feedback_rating'])), ENT_QUOTES, 'UTF-8') : 'Good Price';
     $comment      = isset($_POST['feedback_comment']) ? htmlspecialchars(strip_tags(trim($_POST['feedback_comment'])), ENT_QUOTES, 'UTF-8') : '';
     $pickup_date  = isset($_POST['pickup_date']) ? htmlspecialchars(strip_tags(trim($_POST['pickup_date'])), ENT_QUOTES, 'UTF-8') : 'Today';
@@ -241,13 +258,34 @@ $log_line = json_encode($lead_entry, JSON_UNESCAPED_UNICODE) . "\n";
 
 $_SESSION['last_questionnaire_time'] = time();
 
+// Generate HMAC Signature & Timestamp for secure Thank You page transition
+$now_ts = time();
+$sig = generate_lead_signature($lead_id, $now_ts);
+authorize_lead_session($lead_id, $now_ts, $sig);
+
+$numeric_val = (int)preg_replace('/[^0-9]/', '', $est_value);
+$ty_params = [
+    'model'   => $model,
+    'variant' => $variant,
+    'val'     => $numeric_val > 0 ? $numeric_val : $est_value,
+    'name'    => $name,
+    'phone'   => $phone,
+    'ref'     => $lead_id,
+    'ts'      => $now_ts,
+    'sig'     => $sig
+];
+$signed_thankyou_url = 'thankyou.php?' . http_build_query($ty_params);
+
 echo json_encode([
-    'status'   => 'success',
-    'message'  => 'Your valuation has been submitted successfully.',
-    'ref_id'   => $lead_id,
-    'lead_id'  => $lead_id,
-    'sheets'   => $sheetsResult,
-    'details'  => [
+    'status'       => 'success',
+    'message'      => 'Your valuation has been submitted successfully.',
+    'ref_id'       => $lead_id,
+    'lead_id'      => $lead_id,
+    'ts'           => $now_ts,
+    'sig'          => $sig,
+    'thankyou_url' => $signed_thankyou_url,
+    'sheets'       => $sheetsResult,
+    'details'      => [
         'device'    => "$model ($variant)",
         'est_value' => $est_value
     ]

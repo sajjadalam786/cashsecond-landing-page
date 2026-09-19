@@ -920,26 +920,50 @@
         formData.append('lead_id',               refId);
         formData.append('ref_id',                refId);
 
-        // 3. Process data in background (keepalive guarantees delivery during redirect)
-        try {
-            fetch(SUBMIT_URL, {
-                method: 'POST',
-                body: formData,
-                keepalive: true,
-                headers: { 'X-Requested-With': 'XMLHttpRequest' }
-            }).catch(() => {});
-        } catch (err) {}
-
-        // 4. Directly show Thank You page
-        const params = new URLSearchParams({
-            model: state.model || '',
-            variant: state.storage || '',
-            val: Math.round(state.liveValue || 0).toString(),
-            name: name,
-            phone: phone,
-            ref: refId
+        // 3. Process data via POST handler and redirect to signed Thank You URL
+        fetch(SUBMIT_URL, {
+            method: 'POST',
+            body: formData,
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data && data.status === 'success' && data.thankyou_url) {
+                window.location.href = data.thankyou_url;
+            } else if (data && data.message) {
+                const phoneErr = document.getElementById('ivPhoneErr');
+                if (phoneErr) phoneErr.textContent = data.message;
+                state.isSubmitting = false;
+                if (btnNext) {
+                    btnNext.disabled = false;
+                    btnNext.style.pointerEvents = '';
+                    btnNext.style.opacity = '';
+                    if (spinner) spinner.style.display = 'none';
+                }
+            } else {
+                const phoneErr = document.getElementById('ivPhoneErr');
+                if (phoneErr) phoneErr.textContent = 'Submission failed. Please try again.';
+                state.isSubmitting = false;
+                if (btnNext) {
+                    btnNext.disabled = false;
+                    btnNext.style.pointerEvents = '';
+                    btnNext.style.opacity = '';
+                    if (spinner) spinner.style.display = 'none';
+                }
+            }
+        })
+        .catch(err => {
+            console.error('Valuator submit error:', err);
+            const phoneErr = document.getElementById('ivPhoneErr');
+            if (phoneErr) phoneErr.textContent = 'Connection error. Please try again.';
+            state.isSubmitting = false;
+            if (btnNext) {
+                btnNext.disabled = false;
+                btnNext.style.pointerEvents = '';
+                btnNext.style.opacity = '';
+                if (spinner) spinner.style.display = 'none';
+            }
         });
-        window.location.href = 'thankyou.php?' + params.toString();
     }
 
     /* --------------------------------------------------

@@ -14,6 +14,7 @@ header('Content-Type: application/json; charset=UTF-8');
 
 // Load configuration
 $config = require_once __DIR__ . '/../config/config.php';
+require_once __DIR__ . '/../includes/security.php';
 
 // Only allow POST requests
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
@@ -208,6 +209,25 @@ $stor_text = $storage ? " ({$storage})" : "";
 $wa_text  = urlencode("Hi CashSecond, I checked my {$model}{$stor_text}{$cond_text}{$val_text} on your website. My name is {$name}. Please confirm my valuation and next steps.");
 $whatsapp_direct_url = "https://wa.me/{$wa_phone}?text={$wa_text}";
 
+// Generate HMAC Signature & Timestamp for secure Thank You page transition
+$lead_ref_id = 'CS-' . date('Ymd') . '-' . strtoupper(substr(md5(uniqid(rand(), true)), 0, 5));
+$now_ts = time();
+$sig = generate_lead_signature($lead_ref_id, $now_ts);
+authorize_lead_session($lead_ref_id, $now_ts, $sig);
+
+$numeric_val = (int)preg_replace('/[^0-9]/', '', $final_est_value);
+$ty_params = [
+    'model'   => $model,
+    'variant' => $storage ?: '',
+    'val'     => $numeric_val > 0 ? $numeric_val : $final_est_value,
+    'name'    => $name,
+    'phone'   => $phone,
+    'ref'     => $lead_ref_id,
+    'ts'      => $now_ts,
+    'sig'     => $sig
+];
+$signed_thankyou_url = 'thankyou.php?' . http_build_query($ty_params);
+
 // Return Clean JSON Success with Required Text
 echo json_encode([
     'status'               => 'success',
@@ -216,6 +236,10 @@ echo json_encode([
     'new_csrf_token'       => $_SESSION['csrf_token'],
     'whatsapp_direct_url'  => $whatsapp_direct_url,
     'google_sheets_synced' => $google_sheets_synced,
+    'ref_id'               => $lead_ref_id,
+    'ts'                   => $now_ts,
+    'sig'                  => $sig,
+    'thankyou_url'         => $signed_thankyou_url,
     'lead'                 => [
         'name'            => $name,
         'phone'           => $phone,
