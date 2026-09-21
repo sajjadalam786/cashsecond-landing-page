@@ -113,6 +113,10 @@ return [
         'sender_email'              => get_env_var('SENDER_EMAIL', 'no-reply@cashsecond.in'),
         'sender_name'               => get_env_var('SENDER_NAME', 'CashSecond Valuation Desk'),
         'enable_local_lead_log'     => true,
+        'crm_api_url'               => get_env_var('CRM_API_URL', 'https://www.api.365crm.io/wpaddwebsiteleads'),
+        'crm_api_key'               => get_env_var('CRM_API_KEY', 'c2hhaWtoc2FqamFkNzg2QGdtYWlsLmNvbS8yMTQ2Ny8yMTQ2Ny8yMTA5MjAyNjEwMDYzNA=='),
+        'crm_company_name'          => get_env_var('CRM_COMPANY_NAME', 'Wholesale House'),
+        'crm_lead_label'            => get_env_var('CRM_LEAD_LABEL', 'selliphone'),
     ],
 
     // ============================================================

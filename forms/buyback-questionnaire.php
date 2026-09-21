@@ -144,11 +144,23 @@ if ($is_feedback_action) {
     require_once __DIR__ . '/../includes/GoogleSheetsService.php';
     $sheetsResult = GoogleSheetsService::updateFeedbackRow($ref_id, $rating, $comment, $pickup_date, $pickup_slot, $pickup_addr, $pincode, $extra_data);
 
+    // Sync Doorstep Pickup Schedule to 365 CRM
+    require_once __DIR__ . '/../includes/CrmService.php';
+    $crmResult = CrmService::sendDoorstepPickup($ref_id, array_merge($extra_data, [
+        'pickup_date'      => $pickup_date,
+        'pickup_slot'      => $pickup_slot,
+        'pickup_address'   => $pickup_addr,
+        'pincode'          => $pincode,
+        'feedback_rating'  => $rating,
+        'feedback_comment' => $comment,
+    ]));
+
     echo json_encode([
         'status'  => 'success',
         'message' => 'Thank you! Your doorstep pickup has been 100% confirmed.',
         'ref_id'  => $ref_id,
-        'sheets'  => $sheetsResult
+        'sheets'  => $sheetsResult,
+        'crm'     => $crmResult['success'] ?? false
     ]);
     exit;
 }
@@ -246,7 +258,11 @@ $lead_entry = [
 require_once __DIR__ . '/../includes/GoogleSheetsService.php';
 $sheetsResult = GoogleSheetsService::appendValuationRow($lead_entry);
 
-// 2. Append to Local Audit Log
+// 2. Sync to 365 CRM
+require_once __DIR__ . '/../includes/CrmService.php';
+$crmResult = CrmService::sendValuationLead($lead_entry);
+
+// 3. Append to Local Audit Log
 $logs_dir = __DIR__ . '/../logs';
 if (!is_dir($logs_dir)) {
     @mkdir($logs_dir, 0755, true);

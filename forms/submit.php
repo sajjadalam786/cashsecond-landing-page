@@ -198,6 +198,14 @@ if (!empty($webhook_url) && filter_var($webhook_url, FILTER_VALIDATE_URL)) {
     }
 }
 
+// 7b. 365 CRM Integration
+$crm_synced = false;
+require_once __DIR__ . '/../includes/CrmService.php';
+$crm_result = CrmService::sendEnquiryLead($lead_data);
+if (!empty($crm_result['success'])) {
+    $crm_synced = true;
+}
+
 // Rotate CSRF token after submission
 $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
 
@@ -236,6 +244,7 @@ echo json_encode([
     'new_csrf_token'       => $_SESSION['csrf_token'],
     'whatsapp_direct_url'  => $whatsapp_direct_url,
     'google_sheets_synced' => $google_sheets_synced,
+    'crm_synced'           => $crm_synced,
     'ref_id'               => $lead_ref_id,
     'ts'                   => $now_ts,
     'sig'                  => $sig,

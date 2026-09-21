@@ -152,11 +152,28 @@ if ($is_feedback_action) {
         );
     }
 
+    // Sync Doorstep Pickup Schedule to 365 CRM
+    $crm_result = false;
+    $crm_service = $project_root . '/includes/CrmService.php';
+    if (file_exists($crm_service)) {
+        require_once $crm_service;
+        $crm_res = CrmService::sendDoorstepPickup($ref_id, array_merge($extra_data, [
+            'pickup_date'      => $pickup_date,
+            'pickup_slot'      => $pickup_slot,
+            'pickup_address'   => $pickup_addr,
+            'pincode'          => $pincode,
+            'feedback_rating'  => $rating,
+            'feedback_comment' => $comment,
+        ]));
+        $crm_result = $crm_res['success'] ?? false;
+    }
+
     echo json_encode([
         'status'  => 'success',
         'message' => 'Pickup scheduled! We will contact you shortly.',
         'ref_id'  => $ref_id,
-        'sheets'  => $sheets_result
+        'sheets'  => $sheets_result,
+        'crm'     => $crm_result
     ]);
     exit;
 }
@@ -249,6 +266,13 @@ $sheets_service= $project_root . '/includes/GoogleSheetsService.php';
 if (file_exists($sheets_service)) {
     require_once $sheets_service;
     $sheets_result = GoogleSheetsService::appendValuationRow($lead_entry);
+}
+
+// --- Sync to 365 CRM ---
+$crm_service = $project_root . '/includes/CrmService.php';
+if (file_exists($crm_service)) {
+    require_once $crm_service;
+    CrmService::sendValuationLead($lead_entry);
 }
 
 // --- Save to Local JSONL Log ---
